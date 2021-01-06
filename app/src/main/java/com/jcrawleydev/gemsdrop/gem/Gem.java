@@ -4,7 +4,7 @@ public class Gem {
 
     public enum Color { BLUE, RED, GREEN, YELLOW, EMPTY}
 
-    private Color color;
+    protected Color color;
     private boolean deletionCandidateFlag = false;
     private boolean markedForDeletion = false;
 

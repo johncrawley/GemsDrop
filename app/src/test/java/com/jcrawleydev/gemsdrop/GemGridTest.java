@@ -12,6 +12,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+
 public class GemGridTest {
 
 
@@ -22,17 +23,19 @@ public class GemGridTest {
     private final Gem.Color BLUE = Gem.Color.BLUE;
     private final Gem.Color RED = Gem.Color.RED;
     private final Gem.Color YELLOW = Gem.Color.YELLOW;
+    private final Gem.Color GREEN = Gem.Color.GREEN;
 
     private final int INITIAL_POSITION = 5;
 
     @Before
     public void setup(){
+
         gemGrid = new GemGrid(NUMBER_OF_COLUMNS, GEMS_PER_GROUP);
+        assertTrue(gemGrid.isEmpty());
     }
 
     @Test
     public void containsAddedGems(){
-        assertTrue(gemGrid.isEmpty());
         GemGroup gemGroup = createGemGroup(INITIAL_POSITION, GemGroup.Orientation.HORIZONTAL, RED, BLUE, YELLOW);
         assertTrue(gemGrid.isEmpty());
         gemGrid.add(gemGroup);
@@ -47,7 +50,6 @@ public class GemGridTest {
 
     @Test
     public void canEvaluateGemRows(){
-        assertTrue(gemGrid.isEmpty());
         GemGroup gemGroup = createGemGroup(INITIAL_POSITION, GemGroup.Orientation.HORIZONTAL, BLUE, BLUE, BLUE);
         gemGrid.add(gemGroup);
         assertEquals(3, gemGrid.gemCount());
@@ -65,6 +67,45 @@ public class GemGridTest {
         gemGrid.evaluate();
         assertEquals(6, gemGrid.gemCount());
 
+    }
+
+    private void log(String str){
+        System.out.println("GemGridTest: " + str);
+    }
+
+    @Test
+    public void canEvaluateGemColumns(){
+        log("Entered canEvaluateGemColumns()");
+        //adding a single vertical column with 3 gems of different colours should cause no elimination
+        GemGroup gemGroup = createGemGroup(INITIAL_POSITION, GemGroup.Orientation.VERTICAL, BLUE, GREEN, BLUE);
+        gemGrid.add(gemGroup);
+        assertGemsBeforeAndAfterEval(3,3);
+        gemGrid.clear();
+        log("Starting 2nd subtest ******************");
+
+        // adding a single vertical column with 3 gems of the same colour should eliminate them
+        gemGroup = createGemGroup(INITIAL_POSITION, GemGroup.Orientation.VERTICAL, BLUE, BLUE, BLUE);
+        gemGrid.add(gemGroup);
+        assertGemsBeforeAndAfterEval(3,0);
+
+
+
+        //adding 3 stacked rows, so that the first 2 columns should be removed
+        gemGroup = createGemGroup(INITIAL_POSITION, GemGroup.Orientation.HORIZONTAL, RED, BLUE, YELLOW);
+        gemGrid.add(gemGroup);
+        gemGroup = createGemGroup(INITIAL_POSITION, GemGroup.Orientation.HORIZONTAL, RED, BLUE, YELLOW);
+        gemGrid.add(gemGroup);
+        gemGroup = createGemGroup(INITIAL_POSITION, GemGroup.Orientation.HORIZONTAL, RED, BLUE, GREEN);
+        gemGrid.add(gemGroup);
+
+        gemGrid.evaluate();
+        assertEquals(3, gemGrid.gemCount());
+    }
+
+    private void assertGemsBeforeAndAfterEval(int expectedAmountBefore, int expectedAmountAfter){
+        assertEquals(expectedAmountBefore, gemGrid.gemCount());
+        gemGrid.evaluate();
+        assertEquals(expectedAmountAfter, gemGrid.gemCount());
 
     }
 
@@ -74,7 +115,7 @@ public class GemGridTest {
         Gem gem2 = new Gem(c2);
         Gem gem3 = new Gem(c3);
         List<Gem> gems = Arrays.asList(gem1,gem2, gem3);
-        return new GemGroup(INITIAL_POSITION, GemGroup.Orientation.HORIZONTAL, gems);
+        return new GemGroup(INITIAL_POSITION, orientation, gems);
 
     }
 

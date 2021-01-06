@@ -34,7 +34,7 @@ public class GemGroup {
     }
 
     public Orientation getOrientation(){
-        return this.orientation;
+        return orientation;
     }
 
     public List<Gem> getGems(){
