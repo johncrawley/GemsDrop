@@ -13,11 +13,12 @@ public class GemGrid {
     private List<List<Gem>> gemColumns;
     private int gemsPerGroup;
     private int gemAddOffset;
-    private final int MAX_ROWS = 12;
+    private final int NUMBER_OF_ROWS;
     private int numberOfColumns;
     private final int MATCH_NUMBER = 3; // i.e. how many gems of same colour are required to make the sequence disappear
 
-    public GemGrid(int numberOfColumns, int gemsPerGroup){
+    public GemGrid(int numberOfColumns, int numberOfRows, int gemsPerGroup){
+        NUMBER_OF_ROWS = numberOfRows;
         initColumns(numberOfColumns);
         this.gemsPerGroup = gemsPerGroup;
         this.gemAddOffset = gemsPerGroup / 2;
@@ -26,8 +27,8 @@ public class GemGrid {
     private void initColumns(int numberOfColumns){
         this.numberOfColumns = numberOfColumns;
         gemColumns = new ArrayList<>(numberOfColumns);
-        for(int i=0; i<numberOfColumns; i++){
-            gemColumns.add(new ArrayList<>(MAX_ROWS));
+        for(int i=0; i< numberOfColumns; i++){
+            gemColumns.add(new ArrayList<>(NUMBER_OF_ROWS));
         }
     }
 
@@ -78,6 +79,31 @@ public class GemGrid {
         deleteMarkedGems();
     }
 
+    @Override
+    public String toString(){
+        StringBuilder str = new StringBuilder();
+
+        for(int i = NUMBER_OF_ROWS-1; i>=0; i--) {
+            str.append("[ ");
+            str = appendRowTo(str, i);
+            str.append("] ");
+        }
+        return str.toString();
+    }
+
+
+    private StringBuilder appendRowTo(StringBuilder stringBuilder, int rowIndex){
+        for (List<Gem> column : gemColumns) {
+            if(column.size() > rowIndex){
+                stringBuilder.append(column.get(rowIndex).getColor());
+                stringBuilder.append(" ");
+                continue;
+            }
+            stringBuilder.append("0 ");
+        }
+        return stringBuilder;
+    }
+
 
     private void deleteMarkedGems(){
         for(List<Gem> column : gemColumns){
@@ -98,7 +124,7 @@ public class GemGrid {
 
 
     private void evaluateRows(){
-        for(int i=0; i < MAX_ROWS; i++){
+        for(int i = 0; i < NUMBER_OF_ROWS; i++){
             evaluateRow(i);
         }
     }
@@ -116,7 +142,6 @@ public class GemGrid {
 
     private void evaluateRow(int i){
         List<Gem> filledOutRow = constructRow(i);
-        log(" row " + i + ": ");
         printRow(filledOutRow);
         evaluateGems(filledOutRow);
     }

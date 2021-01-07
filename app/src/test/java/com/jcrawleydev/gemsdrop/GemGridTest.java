@@ -18,6 +18,7 @@ public class GemGridTest {
 
     private GemGrid gemGrid;
     private final int NUMBER_OF_COLUMNS = 10;
+    private final int NUMBER_OF_ROWS = 8;
 
     private final int GEMS_PER_GROUP = 3;
     private final Gem.Color BLUE = Gem.Color.BLUE;
@@ -30,14 +31,13 @@ public class GemGridTest {
     @Before
     public void setup(){
 
-        gemGrid = new GemGrid(NUMBER_OF_COLUMNS, GEMS_PER_GROUP);
+        gemGrid = new GemGrid(NUMBER_OF_COLUMNS, NUMBER_OF_ROWS, GEMS_PER_GROUP);
         assertTrue(gemGrid.isEmpty());
     }
 
     @Test
     public void containsAddedGems(){
         GemGroup gemGroup = createGemGroup(INITIAL_POSITION, GemGroup.Orientation.HORIZONTAL, RED, BLUE, YELLOW);
-        assertTrue(gemGrid.isEmpty());
         gemGrid.add(gemGroup);
         assertEquals(3, gemGrid.gemCount());
         assertFalse(gemGrid.isEmpty());
@@ -45,6 +45,25 @@ public class GemGridTest {
         gemGrid.add(gemGroup);
         assertEquals(6, gemGrid.gemCount());
 
+    }
+
+    @Test
+    public void gemsAreAddedToTheCorrectPosition(){
+        GemGroup gemGroup = createGemGroup(INITIAL_POSITION, GemGroup.Orientation.HORIZONTAL, RED, BLUE, GREEN);
+        gemGrid.add(gemGroup);
+        String expectedColors = withEmptyRows(NUMBER_OF_ROWS - 1) +
+                                "[ 0 0 0 0 R B G 0 0 0 ] ";
+
+        assertEquals(expectedColors, gemGrid.toString());
+
+    }
+
+    private String withEmptyRows(int number){
+        StringBuilder str = new StringBuilder();
+        for(int i=0; i< number; i++){
+            str.append("[ 0 0 0 0 0 0 0 0 0 0 ] ");
+        }
+        return str.toString();
     }
 
 
@@ -59,35 +78,27 @@ public class GemGridTest {
         assertEquals(0, gemGrid.gemCount());
         assertTrue(gemGrid.isEmpty());
 
-
         gemGroup = createGemGroup(INITIAL_POSITION, GemGroup.Orientation.HORIZONTAL, RED, BLUE, YELLOW);
         gemGrid.add(gemGroup);
         gemGroup = createGemGroup(INITIAL_POSITION, GemGroup.Orientation.HORIZONTAL, RED, BLUE, YELLOW);
         gemGrid.add(gemGroup);
         gemGrid.evaluate();
         assertEquals(6, gemGrid.gemCount());
-
     }
 
-    private void log(String str){
-        System.out.println("GemGridTest: " + str);
-    }
 
     @Test
     public void canEvaluateGemColumns(){
-        log("Entered canEvaluateGemColumns()");
         //adding a single vertical column with 3 gems of different colours should cause no elimination
         GemGroup gemGroup = createGemGroup(INITIAL_POSITION, GemGroup.Orientation.VERTICAL, BLUE, GREEN, BLUE);
         gemGrid.add(gemGroup);
         assertGemsBeforeAndAfterEval(3,3);
         gemGrid.clear();
-        log("Starting 2nd subtest ******************");
 
         // adding a single vertical column with 3 gems of the same colour should eliminate them
         gemGroup = createGemGroup(INITIAL_POSITION, GemGroup.Orientation.VERTICAL, BLUE, BLUE, BLUE);
         gemGrid.add(gemGroup);
         assertGemsBeforeAndAfterEval(3,0);
-
 
 
         //adding 3 stacked rows, so that the first 2 columns should be removed
@@ -101,6 +112,7 @@ public class GemGridTest {
         gemGrid.evaluate();
         assertEquals(3, gemGrid.gemCount());
     }
+
 
     private void assertGemsBeforeAndAfterEval(int expectedAmountBefore, int expectedAmountAfter){
         assertEquals(expectedAmountBefore, gemGrid.gemCount());

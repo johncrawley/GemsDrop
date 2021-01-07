@@ -2,7 +2,22 @@ package com.jcrawleydev.gemsdrop.gem;
 
 public class Gem {
 
-    public enum Color { BLUE, RED, GREEN, YELLOW, EMPTY}
+    public enum Color {
+        BLUE("B"),
+        RED("R"),
+        GREEN("G"),
+        YELLOW("Y");
+
+        Color(String str){
+            this.str = str;
+        }
+        public String str;
+
+        public String toString(){
+            return str;
+        }
+
+    }
 
     protected Color color;
     private boolean deletionCandidateFlag = false;
