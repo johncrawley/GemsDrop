@@ -51,19 +51,16 @@ public class GemGrid {
         }
     }
 
-
-    private void addHorizontal(List<Gem> gems, int position){
-        int initialOffset = position - gemAddOffset;
-        for (int i = 0; i < gemsPerGroup; i++) {
-            this.gemColumns.get(initialOffset + i).add(gems.get(i));
+    public void printColumns(){
+        for(List<Gem> column : gemColumns){
+            StringBuilder str = new StringBuilder("col: ");
+            for( Gem gem: column){
+                str.append(" ");
+                str.append(gem.getColor().toString());
+            }
+            log(str.toString());
         }
     }
-
-
-    private void addVertical(List<Gem> gems, int position){
-        this.gemColumns.get(position).addAll(gems);
-    }
-
 
     public boolean isEmpty(){
         return gemsCount == 0;
@@ -76,6 +73,7 @@ public class GemGrid {
     public void evaluate(){
         evaluateRows();
         evaluateColumns();
+        evaluateDiagonal();
         deleteMarkedGems();
     }
 
@@ -92,6 +90,21 @@ public class GemGrid {
     }
 
 
+    private void addHorizontal(List<Gem> gems, int position){
+        int initialOffset = position - gemAddOffset;
+        for (int i = 0; i < gemsPerGroup; i++) {
+            int column = initialOffset + i;
+            this.gemColumns.get(column).add(gems.get(i));
+
+        }
+    }
+
+
+    private void addVertical(List<Gem> gems, int position){
+        this.gemColumns.get(position).addAll(gems);
+    }
+
+
     private StringBuilder appendRowTo(StringBuilder stringBuilder, int rowIndex){
         for (List<Gem> column : gemColumns) {
             if(column.size() > rowIndex){
@@ -99,7 +112,7 @@ public class GemGrid {
                 stringBuilder.append(" ");
                 continue;
             }
-            stringBuilder.append("0 ");
+            stringBuilder.append("_ ");
         }
         return stringBuilder;
     }
@@ -115,7 +128,6 @@ public class GemGrid {
                 if(gem.isMarkedForDeletion()){
                     iterator.remove();
                     gemsCount--;
-                    log("deleteMarkedGems() removing a gem marked for deletion!");
                 }
             }
 
@@ -129,11 +141,60 @@ public class GemGrid {
         }
     }
 
+
+
     private void evaluateColumns(){
         for(List<Gem> column: gemColumns){
             evaluateGems(column);
         }
     }
+
+    private void evaluateDiagonal(){
+        List<List<Gem>> diagonals = new ArrayList<>();
+        addLowerHalfDiagonalsTo(diagonals);
+        addUpperHalfDiagonalsTo(diagonals);
+
+        for(List<Gem> diagonal : diagonals){
+            evaluateGems(diagonal);
+        }
+
+    }
+
+    public void addLowerHalfDiagonalsTo(List<List<Gem>> diagonals){
+
+        for(int i=0; i< (NUMBER_OF_ROWS - MATCH_NUMBER); i++) {
+            List<Gem> diagonal = new ArrayList<>();
+            for (int j = 0 ; j < (gemColumns.size()- i); j++) {
+                int colIndex = j + i;
+                List<Gem> column = gemColumns.get(colIndex);
+                if(j >= column.size()){
+                    diagonal.add(new NullGem());
+                    continue;
+                }
+                diagonal.add(column.get(j));
+            }
+            diagonals.add(diagonal);
+        }
+    }
+
+
+    public void addUpperHalfDiagonalsTo(List<List<Gem>> diagonals){
+
+        for(int i=1; i< NUMBER_OF_ROWS - MATCH_NUMBER; i++) {
+            List<Gem> diagonal = new ArrayList<>();
+            for (int j = 0; j < gemColumns.size(); j++) {
+                List<Gem> column = gemColumns.get(j);
+                int rowToRetrieve = j+ 1;
+                if(rowToRetrieve >= column.size()){
+                    diagonal.add(new NullGem());
+                    continue;
+                }
+                diagonal.add(column.get(rowToRetrieve));
+            }
+            diagonals.add(diagonal);
+        }
+    }
+
 
     private void log(String msg){
         System.out.println("GemGrid --> "  + msg);
@@ -142,7 +203,7 @@ public class GemGrid {
 
     private void evaluateRow(int i){
         List<Gem> filledOutRow = constructRow(i);
-        printRow(filledOutRow);
+        // printRow(filledOutRow);
         evaluateGems(filledOutRow);
     }
 
@@ -164,7 +225,11 @@ public class GemGrid {
         StringBuilder str =new StringBuilder();
         for(Gem gem : gems){
             str.append(" ");
-            str.append(gem.getColor());
+            String color = "_";
+            if(gem.getColor() != null){
+                color = gem.getColor().toString();
+            }
+            str.append(color);
         }
         log(str.toString());
     }
@@ -222,17 +287,16 @@ public class GemGrid {
     }
 
 
-
-
     private void resetFlagForAllGemsInRange(int startIndex, int endIndex, List<Gem> gems){
         for(int i=startIndex; i<= endIndex; i++){
             gems.get(i).resetDeleteCandidateFlag();
         }
     }
+
+
     private void markAllCandidatesForDeletionInRange(int startIndex, int endIndex, List<Gem> gems){
         for(int i=startIndex; i<= endIndex; i++){
             gems.get(i).setMarkedForDeletion();
-            log("gem marked for deletion");
         }
     }
 
