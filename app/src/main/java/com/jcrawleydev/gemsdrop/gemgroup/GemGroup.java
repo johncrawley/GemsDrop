@@ -1,4 +1,4 @@
-package com.jcrawleydev.gemsdrop;
+package com.jcrawleydev.gemsdrop.gemgroup;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
 
@@ -12,14 +12,17 @@ public class GemGroup {
     private List<Gem> reversedOrderGems;
     private int position;
     private Orientation orientation;
+    private int x,y;
     private TrueOrientation trueOrientation = TrueOrientation.FIRST_TO_LAST;
 
     private enum TrueOrientation { FIRST_TO_LAST, TOP_TO_BOTTOM, LAST_TO_FIRST, BOTTOM_TO_TOP }
     public enum Orientation { HORIZONTAL, VERTICAL }
 
-    public GemGroup(int initialPosition, Orientation orientation, List<Gem> gems){
+    public GemGroup(int initialPosition, int initialX, int initialY, Orientation orientation, List<Gem> gems){
         this.position = initialPosition;
         this.gems = new ArrayList<>(gems);
+        this.x = initialX;
+        this.y = initialY;
         this.reversedOrderGems = new ArrayList<>(gems);
         Collections.reverse(reversedOrderGems);
         this.orientation = orientation;
@@ -43,5 +46,15 @@ public class GemGroup {
         }
         return gems;
     }
+
+    public int getX(){
+        return x;
+    }
+
+    public int getY(){
+        return y;
+    }
+
+
 
 }

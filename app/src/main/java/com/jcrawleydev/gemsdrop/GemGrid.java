@@ -2,6 +2,7 @@ package com.jcrawleydev.gemsdrop;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gem.NullGem;
+import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,6 +24,15 @@ public class GemGrid {
         initColumns();
         this.gemsPerGroup = gemsPerGroup;
         this.gemAddOffset = gemsPerGroup / 2;
+    }
+
+
+    public List<Integer> getColumnHeights(){
+        List<Integer> heights = new ArrayList<>(NUMBER_OF_COLUMNS);
+        for(List<?> column : gemColumns){
+            heights.add(column.size());
+        }
+        return heights;
     }
 
     private void initColumns(){

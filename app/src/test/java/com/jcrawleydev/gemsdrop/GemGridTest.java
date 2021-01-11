@@ -1,6 +1,7 @@
 package com.jcrawleydev.gemsdrop;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
+import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -8,9 +9,9 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.jcrawleydev.gemsdrop.GemGroup.Orientation.HORIZONTAL;
+import static com.jcrawleydev.gemsdrop.gemgroup.GemGroup.Orientation.HORIZONTAL;
 
-import static com.jcrawleydev.gemsdrop.GemGroup.Orientation.VERTICAL;
+import static com.jcrawleydev.gemsdrop.gemgroup.GemGroup.Orientation.VERTICAL;
 import static com.jcrawleydev.gemsdrop.gem.Gem.Color.RED;
 import static com.jcrawleydev.gemsdrop.gem.Gem.Color.BLUE;
 import static com.jcrawleydev.gemsdrop.gem.Gem.Color.YELLOW;
@@ -52,6 +53,37 @@ public class GemGridTest {
         assertEquals(6, gemGrid.gemCount());
     }
 
+
+    @Test
+    public void canReportCorrectColumnHeights(){
+        assertEquals(NUMBER_OF_COLUMNS, gemGrid.getColumnHeights().size());
+
+        assertColumnHeights(0,0,0,0,0,0,0,0,0,0);
+
+        addHorizontalGems(2, BLUE, GREEN, RED);
+        assertColumnHeights(0,1,1,1,0,0,0,0,0,0);
+
+        addHorizontalGems(3, BLUE, GREEN, RED);
+        assertColumnHeights(0,1,2,2,1,0,0,0,0,0);
+
+        addGems(0, VERTICAL, YELLOW, GREEN, RED);
+        assertColumnHeights(3,1,2,2,1,0,0,0,0,0);
+
+    }
+
+    private void assertColumnHeights(Integer ... heights){
+
+        List<Integer> expectedHeights = Arrays.asList(heights);
+        List<Integer> columnHeights = gemGrid.getColumnHeights();
+        assertList(expectedHeights, columnHeights);
+    }
+
+    private void assertList(List<?> expected, List<?> provided){
+        assertEquals(expected.size(), provided.size());
+        for(int i = 0; i< provided.size(); i++){
+            assertEquals(" item at index: " + i + " doesn't match up", expected.get(i), provided.get(i));
+        }
+    }
 
     @Test
     public void gemsAreAddedToTheCorrectPosition(){
@@ -274,7 +306,7 @@ public class GemGridTest {
         Gem gem2 = new Gem(c2);
         Gem gem3 = new Gem(c3);
         List<Gem> gems = Arrays.asList(gem1,gem2, gem3);
-        return new GemGroup(initialPosition, orientation, gems);
+        return new GemGroup(initialPosition, 0,0, orientation, gems);
 
     }
 
