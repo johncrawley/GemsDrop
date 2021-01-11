@@ -45,12 +45,10 @@ public class GemGridTest {
 
     @Test
     public void containsAddedGems(){
-        GemGroup gemGroup = createGemGroup(INITIAL_POSITION, HORIZONTAL, RED, BLUE, YELLOW);
-        gemGrid.add(gemGroup);
+        addGems(INITIAL_POSITION, HORIZONTAL, RED, BLUE, YELLOW);
         assertEquals(3, gemGrid.gemCount());
         assertFalse(gemGrid.isEmpty());
-        gemGroup = createGemGroup(INITIAL_POSITION, HORIZONTAL, RED, BLUE, YELLOW);
-        gemGrid.add(gemGroup);
+        addGems(INITIAL_POSITION, HORIZONTAL, RED, BLUE, YELLOW);
         assertEquals(6, gemGrid.gemCount());
     }
 
@@ -165,8 +163,73 @@ public class GemGridTest {
                          "[ _ Y G G _ _ _ _ _ _ ] "+
                          "[ B G R R G _ _ _ _ _ ] "
         );
+
+
+
     }
 
+
+    @Test
+    public void canEvaluateReverseDiagonals(){
+        int maxPosition = this.NUMBER_OF_COLUMNS - 2;
+        int minPosition = 2;
+
+        addHorizontalGems(maxPosition, BLUE, GREEN, YELLOW);
+        addHorizontalGems(maxPosition, GREEN, YELLOW, RED);
+        addHorizontalGems(maxPosition, YELLOW, BLUE, BLUE);
+
+        assertGridBeforeAndAfter(3,
+                 "[ _ _ _ _ _ _ _ Y B B ] " +
+                            "[ _ _ _ _ _ _ _ G Y R ] " +
+                            "[ _ _ _ _ _ _ _ B G Y ] ",
+
+                "[ _ _ _ _ _ _ _ _ _ _ ] " +
+                         "[ _ _ _ _ _ _ _ G B B ] " +
+                         "[ _ _ _ _ _ _ _ B G R ] "
+        );
+
+        gemGrid.clear();
+
+        addHorizontalGems(minPosition, BLUE, GREEN, YELLOW);
+        addHorizontalGems(minPosition, GREEN, YELLOW, RED);
+        addHorizontalGems(minPosition, YELLOW, BLUE, BLUE);
+
+        assertGridBeforeAndAfter(3,
+                 "[ _ Y B B _ _ _ _ _ _ ] " +
+                            "[ _ G Y R _ _ _ _ _ _ ] " +
+                            "[ _ B G Y _ _ _ _ _ _ ] ",
+
+                "[ _ _ _ _ _ _ _ _ _ _ ] " +
+                         "[ _ G B B _ _ _ _ _ _ ] " +
+                         "[ _ B G R _ _ _ _ _ _ ] "
+        );
+
+
+    }
+
+    @Test
+    public void canEvaluateTopHalfReverseDiagonals(){
+        int maxPosition = this.NUMBER_OF_COLUMNS - 2;
+        int minPosition = 2;
+        addHorizontalGems(maxPosition, RED, GREEN, BLUE);
+        addHorizontalGems(maxPosition, YELLOW, BLUE, YELLOW);
+        addHorizontalGems(maxPosition, GREEN, YELLOW, GREEN);
+        addHorizontalGems(maxPosition, YELLOW, RED, GREEN);
+
+        assertGridBeforeAndAfter(4,
+
+                 "[ _ _ _ _ _ _ _ Y R G ] " +
+                            "[ _ _ _ _ _ _ _ G Y G ] " +
+                            "[ _ _ _ _ _ _ _ Y B Y ] " +
+                            "[ _ _ _ _ _ _ _ R G B ] ",
+
+                "[ _ _ _ _ _ _ _ _ _ _ ] " +
+                        "[ _ _ _ _ _ _ _ G R G ] " +
+                        "[ _ _ _ _ _ _ _ Y B G ] " +
+                        "[ _ _ _ _ _ _ _ R G B ] "
+        );
+
+    }
 
     private String buildGridWith(int modifiedRows, String rowsStr){
         int emptyRows = NUMBER_OF_ROWS - modifiedRows;
@@ -176,6 +239,10 @@ public class GemGridTest {
         }
         str.append(rowsStr);
         return str.toString();
+    }
+
+    private void addHorizontalGems(int position, Gem.Color c1, Gem.Color c2, Gem.Color c3){
+        addGems(position, HORIZONTAL, c1, c2, c3);
     }
 
 

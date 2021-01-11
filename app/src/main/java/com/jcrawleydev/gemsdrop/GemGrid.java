@@ -14,20 +14,20 @@ public class GemGrid {
     private int gemsPerGroup;
     private int gemAddOffset;
     private final int NUMBER_OF_ROWS;
-    private int numberOfColumns;
+    private final int NUMBER_OF_COLUMNS;
     private final int MATCH_NUMBER = 3; // i.e. how many gems of same colour are required to make the sequence disappear
 
     public GemGrid(int numberOfColumns, int numberOfRows, int gemsPerGroup){
         NUMBER_OF_ROWS = numberOfRows;
-        initColumns(numberOfColumns);
+        NUMBER_OF_COLUMNS = numberOfColumns;
+        initColumns();
         this.gemsPerGroup = gemsPerGroup;
         this.gemAddOffset = gemsPerGroup / 2;
     }
 
-    private void initColumns(int numberOfColumns){
-        this.numberOfColumns = numberOfColumns;
-        gemColumns = new ArrayList<>(numberOfColumns);
-        for(int i=0; i< numberOfColumns; i++){
+    private void initColumns(){
+        gemColumns = new ArrayList<>(NUMBER_OF_COLUMNS);
+        for(int i=0; i< NUMBER_OF_COLUMNS; i++){
             gemColumns.add(new ArrayList<>(NUMBER_OF_ROWS));
         }
     }
@@ -153,6 +153,8 @@ public class GemGrid {
         List<List<Gem>> diagonals = new ArrayList<>();
         addLowerHalfDiagonalsTo(diagonals);
         addUpperHalfDiagonalsTo(diagonals);
+        addLowerHalfReverseDiagonalsTo(diagonals);
+        addUpperHalfReverseDiagonalsTo(diagonals);
 
         for(List<Gem> diagonal : diagonals){
             evaluateGems(diagonal);
@@ -196,6 +198,45 @@ public class GemGrid {
     }
 
 
+    private void addLowerHalfReverseDiagonalsTo(List<List<Gem>> diagonals){
+
+        for(int i= NUMBER_OF_COLUMNS - 1; i>= MATCH_NUMBER; i--){
+
+            List<Gem> diagonal = new ArrayList<>();
+            for(int j = i, row = 0; j >= 0; j--, row++){
+                List<Gem> column = gemColumns.get(j);
+                if(row >= column.size()){
+                    diagonal.add(new NullGem());
+                    continue;
+                }
+                diagonal.add(column.get(row));
+            }
+            diagonals.add(diagonal);
+        }
+    }
+
+
+    private void addUpperHalfReverseDiagonalsTo(List<List<Gem>> diagonals){
+
+        for(int startingRow= 1; startingRow < NUMBER_OF_ROWS - MATCH_NUMBER; startingRow++){
+
+            List<Gem> diagonal = new ArrayList<>();
+            for(int rowIndex = startingRow, columnIndex = NUMBER_OF_COLUMNS -1; rowIndex < NUMBER_OF_ROWS; rowIndex++, columnIndex--){
+
+                List<Gem> column = gemColumns.get(columnIndex);
+                if(rowIndex >= column.size()){
+                    diagonal.add(new NullGem());
+                    continue;
+                }
+                diagonal.add(column.get(rowIndex));
+            }
+            diagonals.add(diagonal);
+        }
+    }
+
+
+
+
     private void log(String msg){
         System.out.println("GemGrid --> "  + msg);
     }
@@ -234,6 +275,7 @@ public class GemGrid {
         log(str.toString());
     }
 
+
     private void evaluateGems(List<Gem> gems){
         int i = 0;
         while( i < gems.size() - (MATCH_NUMBER - 1)){
@@ -241,23 +283,7 @@ public class GemGrid {
         }
     }
 
-    /*
-        // say match target is 3
-        case 1: B B B G B B B
-         - i = 0, j = 1 to end
-         - deleteCandidateFlag should be set on i first, gems[i] flagged, totalSameColor = 1
-         - j=1, same colour, reset candidate flag should be set on gem at index 1, totalSame=2
-         - j=2, same colour, same deal, totalSame=3.
-         - j=3, different colour, the totalSame is returned
-         - i should now be 3, gem[3] flagged, totalSame = 1
-         - j=4 not same color, gem[3] reset
-         - i should now be 4, gem[4] is flagged, totalSame = 1
-         - j=5, same color, flag set at gems[5], totalSame++
-         - j=6  same color, flag set at gem([6], totalSame++
-         - end of list, totalSame = 3, gems at 4,5,6 marked for deletion
 
-
-     */
     private int evaluateSection(List<Gem> gems, int i){
         Gem currentGem = gems.get(i);
         if(currentGem instanceof NullGem){
