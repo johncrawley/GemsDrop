@@ -33,7 +33,6 @@ public class GemGroupFactoryTest {
         gemGroupFactory = new GemGroupFactory(numberOfGems, 0,0, 50);
         GemGroup gemGroup = gemGroupFactory.createGemGroup();
         assertEquals(numberOfGems, gemGroup.getGems().size());
-
     }
 
 }
