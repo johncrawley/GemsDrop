@@ -15,7 +15,9 @@ import com.jcrawleydev.gemsdrop.R;
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.Nullable;
@@ -31,6 +33,7 @@ public class TransparentView extends View {
     private int mainWidth = 0;
     private int mainHeight = 0;
     private int GEM_WIDTH = 50;
+    private int HALF_WIDTH = GEM_WIDTH /2;
 
     private Context context;
     private Bitmap yellowGem, greenGem, blueGem, redGem;
@@ -59,8 +62,12 @@ public class TransparentView extends View {
         init(context, attrs);
     }
 
+    private int numberOfGems;
+
     public void setGemGroup(GemGroup gemGroup){
         this.gemGroup = gemGroup;
+        numberOfGems = gemGroup.getGems().size();
+        initXCoords();
     }
 
     private void init(Context context, AttributeSet attrs) {
@@ -69,15 +76,46 @@ public class TransparentView extends View {
         link(Gem.Color.YELLOW, R.drawable.jewel_yellow);
         link(Gem.Color.GREEN, R.drawable.jewel_green);
         link(Gem.Color.RED, R.drawable.jewel_red);
+
+        initPaint();
+
+
+    }
+
+    private void initPaint(){
+
+        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(stroke);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER));
+
+    }
+    private List<Integer> xCoords;
+
+    private void initXCoords(){
+        xCoords = new ArrayList<>();
+        int initialX = - HALF_WIDTH - (numberOfGems / 2 * GEM_WIDTH);
+        for(int i =0; i< numberOfGems; i++){
+            xCoords.add( initialX + i * GEM_WIDTH);
+        }
+
     }
 
     private void link(Gem.Color color, int drawableId){
         gemColorMap.put(color, getBitmap(drawableId));
+        Bitmap bm = getBitmap(drawableId);
+        GEM_WIDTH = bm.getWidth();
+        HALF_WIDTH = GEM_WIDTH /2;
+        gemY = HALF_WIDTH;
+
     }
     private int angle = 0;
 
     public void updateAndDraw(){
-        angle = (angle + 15) % 360;
+       // angle = (angle + 15) % 360;
     }
 
     /**
@@ -122,50 +160,37 @@ public class TransparentView extends View {
         isDrawn = true;
     }
 
+    private int width, height;
 
+    public void setDimensions(int width, int height){
+        this.width = width;
+        this.height = height;
+        canvasTranslateX = width / 2;
+    }
+
+    int canvasTranslateX;
+    int canvasTranslateY;
+    int gemY;
+    Paint paint;
+    Canvas canvasBitmap;
     private Bitmap bitmapDraw() {
 
-        Bitmap bitmap = Bitmap.createBitmap(cardWidth, cardHeight, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         bitmap.eraseColor(Color.TRANSPARENT);
-
-        Canvas canvasBitmap = new Canvas(bitmap);
-
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setStyle(Paint.Style.FILL);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(stroke);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER));
-
+        canvasBitmap = new Canvas(bitmap);
         canvasBitmap.save();
-        int jewelX = cardWidth / 2;
-        int jewelY =  gemGroup.getY();// (int)(cardWidth / 2f);
-        canvasBitmap.translate(jewelX, jewelY);
+        canvasTranslateY =  gemGroup.getY();
+        canvasBitmap.translate(canvasTranslateX, canvasTranslateY);
         canvasBitmap.rotate(angle);
-        int middleOffsetX = GEM_WIDTH / 2;
-        int middleOffsetY = GEM_WIDTH / 2;
-        int firstOffsetX =  GEM_WIDTH + middleOffsetX;
-        int firstOffsetY = middleOffsetY;
-
-        int i=0;
-        /* 6 gems
-            0 1 2 3 4 5
-            6/2 = 3
-
-         */
 
         int numberOfGems = gemGroup.getGems().size();
-        boolean evenNumberOfGems = numberOfGems  % 2 == 0;
-        for(Gem gem: gemGroup.getGems()){
-            if(evenNumberOfGems){
-               // if(i < )
-            }
-            i++;
+
+        List<Gem> gems = gemGroup.getGems();
+
+        for(int i=0; i< numberOfGems; i++){
+            Gem gem = gems.get(i);
             Bitmap gemBitmap = gemColorMap.get(gem.getColor());
-            int x = (GEM_WIDTH * 3) * i;
-            int y= GEM_WIDTH /2;
-            canvasBitmap.drawBitmap(gemBitmap, x,y, paint);
+            canvasBitmap.drawBitmap(gemBitmap, xCoords.get(i), gemY, paint);
         }
         canvasBitmap.restore();
         return bitmap;

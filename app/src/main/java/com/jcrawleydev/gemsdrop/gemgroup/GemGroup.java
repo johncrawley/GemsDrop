@@ -56,7 +56,7 @@ public class GemGroup {
     }
 
     public void drop(){
-        y+=5;
+        y+=100;
     }
 
 

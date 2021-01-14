@@ -24,24 +24,10 @@
         app:layout_constraintTop_toTopOf="parent"  />
 
 
-    <SurfaceView
-        android:id="@+id/surfaceView"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:background="@android:drawable/menuitem_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
     <com.jcrawleydev.gemsdrop.view.TransparentView
         android:id="@+id/transparent_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:cardColor="1111"
         app:cardHeight="1000"
         app:cardRadiusInner="50"

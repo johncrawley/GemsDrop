@@ -9,21 +9,23 @@ import android.view.View;
 
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
+import com.jcrawleydev.gemsdrop.tasks.GemDropTask;
 import com.jcrawleydev.gemsdrop.view.TransparentView;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    private int width,height;
-    private SurfaceView surfaceView1;
-    // private Animator animator;
     private TransparentView transparentView;
     private GemGroupFactory gemGroupFactory;
+    int height, width;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,15 +34,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         gemGroupFactory = new GemGroupFactory(3, 300, -100, 100);
         assignScreenDimensions();
-        //stateManager = new StateManager(this, width, height);
-        //drawSurface = new DrawSurface(this, stateManager, width, height);
-        surfaceView1 = findViewById(R.id.surfaceView);
+
         transparentView = findViewById(R.id.transparent_view);
-        // surfaceView1.setZOrderOnTop(true);    // necessary
-        //animator = new Animator(MainActivity.this, surfaceView1);
+        transparentView.setDimensions(width, height);
         transparentView.setOnClickListener(this);
         transparentView.setGemGroup(gemGroupFactory.createGemGroup());
-        ;
 
     }
 
@@ -64,12 +62,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(alreadyStarted){
             return;
         }
+        taskProfiler = new TaskProfiler();
+        ScheduledFuture <?> t;
         alreadyStarted = true;
         GemGroup gemGroup = gemGroupFactory.createGemGroup();
         transparentView.setGemGroup(gemGroup);
-        GemDropTask gemDropTask = new GemDropTask(gemGroup, transparentView, this);
-        ExecutorService threadPoolExecutor = Executors.newScheduledThreadPool(1);
-        threadPoolExecutor.execute(gemDropTask);
+        GemDropTask gemDropTask = new GemDropTask(gemGroup, transparentView, this, taskProfiler);
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        //threadPoolExecutor.execute(gemDropTask);
+        t = executor.scheduleWithFixedDelay(gemDropTask, 0, 300, TimeUnit.MILLISECONDS);
+        setFuture(t);
+    }
+    private ScheduledFuture <?> t;
+    private TaskProfiler taskProfiler;
+
+    public void setFuture(ScheduledFuture<?> t){
+        this.t = t;
+    }
+
+    public void cancelFuture(){
+        t.cancel(false);
     }
 
     public void resetDrop(){
@@ -79,32 +91,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void resetGems(){
 
     }
-}
-
-class GemDropTask implements Runnable{
-    private GemGroup gemGroup;
-    private TransparentView transparentView;
-    private MainActivity mainActivity;
-
-    public GemDropTask(GemGroup gemGroup, TransparentView transparentView, MainActivity mainActivity){
-        this.gemGroup = gemGroup;
-        this.transparentView = transparentView;
-        this.mainActivity = mainActivity;
-    }
-
-    public void run(){
-        while(gemGroup.getY() < 1000){
-            gemGroup.drop();
-            transparentView.updateAndDraw();
-            transparentView.invalidate();
-            try {
-                Thread.sleep(30);
-            }catch(InterruptedException e){
-                e.printStackTrace();
-            }
-        }
-        mainActivity.resetDrop();
-    }
-
-
 }

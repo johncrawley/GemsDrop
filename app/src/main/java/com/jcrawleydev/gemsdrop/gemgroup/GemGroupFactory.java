@@ -34,7 +34,7 @@ public class GemGroupFactory {
     }
 
     private Gem.Color getRandomColor(){
-        int index = ThreadLocalRandom.current().nextInt(colors.size()-1);
+        int index = ThreadLocalRandom.current().nextInt(colors.size());
         return colors.get(index);
     }
 
