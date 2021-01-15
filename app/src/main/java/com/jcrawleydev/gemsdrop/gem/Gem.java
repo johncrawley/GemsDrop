@@ -1,6 +1,12 @@
 package com.jcrawleydev.gemsdrop.gem;
 
-public class Gem {
+import android.graphics.Bitmap;
+
+import com.jcrawleydev.gemsdrop.view.DrawItem;
+
+import androidx.annotation.NonNull;
+
+public class Gem implements DrawItem {
 
     public enum Color {
         BLUE("B"),
@@ -13,15 +19,19 @@ public class Gem {
         }
         public String str;
 
+        @NonNull
         public String toString(){
             return str;
         }
+
 
     }
 
     protected Color color;
     private boolean deletionCandidateFlag = false;
     private boolean markedForDeletion = false;
+    private int x,y;
+    private Bitmap bitmap;
 
     public Gem(Color color){
         this.color = color;
@@ -30,6 +40,38 @@ public class Gem {
     public Color getColor(){
         return color;
     }
+
+    @Override
+    public int getX(){
+        return x;
+    }
+
+    public void setBitmap(Bitmap bitmap){
+        this.bitmap = bitmap;
+    }
+
+
+    @Override
+    public Bitmap getBitmap(){
+        return this.bitmap;
+    }
+
+
+    @Override
+    public int getY(){
+        return y;
+    }
+
+
+    public void setX(int x){
+        this.x = x;
+    }
+
+
+    public void setY(int y){
+        this.y = y;
+    }
+
 
     public void setMarkedForDeletion(){
         if(deletionCandidateFlag){

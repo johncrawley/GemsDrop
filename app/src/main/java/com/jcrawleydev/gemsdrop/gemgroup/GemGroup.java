@@ -14,6 +14,7 @@ public class GemGroup {
     private Orientation orientation;
     private int x,y;
     private TrueOrientation trueOrientation = TrueOrientation.FIRST_TO_LAST;
+    private int dropIncrement;
 
     private enum TrueOrientation { FIRST_TO_LAST, TOP_TO_BOTTOM, LAST_TO_FIRST, BOTTOM_TO_TOP }
     public enum Orientation { HORIZONTAL, VERTICAL }
@@ -30,6 +31,10 @@ public class GemGroup {
             trueOrientation = TrueOrientation.TOP_TO_BOTTOM;
         }
 
+    }
+
+    public void setDropIncrement(int dropIncrement){
+        this.dropIncrement = dropIncrement;
     }
 
     public int getPosition(){
@@ -56,7 +61,7 @@ public class GemGroup {
     }
 
     public void drop(){
-        y+=100;
+        y+=dropIncrement;
     }
 
 

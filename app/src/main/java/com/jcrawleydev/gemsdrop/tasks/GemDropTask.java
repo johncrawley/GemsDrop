@@ -3,19 +3,23 @@ package com.jcrawleydev.gemsdrop.tasks;
 import com.jcrawleydev.gemsdrop.MainActivity;
 import com.jcrawleydev.gemsdrop.TaskProfiler;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
+import com.jcrawleydev.gemsdrop.view.GemGroupView;
 import com.jcrawleydev.gemsdrop.view.TransparentView;
 
 import java.util.concurrent.ScheduledFuture;
 
 public class GemDropTask implements Runnable{
     private GemGroup gemGroup;
-    private TransparentView transparentView;
+    private GemGroupView gemGroupView;
     private MainActivity mainActivity;
     private TaskProfiler taskProfiler;
 
-    public GemDropTask(GemGroup gemGroup, TransparentView transparentView, MainActivity mainActivity, TaskProfiler taskProfiler){
+    public GemDropTask(GemGroup gemGroup,
+                       GemGroupView gemGroupView,
+                       MainActivity mainActivity,
+                       TaskProfiler taskProfiler){
         this.gemGroup = gemGroup;
-        this.transparentView = transparentView;
+        this.gemGroupView = gemGroupView;
         this.mainActivity = mainActivity;
         this.taskProfiler = taskProfiler;
 
@@ -31,8 +35,7 @@ public class GemDropTask implements Runnable{
             return;
         }
             gemGroup.drop();
-            transparentView.updateAndDraw();
-            transparentView.invalidate();
+            gemGroupView.updateAndDraw();
             taskProfiler.end();
     }
 
