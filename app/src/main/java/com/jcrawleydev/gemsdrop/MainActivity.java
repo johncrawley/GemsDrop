@@ -2,6 +2,7 @@ package com.jcrawleydev.gemsdrop;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         gemGroupFactory = new GemGroupFactory(3, 300, -100, 100);
         assignScreenDimensions();
 
@@ -58,8 +59,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void startGemDrop(){
         if(alreadyStarted){
-            t.cancel(false);
-            alreadyStarted = false;
+            gemGroupView.rotate();
+            //t.cancel(false);
+            //alreadyStarted = false;
             return;
         }
         TaskProfiler taskProfiler = new TaskProfiler();

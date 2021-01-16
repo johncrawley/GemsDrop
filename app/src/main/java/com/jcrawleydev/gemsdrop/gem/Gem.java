@@ -33,6 +33,7 @@ public class Gem implements DrawItem {
     private int x,y;
     private Bitmap bitmap;
 
+
     public Gem(Color color){
         this.color = color;
     }
@@ -78,9 +79,11 @@ public class Gem implements DrawItem {
             markedForDeletion = true;
         }
     }
+
     public boolean isMarkedForDeletion(){
         return markedForDeletion;
     }
+
 
     public boolean isNotSameColorAs(Gem otherGem){
         return this instanceof NullGem || this.getColor() != otherGem.getColor();

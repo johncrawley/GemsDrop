@@ -114,6 +114,7 @@ public class TransparentView extends View {
     private void drawItems(){
 
         for(DrawItem drawItem : items){
+            //System.out.println("drawing gem at: " + drawItem.getX() + "," + drawItem.getY());
             canvasBitmap.drawBitmap(drawItem.getBitmap(), drawItem.getX(), drawItem.getY(), paint);
         }
     }

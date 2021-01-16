@@ -14,6 +14,7 @@ public class GemGroupFactory {
     private final int INITIAL_Y;
     private final List<Gem.Color> colors;
 
+
     public GemGroupFactory(int numberOfGems, int initialX, int initialY, int gemWidth){
         this.NUMBER_OF_GEMS = numberOfGems;
         this.INITIAL_X = initialX;
@@ -29,9 +30,10 @@ public class GemGroupFactory {
             Gem gem = new Gem(getRandomColor());
             gems.add(gem);
         }
-
         return new GemGroup(1, INITIAL_X,INITIAL_Y, GemGroup.Orientation.VERTICAL, gems);
     }
+
+
 
     private Gem.Color getRandomColor(){
         int index = ThreadLocalRandom.current().nextInt(colors.size());

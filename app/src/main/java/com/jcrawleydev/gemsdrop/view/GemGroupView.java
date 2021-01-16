@@ -7,9 +7,11 @@ import android.view.View;
 import com.jcrawleydev.gemsdrop.R;
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
+import com.jcrawleydev.gemsdrop.gemgroup.GemRotater;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GemGroupView {
@@ -20,11 +22,13 @@ public class GemGroupView {
     private BitmapLoader bitmapLoader;
     private GemGroup gemGroup;
     private int numberOfGems;
+    private GemRotater gemRotater;
 
     public GemGroupView(View view, Context context, GemGroup gemGroup){
         transparentView = (TransparentView)view;
         bitmapLoader = new BitmapLoader(context);
         linkBitmapsToColorsAndAssignWidths();
+        gemRotater = new GemRotater(gemGroup, GEM_WIDTH);
         setGemGroup(gemGroup);
     }
 
@@ -32,27 +36,24 @@ public class GemGroupView {
     public void setGemGroup(GemGroup gemGroup){
         this.gemGroup = gemGroup;
         numberOfGems = gemGroup.getGems().size();
-        assignXCoordinatesToGems();
         setBitmapReferences();
+        gemRotater.setGemCoordinates(gemGroup);
         setDrawItems();
-        assignYCoordinateToGems();
         gemGroup.setDropIncrement(HALF_WIDTH);
     }
 
-    private void assignYCoordinateToGems(){
-        int yOffset = - HALF_WIDTH;
-        for(Gem gem: gemGroup.getGems()){
-            gem.setY(yOffset);
-        }
+
+    public void updateAndDraw(){
+        transparentView.setTranslateY(gemGroup.getY());
+        transparentView.updateAndDraw();
+        transparentView.invalidate();
+
     }
 
-    private void assignXCoordinatesToGems(){
-        int initialX = - HALF_WIDTH - (numberOfGems / 2 * GEM_WIDTH);
-        for(int i = 0; i < numberOfGems; i++){
-            int x = initialX + (i * GEM_WIDTH);
-            gemGroup.getGems().get(i).setX(x);
-        }
+    public void rotate(){
+        gemRotater.rotate();
     }
+
 
 
     private void setBitmapReferences(){
@@ -76,21 +77,20 @@ public class GemGroupView {
         assignWidths(bm);
     }
 
+
     private void assignWidths(Bitmap bm){
         GEM_WIDTH = bm.getWidth();
         HALF_WIDTH = GEM_WIDTH /2;
     }
 
 
-    public void updateAndDraw(){
-        transparentView.setTranslateY(gemGroup.getY());
-        transparentView.updateAndDraw();
-        transparentView.invalidate();
-
-    }
-
     public void setDrawItems(){
-        transparentView.setDrawItems(new ArrayList<>(gemGroup.getGems()));
+        List<DrawItem> drawItemList = new ArrayList<>(gemGroup.getGems().size());
+        for(Gem gem: gemGroup.getGems()){
+            drawItemList.add(gem);
+        }
+
+        transparentView.setDrawItems(drawItemList);
     }
 
 
