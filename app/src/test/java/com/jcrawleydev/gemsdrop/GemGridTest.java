@@ -1,5 +1,7 @@
 package com.jcrawleydev.gemsdrop;
 
+import android.graphics.Color;
+
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 
@@ -8,6 +10,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static com.jcrawleydev.gemsdrop.gemgroup.GemGroup.Orientation.HORIZONTAL;
 
@@ -263,6 +266,44 @@ public class GemGridTest {
 
     }
 
+    @Test
+    public void canGetAllGems(){
+
+        assertEquals(0, gemGrid.getAllGems().size());
+        addRandomGems();
+        assertEquals(3, gemGrid.getAllGems().size());
+
+        gemGrid.clear();
+
+        addGems(1, VERTICAL, RED, BLUE, GREEN);
+        addGems(2, VERTICAL, RED, YELLOW, GREEN);
+        addGems(3, VERTICAL, RED, GREEN, BLUE);
+        gemGrid.evaluate();
+        assertEquals(6, gemGrid.gemCount());
+        //assertEquals(6, gemGrid.getAllGems().size());
+
+    }
+
+    private void addRandomGems(){
+        addGems(getRandomPosition(), getRandomOrientation(), getRandomColor(), getRandomColor(), getRandomColor());
+    }
+
+    private int getRandomPosition(){
+        return ThreadLocalRandom.current().nextInt(NUMBER_OF_COLUMNS);
+    }
+
+    private GemGroup.Orientation getRandomOrientation(){
+        if(ThreadLocalRandom.current().nextBoolean()){
+            return HORIZONTAL;
+        }
+        return VERTICAL;
+    }
+
+    private Gem.Color getRandomColor(){
+        List<Gem.Color> colors = Arrays.asList(RED,BLUE,GREEN,YELLOW);
+        return colors.get(ThreadLocalRandom.current().nextInt(colors.size()));
+    }
+
     private String buildGridWith(int modifiedRows, String rowsStr){
         int emptyRows = NUMBER_OF_ROWS - modifiedRows;
         StringBuilder str = new StringBuilder();
@@ -309,5 +350,8 @@ public class GemGridTest {
         return new GemGroup(initialPosition, 0,0, orientation, gems);
 
     }
+
+
+
 
 }

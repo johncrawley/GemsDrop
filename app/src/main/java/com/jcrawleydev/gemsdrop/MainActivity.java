@@ -10,6 +10,7 @@ import android.view.View;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
 import com.jcrawleydev.gemsdrop.tasks.GemDropTask;
+import com.jcrawleydev.gemsdrop.view.GemGridView;
 import com.jcrawleydev.gemsdrop.view.GemGroupView;
 import com.jcrawleydev.gemsdrop.view.TransparentView;
 
@@ -26,7 +27,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int height, width;
     private boolean alreadyStarted = false;
     private ScheduledFuture <?> t;
-
+    private int bottom = 1200;
+    private GemGrid gemGrid;
+    private GemGridView gemGridView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +39,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         gemGroupFactory = new GemGroupFactory(3, 300, -100, 100);
         assignScreenDimensions();
 
-        TransparentView transparentView = findViewById(R.id.transparent_view);
-        transparentView.setDimensions(width, height);
-        transparentView.setOnClickListener(this);
-        gemGroupView = new GemGroupView(transparentView, MainActivity.this, gemGroupFactory.createGemGroup());
+        TransparentView gemGroupTransparentView = findViewById(R.id.gemGroupView);
+        TransparentView gemGridTransparentView = findViewById(R.id.gemGridView);
+        gemGroupTransparentView.setDimensions(width, height);
+        gemGroupTransparentView.translateXToMiddle();
+        gemGridTransparentView.setDimensions(width, height);
+        gemGroupTransparentView.setOnClickListener(this);
+        gemGridTransparentView.setOnClickListener(this);
+        gemGroupView = new GemGroupView(gemGroupTransparentView, MainActivity.this, gemGroupFactory.createGemGroup());
+        gemGrid = new GemGrid(10,12,3);
+        gemGridView = new GemGridView(gemGridTransparentView, gemGrid, 150);
     }
 
 
     public void onClick(View v){
+        log("Entered onClick");
         startGemDrop();
     }
 
@@ -69,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         alreadyStarted = true;
         GemGroup gemGroup = gemGroupFactory.createGemGroup();
         gemGroupView.setGemGroup(gemGroup);
-        GemDropTask gemDropTask = new GemDropTask(gemGroup, gemGroupView, this, taskProfiler);
+        GemDropTask gemDropTask = new GemDropTask(gemGroup, gemGrid, gemGroupView, gemGridView, this, taskProfiler);
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
         t = executor.scheduleWithFixedDelay(gemDropTask, 0, 300, TimeUnit.MILLISECONDS);
@@ -86,7 +96,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void resetDrop(){
+        log("Entered resetDrop()");
         alreadyStarted = false;
+    }
+
+    private void log(String msg){
+        System.out.println("MainActivity: " + msg);
     }
 
 }

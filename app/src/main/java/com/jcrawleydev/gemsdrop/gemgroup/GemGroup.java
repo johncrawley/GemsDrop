@@ -17,6 +17,7 @@ public class GemGroup {
     private int x,y;
     private TrueOrientation trueOrientation = TrueOrientation.FIRST_TO_LAST;
     private int dropIncrement;
+    private int gemWidth = 150;
 
     private enum TrueOrientation { FIRST_TO_LAST, TOP_TO_BOTTOM, LAST_TO_FIRST, BOTTOM_TO_TOP }
     public enum Orientation { HORIZONTAL, VERTICAL }
@@ -36,6 +37,21 @@ public class GemGroup {
         }
         setupTrueOrientation();
     }
+
+    public void setGemWidth(int width){
+        this.gemWidth = width;
+    }
+
+    public void setPosition(int position){
+        this.position = position;
+    }
+
+    public int getBottomEdge(){
+
+        return y + gems.size() * gemWidth;
+    }
+
+
 
     private void setupTrueOrientation(){
         nextTrueOrientation = new HashMap<>(4);
@@ -83,7 +99,7 @@ public class GemGroup {
     }
 
     public void drop(){
-        y+=dropIncrement;
+        y += dropIncrement;
     }
 
 

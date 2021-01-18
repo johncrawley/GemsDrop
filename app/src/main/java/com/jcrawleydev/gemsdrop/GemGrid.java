@@ -3,14 +3,17 @@ package com.jcrawleydev.gemsdrop;
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gem.NullGem;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
+import com.jcrawleydev.gemsdrop.view.DrawItem;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+
+
 public class GemGrid {
 
-    private int gemsCount;
     private List<List<Gem>> gemColumns;
     private int gemsPerGroup;
     private int gemAddOffset;
@@ -35,6 +38,19 @@ public class GemGrid {
         return heights;
     }
 
+    public List<List<Gem>> getGemColumns(){
+        return this.gemColumns;
+    }
+
+    public List<DrawItem> getAllGems(){
+        List<DrawItem> allGems = new ArrayList<>(NUMBER_OF_COLUMNS * NUMBER_OF_ROWS);
+        for(List<Gem> column : gemColumns){
+            allGems.addAll(column);
+        }
+        return allGems;
+    }
+
+
     private void initColumns(){
         gemColumns = new ArrayList<>(NUMBER_OF_COLUMNS);
         for(int i=0; i< NUMBER_OF_COLUMNS; i++){
@@ -43,23 +59,27 @@ public class GemGrid {
     }
 
     public void clear(){
-        for(List<Gem> column : gemColumns){
+        for(List<Gem> column : gemColumns) {
             column.clear();
         }
-        this.gemsCount = 0;
     }
 
     public void add(GemGroup gemGroup) {
-        gemsCount += gemGroup.getGems().size();
+        log("Entered add()");
+
         List<Gem> gems = gemGroup.getGems();
         int position = gemGroup.getPosition();
 
         if (gemGroup.getOrientation() == GemGroup.Orientation.HORIZONTAL) {
+            log("about to invoke addHorizontal()");
             addHorizontal(gems, position);
         } else {
+            log("About to invoke addVertical");
             addVertical(gems, position);
         }
+        log("Exiting add()");
     }
+
 
     public void printColumns(){
         for(List<Gem> column : gemColumns){
@@ -73,11 +93,21 @@ public class GemGrid {
     }
 
     public boolean isEmpty(){
-        return gemsCount == 0;
+        for(List<Gem> column : gemColumns){
+            if(!column.isEmpty()){
+                return false;
+            }
+        }
+        return true;
     }
 
+
     public int gemCount(){
-        return gemsCount;
+        int amount = 0;
+        for(List<Gem> column : gemColumns){
+            amount += column.size();
+        }
+        return amount;
     }
 
     public void evaluate(){
@@ -87,13 +117,13 @@ public class GemGrid {
         deleteMarkedGems();
     }
 
-    @Override
+    @Override @NonNull
     public String toString(){
         StringBuilder str = new StringBuilder();
 
         for(int i = NUMBER_OF_ROWS-1; i>=0; i--) {
             str.append("[ ");
-            str = appendRowTo(str, i);
+            appendRowTo(str, i);
             str.append("] ");
         }
         return str.toString();
@@ -115,7 +145,7 @@ public class GemGrid {
     }
 
 
-    private StringBuilder appendRowTo(StringBuilder stringBuilder, int rowIndex){
+    private void appendRowTo(StringBuilder stringBuilder, int rowIndex){
         for (List<Gem> column : gemColumns) {
             if(column.size() > rowIndex){
                 stringBuilder.append(column.get(rowIndex).getColor());
@@ -124,7 +154,6 @@ public class GemGrid {
             }
             stringBuilder.append("_ ");
         }
-        return stringBuilder;
     }
 
 
@@ -137,7 +166,6 @@ public class GemGrid {
                 Gem gem = iterator.next();
                 if(gem.isMarkedForDeletion()){
                     iterator.remove();
-                    gemsCount--;
                 }
             }
 

@@ -35,11 +35,13 @@ public class GemGroupView {
 
     public void setGemGroup(GemGroup gemGroup){
         this.gemGroup = gemGroup;
+        gemGroup.setGemWidth(GEM_WIDTH);
         numberOfGems = gemGroup.getGems().size();
         setBitmapReferences();
         gemRotater.setGemCoordinates(gemGroup);
         setDrawItems();
-        gemGroup.setDropIncrement(HALF_WIDTH);
+       // gemGroup.setDropIncrement(HALF_WIDTH);
+        gemGroup.setDropIncrement(GEM_WIDTH * 2);
     }
 
 

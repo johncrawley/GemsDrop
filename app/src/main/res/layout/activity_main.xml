@@ -25,20 +25,24 @@
 
 
     <com.jcrawleydev.gemsdrop.view.TransparentView
-        android:id="@+id/transparent_view"
+        android:id="@+id/gemGroupView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardColor="1111"
-        app:cardHeight="1000"
-        app:cardRadiusInner="50"
-        app:cardRadiusOuter="80"
-        app:cardTopMargin="40"
-        app:cardWidth="1000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
+
+    <com.jcrawleydev.gemsdrop.view.TransparentView
+        android:id="@+id/gemGridView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+    />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

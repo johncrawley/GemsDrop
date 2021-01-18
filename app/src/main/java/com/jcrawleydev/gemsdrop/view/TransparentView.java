@@ -59,7 +59,10 @@ public class TransparentView extends View {
     public void setDimensions(int width, int height){
         this.width = width;
         this.height = height;
-        canvasTranslateX = width / 2;
+    }
+
+    public void translateXToMiddle(){
+        this.canvasTranslateX = width / 2;
     }
 
 
@@ -112,6 +115,9 @@ public class TransparentView extends View {
 
 
     private void drawItems(){
+        if(items == null){
+            return;
+        }
 
         for(DrawItem drawItem : items){
             //System.out.println("drawing gem at: " + drawItem.getX() + "," + drawItem.getY());
