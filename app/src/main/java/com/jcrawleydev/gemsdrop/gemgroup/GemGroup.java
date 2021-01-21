@@ -76,6 +76,14 @@ public class GemGroup {
     }
 
 
+    public void decrementPosition(){
+        this.position--;
+    }
+
+    public void incrementPosition(){
+        this.position++;
+    }
+
     public void rotate(){
         orientation = orientation == Orientation.VERTICAL ? Orientation.HORIZONTAL : Orientation.VERTICAL;
         trueOrientation = nextTrueOrientation.get(trueOrientation);

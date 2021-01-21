@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         gemGroupTransparentView.setOnClickListener(this);
         gemGridTransparentView.setOnClickListener(this);
         gemGroupView = new GemGroupView(gemGroupTransparentView, MainActivity.this, gemGroupFactory.createGemGroup());
-        gemGrid = new GemGrid(10,12,3);
+        gemGrid = new GemGrid(7,12,3);
         gemGridView = new GemGridView(gemGridTransparentView, gemGrid, 150);
     }
 

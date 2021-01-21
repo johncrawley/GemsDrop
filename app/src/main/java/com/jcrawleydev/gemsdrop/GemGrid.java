@@ -51,6 +51,10 @@ public class GemGrid {
     }
 
 
+    public int getNumberOfColumns(){
+        return NUMBER_OF_COLUMNS;
+    }
+
     private void initColumns(){
         gemColumns = new ArrayList<>(NUMBER_OF_COLUMNS);
         for(int i=0; i< NUMBER_OF_COLUMNS; i++){
