@@ -17,10 +17,12 @@ public class GemControlsTest {
     private static GemGrid gemGrid;
     private GemControls gemControls;
     private GemGroup gemGroup;
+    private static int numberOfGemsPerGroup = 3;
+
+    int rightmostIndexForHorizontal = 0;
 
     @BeforeClass
     public static void initialSetup(){
-        int numberOfGemsPerGroup = 3;
         gemGrid = new GemGrid(8, 12, numberOfGemsPerGroup);
         gemGroupFactory = new GemGroupFactory(numberOfGemsPerGroup,0,0,150);
 
@@ -30,6 +32,8 @@ public class GemControlsTest {
     public void setup(){
         gemGroup = gemGroupFactory.createGemGroup();
         gemControls = new GemControls(gemGroup, gemGrid);
+
+        rightmostIndexForHorizontal = (gemGrid.getNumberOfColumns() -1) - gemGroup.getNumberOfGems() /2;
     }
 
     @Test
@@ -50,18 +54,104 @@ public class GemControlsTest {
     }
 
     @Test
-    public void cantRotateIfVerticalAndAtFirstPosition(){
+    public void cannotMoveLeftIfVerticalAndAtFirstPosition(){
 
-        if(gemGroup.getOrientation() == GemGroup.Orientation.HORIZONTAL){
-            gemGroup.rotate();
-        }
+        changeAndAssertOrientation(GemGroup.Orientation.VERTICAL);
+        moveLeftTillAtPosition(0);
+        gemControls.moveLeft();
+        assertPosition(0);
+    }
+
+
+    @Test
+    public void cannotMoveLeftIfHorizontalAndFirstGemIsAtLeftEdge(){
+        changeAndAssertOrientation(GemGroup.Orientation.HORIZONTAL);
+
+        int horizontalLeftLimit = numberOfGemsPerGroup /2;
+        moveLeftTillAtPosition(horizontalLeftLimit);
+        gemControls.moveLeft();
+        assertPosition(horizontalLeftLimit);
+    }
+
+    @Test
+    public void cannotMoveRightIfVerticalAndAtLastPosition(){
+        changeAndAssertOrientation(GemGroup.Orientation.VERTICAL);
+        int rightmostIndexForVertical = gemGrid.getNumberOfColumns() -1;
+        moveRightTillAtPosition(rightmostIndexForVertical);
+        gemControls.moveRight();
+        assertPosition(rightmostIndexForVertical);
+    }
+
+    @Test
+    public void cannotMoveRightIfHorizontalAndAtLastPosition(){
+        changeAndAssertOrientation(GemGroup.Orientation.HORIZONTAL);
+        moveRightTillAtPosition(rightmostIndexForHorizontal);
+        gemControls.moveRight();
+        assertPosition(rightmostIndexForHorizontal);
+    }
+
+    @Test
+    public void canRotateInDefaultPosition(){
+        changeAndAssertOrientation(GemGroup.Orientation.VERTICAL);
+        gemControls.rotate();
+        assertEquals(GemGroup.Orientation.HORIZONTAL, gemGroup.getOrientation());
+
+    }
+
+
+    @Test
+    public void cannotRotateIfVerticalInFirstPosition(){
+        changeAndAssertOrientation(GemGroup.Orientation.VERTICAL);
+        moveLeftTillAtPosition(0);
+        gemControls.rotate();
         assertEquals(GemGroup.Orientation.VERTICAL, gemGroup.getOrientation());
-        while(gemGroup.getPosition() > 0){
+    }
+
+
+    @Test
+    public void cannotRotateIfVerticalInLastPosition(){
+        changeAndAssertOrientation(GemGroup.Orientation.VERTICAL);
+        moveVerticalToRightEdge();
+        gemControls.rotate();
+        assertEquals(GemGroup.Orientation.VERTICAL, gemGroup.getOrientation());
+    }
+
+
+
+    private void moveRightTillAtPosition(int position){
+        while(gemGroup.getPosition() < position){
+            gemControls.moveRight();
+        }
+        assertPosition(position);
+
+    }
+
+
+
+    private void moveVerticalToRightEdge(){
+        moveRightTillAtPosition(gemGrid.getNumberOfColumns()-1);
+    }
+
+
+    private void moveLeftTillAtPosition(int position){
+        while(gemGroup.getPosition() > position){
             gemControls.moveLeft();
         }
-        assertEquals(0, gemGroup.getPosition());
-        gemControls.moveLeft();
-        assertEquals(0,gemGroup.getPosition());
+        assertPosition(position);
+    }
+
+
+    private void assertPosition(int expected){
+        assertEquals(expected, gemGroup.getPosition());
+    }
+
+
+    private void changeAndAssertOrientation(GemGroup.Orientation orientation){
+
+        if(gemGroup.getOrientation() != orientation){
+            gemGroup.rotate();
+        }
+        assertEquals(orientation, gemGroup.getOrientation());
 
     }
 

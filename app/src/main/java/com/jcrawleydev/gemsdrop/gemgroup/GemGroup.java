@@ -98,6 +98,10 @@ public class GemGroup {
     }
 
 
+    public int getNumberOfGems(){
+        return gems.size();
+    }
+
     public int getX(){
         return x;
     }
