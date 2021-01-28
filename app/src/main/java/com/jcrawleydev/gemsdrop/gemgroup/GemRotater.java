@@ -37,7 +37,6 @@ public class GemRotater {
 
 
     public void rotate(){
-            gemGroup.rotate();
             setGemCoordinates(gemGroup);
     }
 

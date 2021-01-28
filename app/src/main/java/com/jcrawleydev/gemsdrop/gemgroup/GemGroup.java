@@ -21,6 +21,7 @@ public class GemGroup {
 
     private enum TrueOrientation { FIRST_TO_LAST, TOP_TO_BOTTOM, LAST_TO_FIRST, BOTTOM_TO_TOP }
     public enum Orientation { HORIZONTAL, VERTICAL }
+    private GemRotater gemRotater;
 
     private Map<TrueOrientation, TrueOrientation> nextTrueOrientation;
 
@@ -36,7 +37,10 @@ public class GemGroup {
             trueOrientation = TrueOrientation.TOP_TO_BOTTOM;
         }
         setupTrueOrientation();
+        this.gemRotater = new GemRotater(this, gemWidth);
+        gemRotater.setGemCoordinates(this);
     }
+
 
     public void setGemWidth(int width){
         this.gemWidth = width;
@@ -77,16 +81,19 @@ public class GemGroup {
 
 
     public void decrementPosition(){
+        this.x -= gemWidth;
         this.position--;
     }
 
     public void incrementPosition(){
+        this.x += gemWidth;
         this.position++;
     }
 
     public void rotate(){
         orientation = orientation == Orientation.VERTICAL ? Orientation.HORIZONTAL : Orientation.VERTICAL;
         trueOrientation = nextTrueOrientation.get(trueOrientation);
+        gemRotater.rotate();
     }
 
 

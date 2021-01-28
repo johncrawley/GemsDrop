@@ -14,8 +14,19 @@ public class GemControls {
         this.gemGrid = gemGrid;
     }
 
+    public GemControls(GemGrid gemGrid){
+        this.gemGrid = gemGrid;
+    }
+
+    public void setGemGroup(GemGroup gemGroup){
+        this.gemGroup = gemGroup;
+    }
+
 
     public void moveLeft(){
+        if(gemGroup == null){
+            return;
+        }
         int minPosition = getMinPosition();
         if(gemGroup.getPosition() <= minPosition){
             return;
@@ -25,6 +36,9 @@ public class GemControls {
 
 
     public void moveRight(){
+        if(gemGroup == null){
+            return;
+        }
         int maxPosition = gemGrid.getNumberOfColumns() -1;
 
         if(gemGroup.getOrientation() == GemGroup.Orientation.HORIZONTAL){
@@ -39,6 +53,9 @@ public class GemControls {
 
 
     public void rotate(){
+        if(gemGroup == null){
+            return;
+        }
         if(isVerticalAndAtAnEdge()){
             return;
         }

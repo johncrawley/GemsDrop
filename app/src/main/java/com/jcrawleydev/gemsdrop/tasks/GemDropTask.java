@@ -37,15 +37,6 @@ public class GemDropTask implements Runnable{
     public void run(){
         //taskProfiler.start();
         if(gemGroup.getY() > 1800) {
-            System.out.println("GemDropTask run() gemGroup > 1800, resetting drop!");
-            int rand = ThreadLocalRandom.current().nextInt(1,gemGrid.getNumberOfColumns()-2);
-            boolean shouldVerticalBeZero = ThreadLocalRandom.current().nextBoolean();
-
-            if(rand == 1 && shouldVerticalBeZero && gemGroup.getOrientation() == GemGroup.Orientation.VERTICAL){
-                rand = 0;
-            }
-            System.out.println("GemDRopTask run() random index: " + rand);
-            gemGroup.setPosition(rand);
             gemGrid.add(gemGroup);
             gemGridView.draw();
             mainActivity.resetDrop();
@@ -54,7 +45,6 @@ public class GemDropTask implements Runnable{
             //taskProfiler.print();
             return;
         }
-        System.out.println("GemDropTask run() gemGroup y :" + gemGroup.getY());
             gemGroup.drop();
             gemGroupView.updateAndDraw();
             //taskProfiler.end();

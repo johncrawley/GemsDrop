@@ -45,6 +45,10 @@ public class TransparentView extends View {
         this.canvasTranslateY = y;
     }
 
+    public void setTranslateX(int x){
+        this.canvasTranslateX = x;
+    }
+
 
     public void updateAndDraw(){
          //angle = (angle + 15) % 360;

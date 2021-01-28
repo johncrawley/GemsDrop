@@ -22,13 +22,11 @@ public class GemGroupView {
     private BitmapLoader bitmapLoader;
     private GemGroup gemGroup;
     private int numberOfGems;
-    private GemRotater gemRotater;
 
     public GemGroupView(View view, Context context, GemGroup gemGroup){
         transparentView = (TransparentView)view;
         bitmapLoader = new BitmapLoader(context);
         linkBitmapsToColorsAndAssignWidths();
-        gemRotater = new GemRotater(gemGroup, GEM_WIDTH);
         setGemGroup(gemGroup);
     }
 
@@ -38,24 +36,19 @@ public class GemGroupView {
         gemGroup.setGemWidth(GEM_WIDTH);
         numberOfGems = gemGroup.getGems().size();
         setBitmapReferences();
-        gemRotater.setGemCoordinates(gemGroup);
         setDrawItems();
        // gemGroup.setDropIncrement(HALF_WIDTH);
-        gemGroup.setDropIncrement(GEM_WIDTH * 2);
+        gemGroup.setDropIncrement(GEM_WIDTH /2);
     }
 
 
     public void updateAndDraw(){
         transparentView.setTranslateY(gemGroup.getY());
+        transparentView.setTranslateX(gemGroup.getX());
         transparentView.updateAndDraw();
         transparentView.invalidate();
 
     }
-
-    public void rotate(){
-        gemRotater.rotate();
-    }
-
 
 
     private void setBitmapReferences(){

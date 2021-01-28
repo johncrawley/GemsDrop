@@ -5,8 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.MotionEvent;
 import android.view.View;
 
+import com.jcrawleydev.gemsdrop.control.ClickHandler;
+import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
 import com.jcrawleydev.gemsdrop.tasks.GemDropTask;
@@ -20,7 +23,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
 
     private GemGroupFactory gemGroupFactory;
     private GemGroupView gemGroupView;
@@ -30,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int bottom = 1200;
     private GemGrid gemGrid;
     private GemGridView gemGridView;
+    private ClickHandler clickHandler;
+    private GemControls gemControls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,17 +49,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         gemGroupTransparentView.setDimensions(width, height);
         gemGroupTransparentView.translateXToMiddle();
         gemGridTransparentView.setDimensions(width, height);
-        gemGroupTransparentView.setOnClickListener(this);
-        gemGridTransparentView.setOnClickListener(this);
+        gemGroupTransparentView.setOnTouchListener(this);
+        gemGridTransparentView.setOnTouchListener(this);
         gemGroupView = new GemGroupView(gemGroupTransparentView, MainActivity.this, gemGroupFactory.createGemGroup());
         gemGrid = new GemGrid(7,12,3);
         gemGridView = new GemGridView(gemGridTransparentView, gemGrid, 150);
+
+        gemControls = new GemControls(gemGrid);
+        clickHandler = new ClickHandler(gemControls, width);
     }
 
 
-    public void onClick(View v){
+    public boolean onTouch(View v, MotionEvent e){
+        if(e.getAction() != MotionEvent.ACTION_DOWN){
+            return true;
+        }
         log("Entered onClick");
+        clickHandler.click((int)e.getX());
         startGemDrop();
+        return true;
     }
 
 
@@ -69,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void startGemDrop(){
         if(alreadyStarted){
-            gemGroupView.rotate();
+           // gemGroupView.rotate();
             //t.cancel(false);
             //alreadyStarted = false;
             return;
@@ -78,11 +91,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ScheduledFuture <?> t;
         alreadyStarted = true;
         GemGroup gemGroup = gemGroupFactory.createGemGroup();
+        gemControls.setGemGroup(gemGroup);
         gemGroupView.setGemGroup(gemGroup);
         GemDropTask gemDropTask = new GemDropTask(gemGroup, gemGrid, gemGroupView, gemGridView, this, taskProfiler);
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
-        t = executor.scheduleWithFixedDelay(gemDropTask, 0, 300, TimeUnit.MILLISECONDS);
+        t = executor.scheduleWithFixedDelay(gemDropTask, 0, 500, TimeUnit.MILLISECONDS);
         setFuture(t);
     }
 
