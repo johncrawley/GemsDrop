@@ -51,7 +51,6 @@ public class GemGroup {
     }
 
     public int getBottomEdge(){
-
         return y + gems.size() * gemWidth;
     }
 
@@ -97,11 +96,24 @@ public class GemGroup {
     }
 
 
+
     public List<Gem> getGems(){
         if(trueOrientation == TrueOrientation.TOP_TO_BOTTOM || trueOrientation == TrueOrientation.FIRST_TO_LAST){
            return gems;
         }
         return reversedOrderGems;
+    }
+
+    // NB gems if vertical orientation, a gem group will be printed top-to-bottom
+    //  but the same gem group will be added bottom-to-top to a grid column
+    public List<Gem> getGemsToAddToGrid(){
+        if(orientation == Orientation.HORIZONTAL){
+            return getGems();
+        }
+        if(trueOrientation == TrueOrientation.TOP_TO_BOTTOM){
+            return reversedOrderGems;
+        }
+        return gems;
     }
 
 

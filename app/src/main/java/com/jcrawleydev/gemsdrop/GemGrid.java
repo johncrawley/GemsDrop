@@ -69,32 +69,16 @@ public class GemGrid {
     }
 
     public void add(GemGroup gemGroup) {
-        log("Entered add()");
-
-        List<Gem> gems = gemGroup.getGems();
+        List<Gem> gems = gemGroup.getGemsToAddToGrid();
         int position = gemGroup.getPosition();
 
         if (gemGroup.getOrientation() == GemGroup.Orientation.HORIZONTAL) {
-            log("about to invoke addHorizontal()");
             addHorizontal(gems, position);
         } else {
-            log("About to invoke addVertical");
             addVertical(gems, position);
         }
-        log("Exiting add()");
     }
 
-
-    public void printColumns(){
-        for(List<Gem> column : gemColumns){
-            StringBuilder str = new StringBuilder("col: ");
-            for( Gem gem: column){
-                str.append(" ");
-                str.append(gem.getColor().toString());
-            }
-            log(str.toString());
-        }
-    }
 
     public boolean isEmpty(){
         for(List<Gem> column : gemColumns){
