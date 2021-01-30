@@ -36,9 +36,12 @@ public class GemDropTask implements Runnable{
 
     public void run(){
         //taskProfiler.start();
-        if(gemGroup.getY() > 1800) {
+
+        if(gemGroup.getBottomPosition() <=0 || gemGrid.shouldAdd(gemGroup)) {
             gemGrid.add(gemGroup);
+            gemGroup.setGemsInvisible();
             gemGridView.draw();
+            gemGroupView.updateAndDraw();
             mainActivity.resetDrop();
             mainActivity.cancelFuture();
             //taskProfiler.end();

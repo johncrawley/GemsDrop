@@ -18,14 +18,20 @@ public class GemControlsTest {
     private GemControls gemControls;
     private GemGroup gemGroup;
     private static int numberOfGemsPerGroup = 3;
+    private static int gemWidth = 150;
 
     int rightmostIndexForHorizontal = 0;
 
     @BeforeClass
     public static void initialSetup(){
-        gemGrid = new GemGrid(8, 12, numberOfGemsPerGroup);
-        gemGroupFactory = new GemGroupFactory(numberOfGemsPerGroup,0,0,150);
-
+        gemGrid = new GemGrid(8, 12);
+        gemGroupFactory = new GemGroupFactory.Builder()
+                .withInitialCoords(0, 150)
+                .withGemWidth(gemWidth)
+                .withNumerOfGems(numberOfGemsPerGroup)
+                .withInitialPosition(0)
+                .withFloorAt(300)
+                .build();
     }
 
     @Before

@@ -15,18 +15,14 @@ import androidx.annotation.NonNull;
 public class GemGrid {
 
     private List<List<Gem>> gemColumns;
-    private int gemsPerGroup;
-    private int gemAddOffset;
     private final int NUMBER_OF_ROWS;
     private final int NUMBER_OF_COLUMNS;
     private final int MATCH_NUMBER = 3; // i.e. how many gems of same colour are required to make the sequence disappear
 
-    public GemGrid(int numberOfColumns, int numberOfRows, int gemsPerGroup){
+    public GemGrid(int numberOfColumns, int numberOfRows){
         NUMBER_OF_ROWS = numberOfRows;
         NUMBER_OF_COLUMNS = numberOfColumns;
         initColumns();
-        this.gemsPerGroup = gemsPerGroup;
-        this.gemAddOffset = gemsPerGroup / 2;
     }
 
 
@@ -36,6 +32,18 @@ public class GemGrid {
             heights.add(column.size());
         }
         return heights;
+    }
+
+    public boolean shouldAdd(GemGroup gemGroup) {
+        if(gemGroup.getOrientation() == GemGroup.Orientation.HORIZONTAL){
+            return false;
+        }
+        return gemGroup.getBottomPosition() <= getColumnHeight(gemGroup.getPosition());
+
+    }
+
+    public int getColumnHeight(int position){
+        return gemColumns.get(position).size();
     }
 
     public List<List<Gem>> getGemColumns(){
@@ -119,8 +127,8 @@ public class GemGrid {
 
 
     private void addHorizontal(List<Gem> gems, int position){
-        int initialOffset = position - gemAddOffset;
-        for (int i = 0; i < gemsPerGroup; i++) {
+        int initialOffset = position - gems.size()/ 2;
+        for (int i = 0; i < gems.size(); i++) {
             int column = initialOffset + i;
             this.gemColumns.get(column).add(gems.get(i));
 
@@ -259,9 +267,6 @@ public class GemGrid {
             diagonals.add(diagonal);
         }
     }
-
-
-
 
     private void log(String msg){
         System.out.println("GemGrid --> "  + msg);

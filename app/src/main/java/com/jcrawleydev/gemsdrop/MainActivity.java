@@ -30,19 +30,30 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     int height, width;
     private boolean alreadyStarted = false;
     private ScheduledFuture <?> t;
-    private int bottom = 1200;
+    private int floorY = 0;
     private GemGrid gemGrid;
     private GemGridView gemGridView;
     private ClickHandler clickHandler;
     private GemControls gemControls;
+    private int gemWidth = 150;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        gemGroupFactory = new GemGroupFactory(3, 300, -100, 100);
         assignScreenDimensions();
+
+        int initialY = gemWidth * -2;
+
+        gemGroupFactory = new GemGroupFactory.Builder()
+                    .withInitialCoords(300, initialY)
+                    .withGemWidth(150)
+                    .withNumerOfGems(3)
+                    .withInitialPosition(4)
+                    .withFloorAt(floorY)
+                .build();
+
 
         TransparentView gemGroupTransparentView = findViewById(R.id.gemGroupView);
         TransparentView gemGridTransparentView = findViewById(R.id.gemGridView);
@@ -52,8 +63,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         gemGroupTransparentView.setOnTouchListener(this);
         gemGridTransparentView.setOnTouchListener(this);
         gemGroupView = new GemGroupView(gemGroupTransparentView, MainActivity.this, gemGroupFactory.createGemGroup());
-        gemGrid = new GemGrid(7,12,3);
-        gemGridView = new GemGridView(gemGridTransparentView, gemGrid, 150);
+        gemGrid = new GemGrid(7,12);
+        gemGridView = new GemGridView(gemGridTransparentView, gemGrid, 150, floorY);
 
         gemControls = new GemControls(gemGrid);
         clickHandler = new ClickHandler(gemControls, width);
@@ -77,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         height = displayMetrics.heightPixels;
         width = displayMetrics.widthPixels;
+        floorY = height - (height /10);
     }
 
 
@@ -96,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         GemDropTask gemDropTask = new GemDropTask(gemGroup, gemGrid, gemGroupView, gemGridView, this, taskProfiler);
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
-        t = executor.scheduleWithFixedDelay(gemDropTask, 0, 500, TimeUnit.MILLISECONDS);
+        t = executor.scheduleWithFixedDelay(gemDropTask, 0, 150, TimeUnit.MILLISECONDS);
         setFuture(t);
     }
 

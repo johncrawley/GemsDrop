@@ -10,12 +10,14 @@ public class GemGridView {
     private GemGrid gemGrid;
     private final int GEM_SIZE;
     private TransparentView transparentView;
+    private int floorY;
 
-    public GemGridView(TransparentView transparentView, GemGrid gemGrid, int gem_size){
+    public GemGridView(TransparentView transparentView, GemGrid gemGrid, int gem_size, int floorY){
 
         this.gemGrid = gemGrid;
         this.GEM_SIZE = gem_size;
         this.transparentView = transparentView;
+        this.floorY = floorY;
         draw();
     }
 
@@ -25,8 +27,8 @@ public class GemGridView {
 
 
     public void draw(){
-        int startingX = 50;
-        int startingBottomY = 1900;
+        int startingX = 0;
+        int startingBottomY = floorY;
 
         List<List<Gem>> columns = gemGrid.getGemColumns();
 
@@ -34,10 +36,8 @@ public class GemGridView {
             List<Gem> column = columns.get(columnIndex);
             for(int rowIndex=0; rowIndex < column.size(); rowIndex++){
                 Gem gem = column.get(rowIndex);
-                //log("Gem size: " + GEM_SIZE + " column index : " + columnIndex +  " GEM_SIZE * columnIndex: " + GEM_SIZE * columnIndex);
                 int x = startingX + (GEM_SIZE * columnIndex);
                 int y = startingBottomY - ((rowIndex + 1)* GEM_SIZE);
-                //log("Gem in grid x,y: " + x + "," + y);
                 gem.setX(x);
                 gem.setY(y);
             }

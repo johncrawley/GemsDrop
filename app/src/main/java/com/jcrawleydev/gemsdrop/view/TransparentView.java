@@ -28,7 +28,6 @@ public class TransparentView extends View {
         super(context);
     }
 
-
     public TransparentView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         initPaint();
@@ -124,8 +123,10 @@ public class TransparentView extends View {
         }
 
         for(DrawItem drawItem : items){
-            //System.out.println("drawing gem at: " + drawItem.getX() + "," + drawItem.getY());
-            canvasBitmap.drawBitmap(drawItem.getBitmap(), drawItem.getX(), drawItem.getY(), paint);
+
+            if(drawItem.isVisible()) {
+                canvasBitmap.drawBitmap(drawItem.getBitmap(), drawItem.getX(), drawItem.getY(), paint);
+            }
         }
     }
 

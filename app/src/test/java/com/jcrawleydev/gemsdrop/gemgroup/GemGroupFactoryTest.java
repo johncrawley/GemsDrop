@@ -21,7 +21,13 @@ public class GemGroupFactoryTest {
         int initialY = -100;
         int gemWidth = 50;
 
-        gemGroupFactory = new GemGroupFactory(numberOfGems, initialX, initialY, gemWidth);
+        gemGroupFactory = new GemGroupFactory.Builder()
+                .withInitialCoords(initialX, initialY)
+                .withGemWidth(gemWidth)
+                .withNumerOfGems(numberOfGems)
+                .withInitialPosition(0)
+                .withFloorAt(300)
+                .build();
         GemGroup gemGroup= gemGroupFactory.createGemGroup();
         assertEquals(initialX, gemGroup.getX() );
         assertEquals(initialY, gemGroup.getY() );
@@ -30,7 +36,14 @@ public class GemGroupFactoryTest {
 
 
     private void assertNumberOfGemsCreated(int numberOfGems){
-        gemGroupFactory = new GemGroupFactory(numberOfGems, 0,0, 50);
+
+        gemGroupFactory = new GemGroupFactory.Builder()
+                .withInitialCoords(300, 50)
+                .withGemWidth(150)
+                .withNumerOfGems(numberOfGems)
+                .withInitialPosition(0)
+                .withFloorAt(300)
+                .build();
         GemGroup gemGroup = gemGroupFactory.createGemGroup();
         assertEquals(numberOfGems, gemGroup.getGems().size());
     }

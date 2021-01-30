@@ -7,4 +7,5 @@ public interface DrawItem {
     Bitmap getBitmap();
     int getX();
     int getY();
+    boolean isVisible();
 }

@@ -18,6 +18,9 @@ public class GemGroup {
     private TrueOrientation trueOrientation = TrueOrientation.FIRST_TO_LAST;
     private int dropIncrement;
     private int gemWidth = 150;
+    private int middleYPosition;
+    private int floorY;
+    float dropMultiple = 0f;
 
     private enum TrueOrientation { FIRST_TO_LAST, TOP_TO_BOTTOM, LAST_TO_FIRST, BOTTOM_TO_TOP }
     public enum Orientation { HORIZONTAL, VERTICAL }
@@ -25,11 +28,13 @@ public class GemGroup {
 
     private Map<TrueOrientation, TrueOrientation> nextTrueOrientation;
 
-    public GemGroup(int initialPosition, int initialX, int initialY, Orientation orientation, List<Gem> gems){
+    public GemGroup(int initialPosition, int initialX, int initialY, Orientation orientation, List<Gem> gems, int floorY){
         this.position = initialPosition;
         this.gems = new ArrayList<>(gems);
-        this.x = initialX;
+        this.floorY = floorY;
+        this.x = (initialPosition * gemWidth) + gemWidth /2;
         this.y = initialY;
+        setupMiddleYPosition();
         this.reversedOrderGems = new ArrayList<>(gems);
         Collections.reverse(reversedOrderGems);
         this.orientation = orientation;
@@ -42,18 +47,14 @@ public class GemGroup {
     }
 
 
+    private void setupMiddleYPosition(){
+        this.middleYPosition = ((floorY - y) / gemWidth) -1;
+    }
+
+
     public void setGemWidth(int width){
         this.gemWidth = width;
     }
-
-    public void setPosition(int position){
-        this.position = position;
-    }
-
-    public int getBottomEdge(){
-        return y + gems.size() * gemWidth;
-    }
-
 
 
     private void setupTrueOrientation(){
@@ -65,8 +66,10 @@ public class GemGroup {
 
     }
 
-    public void setDropIncrement(int dropIncrement){
-        this.dropIncrement = dropIncrement;
+
+    public void setDropMultiple(float dropMultiple){
+        this.dropMultiple = dropMultiple;
+        this.dropIncrement = (int)(gemWidth * dropMultiple);
     }
 
     public int getPosition(){
@@ -107,15 +110,35 @@ public class GemGroup {
     // NB gems if vertical orientation, a gem group will be printed top-to-bottom
     //  but the same gem group will be added bottom-to-top to a grid column
     public List<Gem> getGemsToAddToGrid(){
+        return copyOf(getGridGems());
+    }
+
+
+    private List<Gem> getGridGems(){
         if(orientation == Orientation.HORIZONTAL){
             return getGems();
         }
         if(trueOrientation == TrueOrientation.TOP_TO_BOTTOM){
-            return reversedOrderGems;
+                return reversedOrderGems;
         }
         return gems;
     }
 
+
+    public void setGemsInvisible(){
+        for(Gem gem: gems){
+            gem.setInvisible();
+        }
+    }
+
+
+    private List<Gem> copyOf(List<Gem> gems){
+        List<Gem> copiedList = new ArrayList<>(gems.size());
+        for(Gem gem: gems){
+            copiedList.add(gem.clone());
+        }
+        return copiedList;
+    }
 
     public int getNumberOfGems(){
         return gems.size();
@@ -129,8 +152,27 @@ public class GemGroup {
         return y;
     }
 
+    private float currentDropIncrement = 0f;
+
     public void drop(){
+        currentDropIncrement += dropMultiple;
+        while(currentDropIncrement >= 1){
+            currentDropIncrement -= 1;
+            middleYPosition --;
+        }
         y += dropIncrement;
+        //log("dropping gemGroup, current middle Y position: " + middleYPosition + " currentDropIncrement: " + currentDropIncrement);
+    }
+
+    public int getBottomPosition(){
+        if( orientation == Orientation.HORIZONTAL){
+            return middleYPosition + 1;
+        }
+        return (middleYPosition + getNumberOfGems() /2) -1;
+    }
+
+    private void log(String msg){
+        System.out.println("GemGroup: " + msg);
     }
 
 

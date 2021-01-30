@@ -6,7 +6,7 @@ import com.jcrawleydev.gemsdrop.view.DrawItem;
 
 import androidx.annotation.NonNull;
 
-public class Gem implements DrawItem {
+public class Gem implements DrawItem, Cloneable {
 
     public enum Color {
         BLUE("B"),
@@ -23,20 +23,22 @@ public class Gem implements DrawItem {
         public String toString(){
             return str;
         }
-
-
     }
+
 
     protected Color color;
     private boolean deletionCandidateFlag = false;
     private boolean markedForDeletion = false;
     private int x,y;
     private Bitmap bitmap;
+    private boolean visible;
 
 
     public Gem(Color color){
         this.color = color;
+        this.visible = true;
     }
+
 
     public Color getColor(){
         return color;
@@ -95,5 +97,24 @@ public class Gem implements DrawItem {
 
     public void resetDeleteCandidateFlag(){
         deletionCandidateFlag = false;
+    }
+
+    @Override
+    public boolean isVisible(){
+        return this.visible;
+    }
+
+    public void setInvisible(){
+        this.visible = false;
+    }
+
+    public Gem clone(){
+        Gem gem= new Gem(Color.BLUE);
+        try{
+            gem = (Gem) super.clone();
+        }catch(CloneNotSupportedException e){
+            e.printStackTrace();
+        }
+        return gem;
     }
 }

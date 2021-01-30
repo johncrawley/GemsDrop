@@ -7,7 +7,6 @@ import android.view.View;
 import com.jcrawleydev.gemsdrop.R;
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
-import com.jcrawleydev.gemsdrop.gemgroup.GemRotater;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,8 +36,7 @@ public class GemGroupView {
         numberOfGems = gemGroup.getGems().size();
         setBitmapReferences();
         setDrawItems();
-       // gemGroup.setDropIncrement(HALF_WIDTH);
-        gemGroup.setDropIncrement(GEM_WIDTH /2);
+        gemGroup.setDropMultiple(.5f);
     }
 
 

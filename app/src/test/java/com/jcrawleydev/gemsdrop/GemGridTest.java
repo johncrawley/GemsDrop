@@ -35,14 +35,13 @@ public class GemGridTest {
     private GemGrid gemGrid;
     private final int NUMBER_OF_COLUMNS = 10;
     private final int NUMBER_OF_ROWS = 8;
-    private final int GEMS_PER_GROUP = 3;
     private final int INITIAL_POSITION = 5;
 
 
     @Before
     public void setup(){
 
-        gemGrid = new GemGrid(NUMBER_OF_COLUMNS, NUMBER_OF_ROWS, GEMS_PER_GROUP);
+        gemGrid = new GemGrid(NUMBER_OF_COLUMNS, NUMBER_OF_ROWS);
         assertTrue(gemGrid.isEmpty());
     }
 
@@ -347,7 +346,7 @@ public class GemGridTest {
         Gem gem2 = new Gem(c2);
         Gem gem3 = new Gem(c3);
         List<Gem> gems = Arrays.asList(gem1,gem2, gem3);
-        return new GemGroup(initialPosition, 0,0, orientation, gems);
+        return new GemGroup(initialPosition, 0,0, orientation, gems, 1000);
 
     }
 
