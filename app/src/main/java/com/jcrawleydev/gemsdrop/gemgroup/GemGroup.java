@@ -4,33 +4,25 @@ import com.jcrawleydev.gemsdrop.gem.Gem;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class GemGroup {
 
     private List<Gem> gems;
     private List<Gem> reversedOrderGems;
-    private int position;
     private Orientation orientation;
-    private int x,y;
-    private TrueOrientation trueOrientation = TrueOrientation.FIRST_TO_LAST;
-    private int dropIncrement;
-    private int gemWidth = 150;
-    private int middleYPosition;
-    private int floorY;
+    private DetailedOrientation detailedOrientation = DetailedOrientation.FIRST_TO_LAST;
+    private int x,y, position, dropIncrement, gemWidth, middleYPosition, floorY;
     float dropMultiple = 0f;
-
-    private enum TrueOrientation { FIRST_TO_LAST, TOP_TO_BOTTOM, LAST_TO_FIRST, BOTTOM_TO_TOP }
+    public enum DetailedOrientation { FIRST_TO_LAST, TOP_TO_BOTTOM, LAST_TO_FIRST, BOTTOM_TO_TOP }
     public enum Orientation { HORIZONTAL, VERTICAL }
     private GemRotater gemRotater;
 
-    private Map<TrueOrientation, TrueOrientation> nextTrueOrientation;
 
-    public GemGroup(int initialPosition, int initialX, int initialY, Orientation orientation, List<Gem> gems, int floorY){
+    public GemGroup(int initialPosition, int initialY, Orientation orientation, List<Gem> gems, int gemWidth,  int floorY){
         this.position = initialPosition;
         this.gems = new ArrayList<>(gems);
+        this.gemWidth = gemWidth;
         this.floorY = floorY;
         this.x = (initialPosition * gemWidth) + gemWidth /2;
         this.y = initialY;
@@ -39,9 +31,8 @@ public class GemGroup {
         Collections.reverse(reversedOrderGems);
         this.orientation = orientation;
         if(orientation == Orientation.VERTICAL){
-            trueOrientation = TrueOrientation.TOP_TO_BOTTOM;
+            detailedOrientation = DetailedOrientation.TOP_TO_BOTTOM;
         }
-        setupTrueOrientation();
         this.gemRotater = new GemRotater(this, gemWidth);
         gemRotater.setGemCoordinates(this);
     }
@@ -56,15 +47,6 @@ public class GemGroup {
         this.gemWidth = width;
     }
 
-
-    private void setupTrueOrientation(){
-        nextTrueOrientation = new HashMap<>(4);
-        nextTrueOrientation.put(TrueOrientation.BOTTOM_TO_TOP, TrueOrientation.FIRST_TO_LAST);
-        nextTrueOrientation.put(TrueOrientation.FIRST_TO_LAST, TrueOrientation.TOP_TO_BOTTOM);
-        nextTrueOrientation.put(TrueOrientation.TOP_TO_BOTTOM, TrueOrientation.LAST_TO_FIRST);
-        nextTrueOrientation.put(TrueOrientation.LAST_TO_FIRST, TrueOrientation.BOTTOM_TO_TOP);
-
-    }
 
 
     public void setDropMultiple(float dropMultiple){
@@ -93,15 +75,26 @@ public class GemGroup {
     }
 
     public void rotate(){
-        orientation = orientation == Orientation.VERTICAL ? Orientation.HORIZONTAL : Orientation.VERTICAL;
-        trueOrientation = nextTrueOrientation.get(trueOrientation);
         gemRotater.rotate();
     }
 
+    public void setDetailedOrientation(DetailedOrientation trueOrientation){
+        this.detailedOrientation = trueOrientation;
+    }
+
+
+    public DetailedOrientation getDetailedOrientation(){
+        return this.detailedOrientation;
+    }
+
+
+    public void setOrientation(Orientation orientation){
+        this.orientation = orientation;
+    }
 
 
     public List<Gem> getGems(){
-        if(trueOrientation == TrueOrientation.TOP_TO_BOTTOM || trueOrientation == TrueOrientation.FIRST_TO_LAST){
+        if(detailedOrientation == DetailedOrientation.TOP_TO_BOTTOM || detailedOrientation == DetailedOrientation.FIRST_TO_LAST){
            return gems;
         }
         return reversedOrderGems;
@@ -118,7 +111,7 @@ public class GemGroup {
         if(orientation == Orientation.HORIZONTAL){
             return getGems();
         }
-        if(trueOrientation == TrueOrientation.TOP_TO_BOTTOM){
+        if(detailedOrientation == DetailedOrientation.TOP_TO_BOTTOM){
                 return reversedOrderGems;
         }
         return gems;
@@ -161,7 +154,6 @@ public class GemGroup {
             middleYPosition --;
         }
         y += dropIncrement;
-        //log("dropping gemGroup, current middle Y position: " + middleYPosition + " currentDropIncrement: " + currentDropIncrement);
     }
 
     public int getBottomPosition(){
@@ -169,6 +161,15 @@ public class GemGroup {
             return middleYPosition + 1;
         }
         return (middleYPosition + getNumberOfGems() /2) -1;
+    }
+
+    public List<Integer> getGemPositions(){
+        List<Integer> positions = new ArrayList<>();
+        int leftMostPosition = position - getNumberOfGems() / 2;
+        for(int i=0; i< gems.size(); i++){
+            positions.add(leftMostPosition + i);
+        }
+        return positions;
     }
 
     private void log(String msg){

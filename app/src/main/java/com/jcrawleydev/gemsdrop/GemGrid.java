@@ -36,9 +36,20 @@ public class GemGrid {
 
     public boolean shouldAdd(GemGroup gemGroup) {
         if(gemGroup.getOrientation() == GemGroup.Orientation.HORIZONTAL){
-            return false;
+            return areAllGemsConnectingToColumns(gemGroup);
         }
         return gemGroup.getBottomPosition() <= getColumnHeight(gemGroup.getPosition());
+
+    }
+
+
+    private boolean areAllGemsConnectingToColumns(GemGroup gemGroup){
+        for(int position : gemGroup.getGemPositions()){
+            if(gemGroup.getBottomPosition() > getColumnHeight(position)){
+                return false;
+            }
+        }
+        return true;
 
     }
 

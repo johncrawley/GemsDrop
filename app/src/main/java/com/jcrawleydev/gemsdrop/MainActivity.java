@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         int initialY = gemWidth * -2;
 
         gemGroupFactory = new GemGroupFactory.Builder()
-                    .withInitialCoords(300, initialY)
+                    .withInitialY(initialY)
                     .withGemWidth(150)
                     .withNumerOfGems(3)
                     .withInitialPosition(4)

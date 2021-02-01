@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 public class GemRotaterTest {
 
 
-    private final int GEM_WIDTH = 50;
+    private final int GEM_WIDTH = 150;
     private final int NUMBER_OF_GEMS = 3;
     private final GemGroup.Orientation INITIAL_ORIENTATION = GemGroup.Orientation.VERTICAL;
     private GemGroup gemGroup;
@@ -21,8 +21,14 @@ public class GemRotaterTest {
 
     @Before
     public void init(){
+        gemGroup = new GemGroupFactory.Builder()
+                .withNumerOfGems(NUMBER_OF_GEMS)
+                .withInitialPosition(8)
+                .withInitialY(50)
+                .withFloorAt(1000)
+                .withGemWidth(GEM_WIDTH)
+                .build().createGemGroup();
 
-        gemGroup = new GemGroupFactory(NUMBER_OF_GEMS,10,10,50).createGemGroup();
         gems = gemGroup.getGems();
         gemRotater = new GemRotater(gemGroup, GEM_WIDTH);
     }
@@ -33,8 +39,9 @@ public class GemRotaterTest {
         gemRotater.setGemCoordinates(gemGroup);
         int initialExpectedY =  - (GEM_WIDTH /2) - ( NUMBER_OF_GEMS /2 * GEM_WIDTH );
         for(int i=0; i < NUMBER_OF_GEMS; i++){
-            assertEquals("Gem index : " + i + " has an unexpected x coordinate..." , -GEM_WIDTH /2, gems.get(i).getX());
-            assertEquals("Gem index : " + i + " has an unexpected y coordinate..." ,  initialExpectedY +  i * (GEM_WIDTH), gems.get(i).getY());
+            Gem gem = gems.get(i);
+            assertEquals("Gem index : " + i + " has an unexpected x coordinate..." , -GEM_WIDTH /2, gem.getX());
+            assertEquals("Gem index : " + i + " has an unexpected y coordinate..." ,  initialExpectedY +  i * (GEM_WIDTH), gem.getY());
         }
 
     }
@@ -43,27 +50,29 @@ public class GemRotaterTest {
     @Test
     public void coordinatesAreAdjustedDuringRotation(){
 
-        gemRotater.setGemCoordinates(gemGroup);
         assertEquals(GemGroup.Orientation.VERTICAL, gemGroup.getOrientation());
-        gemGroup.rotate();
         gemRotater.rotate();
-        //assertEquals(GemGroup.Orientation.HORIZONTAL, gemGroup.getOrientation());
+        assertEquals(GemGroup.Orientation.HORIZONTAL, gemGroup.getOrientation());
 
-        int initialStaggeredValue =  - (GEM_WIDTH /2) - ( NUMBER_OF_GEMS /2 * GEM_WIDTH );
+
+        int baseline =  (GEM_WIDTH /2);// + ( NUMBER_OF_GEMS /2 * GEM_WIDTH );
+
         for(int i=0; i < NUMBER_OF_GEMS; i++){
-            assertEquals("Gem index : " + i + " has an unexpected x coordinate..." ,  initialStaggeredValue +  i * (GEM_WIDTH), gems.get(i).getX());
-            assertEquals("Gem index : " + i + " has an unexpected y coordinate..." , -GEM_WIDTH /2, gems.get(i).getY());
+            Gem gem = gems.get(i);
+            assertEquals("Gem index : " + i + " has an unexpected x coordinate..." ,  baseline -  i * (GEM_WIDTH), gem.getX());
+            assertEquals("Gem index : " + i + " has an unexpected y coordinate..." , -GEM_WIDTH /2, gem.getY());
         }
 
         gemRotater.rotate();
         assertEquals(GemGroup.Orientation.VERTICAL, gemGroup.getOrientation());
+
         for(int i=0; i < NUMBER_OF_GEMS; i++){
-            assertEquals("Gem index : " + i + " has an unexpected x coordinate..." ,  -GEM_WIDTH /2, gems.get(i).getX());
-            assertEquals("Gem index : " + i + " has an unexpected y coordinate..." , initialStaggeredValue +  i * (GEM_WIDTH), gems.get(i).getY());
+            assertEquals("Gem index : " + i + " has an unexpected x coordinate for vertical orientation.." ,  -GEM_WIDTH /2, gems.get(i).getX());
+            assertEquals("Gem index : " + i + " has an unexpected y coordinate for vertical orientation.." , baseline -  i * (GEM_WIDTH), gems.get(i).getY());
         }
-
-
-
 
     }
+
+
+
 }

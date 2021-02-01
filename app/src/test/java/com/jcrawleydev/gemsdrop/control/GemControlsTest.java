@@ -26,7 +26,7 @@ public class GemControlsTest {
     public static void initialSetup(){
         gemGrid = new GemGrid(8, 12);
         gemGroupFactory = new GemGroupFactory.Builder()
-                .withInitialCoords(0, 150)
+                .withInitialY(150)
                 .withGemWidth(gemWidth)
                 .withNumerOfGems(numberOfGemsPerGroup)
                 .withInitialPosition(0)

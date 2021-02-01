@@ -2,7 +2,9 @@ package com.jcrawleydev.gemsdrop.gemgroup;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GemRotater {
 
@@ -12,6 +14,7 @@ public class GemRotater {
     private List<Gem> gems;
     private int numberOfGems;
     private GemGroup gemGroup;
+    private Map<GemGroup.DetailedOrientation, GemGroup.DetailedOrientation> nextDetailedOrientation;
 
 
     public GemRotater(GemGroup gemGroup, int gemWidth){
@@ -20,8 +23,17 @@ public class GemRotater {
          this.gemGroup = gemGroup;
          this.gems = gemGroup.getGems();
          numberOfGems = gems.size();
+         setupDetailedOrientation();
     }
 
+
+    private void setupDetailedOrientation(){
+        nextDetailedOrientation = new HashMap<>(4);
+        nextDetailedOrientation.put(GemGroup.DetailedOrientation.BOTTOM_TO_TOP, GemGroup.DetailedOrientation.FIRST_TO_LAST);
+        nextDetailedOrientation.put(GemGroup.DetailedOrientation.FIRST_TO_LAST, GemGroup.DetailedOrientation.TOP_TO_BOTTOM);
+        nextDetailedOrientation.put(GemGroup.DetailedOrientation.TOP_TO_BOTTOM, GemGroup.DetailedOrientation.LAST_TO_FIRST);
+        nextDetailedOrientation.put(GemGroup.DetailedOrientation.LAST_TO_FIRST, GemGroup.DetailedOrientation.BOTTOM_TO_TOP);
+    }
 
     public void setGemCoordinates(GemGroup gemGroup){
         this.gemGroup = gemGroup;
@@ -37,9 +49,24 @@ public class GemRotater {
 
 
     public void rotate(){
-            setGemCoordinates(gemGroup);
+        adjustOrientation();
+        adjustTrueOrientation();
+        setGemCoordinates(gemGroup);
     }
 
+
+    private void adjustOrientation(){
+        GemGroup.Orientation rotatedOrientation = gemGroup.getOrientation() == GemGroup.Orientation.VERTICAL ?
+                GemGroup.Orientation.HORIZONTAL : GemGroup.Orientation.VERTICAL;
+        gemGroup.setOrientation(rotatedOrientation);
+    }
+
+
+    private void adjustTrueOrientation(){
+        GemGroup.DetailedOrientation current = gemGroup.getDetailedOrientation();
+        gemGroup.setDetailedOrientation(nextDetailedOrientation.get(current));
+
+    }
 
     private void assignVerticalXCoordinatesToGems(){
         int xOffset = - HALF_WIDTH;

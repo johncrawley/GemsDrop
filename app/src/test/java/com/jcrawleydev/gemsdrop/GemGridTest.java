@@ -1,7 +1,5 @@
 package com.jcrawleydev.gemsdrop;
 
-import android.graphics.Color;
-
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 
@@ -346,7 +344,8 @@ public class GemGridTest {
         Gem gem2 = new Gem(c2);
         Gem gem3 = new Gem(c3);
         List<Gem> gems = Arrays.asList(gem1,gem2, gem3);
-        return new GemGroup(initialPosition, 0,0, orientation, gems, 1000);
+        int gemWidth = 150;
+        return new GemGroup(initialPosition,0, orientation, gems, gemWidth,1000);
 
     }
 
