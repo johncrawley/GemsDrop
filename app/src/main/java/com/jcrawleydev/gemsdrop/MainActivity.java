@@ -12,6 +12,7 @@ import com.jcrawleydev.gemsdrop.control.ClickHandler;
 import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
+import com.jcrawleydev.gemsdrop.tasks.AnimateTask;
 import com.jcrawleydev.gemsdrop.tasks.GemDropTask;
 import com.jcrawleydev.gemsdrop.view.GemGridView;
 import com.jcrawleydev.gemsdrop.view.GemGroupView;
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private ClickHandler clickHandler;
     private GemControls gemControls;
     private int gemWidth = 150;
+    private ScheduledFuture<?> gemDropFuture, animateFuture;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,35 +97,26 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private void startGemDrop(){
         if(alreadyStarted){
-           // gemGroupView.rotate();
-            //t.cancel(false);
-            //alreadyStarted = false;
             return;
         }
-        TaskProfiler taskProfiler = new TaskProfiler();
-        ScheduledFuture <?> t;
         alreadyStarted = true;
         GemGroup gemGroup = gemGroupFactory.createGemGroup();
         gemControls.setGemGroup(gemGroup);
         gemGroupView.setGemGroup(gemGroup);
-        GemDropTask gemDropTask = new GemDropTask(gemGroup, gemGrid, gemGroupView, gemGridView, this, taskProfiler);
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        GemDropTask gemDropTask = new GemDropTask(gemGroup, gemGrid, gemGridView, this);
+        AnimateTask animateTask = new AnimateTask(gemGroupView);
 
-        t = executor.scheduleWithFixedDelay(gemDropTask, 0, 150, TimeUnit.MILLISECONDS);
-        setFuture(t);
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
+        gemDropFuture = executor.scheduleWithFixedDelay(gemDropTask, 0, 150, TimeUnit.MILLISECONDS);
+        animateFuture = executor.scheduleWithFixedDelay(animateTask, 0, 20, TimeUnit.MILLISECONDS);
     }
 
-
-    public void setFuture(ScheduledFuture<?> t){
-        this.t = t;
-    }
 
     public void cancelFuture(){
-        t.cancel(false);
+        gemDropFuture.cancel(false);
     }
 
     public void resetDrop(){
-        log("Entered resetDrop()");
         alreadyStarted = false;
     }
 

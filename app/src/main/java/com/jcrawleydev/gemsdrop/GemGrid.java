@@ -18,6 +18,10 @@ public class GemGrid {
     private final int NUMBER_OF_ROWS;
     private final int NUMBER_OF_COLUMNS;
     private final int MATCH_NUMBER = 3; // i.e. how many gems of same colour are required to make the sequence disappear
+    private int gemSize;
+    private int floorY;
+    private int startingX;
+
 
     public GemGrid(int numberOfColumns, int numberOfRows){
         NUMBER_OF_ROWS = numberOfRows;
@@ -25,6 +29,17 @@ public class GemGrid {
         initColumns();
     }
 
+    public void setGemSize(int gemSize){
+        this.gemSize = gemSize;
+    }
+
+    public void setFloorY(int y){
+        this.floorY = y;
+    }
+
+    public void setStartingX(int x){
+        this.startingX = x;
+    }
 
     public List<Integer> getColumnHeights(){
         List<Integer> heights = new ArrayList<>(NUMBER_OF_COLUMNS);
@@ -137,18 +152,36 @@ public class GemGrid {
     }
 
 
-    private void addHorizontal(List<Gem> gems, int position){
-        int initialOffset = position - gems.size()/ 2;
+    private void addHorizontal(List<Gem> gems, int gemGroupPosition){
+        int initialOffset = gemGroupPosition - gems.size()/ 2;
         for (int i = 0; i < gems.size(); i++) {
-            int column = initialOffset + i;
-            this.gemColumns.get(column).add(gems.get(i));
+            Gem gem = gems.get(i);
+            int columnIndex = initialOffset + i;
+            List<Gem> column = gemColumns.get(columnIndex);
+            int rowIndex = column.size();
+            setGemCoordinatesToGridPosition(gem, rowIndex, columnIndex);
+            column.add(gem);
 
         }
     }
 
 
-    private void addVertical(List<Gem> gems, int position){
-        this.gemColumns.get(position).addAll(gems);
+    private void addVertical(List<Gem> gems, int columnIndex){
+        List<Gem> column = gemColumns.get(columnIndex);
+
+        for(Gem gem : gems){
+            int rowIndex = column.size();
+            setGemCoordinatesToGridPosition(gem, rowIndex, columnIndex);
+            column.add(gem);
+        }
+    }
+
+
+
+    private void setGemCoordinatesToGridPosition(Gem gem, int rowIndex, int columnIndex){
+        int gemX = startingX + (gemSize * columnIndex);
+        int gemY = floorY - ((rowIndex + 1) * gemSize);
+        gem.setXY(gemX, gemY);
     }
 
 

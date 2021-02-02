@@ -13,14 +13,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GemGroupView {
+public class GemGroupView implements UpdatableView{
 
     private TransparentView transparentView;
-    private int GEM_WIDTH, HALF_WIDTH;
+    private int GEM_WIDTH;
     private Map<Gem.Color, Bitmap> gemColorMap;
     private BitmapLoader bitmapLoader;
     private GemGroup gemGroup;
-    private int numberOfGems;
+    private boolean wasModelUpdated;
 
     public GemGroupView(View view, Context context, GemGroup gemGroup){
         transparentView = (TransparentView)view;
@@ -33,12 +33,32 @@ public class GemGroupView {
     public void setGemGroup(GemGroup gemGroup){
         this.gemGroup = gemGroup;
         gemGroup.setGemWidth(GEM_WIDTH);
-        numberOfGems = gemGroup.getGems().size();
         setBitmapReferences();
         setDrawItems();
         gemGroup.setDropMultiple(.5f);
     }
 
+
+    public void setDrawItems(){
+        List<DrawItem> drawItemList = new ArrayList<>(gemGroup.getGems().size());
+        for(Gem gem: gemGroup.getGems()){
+            drawItemList.add(gem);
+        }
+        transparentView.setDrawItems(drawItemList);
+    }
+
+
+    @Override
+    public void drawIfUpdated(){
+
+        if(gemGroup.wasUpdated()) {
+            transparentView.setTranslateY(gemGroup.getY());
+            transparentView.setTranslateX(gemGroup.getX());
+            transparentView.updateAndDraw();
+            transparentView.invalidate();
+            gemGroup.setUpdated(false);
+        }
+    }
 
     public void updateAndDraw(){
         transparentView.setTranslateY(gemGroup.getY());
@@ -73,18 +93,6 @@ public class GemGroupView {
 
     private void assignWidths(Bitmap bm){
         GEM_WIDTH = bm.getWidth();
-        HALF_WIDTH = GEM_WIDTH /2;
     }
-
-
-    public void setDrawItems(){
-        List<DrawItem> drawItemList = new ArrayList<>(gemGroup.getGems().size());
-        for(Gem gem: gemGroup.getGems()){
-            drawItemList.add(gem);
-        }
-
-        transparentView.setDrawItems(drawItemList);
-    }
-
 
 }

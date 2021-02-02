@@ -13,10 +13,12 @@ public class GemGroup {
     private Orientation orientation;
     private DetailedOrientation detailedOrientation = DetailedOrientation.FIRST_TO_LAST;
     private int x,y, position, dropIncrement, gemWidth, middleYPosition, floorY;
-    float dropMultiple = 0f;
+    private float dropMultiple = 0f;
+    private float currentDropIncrement = 0f;
     public enum DetailedOrientation { FIRST_TO_LAST, TOP_TO_BOTTOM, LAST_TO_FIRST, BOTTOM_TO_TOP }
     public enum Orientation { HORIZONTAL, VERTICAL }
     private GemRotater gemRotater;
+    private boolean wasUpdated;
 
 
     public GemGroup(int initialPosition, int initialY, Orientation orientation, List<Gem> gems, int gemWidth,  int floorY){
@@ -48,6 +50,15 @@ public class GemGroup {
     }
 
 
+    public boolean wasUpdated(){
+        return wasUpdated;
+    }
+
+
+    public void setUpdated(boolean updated){
+        this.wasUpdated = updated;
+    }
+
 
     public void setDropMultiple(float dropMultiple){
         this.dropMultiple = dropMultiple;
@@ -65,26 +76,29 @@ public class GemGroup {
 
 
     public void decrementPosition(){
-        this.x -= gemWidth;
-        this.position--;
+        x -= gemWidth;
+        position--;
+        wasUpdated = true;
     }
 
     public void incrementPosition(){
-        this.x += gemWidth;
-        this.position++;
+        x += gemWidth;
+        position++;
+        wasUpdated = true;
     }
 
     public void rotate(){
         gemRotater.rotate();
+        wasUpdated = true;
     }
 
     public void setDetailedOrientation(DetailedOrientation trueOrientation){
-        this.detailedOrientation = trueOrientation;
+        detailedOrientation = trueOrientation;
     }
 
 
     public DetailedOrientation getDetailedOrientation(){
-        return this.detailedOrientation;
+        return detailedOrientation;
     }
 
 
@@ -122,6 +136,7 @@ public class GemGroup {
         for(Gem gem: gems){
             gem.setInvisible();
         }
+        wasUpdated = true;
     }
 
 
@@ -133,19 +148,21 @@ public class GemGroup {
         return copiedList;
     }
 
+
     public int getNumberOfGems(){
         return gems.size();
     }
+
 
     public int getX(){
         return x;
     }
 
+
     public int getY(){
         return y;
     }
 
-    private float currentDropIncrement = 0f;
 
     public void drop(){
         currentDropIncrement += dropMultiple;
@@ -154,7 +171,9 @@ public class GemGroup {
             middleYPosition --;
         }
         y += dropIncrement;
+        wasUpdated = true;
     }
+
 
     public int getBottomPosition(){
         if( orientation == Orientation.HORIZONTAL){
@@ -162,6 +181,7 @@ public class GemGroup {
         }
         return (middleYPosition + getNumberOfGems() /2) -1;
     }
+
 
     public List<Integer> getGemPositions(){
         List<Integer> positions = new ArrayList<>();
@@ -171,11 +191,5 @@ public class GemGroup {
         }
         return positions;
     }
-
-    private void log(String msg){
-        System.out.println("GemGroup: " + msg);
-    }
-
-
 
 }
