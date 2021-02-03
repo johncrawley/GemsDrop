@@ -2,6 +2,7 @@ package com.jcrawleydev.gemsdrop;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
+import com.jcrawleydev.gemsdrop.gemgroup.Utils;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -317,7 +318,7 @@ public class GemGridTest {
 
 
     private void addGems(int position, GemGroup.Orientation orientation, Gem.Color color1, Gem.Color color2, Gem.Color color3){
-        GemGroup gemGroup = createGemGroup(position, orientation, color1, color2, color3);
+        GemGroup gemGroup = Utils.createGemGroup(position, orientation, color1, color2, color3);
         gemGrid.add(gemGroup);
     }
 
@@ -339,15 +340,6 @@ public class GemGridTest {
     }
 
 
-    private GemGroup createGemGroup(int initialPosition, GemGroup.Orientation orientation, Gem.Color c1, Gem.Color c2, Gem.Color c3){
-        Gem gem1 = new Gem(c1);
-        Gem gem2 = new Gem(c2);
-        Gem gem3 = new Gem(c3);
-        List<Gem> gems = Arrays.asList(gem1,gem2, gem3);
-        int gemWidth = 150;
-        return new GemGroup(initialPosition,0, orientation, gems, gemWidth,1000);
-
-    }
 
 
 

@@ -86,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
 
     private void assignScreenDimensions(){
-
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         height = displayMetrics.heightPixels;
@@ -116,9 +115,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         gemDropFuture.cancel(false);
     }
 
+
     public void resetDrop(){
         alreadyStarted = false;
     }
+
 
     private void log(String msg){
         System.out.println("MainActivity: " + msg);

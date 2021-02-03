@@ -87,6 +87,10 @@ public class GemGroup {
         wasUpdated = true;
     }
 
+    public void setPosition(int position){
+        this.position = position;
+    }
+
     public void rotate(){
         gemRotater.rotate();
         wasUpdated = true;

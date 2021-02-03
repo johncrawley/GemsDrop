@@ -56,7 +56,7 @@ public class GemControls {
         if(gemGroup == null){
             return;
         }
-        if(isVerticalAndAtAnEdge()){
+        if(isVerticalAndAtAnEdge() || isGemGroupIsToTheRightOfColumn()){
             return;
         }
         gemGroup.rotate();
@@ -68,6 +68,22 @@ public class GemControls {
         boolean isAtAnEdge = gemGroup.getPosition() == getMinPosition() || gemGroup.getPosition() == gemGrid.getNumberOfColumns() -1;
         return isAtAnEdge && gemGroup.getOrientation() == GemGroup.Orientation.VERTICAL;
     }
+
+    private boolean isGemGroupIsToTheRightOfColumn(){
+        int bottomGemPosition = gemGroup.getBottomPosition();
+        int columnIndex = gemGroup.getPosition() + 1;
+        if(columnIndex >= gemGrid.getNumberOfColumns()){
+            return false;
+        }
+
+        // bottomGemPosition + 2, because 1 for the index/height conversion
+        //  and one to match the middle gem
+        if(gemGrid.getColumnHeight(columnIndex) >= bottomGemPosition + 1 + gemGroup.getNumberOfGems() /2){
+            return true;
+        }
+        return false;
+    }
+
 
 
     private int getMinPosition(){

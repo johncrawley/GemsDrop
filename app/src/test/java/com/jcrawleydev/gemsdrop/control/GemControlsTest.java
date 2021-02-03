@@ -1,8 +1,12 @@
 package com.jcrawleydev.gemsdrop.control;
 
+import android.icu.lang.UCharacter;
+
 import com.jcrawleydev.gemsdrop.GemGrid;
+import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
+import com.jcrawleydev.gemsdrop.gemgroup.Utils;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -123,6 +127,25 @@ public class GemControlsTest {
     }
 
 
+
+    @Test(timeout = 1000)
+    public void cannotRotateIfVerticalAndColumnTooCloseToTheRight(){
+        int dropPosition = 3;
+        changeAndAssertOrientation(GemGroup.Orientation.VERTICAL);
+        gemGroup.setPosition(dropPosition);
+        GemGroup gemGroupToAdd = Utils.createGemGroup(dropPosition + 1, GemGroup.Orientation.VERTICAL, Gem.Color.RED, Gem.Color.BLUE, Gem.Color.GREEN);
+        gemGrid.add(gemGroupToAdd);
+        // the already-placed gems should be in y position 0,1,2
+        // if the dropping gemGroups lowest gem is adjacent to position 2, it should still be possible to rotate the gem group, as rotations are clockwise
+        //  but when the lowest gem in the dropping gemGroup is at position 1,
+        //   then the top gem in the dropping group could not rotate without colliding with the top gem in the stationary column
+        while(gemGroup.getBottomPosition() > 1){
+            gemGroup.drop();
+        }
+        gemControls.rotate();
+        assertEquals(GemGroup.Orientation.VERTICAL, gemGroup.getOrientation());
+
+    }
 
     private void moveRightTillAtPosition(int position){
         while(gemGroup.getPosition() < position){
