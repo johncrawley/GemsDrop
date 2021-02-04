@@ -6,6 +6,7 @@ import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.view.DrawItem;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,7 +22,6 @@ public class GemGrid {
     private int gemSize;
     private int floorY;
     private int startingX;
-
 
     public GemGrid(int numberOfColumns, int numberOfRows){
         NUMBER_OF_ROWS = numberOfRows;
@@ -49,12 +49,39 @@ public class GemGrid {
         return heights;
     }
 
+
     public boolean shouldAdd(GemGroup gemGroup) {
+        final int FLOOR_POSITON = 1;
+        if(gemGroup.getBottomPosition() <= FLOOR_POSITON){
+            return true;
+        }
         if(gemGroup.getOrientation() == GemGroup.Orientation.HORIZONTAL){
             return areAllGemsConnectingToColumns(gemGroup);
         }
         return gemGroup.getBottomPosition() <= getColumnHeight(gemGroup.getPosition());
+    }
 
+
+    public boolean addAnyFrom(GemGroup gemGroup){
+        if(isVertical(gemGroup)) {
+            return false;
+        }
+        boolean hasGemBeenAdded = false;
+        List<Gem> gems = gemGroup.getGridGems();
+
+        for(int i=0, position = gemGroup.getBasePosition(); i< gems.size();i++, position ++){
+            Gem gem = gems.get(i);
+            if(gemColumns.get(position).size() >= gemGroup.getBottomPosition()){
+                add(gem, position);
+                hasGemBeenAdded = true;
+            }
+        }
+        return hasGemBeenAdded;
+    }
+
+
+    boolean isVertical(GemGroup gemGroup){
+        return gemGroup.getOrientation() == GemGroup.Orientation.VERTICAL;
     }
 
 
@@ -65,16 +92,13 @@ public class GemGrid {
             }
         }
         return true;
-
     }
+
 
     public int getColumnHeight(int position){
         return gemColumns.get(position).size();
     }
 
-    public List<List<Gem>> getGemColumns(){
-        return this.gemColumns;
-    }
 
     public List<DrawItem> getAllGems(){
         List<DrawItem> allGems = new ArrayList<>(NUMBER_OF_COLUMNS * NUMBER_OF_ROWS);
@@ -89,6 +113,7 @@ public class GemGrid {
         return NUMBER_OF_COLUMNS;
     }
 
+
     private void initColumns(){
         gemColumns = new ArrayList<>(NUMBER_OF_COLUMNS);
         for(int i=0; i< NUMBER_OF_COLUMNS; i++){
@@ -96,14 +121,16 @@ public class GemGrid {
         }
     }
 
+
     public void clear(){
         for(List<Gem> column : gemColumns) {
             column.clear();
         }
     }
 
+
     public void add(GemGroup gemGroup) {
-        List<Gem> gems = gemGroup.getGemsToAddToGrid();
+        List<Gem> gems = gemGroup.getCopyOfGemsToAddToGrid();
         int position = gemGroup.getPosition();
 
         if (gemGroup.getOrientation() == GemGroup.Orientation.HORIZONTAL) {
@@ -111,6 +138,12 @@ public class GemGrid {
         } else {
             addVertical(gems, position);
         }
+    }
+
+
+    public void add(Gem gem, int position){
+        addHorizontal(Collections.singletonList(gem.clone()), position);
+        gem.setInvisible();
     }
 
 
@@ -132,12 +165,14 @@ public class GemGrid {
         return amount;
     }
 
+
     public void evaluate(){
         evaluateRows();
         evaluateColumns();
         evaluateDiagonal();
         deleteMarkedGems();
     }
+
 
     @Override @NonNull
     public String toString(){
@@ -156,12 +191,14 @@ public class GemGrid {
         int initialOffset = gemGroupPosition - gems.size()/ 2;
         for (int i = 0; i < gems.size(); i++) {
             Gem gem = gems.get(i);
+            if(!gem.isVisible()){
+                continue;
+            }
             int columnIndex = initialOffset + i;
             List<Gem> column = gemColumns.get(columnIndex);
             int rowIndex = column.size();
             setGemCoordinatesToGridPosition(gem, rowIndex, columnIndex);
             column.add(gem);
-
         }
     }
 
@@ -175,7 +212,6 @@ public class GemGrid {
             column.add(gem);
         }
     }
-
 
 
     private void setGemCoordinatesToGridPosition(Gem gem, int rowIndex, int columnIndex){
@@ -227,6 +263,7 @@ public class GemGrid {
         }
     }
 
+
     private void evaluateDiagonal(){
         List<List<Gem>> diagonals = new ArrayList<>();
         addLowerHalfDiagonalsTo(diagonals);
@@ -239,6 +276,7 @@ public class GemGrid {
         }
 
     }
+
 
     public void addLowerHalfDiagonalsTo(List<List<Gem>> diagonals){
 
@@ -312,14 +350,9 @@ public class GemGrid {
         }
     }
 
-    private void log(String msg){
-        System.out.println("GemGrid --> "  + msg);
-    }
-
 
     private void evaluateRow(int i){
         List<Gem> filledOutRow = constructRow(i);
-        // printRow(filledOutRow);
         evaluateGems(filledOutRow);
     }
 
@@ -334,20 +367,6 @@ public class GemGrid {
             filledOutRow.add(new NullGem());
         }
         return filledOutRow;
-    }
-
-
-    private void printRow(List<Gem> gems){
-        StringBuilder str =new StringBuilder();
-        for(Gem gem : gems){
-            str.append(" ");
-            String color = "_";
-            if(gem.getColor() != null){
-                color = gem.getColor().toString();
-            }
-            str.append(color);
-        }
-        log(str.toString());
     }
 
 

@@ -20,7 +20,7 @@ public class GemGroupView implements UpdatableView{
     private Map<Gem.Color, Bitmap> gemColorMap;
     private BitmapLoader bitmapLoader;
     private GemGroup gemGroup;
-    private boolean wasModelUpdated;
+
 
     public GemGroupView(View view, Context context, GemGroup gemGroup){
         transparentView = (TransparentView)view;
@@ -50,7 +50,6 @@ public class GemGroupView implements UpdatableView{
 
     @Override
     public void drawIfUpdated(){
-
         if(gemGroup.wasUpdated()) {
             transparentView.setTranslateY(gemGroup.getY());
             transparentView.setTranslateX(gemGroup.getX());
@@ -60,20 +59,13 @@ public class GemGroupView implements UpdatableView{
         }
     }
 
-    public void updateAndDraw(){
-        transparentView.setTranslateY(gemGroup.getY());
-        transparentView.setTranslateX(gemGroup.getX());
-        transparentView.updateAndDraw();
-        transparentView.invalidate();
-
-    }
-
 
     private void setBitmapReferences(){
         for(Gem gem: gemGroup.getGems()){
             gem.setBitmap(gemColorMap.get(gem.getColor()));
         }
     }
+
 
     private void linkBitmapsToColorsAndAssignWidths(){
         gemColorMap = new HashMap<>();

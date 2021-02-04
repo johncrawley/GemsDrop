@@ -69,6 +69,10 @@ public class GemGroup {
         return position;
     }
 
+    public int getBasePosition(){
+        return position - getNumberOfGems() /2;
+    }
+
 
     public Orientation getOrientation(){
         return orientation;
@@ -118,14 +122,15 @@ public class GemGroup {
         return reversedOrderGems;
     }
 
+
     // NB gems if vertical orientation, a gem group will be printed top-to-bottom
     //  but the same gem group will be added bottom-to-top to a grid column
-    public List<Gem> getGemsToAddToGrid(){
+    public List<Gem> getCopyOfGemsToAddToGrid(){
         return copyOf(getGridGems());
     }
 
 
-    private List<Gem> getGridGems(){
+    public List<Gem> getGridGems(){
         if(orientation == Orientation.HORIZONTAL){
             return getGems();
         }
@@ -176,6 +181,16 @@ public class GemGroup {
         }
         y += dropIncrement;
         wasUpdated = true;
+    }
+
+
+    public boolean haveAllGemsSettled(){
+        for(Gem gem: gems){
+            if(gem.isVisible()){
+                return false;
+            }
+        }
+        return true;
     }
 
 

@@ -121,14 +121,14 @@ public class TransparentView extends View {
         if(items == null){
             return;
         }
-
-        for(DrawItem drawItem : items){
-
-            if(drawItem.isVisible()) {
-                canvasBitmap.drawBitmap(drawItem.getBitmap(), drawItem.getX(), drawItem.getY(), paint);
+        for(DrawItem item : items){
+            if(!item.isVisible()) {
+                continue;
             }
+            canvasBitmap.drawBitmap(item.getBitmap(), item.getX(), item.getY(), paint);
         }
     }
+
 
 
 }

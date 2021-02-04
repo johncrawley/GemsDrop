@@ -71,8 +71,8 @@ public class Gem implements DrawItem, Cloneable {
     }
 
     public void setXY(int x, int y){
-        this.x = x;
-        this.y = y;
+        setX(x);
+        setY(y);
     }
 
 
@@ -113,6 +113,8 @@ public class Gem implements DrawItem, Cloneable {
         this.visible = false;
     }
 
+
+    @Override
     public Gem clone(){
         Gem gem= new Gem(Color.BLUE);
         try{

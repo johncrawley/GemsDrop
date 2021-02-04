@@ -264,6 +264,17 @@ public class GemGridTest {
 
     }
 
+
+    @Test
+    public void canAddSingleGem(){
+        Gem gem = new Gem(BLUE);
+        int position = 3;
+        gemGrid.add(gem, position);
+        assertEquals(1, gemGrid.gemCount());
+        assertEquals(1,gemGrid.getColumnHeight(position));
+
+    }
+
     @Test
     public void canGetAllGems(){
 
@@ -321,6 +332,7 @@ public class GemGridTest {
         GemGroup gemGroup = Utils.createGemGroup(position, orientation, color1, color2, color3);
         gemGrid.add(gemGroup);
     }
+
 
 
     private void assertGridBeforeAndAfter(int modifiedRows, String beforeGrid, String afterGrid){

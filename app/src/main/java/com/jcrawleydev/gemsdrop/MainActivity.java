@@ -14,6 +14,7 @@ import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
 import com.jcrawleydev.gemsdrop.tasks.AnimateTask;
 import com.jcrawleydev.gemsdrop.tasks.GemDropTask;
+import com.jcrawleydev.gemsdrop.tasks.QuickDropTask;
 import com.jcrawleydev.gemsdrop.view.GemGridView;
 import com.jcrawleydev.gemsdrop.view.GemGroupView;
 import com.jcrawleydev.gemsdrop.view.TransparentView;
@@ -29,15 +30,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private GemGroupFactory gemGroupFactory;
     private GemGroupView gemGroupView;
     int height, width;
-    private boolean alreadyStarted = false;
-    private ScheduledFuture <?> t;
+    private boolean hasGemDropStarted = false;
     private int floorY = 0;
     private GemGrid gemGrid;
     private GemGridView gemGridView;
     private ClickHandler clickHandler;
     private GemControls gemControls;
     private int gemWidth = 150;
-    private ScheduledFuture<?> gemDropFuture, animateFuture;
+    private ScheduledFuture<?> gemDropFuture, animateFuture, quickDropFuture;
 
 
     @Override
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         gemGroupFactory = new GemGroupFactory.Builder()
                     .withInitialY(initialY)
-                    .withGemWidth(150)
+                    .withGemWidth(gemWidth)
                     .withNumerOfGems(3)
                     .withInitialPosition(4)
                     .withFloorAt(floorY)
@@ -78,7 +78,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         if(e.getAction() != MotionEvent.ACTION_DOWN){
             return true;
         }
-        log("Entered onClick");
         clickHandler.click((int)e.getX());
         startGemDrop();
         return true;
@@ -94,20 +93,31 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
 
+    GemGroup gemGroup;
     private void startGemDrop(){
-        if(alreadyStarted){
+        if(hasGemDropStarted){
             return;
         }
-        alreadyStarted = true;
-        GemGroup gemGroup = gemGroupFactory.createGemGroup();
+        hasGemDropStarted = true;
+        gemGroup = gemGroupFactory.createGemGroup();
         gemControls.setGemGroup(gemGroup);
         gemGroupView.setGemGroup(gemGroup);
         GemDropTask gemDropTask = new GemDropTask(gemGroup, gemGrid, gemGridView, this);
         AnimateTask animateTask = new AnimateTask(gemGroupView);
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
-        gemDropFuture = executor.scheduleWithFixedDelay(gemDropTask, 0, 150, TimeUnit.MILLISECONDS);
+        gemDropFuture = executor.scheduleWithFixedDelay(gemDropTask, 0, 250, TimeUnit.MILLISECONDS);
         animateFuture = executor.scheduleWithFixedDelay(animateTask, 0, 20, TimeUnit.MILLISECONDS);
+    }
+
+
+    public void quickDropRemainingGems(){
+
+        QuickDropTask quickDropTask = new QuickDropTask(this, gemGroup, gemGrid, gemGridView);
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
+        gemControls.deactivate();
+        quickDropFuture = executor.scheduleWithFixedDelay(quickDropTask, 0, 70, TimeUnit.MILLISECONDS);
+
     }
 
 
@@ -115,14 +125,16 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         gemDropFuture.cancel(false);
     }
 
+    public void finishQuickDrop(){
+        resetDrop();
+        gemControls.reactivate();
+        quickDropFuture.cancel(false);
+
+    }
 
     public void resetDrop(){
-        alreadyStarted = false;
+        hasGemDropStarted = false;
     }
 
-
-    private void log(String msg){
-        System.out.println("MainActivity: " + msg);
-    }
 
 }

@@ -22,17 +22,22 @@ public class GemDropTask implements Runnable{
     }
 
     public void run(){
-        if(gemGroup.getBottomPosition() <=0 || gemGrid.shouldAdd(gemGroup)) {
+        if(gemGrid.shouldAdd(gemGroup)) {
             gemGrid.add(gemGroup);
             gemGridView.draw();
             gemGroup.setGemsInvisible();
-            mainActivity.resetDrop();
             mainActivity.cancelFuture();
-            return;
+            mainActivity.resetDrop();
         }
+        else if(gemGrid.addAnyFrom(gemGroup)){
+            gemGridView.draw();
+            mainActivity.quickDropRemainingGems();
+            mainActivity.cancelFuture();
+        }
+        else {
             gemGroup.drop();
+        }
     }
-
 
 
 }

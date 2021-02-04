@@ -7,6 +7,7 @@ public class GemControls {
 
     private GemGrid gemGrid;
     private GemGroup gemGroup;
+    private boolean isActivated = true;
 
 
     public GemControls(GemGroup gemGroup, GemGrid gemGrid){
@@ -23,8 +24,16 @@ public class GemControls {
     }
 
 
+    public void deactivate(){
+        isActivated = false;
+    }
+
+    public void reactivate(){
+        isActivated = true;
+    }
+
     public void moveLeft(){
-        if(gemGroup == null){
+        if(shouldSkipAction()){
             return;
         }
         int minPosition = getMinPosition();
@@ -35,8 +44,10 @@ public class GemControls {
     }
 
 
+
+
     public void moveRight(){
-        if(gemGroup == null){
+        if(shouldSkipAction()){
             return;
         }
         int maxPosition = gemGrid.getNumberOfColumns() -1;
@@ -53,21 +64,22 @@ public class GemControls {
 
 
     public void rotate(){
-        if(gemGroup == null){
+        if(shouldSkipAction()){
             return;
         }
         if(isVerticalAndAtAnEdge() || isGemGroupIsToTheRightOfColumn()){
             return;
         }
         gemGroup.rotate();
-
     }
+
 
     private boolean isVerticalAndAtAnEdge(){
 
         boolean isAtAnEdge = gemGroup.getPosition() == getMinPosition() || gemGroup.getPosition() == gemGrid.getNumberOfColumns() -1;
         return isAtAnEdge && gemGroup.getOrientation() == GemGroup.Orientation.VERTICAL;
     }
+
 
     private boolean isGemGroupIsToTheRightOfColumn(){
         int bottomGemPosition = gemGroup.getBottomPosition();
@@ -85,13 +97,17 @@ public class GemControls {
     }
 
 
-
     private int getMinPosition(){
         int minPosition = 0;
         if(gemGroup.getOrientation() == GemGroup.Orientation.HORIZONTAL){
             minPosition = gemGroup.getNumberOfGems() / 2;
         }
         return minPosition;
+    }
+
+
+    private boolean shouldSkipAction(){
+        return gemGroup == null || !isActivated;
     }
 
 

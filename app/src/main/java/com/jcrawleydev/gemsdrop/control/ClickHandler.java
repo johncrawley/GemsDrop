@@ -12,24 +12,16 @@ public class ClickHandler {
     }
 
     public void click(int x){
-        log("Entered click() x: " + x);
         if(x < leftLimit){
-            log("moving left...");
             moveLeft();
             return;
         }
         if(x < rotateLimit){
-            log("rotating...");
             rotate();
             return;
         }
-        log("moving right...");
         moveRight();
 
-    }
-
-    private void log(String msg){
-        System.out.println("ClickHandler  " + msg);
     }
 
 
