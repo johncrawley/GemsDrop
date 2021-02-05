@@ -256,7 +256,6 @@ public class GemGrid {
     }
 
 
-
     private void evaluateColumns(){
         for(List<Gem> column: gemColumns){
             evaluateGems(column);
