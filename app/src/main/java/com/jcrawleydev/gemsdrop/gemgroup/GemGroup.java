@@ -70,6 +70,9 @@ public class GemGroup {
     }
 
     public int getBasePosition(){
+        if(isVertical()){
+            return position;
+        }
         return position - getNumberOfGems() /2;
     }
 
@@ -78,6 +81,9 @@ public class GemGroup {
         return orientation;
     }
 
+    public boolean isVertical(){
+        return this.orientation == Orientation.VERTICAL;
+    }
 
     public void decrementPosition(){
         x -= gemWidth;

@@ -1,7 +1,5 @@
 package com.jcrawleydev.gemsdrop.control;
 
-import android.icu.lang.UCharacter;
-
 import com.jcrawleydev.gemsdrop.GemGrid;
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
@@ -16,15 +14,13 @@ import static org.junit.Assert.assertEquals;
 
 public class GemControlsTest {
 
-
     private static GemGroupFactory gemGroupFactory;
     private static GemGrid gemGrid;
     private GemControls gemControls;
     private GemGroup gemGroup;
     private static int numberOfGemsPerGroup = 3;
     private static int gemWidth = 150;
-
-    int rightmostIndexForHorizontal = 0;
+    private int rightmostIndexForHorizontal = 0;
 
     @BeforeClass
     public static void initialSetup(){
@@ -38,6 +34,7 @@ public class GemControlsTest {
                 .build();
     }
 
+
     @Before
     public void setup(){
         gemGroup = gemGroupFactory.createGemGroup();
@@ -45,6 +42,7 @@ public class GemControlsTest {
 
         rightmostIndexForHorizontal = (gemGrid.getNumberOfColumns() -1) - gemGroup.getNumberOfGems() /2;
     }
+
 
     @Test
     public void canMoveGemGroupLeftAndRight(){
@@ -60,8 +58,8 @@ public class GemControlsTest {
         assertEquals(initialPosition, gemGroup.getPosition());
         gemControls.moveRight();
         assertEquals(initialPosition + 1, gemGroup.getPosition());
-
     }
+
 
     @Test
     public void cannotMoveLeftIfVerticalAndAtFirstPosition(){
@@ -83,6 +81,7 @@ public class GemControlsTest {
         assertPosition(horizontalLeftLimit);
     }
 
+
     @Test
     public void cannotMoveRightIfVerticalAndAtLastPosition(){
         changeAndAssertOrientation(GemGroup.Orientation.VERTICAL);
@@ -92,6 +91,7 @@ public class GemControlsTest {
         assertPosition(rightmostIndexForVertical);
     }
 
+
     @Test
     public void cannotMoveRightIfHorizontalAndAtLastPosition(){
         changeAndAssertOrientation(GemGroup.Orientation.HORIZONTAL);
@@ -99,6 +99,7 @@ public class GemControlsTest {
         gemControls.moveRight();
         assertPosition(rightmostIndexForHorizontal);
     }
+
 
     @Test
     public void canRotateInDefaultPosition(){
@@ -127,34 +128,67 @@ public class GemControlsTest {
     }
 
 
-
     @Test(timeout = 1000)
     public void cannotRotateIfVerticalAndColumnTooCloseToTheRight(){
         int dropPosition = 3;
         changeAndAssertOrientation(GemGroup.Orientation.VERTICAL);
         gemGroup.setPosition(dropPosition);
-        GemGroup gemGroupToAdd = Utils.createGemGroup(dropPosition + 1, GemGroup.Orientation.VERTICAL, Gem.Color.RED, Gem.Color.BLUE, Gem.Color.GREEN);
-        gemGrid.add(gemGroupToAdd);
+        addVerticalGemsToGridAtPosition(dropPosition+1);
         // the already-placed gems should be in y position 0,1,2
         // if the dropping gemGroups lowest gem is adjacent to position 2, it should still be possible to rotate the gem group, as rotations are clockwise
         //  but when the lowest gem in the dropping gemGroup is at position 1,
         //   then the top gem in the dropping group could not rotate without colliding with the top gem in the stationary column
-        while(gemGroup.getBottomPosition() > 1){
-            gemGroup.drop();
-        }
+        dropGemGroupTo(1);
         gemControls.rotate();
-        assertEquals(GemGroup.Orientation.VERTICAL, gemGroup.getOrientation());
+        assertVerticalOrientation();
+    }
+
+
+    @Test(timeout = 1000)
+    public void cannotRotateIfVerticalAndColumnTooCloseToTheLeft(){
+        int dropPosition = 3;
+        changeAndAssertOrientation(GemGroup.Orientation.VERTICAL);
+        gemGroup.setPosition(dropPosition);
+
+        addVerticalGemsToGridAtPosition(dropPosition -1);
+        dropGemGroupTo(1);
+        gemControls.rotate();
+        assertVerticalOrientation();
+    }
+
+    //@Test
+    public void cannotMoveLeftIfColumnToTheLeft(){
+        int dropPosition = 3;
 
     }
+
+
+    private void assertVerticalOrientation(){
+        assertEquals(GemGroup.Orientation.VERTICAL, gemGroup.getOrientation());
+    }
+
+
+    private void dropGemGroupTo(int yPosition){
+        while(gemGroup.getBottomPosition() > yPosition){
+            gemGroup.drop();
+        }
+    }
+
+
+
+
+    private void addVerticalGemsToGridAtPosition(int position){
+        GemGroup gemGroupToAdd = Utils.createGemGroup(position, GemGroup.Orientation.VERTICAL, Gem.Color.RED, Gem.Color.BLUE, Gem.Color.GREEN);
+        gemGrid.add(gemGroupToAdd);
+    }
+
 
     private void moveRightTillAtPosition(int position){
         while(gemGroup.getPosition() < position){
             gemControls.moveRight();
         }
         assertPosition(position);
-
     }
-
 
 
     private void moveVerticalToRightEdge(){
@@ -176,14 +210,11 @@ public class GemControlsTest {
 
 
     private void changeAndAssertOrientation(GemGroup.Orientation orientation){
-
         if(gemGroup.getOrientation() != orientation){
             gemGroup.rotate();
         }
         assertEquals(orientation, gemGroup.getOrientation());
-
     }
-
 
 
 }
