@@ -65,9 +65,11 @@ public class GemGroup {
         this.dropIncrement = (int)(gemWidth * dropMultiple);
     }
 
+
     public int getPosition(){
         return position;
     }
+
 
     public int getBasePosition(){
         if(isVertical()){
@@ -77,13 +79,23 @@ public class GemGroup {
     }
 
 
+    public int getEndPosition(){
+        if(isVertical()){
+            return position;
+        }
+        return position + getNumberOfGems() /2;
+    }
+
+
     public Orientation getOrientation(){
         return orientation;
     }
 
+
     public boolean isVertical(){
         return this.orientation == Orientation.VERTICAL;
     }
+
 
     public void decrementPosition(){
         x -= gemWidth;
@@ -91,20 +103,24 @@ public class GemGroup {
         wasUpdated = true;
     }
 
+
     public void incrementPosition(){
         x += gemWidth;
         position++;
         wasUpdated = true;
     }
 
+
     public void setPosition(int position){
         this.position = position;
     }
+
 
     public void rotate(){
         gemRotater.rotate();
         wasUpdated = true;
     }
+
 
     public void setDetailedOrientation(DetailedOrientation trueOrientation){
         detailedOrientation = trueOrientation;

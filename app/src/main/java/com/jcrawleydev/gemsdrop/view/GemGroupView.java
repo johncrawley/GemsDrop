@@ -35,7 +35,6 @@ public class GemGroupView implements UpdatableView{
         gemGroup.setGemWidth(GEM_WIDTH);
         setBitmapReferences();
         setDrawItems();
-        gemGroup.setDropMultiple(.5f);
     }
 
 

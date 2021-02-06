@@ -19,18 +19,18 @@ public class GemControlsTest {
     private GemControls gemControls;
     private GemGroup gemGroup;
     private static int numberOfGemsPerGroup = 3;
-    private static int gemWidth = 150;
     private int rightmostIndexForHorizontal = 0;
 
     @BeforeClass
     public static void initialSetup(){
         gemGrid = new GemGrid(8, 12);
+        int gemWidth = 150;
         gemGroupFactory = new GemGroupFactory.Builder()
-                .withInitialY(150)
+                .withInitialY(16)
                 .withGemWidth(gemWidth)
                 .withNumerOfGems(numberOfGemsPerGroup)
                 .withInitialPosition(0)
-                .withFloorAt(300)
+                .withFloorAt(1300)
                 .build();
     }
 
@@ -156,10 +156,35 @@ public class GemControlsTest {
         assertVerticalOrientation();
     }
 
-    //@Test
-    public void cannotMoveLeftIfColumnToTheLeft(){
-        int dropPosition = 3;
 
+    @Test
+    public void cannotMoveLeftIfColumnToTheLeft(){
+        int dropPosition = 5;
+        gemGroup.setPosition(dropPosition);
+        addVerticalGemsToGridAtPosition(dropPosition -1);
+        dropGemGroupTo(4);
+        gemControls.moveLeft();
+        assertPosition(dropPosition-1);
+        gemControls.moveRight();
+        assertPosition(dropPosition);
+        dropGemGroupTo(3);
+        gemControls.moveLeft();
+        assertPosition(dropPosition);
+    }
+
+
+    @Test(timeout = 1000)
+    public void cannotMoveRightIfColumnToTheRight(){
+        int dropPosition = 5;
+        gemGroup.setPosition(dropPosition);
+        addVerticalGemsToGridAtPosition(dropPosition +1);
+        dropGemGroupTo(4);
+        gemControls.moveRight();
+        assertPosition(dropPosition +1);
+        gemControls.moveLeft();
+        dropGemGroupTo(3);
+        gemControls.moveRight();
+        assertPosition(dropPosition);
     }
 
 
@@ -173,8 +198,6 @@ public class GemControlsTest {
             gemGroup.drop();
         }
     }
-
-
 
 
     private void addVerticalGemsToGridAtPosition(int position){

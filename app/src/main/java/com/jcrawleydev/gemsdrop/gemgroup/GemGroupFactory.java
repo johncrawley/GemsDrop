@@ -31,7 +31,10 @@ public class GemGroupFactory {
             Gem gem = new Gem(getRandomColor());
             gems.add(gem);
         }
-        return new GemGroup(INITIAL_POSITION, GEMS_INITIAL_Y, GemGroup.Orientation.VERTICAL, gems, GEM_WIDTH, floorY);
+        GemGroup gemGroup = new GemGroup(INITIAL_POSITION, GEMS_INITIAL_Y, GemGroup.Orientation.VERTICAL, gems, GEM_WIDTH, floorY);
+
+        gemGroup.setDropMultiple(.5f);
+        return gemGroup;
     }
 
 
@@ -47,9 +50,7 @@ public class GemGroupFactory {
 
         public Builder(){}
 
-
-       // public GemGroupFactory(int numberOfGems, int initialPosition, int gemsInitialX, int gemsInitialY, int gemWidth, int floorY){
-           private int numberOfGems, initialPosition, gemsInitialX, gemsInitialY, gemWidth, floorY;
+       private int numberOfGems, initialPosition, gemsInitialY, gemWidth, floorY;
 
         public Builder withInitialY(int initialY){
             this.gemsInitialY = initialY;

@@ -37,10 +37,30 @@ public class GemControls {
             return;
         }
         int minPosition = getMinPosition();
-        if(gemGroup.getPosition() <= minPosition ){
+        if(gemGroup.getPosition() <= minPosition || aGemColumnIsToTheLeft()){
             return;
         }
         gemGroup.decrementPosition();
+    }
+
+    private boolean aGemColumnIsToTheLeft(){
+        int colIndex = gemGroup.getBasePosition() -1;
+        if(colIndex < 0){
+            return false;
+        }
+        return isColumnTallerThanLowestFallingGem(colIndex);
+    }
+
+    private boolean aGemColumnIsToTheRight(){
+        int colIndex = gemGroup.getEndPosition() + 1;
+        if(colIndex > gemGrid.getNumberOfColumns()){
+            return false;
+        }
+        return isColumnTallerThanLowestFallingGem(colIndex);
+    }
+
+    private boolean isColumnTallerThanLowestFallingGem(int colIndex){
+        return gemGrid.getColumnHeight(colIndex) >= gemGroup.getBottomPosition();
     }
 
 
@@ -54,14 +74,10 @@ public class GemControls {
             maxPosition -= gemGroup.getNumberOfGems() /2;
         }
 
-        if(gemGroup.getPosition() >= maxPosition || isGemGroupRightSideTouchingColumn()){
+        if(gemGroup.getPosition() >= maxPosition || aGemColumnIsToTheRight()){
             return;
         }
         gemGroup.incrementPosition();
-    }
-
-    private boolean isGemGroupRightSideTouchingColumn(){
-        return gemGrid.getColumnHeight(gemGroup.getBasePosition() -1) > gemGroup.getBottomPosition();
     }
 
 
@@ -77,14 +93,15 @@ public class GemControls {
 
 
     private boolean isVerticalAndAtAnEdge(){
-
         boolean isAtAnEdge = gemGroup.getPosition() == getMinPosition() || gemGroup.getPosition() == gemGrid.getNumberOfColumns() -1;
         return isAtAnEdge && gemGroup.getOrientation() == GemGroup.Orientation.VERTICAL;
     }
 
+
     private boolean isGemGroupAdjacentToColumns(){
         return isGemGroupToTheLeftOfColumn() || isGemGroupToTheRightOfColumn();
     }
+
 
     private boolean isGemGroupToTheRightOfColumn(){
         int columnIndex = gemGroup.getPosition() + 1;
@@ -103,10 +120,10 @@ public class GemControls {
         return doesColumnHeightMeetLowestGem(columnIndex);
     }
 
+
     public boolean doesColumnHeightMeetLowestGem(int colIndex){
         return gemGrid.getColumnHeight(colIndex) >= gemGroup.getBottomPosition() + 1 + gemGroup.getNumberOfGems() /2;
     }
-
 
 
     private int getMinPosition(){
@@ -121,7 +138,6 @@ public class GemControls {
     private boolean shouldSkipAction(){
         return gemGroup == null || !isActivated;
     }
-
 
 
 }
