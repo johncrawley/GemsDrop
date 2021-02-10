@@ -419,5 +419,34 @@ public class GemGrid {
         }
     }
 
+    // it's possible to have more than one segment per column
+    // each segment will drop until it hits something (NB lower segments on Y axis should drop first)
+    // Work in progress algorithm!
+    public List<List<Gem>> getGemSegmentsToDropAfterDeletion() {
+        List<List<Gem>> gemSegments = new ArrayList<>();
+        for (List<Gem> column : gemColumns) {
+            boolean isStarted = false;
+            int startedIndex = -1;
+            int endIndex = -1;
+            List<Gem> gemSegment = new ArrayList<>();
+
+            for (int i = 0; i < column.size(); i++) {
+                Gem gem = column.get(i);
+                if (isStarted && !gem.isMarkedForDeletion()) {
+                    gemSegment = new ArrayList<>();
+                    gemSegment.add(gem.clone());
+                    //maybe mark gem for deletion as well, or use another tag to avoid deletion animation?
+                } else if (isStarted && gem.isMarkedForDeletion()) {
+                    isStarted = false;
+                    gemSegments.add(gemSegment);
+
+
+                }
+
+            }
+        }
+        return gemSegments;
+    }
+
 
 }
