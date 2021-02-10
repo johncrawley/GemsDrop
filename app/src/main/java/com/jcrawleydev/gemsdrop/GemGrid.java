@@ -22,6 +22,7 @@ public class GemGrid {
     private int gemSize;
     private int floorY;
     private int startingX;
+    private int dropIncrement;
 
     public GemGrid(int numberOfColumns, int numberOfRows){
         NUMBER_OF_ROWS = numberOfRows;
@@ -39,6 +40,10 @@ public class GemGrid {
 
     public void setStartingX(int x){
         this.startingX = x;
+    }
+
+    public void setDropIncrement(int dropIncrement){
+        this.dropIncrement = dropIncrement;
     }
 
     public List<Integer> getColumnHeights(){
@@ -244,7 +249,6 @@ public class GemGrid {
                     iterator.remove();
                 }
             }
-
         }
     }
 
@@ -273,7 +277,6 @@ public class GemGrid {
         for(List<Gem> diagonal : diagonals){
             evaluateGems(diagonal);
         }
-
     }
 
 
@@ -419,33 +422,31 @@ public class GemGrid {
         }
     }
 
-    // it's possible to have more than one segment per column
-    // each segment will drop until it hits something (NB lower segments on Y axis should drop first)
-    // Work in progress algorithm!
-    public List<List<Gem>> getGemSegmentsToDropAfterDeletion() {
-        List<List<Gem>> gemSegments = new ArrayList<>();
-        for (List<Gem> column : gemColumns) {
-            boolean isStarted = false;
-            int startedIndex = -1;
-            int endIndex = -1;
-            List<Gem> gemSegment = new ArrayList<>();
 
-            for (int i = 0; i < column.size(); i++) {
-                Gem gem = column.get(i);
-                if (isStarted && !gem.isMarkedForDeletion()) {
-                    gemSegment = new ArrayList<>();
-                    gemSegment.add(gem.clone());
-                    //maybe mark gem for deletion as well, or use another tag to avoid deletion animation?
-                } else if (isStarted && gem.isMarkedForDeletion()) {
-                    isStarted = false;
-                    gemSegments.add(gemSegment);
-
-
-                }
-
-            }
+    public void dropGems(){
+        for(List<Gem> column : gemColumns){
+            dropGemsInColumn(column);
         }
-        return gemSegments;
+    }
+
+    private void dropGemsInColumn(List<Gem> column){
+        for(int i =0; i< column.size(); i++){
+            dropGemIfAboveGridPosition(column.get(i), i);
+        }
+    }
+
+    private void dropGemIfAboveGridPosition(Gem gem, int actualRowIndex){
+        if(gem.getY() < getYForRowTop(actualRowIndex)){
+            dropGem(gem);
+        }
+    }
+
+    private void dropGem(Gem gem){
+        gem.incY(dropIncrement);
+    }
+
+    private int getYForRowTop(int rowIndex){
+        return this.floorY + ((1 + rowIndex) * gemSize);
     }
 
 
