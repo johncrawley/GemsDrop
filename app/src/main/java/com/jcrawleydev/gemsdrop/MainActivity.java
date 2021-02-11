@@ -10,6 +10,8 @@ import android.view.View;
 
 import com.jcrawleydev.gemsdrop.control.ClickHandler;
 import com.jcrawleydev.gemsdrop.control.GemControls;
+import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
+import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
 import com.jcrawleydev.gemsdrop.tasks.AnimateTask;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private GemControls gemControls;
     private int gemWidth = 150;
     private ScheduledFuture<?> gemDropFuture, animateFuture, quickDropFuture;
+    private Evaluator evaluator;
 
 
     @Override
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         setContentView(R.layout.activity_main);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         assignScreenDimensions();
+
 
         int initialY = gemWidth * -2;
 
@@ -68,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         gemGroupView = new GemGroupView(gemGroupTransparentView, MainActivity.this, gemGroupFactory.createGemGroup());
         gemGrid = new GemGrid(7,12);
         gemGridView = new GemGridView(gemGridTransparentView, gemGrid, 150, floorY);
-
+        evaluator = new Evaluator(gemGrid, 3);
         gemControls = new GemControls(gemGrid);
         clickHandler = new ClickHandler(gemControls, width);
     }
@@ -126,10 +130,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     public void finishQuickDrop(){
+        System.out.println("MainActivity - entered finishQuickDrop()");
         resetDrop();
         gemControls.reactivate();
         quickDropFuture.cancel(false);
-
+        evaluator.evaluate();
     }
 
     public void resetDrop(){

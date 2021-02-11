@@ -1,6 +1,8 @@
 package com.jcrawleydev.gemsdrop;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
+import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
+import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.Utils;
 
@@ -35,6 +37,7 @@ public class GemGridTest {
     private final int NUMBER_OF_COLUMNS = 10;
     private final int NUMBER_OF_ROWS = 8;
     private final int INITIAL_POSITION = 5;
+    private Evaluator evaluator;
 
 
     @Before
@@ -42,6 +45,7 @@ public class GemGridTest {
 
         gemGrid = new GemGrid(NUMBER_OF_COLUMNS, NUMBER_OF_ROWS);
         assertTrue(gemGrid.isEmpty());
+        evaluator = new Evaluator(gemGrid, 3);
     }
 
 
@@ -111,13 +115,13 @@ public class GemGridTest {
         assertEquals(3, gemGrid.gemCount());
         assertFalse(gemGrid.isEmpty());
 
-        gemGrid.evaluate();
+        evaluator.evaluate();
         assertEquals(0, gemGrid.gemCount());
         assertTrue(gemGrid.isEmpty());
 
         addGems(INITIAL_POSITION, HORIZONTAL, RED, BLUE, YELLOW);
         addGems(INITIAL_POSITION, HORIZONTAL, RED, BLUE, YELLOW);
-        gemGrid.evaluate();
+        evaluator.evaluate();
         assertEquals(6, gemGrid.gemCount());
     }
 
@@ -137,7 +141,7 @@ public class GemGridTest {
         addGems(INITIAL_POSITION, HORIZONTAL, RED, BLUE,YELLOW);
         addGems(INITIAL_POSITION, HORIZONTAL, RED, BLUE, YELLOW);
         addGems(INITIAL_POSITION, HORIZONTAL, RED, BLUE, GREEN);
-        gemGrid.evaluate();
+        evaluator.evaluate();
         assertEquals(3, gemGrid.gemCount());
     }
 
@@ -157,7 +161,7 @@ public class GemGridTest {
         addGems(INITIAL_POSITION, HORIZONTAL, RED, BLUE,YELLOW);
         addGems(INITIAL_POSITION, HORIZONTAL, RED, BLUE, YELLOW);
         addGems(INITIAL_POSITION, HORIZONTAL, RED, BLUE, GREEN);
-        gemGrid.evaluate();
+        evaluator.evaluate();
         assertEquals(3, gemGrid.gemCount());
     }
 
@@ -287,7 +291,7 @@ public class GemGridTest {
         addGems(1, VERTICAL, RED, BLUE, GREEN);
         addGems(2, VERTICAL, RED, YELLOW, GREEN);
         addGems(3, VERTICAL, RED, GREEN, BLUE);
-        gemGrid.evaluate();
+        evaluator.evaluate();
         assertEquals(6, gemGrid.gemCount());
         //assertEquals(6, gemGrid.getAllGems().size());
 
@@ -338,7 +342,7 @@ public class GemGridTest {
     private void assertGridBeforeAndAfter(int modifiedRows, String beforeGrid, String afterGrid){
         String expectedGrid = buildGridWith(modifiedRows,beforeGrid);
         assertEquals(expectedGrid, gemGrid.toString());
-        gemGrid.evaluate();
+        evaluator.evaluate();
         expectedGrid = buildGridWith(modifiedRows, afterGrid);
         assertEquals(expectedGrid, gemGrid.toString());
 
@@ -346,7 +350,7 @@ public class GemGridTest {
 
     private void assertGemsBeforeAndAfterEval(int expectedAmountBefore, int expectedAmountAfter){
         assertEquals(expectedAmountBefore, gemGrid.gemCount());
-        gemGrid.evaluate();
+        evaluator.evaluate();
         assertEquals(expectedAmountAfter, gemGrid.gemCount());
 
     }

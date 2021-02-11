@@ -1,5 +1,5 @@
 package com.jcrawleydev.gemsdrop.view;
-import com.jcrawleydev.gemsdrop.GemGrid;
+import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 
 public class GemGridView implements UpdatableView{
 

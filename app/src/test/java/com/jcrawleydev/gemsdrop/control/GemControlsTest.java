@@ -1,6 +1,6 @@
 package com.jcrawleydev.gemsdrop.control;
 
-import com.jcrawleydev.gemsdrop.GemGrid;
+import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;

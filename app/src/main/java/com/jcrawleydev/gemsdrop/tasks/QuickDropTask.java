@@ -1,6 +1,6 @@
 package com.jcrawleydev.gemsdrop.tasks;
 
-import com.jcrawleydev.gemsdrop.GemGrid;
+import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.MainActivity;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.view.GemGridView;
