@@ -117,6 +117,10 @@ public class Gem implements DrawItem, Cloneable {
         this.visible = false;
     }
 
+    public void setVisible(){
+        this.visible = true;
+    }
+
 
     @Override
     public Gem clone(){

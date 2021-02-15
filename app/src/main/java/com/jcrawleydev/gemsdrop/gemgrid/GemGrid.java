@@ -55,6 +55,24 @@ public class GemGrid {
         return heights;
     }
 
+    public void flickerGemsMarkedForDeletion(){
+        for(List<Gem> column : gemColumns){
+            for(Gem gem: column){
+                if(!gem.isMarkedForDeletion()){
+                    return;
+                }
+                if(gem.isVisible()){
+                    gem.setInvisible();
+                    return;
+                }
+                gem.setVisible();
+
+            }
+        }
+
+
+    }
+
 
     public boolean shouldAdd(GemGroup gemGroup) {
         final int FLOOR_POSITON = 1;

@@ -6,6 +6,7 @@ import com.jcrawleydev.gemsdrop.gem.NullGem;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 public class Evaluator {
 
@@ -28,7 +29,17 @@ public class Evaluator {
         evaluateRows();
         evaluateColumns();
         evaluateDiagonal();
-        deleteMarkedGems();
+        //deleteMarkedGems();
+    }
+
+    private boolean hasMarkedGems = false;
+
+    public boolean hasMarkedGems(){
+        return hasMarkedGems;
+    }
+
+    public void resetMarkedStatus(){
+        hasMarkedGems = false;
     }
 
 
@@ -143,22 +154,28 @@ public class Evaluator {
 
 
     private void addLowerHalfReverseDiagonalsTo(List<List<Gem>> diagonals){
-
         for(int i= NUMBER_OF_COLUMNS - 1; i>= MATCH_NUMBER; i--){
-
-            List<Gem> diagonal = new ArrayList<>();
-            for(int j = i, row = 0; j >= 0; j--, row++){
-                List<Gem> column = gemColumns.get(j);
-                if(row >= column.size()){
-                    diagonal.add(new NullGem());
-                    continue;
-                }
-                diagonal.add(column.get(row));
-            }
-            diagonals.add(diagonal);
+            diagonals.add(getLowerHalfReverseDiagonalStartingFromColumn(i));
         }
     }
 
+
+    private List<Gem> getLowerHalfReverseDiagonalStartingFromColumn(int columnIndex){
+        List<Gem> diagonal = new ArrayList<>();
+        for(int column = columnIndex, row = 0; column >= 0; column--, row++){
+            diagonal.add(getLowerHalfReverseDiagonalGem(row, column));
+        }
+        return diagonal;
+    }
+
+
+    private Gem getLowerHalfReverseDiagonalGem(int rowIndex, int columnIndex){
+        List<Gem> column = gemColumns.get(columnIndex);
+        if(rowIndex >= column.size()){
+            return new NullGem();
+        }
+        return column.get(rowIndex);
+    }
 
 
     private void evaluateGems(List<Gem> gems){
@@ -194,8 +211,12 @@ public class Evaluator {
 
         markAllCandidatesForDeletionInRange(i,gems.size()-1, gems);
         return gems.size();
-
     }
+
+
+
+
+
 
 
     private void resetFlagForAllGemsInRange(int startIndex, int endIndex, List<Gem> gems){

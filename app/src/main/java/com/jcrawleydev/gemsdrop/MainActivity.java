@@ -15,6 +15,8 @@ import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
 import com.jcrawleydev.gemsdrop.tasks.AnimateTask;
+import com.jcrawleydev.gemsdrop.tasks.CancelFutureTask;
+import com.jcrawleydev.gemsdrop.tasks.FlickerMarkedGemsTask;
 import com.jcrawleydev.gemsdrop.tasks.GemDropTask;
 import com.jcrawleydev.gemsdrop.tasks.QuickDropTask;
 import com.jcrawleydev.gemsdrop.view.GemGridView;
@@ -39,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private ClickHandler clickHandler;
     private GemControls gemControls;
     private int gemWidth = 150;
-    private ScheduledFuture<?> gemDropFuture, animateFuture, quickDropFuture;
+    private ScheduledFuture<?> gemDropFuture, animateFuture, quickDropFuture, gemsFlickerFuture;
     private Evaluator evaluator;
 
 
@@ -131,14 +133,35 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     public void finishQuickDrop(){
         System.out.println("MainActivity - entered finishQuickDrop()");
-        resetDrop();
-        gemControls.reactivate();
         quickDropFuture.cancel(false);
+
         evaluator.evaluate();
+        if(evaluator.hasMarkedGems()){
+            startMarkedGemsFlicker();
+        }
+
     }
 
     public void resetDrop(){
         hasGemDropStarted = false;
+    }
+
+
+    private void startMarkedGemsFlicker(){
+        Runnable markedGemsFlickerTask = new FlickerMarkedGemsTask(gemGrid);
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+        gemsFlickerFuture = executor.scheduleWithFixedDelay(markedGemsFlickerTask, 0, 30, TimeUnit.MILLISECONDS);
+
+        Runnable flickerTimeoutTask = new CancelFutureTask(gemsFlickerFuture, this);
+        executor.schedule(flickerTimeoutTask, 1000, TimeUnit.MILLISECONDS);
+    }
+
+
+    public void deleteMarkedGems(){
+        evaluator.deleteMarkedGems();
+        resetDrop();
+        gemControls.reactivate();
+
     }
 
 
