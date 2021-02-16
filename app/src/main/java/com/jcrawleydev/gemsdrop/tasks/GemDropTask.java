@@ -27,7 +27,7 @@ public class GemDropTask implements Runnable{
             gemGridView.draw();
             gemGroup.setGemsInvisible();
             mainActivity.cancelFuture();
-            mainActivity.resetDrop();
+            mainActivity.evaluateStep();
         }
         else if(gemGrid.addAnyFrom(gemGroup)){
             gemGridView.draw();

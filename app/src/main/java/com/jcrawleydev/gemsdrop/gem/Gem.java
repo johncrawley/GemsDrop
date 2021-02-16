@@ -91,8 +91,12 @@ public class Gem implements DrawItem, Cloneable {
         }
     }
 
+    public boolean isDeletionCandidateFlagSet(){
+        return deletionCandidateFlag;
+    }
+
     public boolean isMarkedForDeletion(){
-        return markedForDeletion;
+        return this.markedForDeletion;
     }
 
 

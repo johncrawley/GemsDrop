@@ -6,7 +6,6 @@ import com.jcrawleydev.gemsdrop.gem.NullGem;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
 public class Evaluator {
 
@@ -42,6 +41,11 @@ public class Evaluator {
         hasMarkedGems = false;
     }
 
+
+    private void markGem(Gem gem){
+        gem.setDeleteCandidateFlag();
+        hasMarkedGems = true;
+    }
 
 
     private void evaluateRows(){
@@ -186,37 +190,33 @@ public class Evaluator {
     }
 
 
-    private int evaluateSection(List<Gem> gems, int i){
-        Gem currentGem = gems.get(i);
+    private int evaluateSection(List<Gem> gems, int currentIndex){
+        Gem currentGem = gems.get(currentIndex);
+        int nextIndex = currentIndex + 1;
         if(currentGem instanceof NullGem){
-            return i+1;
+            return nextIndex;
         }
 
-        currentGem.setDeleteCandidateFlag();
+        markGem(currentGem);
         int sameColorCount = 1;
 
-        for(int j = i+1; j < gems.size(); j++){
-            Gem gem = gems.get(j);
-            if(gem.isNotSameColorAs(currentGem)){
+        for(int comparisonIndex = nextIndex; comparisonIndex < gems.size(); comparisonIndex++){
+            Gem comparisonGem = gems.get(comparisonIndex);
+            if(comparisonGem.isNotSameColorAs(currentGem)){
                 if(sameColorCount >= MATCH_NUMBER){
-                    markAllCandidatesForDeletionInRange(i,j, gems);
-                    return j;
+                    markAllCandidatesForDeletionInRange(currentIndex,comparisonIndex, gems);
+                    return comparisonIndex;
                 }
-                resetFlagForAllGemsInRange(i,j,gems);
-                return i+1;
+                resetFlagForAllGemsInRange(currentIndex,comparisonIndex,gems);
+                return nextIndex;
             }
             sameColorCount++;
-            gem.setDeleteCandidateFlag();
+            markGem(comparisonGem);
         }
 
-        markAllCandidatesForDeletionInRange(i,gems.size()-1, gems);
+        markAllCandidatesForDeletionInRange(currentIndex,gems.size()-1, gems);
         return gems.size();
     }
-
-
-
-
-
 
 
     private void resetFlagForAllGemsInRange(int startIndex, int endIndex, List<Gem> gems){

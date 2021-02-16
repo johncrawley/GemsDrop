@@ -32,9 +32,13 @@ public class GemGridView implements UpdatableView{
 
     public void draw(){
         transparentView.setDrawItems(gemGrid.getAllGems());
+        log("Just set draw items: number of gems: " + gemGrid.gemCount());
         transparentView.invalidate();
     }
 
-
+    private void log(String msg){
+        System.out.println("GemGridView: " + msg);
+        System.out.flush();
+    }
 
 }

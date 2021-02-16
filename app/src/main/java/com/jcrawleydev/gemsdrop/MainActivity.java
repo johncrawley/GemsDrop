@@ -18,6 +18,7 @@ import com.jcrawleydev.gemsdrop.tasks.AnimateTask;
 import com.jcrawleydev.gemsdrop.tasks.CancelFutureTask;
 import com.jcrawleydev.gemsdrop.tasks.FlickerMarkedGemsTask;
 import com.jcrawleydev.gemsdrop.tasks.GemDropTask;
+import com.jcrawleydev.gemsdrop.tasks.GemGridGravityTask;
 import com.jcrawleydev.gemsdrop.tasks.QuickDropTask;
 import com.jcrawleydev.gemsdrop.view.GemGridView;
 import com.jcrawleydev.gemsdrop.view.GemGroupView;
@@ -41,8 +42,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private ClickHandler clickHandler;
     private GemControls gemControls;
     private int gemWidth = 150;
-    private ScheduledFuture<?> gemDropFuture, animateFuture, quickDropFuture, gemsFlickerFuture;
+    private ScheduledFuture<?> gemDropFuture, animateFuture, quickDropFuture, gemsFlickerFuture, gemGridGravityFuture;
     private Evaluator evaluator;
+    private GemGroup gemGroup;
 
 
     @Override
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         gemGridTransparentView.setOnTouchListener(this);
         gemGroupView = new GemGroupView(gemGroupTransparentView, MainActivity.this, gemGroupFactory.createGemGroup());
         gemGrid = new GemGrid(7,12);
+        gemGrid.setDropIncrement(gemWidth / 5);
         gemGridView = new GemGridView(gemGridTransparentView, gemGrid, 150, floorY);
         evaluator = new Evaluator(gemGrid, 3);
         gemControls = new GemControls(gemGrid);
@@ -99,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
 
-    GemGroup gemGroup;
     private void startGemDrop(){
         if(hasGemDropStarted){
             return;
@@ -117,12 +119,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
 
+    private int quickDropAnimationInterval = 70;
+
     public void quickDropRemainingGems(){
 
         QuickDropTask quickDropTask = new QuickDropTask(this, gemGroup, gemGrid, gemGridView);
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
         gemControls.deactivate();
-        quickDropFuture = executor.scheduleWithFixedDelay(quickDropTask, 0, 70, TimeUnit.MILLISECONDS);
+        quickDropFuture = executor.scheduleWithFixedDelay(quickDropTask, 0, quickDropAnimationInterval, TimeUnit.MILLISECONDS);
 
     }
 
@@ -132,25 +136,37 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     public void finishQuickDrop(){
-        System.out.println("MainActivity - entered finishQuickDrop()");
         quickDropFuture.cancel(false);
-
-        evaluator.evaluate();
-        if(evaluator.hasMarkedGems()){
-            startMarkedGemsFlicker();
-        }
-
+        evaluateStep();
     }
 
-    public void resetDrop(){
+    public void evaluateStep(){
+        evaluator.evaluate();
+
+        if(evaluator.hasMarkedGems()){
+            startMarkedGemsFlicker();
+            return;
+        }
+        resetDrop();
+    }
+
+
+    private void log(String msg){
+        System.out.println("MainActivity: " + msg);
+        System.out.flush();
+    }
+
+
+    private void resetDrop(){
         hasGemDropStarted = false;
+        gemControls.reactivate();
     }
 
 
     private void startMarkedGemsFlicker(){
-        Runnable markedGemsFlickerTask = new FlickerMarkedGemsTask(gemGrid);
+        Runnable markedGemsFlickerTask = new FlickerMarkedGemsTask(gemGrid, gemGridView);
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
-        gemsFlickerFuture = executor.scheduleWithFixedDelay(markedGemsFlickerTask, 0, 30, TimeUnit.MILLISECONDS);
+        gemsFlickerFuture = executor.scheduleWithFixedDelay(markedGemsFlickerTask, 0, 100, TimeUnit.MILLISECONDS);
 
         Runnable flickerTimeoutTask = new CancelFutureTask(gemsFlickerFuture, this);
         executor.schedule(flickerTimeoutTask, 1000, TimeUnit.MILLISECONDS);
@@ -159,10 +175,23 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     public void deleteMarkedGems(){
         evaluator.deleteMarkedGems();
-        resetDrop();
-        gemControls.reactivate();
-
+        gemGridView.draw();
+        startGemGridGravityDrop();
     }
+
+
+    public void stopGravity(){
+        gemGridGravityFuture.cancel(false);
+        resetDrop();
+    }
+
+
+    public void startGemGridGravityDrop(){
+        Runnable gemGridGravityTask = new GemGridGravityTask(gemGrid, gemGridView, this);
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+        gemGridGravityFuture = executor.scheduleWithFixedDelay(gemGridGravityTask, 0, quickDropAnimationInterval, TimeUnit.MILLISECONDS);
+    }
+
 
 
 }

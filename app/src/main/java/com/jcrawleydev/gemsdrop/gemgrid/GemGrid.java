@@ -20,6 +20,7 @@ public class GemGrid {
     private int floorY;
     private int startingX;
     private int dropIncrement;
+    private boolean haveAnyGemsMovedDuringLastDrop;
 
     public GemGrid(int numberOfColumns, int numberOfRows){
         NUMBER_OF_ROWS = numberOfRows;
@@ -55,22 +56,21 @@ public class GemGrid {
         return heights;
     }
 
+
     public void flickerGemsMarkedForDeletion(){
         for(List<Gem> column : gemColumns){
             for(Gem gem: column){
                 if(!gem.isMarkedForDeletion()){
-                    return;
+                    continue;
                 }
                 if(gem.isVisible()){
                     gem.setInvisible();
-                    return;
+                    continue;
                 }
                 gem.setVisible();
 
             }
         }
-
-
     }
 
 
@@ -257,12 +257,12 @@ public class GemGrid {
     }
 
 
-
     public void dropGems(){
         for(List<Gem> column : gemColumns){
             dropGemsInColumn(column);
         }
     }
+
 
     private void dropGemsInColumn(List<Gem> column){
         for(int i =0; i< column.size(); i++){
@@ -270,19 +270,30 @@ public class GemGrid {
         }
     }
 
+
     private void dropGemIfAboveGridPosition(Gem gem, int actualRowIndex){
         if(gem.getY() < getYForRowTop(actualRowIndex)){
             dropGem(gem);
         }
     }
 
+
     private void dropGem(Gem gem){
         gem.incY(dropIncrement);
+        haveAnyGemsMovedDuringLastDrop = true;
     }
+
 
     private int getYForRowTop(int rowIndex){
-        return this.floorY + ((1 + rowIndex) * gemSize);
+        return this.floorY - ((1 + rowIndex) * gemSize);
     }
 
+
+
+    public boolean isStable(){
+        boolean isStable = !haveAnyGemsMovedDuringLastDrop;
+        haveAnyGemsMovedDuringLastDrop = false;
+        return isStable;
+    }
 
 }
