@@ -115,13 +115,13 @@ public class GemGridTest {
         assertEquals(3, gemGrid.gemCount());
         assertFalse(gemGrid.isEmpty());
 
-        evaluator.evaluate();
+        evaluateAndDeleteMarkedGems();
         assertEquals(0, gemGrid.gemCount());
         assertTrue(gemGrid.isEmpty());
 
         addGems(INITIAL_POSITION, HORIZONTAL, RED, BLUE, YELLOW);
         addGems(INITIAL_POSITION, HORIZONTAL, RED, BLUE, YELLOW);
-        evaluator.evaluate();
+        evaluateAndDeleteMarkedGems();
         assertEquals(6, gemGrid.gemCount());
     }
 
@@ -141,7 +141,7 @@ public class GemGridTest {
         addGems(INITIAL_POSITION, HORIZONTAL, RED, BLUE,YELLOW);
         addGems(INITIAL_POSITION, HORIZONTAL, RED, BLUE, YELLOW);
         addGems(INITIAL_POSITION, HORIZONTAL, RED, BLUE, GREEN);
-        evaluator.evaluate();
+        evaluateAndDeleteMarkedGems();
         assertEquals(3, gemGrid.gemCount());
     }
 
@@ -161,7 +161,7 @@ public class GemGridTest {
         addGems(INITIAL_POSITION, HORIZONTAL, RED, BLUE,YELLOW);
         addGems(INITIAL_POSITION, HORIZONTAL, RED, BLUE, YELLOW);
         addGems(INITIAL_POSITION, HORIZONTAL, RED, BLUE, GREEN);
-        evaluator.evaluate();
+        evaluateAndDeleteMarkedGems();
         assertEquals(3, gemGrid.gemCount());
     }
 
@@ -232,13 +232,29 @@ public class GemGridTest {
         addHorizontalGems(minPosition, YELLOW, BLUE, BLUE);
 
         assertGridBeforeAndAfter(3,
-                 "[ _ Y B B _ _ _ _ _ _ ] " +
-                            "[ _ G Y R _ _ _ _ _ _ ] " +
-                            "[ _ B G Y _ _ _ _ _ _ ] ",
+                "[ _ Y B B _ _ _ _ _ _ ] " +
+                        "[ _ G Y R _ _ _ _ _ _ ] " +
+                        "[ _ B G Y _ _ _ _ _ _ ] ",
 
                 "[ _ _ _ _ _ _ _ _ _ _ ] " +
-                         "[ _ G B B _ _ _ _ _ _ ] " +
-                         "[ _ B G R _ _ _ _ _ _ ] "
+                        "[ _ G B B _ _ _ _ _ _ ] " +
+                        "[ _ B G R _ _ _ _ _ _ ] "
+        );
+
+        gemGrid.clear();
+        minPosition = 1;
+        addHorizontalGems(minPosition, BLUE, GREEN, YELLOW);
+        addHorizontalGems(minPosition, GREEN, YELLOW, RED);
+        addHorizontalGems(minPosition, YELLOW, BLUE, BLUE);
+
+        assertGridBeforeAndAfter(3,
+                 "[ Y B B _ _ _ _ _ _ _ ] " +
+                            "[ G Y R _ _ _ _ _ _ _ ] " +
+                            "[ B G Y _ _ _ _ _ _ _ ] ",
+
+                "[ _ _ _ _ _ _ _ _ _ _ ] " +
+                        "[ G B B _ _ _ _ _ _ _ ] " +
+                        "[ B G R _ _ _ _ _ _ _ ] "
         );
 
 
@@ -255,10 +271,10 @@ public class GemGridTest {
 
         assertGridBeforeAndAfter(4,
 
-                 "[ _ _ _ _ _ _ _ Y R G ] " +
-                            "[ _ _ _ _ _ _ _ G Y G ] " +
-                            "[ _ _ _ _ _ _ _ Y B Y ] " +
-                            "[ _ _ _ _ _ _ _ R G B ] ",
+                "[ _ _ _ _ _ _ _ Y R G ] " +
+                        "[ _ _ _ _ _ _ _ G Y G ] " +
+                        "[ _ _ _ _ _ _ _ Y B Y ] " +
+                        "[ _ _ _ _ _ _ _ R G B ] ",
 
                 "[ _ _ _ _ _ _ _ _ _ _ ] " +
                         "[ _ _ _ _ _ _ _ G R G ] " +
@@ -291,7 +307,7 @@ public class GemGridTest {
         addGems(1, VERTICAL, RED, BLUE, GREEN);
         addGems(2, VERTICAL, RED, YELLOW, GREEN);
         addGems(3, VERTICAL, RED, GREEN, BLUE);
-        evaluator.evaluate();
+        evaluateAndDeleteMarkedGems();
         assertEquals(6, gemGrid.gemCount());
         //assertEquals(6, gemGrid.getAllGems().size());
 
@@ -342,7 +358,7 @@ public class GemGridTest {
     private void assertGridBeforeAndAfter(int modifiedRows, String beforeGrid, String afterGrid){
         String expectedGrid = buildGridWith(modifiedRows,beforeGrid);
         assertEquals(expectedGrid, gemGrid.toString());
-        evaluator.evaluate();
+        evaluateAndDeleteMarkedGems();
         expectedGrid = buildGridWith(modifiedRows, afterGrid);
         assertEquals(expectedGrid, gemGrid.toString());
 
@@ -350,7 +366,7 @@ public class GemGridTest {
 
     private void assertGemsBeforeAndAfterEval(int expectedAmountBefore, int expectedAmountAfter){
         assertEquals(expectedAmountBefore, gemGrid.gemCount());
-        evaluator.evaluate();
+        evaluateAndDeleteMarkedGems();
         assertEquals(expectedAmountAfter, gemGrid.gemCount());
 
     }
@@ -358,6 +374,10 @@ public class GemGridTest {
 
 
 
+    private void evaluateAndDeleteMarkedGems(){
+        evaluator.evaluate();
+        evaluator.deleteMarkedGems();
+    }
 
 
 }

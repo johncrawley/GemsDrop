@@ -14,6 +14,8 @@ public class Evaluator {
     private final int MATCH_NUMBER;
     private final int NUMBER_OF_COLUMNS;
     private final int NUMBER_OF_ROWS;
+    private boolean hasMarkedGems = false;
+
 
     public Evaluator(GemGrid gemGrid, int matchNumber){
         this.gemGrid = gemGrid;
@@ -27,24 +29,17 @@ public class Evaluator {
     public void evaluate(){
         evaluateRows();
         evaluateColumns();
-        evaluateDiagonal();
+        evaluateDiagonals();
         //deleteMarkedGems();
     }
-
-    private boolean hasMarkedGems = false;
 
     public boolean hasMarkedGems(){
         return hasMarkedGems;
     }
 
-    public void resetMarkedStatus(){
-        hasMarkedGems = false;
-    }
-
 
     private void markGem(Gem gem){
         gem.setDeleteCandidateFlag();
-        hasMarkedGems = true;
     }
 
 
@@ -62,7 +57,7 @@ public class Evaluator {
     }
 
 
-    private void evaluateDiagonal(){
+    private void evaluateDiagonals(){
         List<List<Gem>> diagonals = new ArrayList<>();
         addLowerHalfDiagonalsTo(diagonals);
         addUpperHalfDiagonalsTo(diagonals);
@@ -73,6 +68,7 @@ public class Evaluator {
             evaluateGems(diagonal);
         }
     }
+
 
     public void addLowerHalfDiagonalsTo(List<List<Gem>> diagonals){
 
@@ -158,7 +154,7 @@ public class Evaluator {
 
 
     private void addLowerHalfReverseDiagonalsTo(List<List<Gem>> diagonals){
-        for(int i= NUMBER_OF_COLUMNS - 1; i>= MATCH_NUMBER; i--){
+        for(int i= NUMBER_OF_COLUMNS - 1; i >= MATCH_NUMBER -1; i--){
             diagonals.add(getLowerHalfReverseDiagonalStartingFromColumn(i));
         }
     }
@@ -230,12 +226,12 @@ public class Evaluator {
         for(int i=startIndex; i<= endIndex; i++){
             gems.get(i).setMarkedForDeletion();
         }
+        hasMarkedGems = true;
     }
 
 
 
     public void deleteMarkedGems(){
-        log("Entered deleteMarkedGems()");
         for(List<Gem> column : gemGrid.getGemColumns()){
             //column.removeIf( g -> g.isMarkedForDeletion());
 
@@ -243,15 +239,11 @@ public class Evaluator {
             while(iterator.hasNext()){
                 Gem gem = iterator.next();
                 if(gem.isMarkedForDeletion()){
-                    log("Found gem to remove! " + gem.getColor().toString());
                     iterator.remove();
                 }
             }
         }
-    }
-
-    void log(String msg){
-        System.out.println("Evaluator: " + msg);
+        this.hasMarkedGems = false;
     }
 
 }

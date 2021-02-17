@@ -21,18 +21,19 @@ public class GemDropTask implements Runnable{
         this.gemGridView = gemGridView;
     }
 
+
     public void run(){
         if(gemGrid.shouldAdd(gemGroup)) {
             gemGrid.add(gemGroup);
             gemGridView.draw();
             gemGroup.setGemsInvisible();
-            mainActivity.cancelFuture();
+            mainActivity.cancelDropAndAnimateFutures();
             mainActivity.evaluateStep();
         }
         else if(gemGrid.addAnyFrom(gemGroup)){
             gemGridView.draw();
             mainActivity.quickDropRemainingGems();
-            mainActivity.cancelFuture();
+            mainActivity.cancelDropAndAnimateFutures();
         }
         else {
             gemGroup.drop();

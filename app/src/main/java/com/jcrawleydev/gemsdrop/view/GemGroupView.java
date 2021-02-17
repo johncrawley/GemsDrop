@@ -58,6 +58,11 @@ public class GemGroupView implements UpdatableView{
         }
     }
 
+    public void wipe(){
+        gemGroup.setGemsInvisible();
+        transparentView.invalidate();
+    }
+
 
     private void setBitmapReferences(){
         for(Gem gem: gemGroup.getGems()){
