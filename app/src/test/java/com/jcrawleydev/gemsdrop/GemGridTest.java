@@ -44,8 +44,8 @@ public class GemGridTest {
     public void setup(){
 
         gemGrid = new GemGrid(NUMBER_OF_COLUMNS, NUMBER_OF_ROWS);
-        assertTrue(gemGrid.isEmpty());
         evaluator = new Evaluator(gemGrid, 3);
+        assertTrue(gemGrid.isEmpty());
     }
 
 
@@ -76,12 +76,13 @@ public class GemGridTest {
 
     }
 
-    private void assertColumnHeights(Integer ... heights){
 
+    private void assertColumnHeights(Integer ... heights){
         List<Integer> expectedHeights = Arrays.asList(heights);
         List<Integer> columnHeights = gemGrid.getColumnHeights();
         assertList(expectedHeights, columnHeights);
     }
+
 
     private void assertList(List<?> expected, List<?> provided){
         assertEquals(expected.size(), provided.size());
@@ -89,6 +90,7 @@ public class GemGridTest {
             assertEquals(" item at index: " + i + " doesn't match up", expected.get(i), provided.get(i));
         }
     }
+
 
     @Test
     public void gemsAreAddedToTheCorrectPosition(){
@@ -200,9 +202,6 @@ public class GemGridTest {
                          "[ _ Y G G _ _ _ _ _ _ ] "+
                          "[ B G R R G _ _ _ _ _ ] "
         );
-
-
-
     }
 
 
@@ -256,14 +255,48 @@ public class GemGridTest {
                         "[ G B B _ _ _ _ _ _ _ ] " +
                         "[ B G R _ _ _ _ _ _ _ ] "
         );
-
-
     }
+
+
+    @Test
+    public void higherUpDiagonal(){
+        int numberOfColumns = 7;
+        gemGrid = new GemGrid(numberOfColumns, NUMBER_OF_ROWS);
+        evaluator = new Evaluator(gemGrid, 3);
+
+        addToRow(YELLOW, BLUE, GREEN, GREEN,YELLOW,RED);
+        addToRow(RED,RED,YELLOW,RED,RED,GREEN);
+        addToRow(YELLOW,RED,BLUE,BLUE,YELLOW,BLUE);
+        addToRow(YELLOW,GREEN,YELLOW,GREEN,YELLOW,YELLOW);
+        addToRow(GREEN,RED,GREEN, BLUE);
+        addToRow(GREEN, RED, YELLOW, GREEN);
+
+        /*
+            Notice the G G G upper diagonal that should be removed,
+                (starting from column index 1, row index 3)
+         */
+
+        assertGridBeforeAndAfter(6,
+                 "[ G R Y G _ _ _ ] " +
+                            "[ G R G B _ _ _ ] " +
+                            "[ Y G Y G Y Y _ ] " +
+                            "[ Y R B B Y B _ ] " +
+                            "[ R R Y R R G _ ] " +
+                            "[ Y B G G Y R _ ] ",
+
+                "[ G _ _ _ _ _ _ ] " +
+                         "[ G R Y B _ _ _ ] " +
+                         "[ Y R Y G Y Y _ ] " +
+                         "[ Y R B B Y B _ ] " +
+                         "[ R R Y R R G _ ] " +
+                         "[ Y B G G Y R _ ] "
+        );
+    }
+
 
     @Test
     public void canEvaluateTopHalfReverseDiagonals(){
         int maxPosition = this.NUMBER_OF_COLUMNS - 2;
-        int minPosition = 2;
         addHorizontalGems(maxPosition, RED, GREEN, BLUE);
         addHorizontalGems(maxPosition, YELLOW, BLUE, YELLOW);
         addHorizontalGems(maxPosition, GREEN, YELLOW, GREEN);
@@ -310,16 +343,18 @@ public class GemGridTest {
         evaluateAndDeleteMarkedGems();
         assertEquals(6, gemGrid.gemCount());
         //assertEquals(6, gemGrid.getAllGems().size());
-
     }
+
 
     private void addRandomGems(){
         addGems(getRandomPosition(), getRandomOrientation(), getRandomColor(), getRandomColor(), getRandomColor());
     }
 
+
     private int getRandomPosition(){
         return ThreadLocalRandom.current().nextInt(NUMBER_OF_COLUMNS);
     }
+
 
     private GemGroup.Orientation getRandomOrientation(){
         if(ThreadLocalRandom.current().nextBoolean()){
@@ -328,20 +363,32 @@ public class GemGridTest {
         return VERTICAL;
     }
 
+
     private Gem.Color getRandomColor(){
         List<Gem.Color> colors = Arrays.asList(RED,BLUE,GREEN,YELLOW);
         return colors.get(ThreadLocalRandom.current().nextInt(colors.size()));
     }
 
+
     private String buildGridWith(int modifiedRows, String rowsStr){
         int emptyRows = NUMBER_OF_ROWS - modifiedRows;
         StringBuilder str = new StringBuilder();
         for(int i=0; i< emptyRows; i++){
-            str.append("[ _ _ _ _ _ _ _ _ _ _ ] ");
+            appendEmptyRow(str);
         }
         str.append(rowsStr);
         return str.toString();
     }
+
+
+    private void appendEmptyRow(StringBuilder str){
+        str.append("[ ");
+        for(int j = 0; j < gemGrid.getNumberOfColumns(); j++){
+            str.append("_ ");
+        }
+        str.append("] ");
+    }
+
 
     private void addHorizontalGems(int position, Gem.Color c1, Gem.Color c2, Gem.Color c3){
         addGems(position, HORIZONTAL, c1, c2, c3);
@@ -354,6 +401,17 @@ public class GemGridTest {
     }
 
 
+    private void addToRow(Gem.Color... colors){
+        int position = 0;
+        for(Gem.Color color : colors){
+            if(position == gemGrid.getNumberOfColumns()){
+                return;
+            }
+            gemGrid.add(new Gem(color), position);
+            position++;
+        }
+    }
+
 
     private void assertGridBeforeAndAfter(int modifiedRows, String beforeGrid, String afterGrid){
         String expectedGrid = buildGridWith(modifiedRows,beforeGrid);
@@ -361,17 +419,14 @@ public class GemGridTest {
         evaluateAndDeleteMarkedGems();
         expectedGrid = buildGridWith(modifiedRows, afterGrid);
         assertEquals(expectedGrid, gemGrid.toString());
-
     }
+
 
     private void assertGemsBeforeAndAfterEval(int expectedAmountBefore, int expectedAmountAfter){
         assertEquals(expectedAmountBefore, gemGrid.gemCount());
         evaluateAndDeleteMarkedGems();
         assertEquals(expectedAmountAfter, gemGrid.gemCount());
-
     }
-
-
 
 
     private void evaluateAndDeleteMarkedGems(){

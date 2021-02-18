@@ -125,28 +125,21 @@ public class Evaluator {
     private void evaluateRow(int i){
         List<Gem> filledOutRow = constructRow(i);
         evaluateGems(filledOutRow);
-        /*
-            if(there are marked gems, display them for half a second or so
-            then start process to drop all hanging gems
-            gemGridDropProcess -> which will continue until no gem drops after an iteration
-            then repeat evaluation
-         */
     }
-
 
 
     public void addUpperHalfDiagonalsTo(List<List<Gem>> diagonals){
 
-        for(int i=1; i< NUMBER_OF_ROWS - MATCH_NUMBER; i++) {
+        for(int startingRow = 1; startingRow < NUMBER_OF_ROWS - MATCH_NUMBER; startingRow++) {
             List<Gem> diagonal = new ArrayList<>();
-            for (int j = 0; j < NUMBER_OF_COLUMNS; j++) {
-                List<Gem> column = gemColumns.get(j);
-                int rowToRetrieve = j+ 1;
-                if(rowToRetrieve >= column.size()){
-                    diagonal.add(new NullGem());
+            for (int columnIndex = 0; columnIndex < NUMBER_OF_COLUMNS; columnIndex++) {
+                List<Gem> column = gemColumns.get(columnIndex);
+                int rowToRetrieve = columnIndex + startingRow;
+                if(rowToRetrieve < column.size()){
+                    diagonal.add(column.get(rowToRetrieve));
                     continue;
                 }
-                diagonal.add(column.get(rowToRetrieve));
+                diagonal.add(new NullGem());
             }
             diagonals.add(diagonal);
         }

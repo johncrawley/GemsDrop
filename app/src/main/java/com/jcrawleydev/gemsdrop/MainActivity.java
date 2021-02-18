@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private GemGroup gemGroup;
     private final int FLICKER_SPEED = 80;
     private final int GEM_GRID_GRAVITY_INTERVAL = 30;
+    private int quickDropAnimationInterval = 70;
 
 
     @Override
@@ -121,15 +122,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
 
-    private int quickDropAnimationInterval = 70;
-
     public void quickDropRemainingGems(){
-
         QuickDropTask quickDropTask = new QuickDropTask(this, gemGroup, gemGroupView, gemGrid, gemGridView);
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
         gemControls.deactivate();
         quickDropFuture = executor.scheduleWithFixedDelay(quickDropTask, 0, quickDropAnimationInterval, TimeUnit.MILLISECONDS);
-
     }
 
 
