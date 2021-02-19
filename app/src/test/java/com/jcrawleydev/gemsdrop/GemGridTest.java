@@ -91,6 +91,16 @@ public class GemGridTest {
         }
     }
 
+    @Test
+    public void returnsRemainingColorsInGrid(){
+        addRandomGems();
+        addRandomGems();
+        addRandomGems();
+        List<Gem.Color> colors = gemGrid.getRemainingColors();
+        assertEquals(9, gemGrid.gemCount());
+
+    }
+
 
     @Test
     public void gemsAreAddedToTheCorrectPosition(){
@@ -347,12 +357,15 @@ public class GemGridTest {
 
 
     private void addRandomGems(){
-        addGems(getRandomPosition(), getRandomOrientation(), getRandomColor(), getRandomColor(), getRandomColor());
+        GemGroup.Orientation orientation = getRandomOrientation();
+        addGems(getRandomPosition(orientation), orientation, getRandomColor(), getRandomColor(), getRandomColor());
     }
 
 
-    private int getRandomPosition(){
-        return ThreadLocalRandom.current().nextInt(NUMBER_OF_COLUMNS);
+    private int getRandomPosition(GemGroup.Orientation orientation){
+        int offset = orientation == VERTICAL ? 0 : 1;
+
+        return offset + ThreadLocalRandom.current().nextInt(NUMBER_OF_COLUMNS - offset);
     }
 
 

@@ -6,7 +6,9 @@ import com.jcrawleydev.gemsdrop.view.DrawItem;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import androidx.annotation.NonNull;
 
@@ -101,6 +103,18 @@ public class GemGrid {
             }
         }
         return hasGemBeenAdded;
+    }
+
+    public List<Gem.Color> getRemainingColors(){
+        Set<Gem.Color> colors = new HashSet<>();
+
+        for(List<Gem> column : gemColumns){
+            for(Gem gem: column){
+                colors.add(gem.getColor());
+            }
+        }
+        System.out.println("Number of colors: " + colors.size());
+        return new ArrayList<>(colors);
     }
 
 
