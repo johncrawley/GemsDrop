@@ -12,7 +12,7 @@ public class GemGroup {
     private List<Gem> reversedOrderGems;
     private Orientation orientation;
     private DetailedOrientation detailedOrientation = DetailedOrientation.FIRST_TO_LAST;
-    private int x,y, position, dropIncrement, gemWidth, middleYPosition, floorY;
+    private int x,y, xPosition, dropIncrement, gemWidth, middleYPosition, floorY;
     private float dropMultiple = 0f;
     private float currentDropIncrement = 0f;
     public enum DetailedOrientation { FIRST_TO_LAST, TOP_TO_BOTTOM, LAST_TO_FIRST, BOTTOM_TO_TOP }
@@ -22,7 +22,7 @@ public class GemGroup {
 
 
     public GemGroup(int initialPosition, int initialY, Orientation orientation, List<Gem> gems, int gemWidth,  int floorY){
-        this.position = initialPosition;
+        this.xPosition = initialPosition;
         this.gems = new ArrayList<>(gems);
         this.gemWidth = gemWidth;
         this.floorY = floorY;
@@ -66,24 +66,24 @@ public class GemGroup {
     }
 
 
-    public int getPosition(){
-        return position;
+    public int getXPosition(){
+        return xPosition;
     }
 
 
-    public int getBasePosition(){
+    public int getBaseXPosition(){
         if(isVertical()){
-            return position;
+            return xPosition;
         }
-        return position - getNumberOfGems() /2;
+        return xPosition - getNumberOfGems() /2;
     }
 
 
-    public int getEndPosition(){
+    public int getEndXPosition(){
         if(isVertical()){
-            return position;
+            return xPosition;
         }
-        return position + getNumberOfGems() /2;
+        return xPosition + getNumberOfGems() /2;
     }
 
 
@@ -99,20 +99,20 @@ public class GemGroup {
 
     public void decrementPosition(){
         x -= gemWidth;
-        position--;
+        xPosition--;
         wasUpdated = true;
     }
 
 
     public void incrementPosition(){
         x += gemWidth;
-        position++;
+        xPosition++;
         wasUpdated = true;
     }
 
 
-    public void setPosition(int position){
-        this.position = position;
+    public void setXPosition(int xPosition){
+        this.xPosition = xPosition;
     }
 
 
@@ -134,6 +134,16 @@ public class GemGroup {
 
     public void setOrientation(Orientation orientation){
         this.orientation = orientation;
+    }
+
+
+    public void rotateToVertical(){
+        this.orientation = Orientation.VERTICAL;
+    }
+
+
+    public void rotateToHorizontal(){
+        this.orientation = Orientation.HORIZONTAL;
     }
 
 
@@ -226,7 +236,7 @@ public class GemGroup {
 
     public List<Integer> getGemPositions(){
         List<Integer> positions = new ArrayList<>();
-        int leftMostPosition = position - getNumberOfGems() / 2;
+        int leftMostPosition = xPosition - getNumberOfGems() / 2;
         for(int i=0; i< gems.size(); i++){
             positions.add(leftMostPosition + i);
         }

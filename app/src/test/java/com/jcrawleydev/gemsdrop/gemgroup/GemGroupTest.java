@@ -35,8 +35,8 @@ public class GemGroupTest {
     @Test
     public void canSetPosition(){
         int adjustedPosition = 3;
-        gemGroup.setPosition(adjustedPosition);
-        assertEquals(adjustedPosition, gemGroup.getPosition());
+        gemGroup.setXPosition(adjustedPosition);
+        assertEquals(adjustedPosition, gemGroup.getXPosition());
 
     }
 

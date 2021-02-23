@@ -33,18 +33,18 @@ public class GemControls {
     }
 
     public void moveLeft(){
-        if(shouldSkipAction()){
+        if(isGemGroupNullOrDeactivated()){
             return;
         }
         int minPosition = getMinPosition();
-        if(gemGroup.getPosition() <= minPosition || aGemColumnIsToTheLeft()){
+        if(gemGroup.getXPosition() <= minPosition || aGemColumnIsToTheLeft()){
             return;
         }
         gemGroup.decrementPosition();
     }
 
     private boolean aGemColumnIsToTheLeft(){
-        int colIndex = gemGroup.getBasePosition() -1;
+        int colIndex = gemGroup.getBaseXPosition() -1;
         if(colIndex < 0){
             return false;
         }
@@ -52,7 +52,7 @@ public class GemControls {
     }
 
     private boolean aGemColumnIsToTheRight(){
-        int colIndex = gemGroup.getEndPosition() + 1;
+        int colIndex = gemGroup.getEndXPosition() + 1;
         if(colIndex > gemGrid.getNumberOfColumns()){
             return false;
         }
@@ -65,7 +65,7 @@ public class GemControls {
 
 
     public void moveRight(){
-        if(shouldSkipAction()){
+        if(isGemGroupNullOrDeactivated()){
             return;
         }
         int maxPosition = gemGrid.getNumberOfColumns() -1;
@@ -74,7 +74,7 @@ public class GemControls {
             maxPosition -= gemGroup.getNumberOfGems() /2;
         }
 
-        if(gemGroup.getPosition() >= maxPosition || aGemColumnIsToTheRight()){
+        if(gemGroup.getXPosition() >= maxPosition || aGemColumnIsToTheRight()){
             return;
         }
         gemGroup.incrementPosition();
@@ -82,7 +82,7 @@ public class GemControls {
 
 
     public void rotate(){
-        if(shouldSkipAction()){
+        if(isGemGroupNullOrDeactivated()){
             return;
         }
         if(isVerticalAndAtAnEdge() || isGemGroupAdjacentToColumns()){
@@ -93,7 +93,7 @@ public class GemControls {
 
 
     private boolean isVerticalAndAtAnEdge(){
-        boolean isAtAnEdge = gemGroup.getPosition() == getMinPosition() || gemGroup.getPosition() == gemGrid.getNumberOfColumns() -1;
+        boolean isAtAnEdge = gemGroup.getXPosition() == getMinPosition() || gemGroup.getXPosition() == gemGrid.getNumberOfColumns() -1;
         return isAtAnEdge && gemGroup.getOrientation() == GemGroup.Orientation.VERTICAL;
     }
 
@@ -103,26 +103,37 @@ public class GemControls {
     }
 
 
-    private boolean isGemGroupToTheRightOfColumn(){
-        int columnIndex = gemGroup.getPosition() + 1;
+    private boolean isGemGroupToTheLeftOfColumn(){
+        int columnIndex = gemGroup.getXPosition() + 1;
         if(columnIndex >= gemGrid.getNumberOfColumns()){
             return false;
         }
-        return doesColumnHeightMeetLowestGem(columnIndex);
+        return doesColumnHeightMeetMiddleGem(columnIndex);
     }
 
 
-    private boolean isGemGroupToTheLeftOfColumn(){
-        int columnIndex = gemGroup.getPosition() -1;
-        if(columnIndex < 0){
+    private boolean isGemGroupToTheRightOfColumn(){
+       int columnIndex = gemGroup.getXPosition() - 1;
+       if(columnIndex < 0){
             return false;
         }
         return doesColumnHeightMeetLowestGem(columnIndex);
     }
 
 
-    public boolean doesColumnHeightMeetLowestGem(int colIndex){
-        return gemGrid.getColumnHeight(colIndex) >= gemGroup.getBottomPosition() + 1 + gemGroup.getNumberOfGems() /2;
+    private boolean doesColumnHeightMeetLowestGem(int colIndex){
+        return getColumnTopPosition(colIndex) >= gemGroup.getBottomPosition();// gemGroup.getNumberOfGems() /2;
+    }
+
+
+    private boolean doesColumnHeightMeetMiddleGem(int colIndex){
+        int gemGroupMidY = gemGroup.getBottomPosition() + 1;
+        return getColumnTopPosition(colIndex) >= gemGroupMidY;
+    }
+
+
+    private int getColumnTopPosition(int colIndex){
+        return gemGrid.getColumnHeight(colIndex) - 1;
     }
 
 
@@ -135,7 +146,7 @@ public class GemControls {
     }
 
 
-    private boolean shouldSkipAction(){
+    private boolean isGemGroupNullOrDeactivated(){
         return gemGroup == null || !isActivated;
     }
 

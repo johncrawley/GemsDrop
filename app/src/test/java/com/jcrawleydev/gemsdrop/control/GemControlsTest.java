@@ -20,6 +20,7 @@ public class GemControlsTest {
     private GemGroup gemGroup;
     private static int numberOfGemsPerGroup = 3;
     private int rightmostIndexForHorizontal = 0;
+    private int initialPosition = 5;
 
     @BeforeClass
     public static void initialSetup(){
@@ -39,25 +40,26 @@ public class GemControlsTest {
     public void setup(){
         gemGroup = gemGroupFactory.createGemGroup();
         gemControls = new GemControls(gemGroup, gemGrid);
-
+        gemGroup.setXPosition(initialPosition);
+        gemGrid.clear();
         rightmostIndexForHorizontal = (gemGrid.getNumberOfColumns() -1) - gemGroup.getNumberOfGems() /2;
     }
 
 
     @Test
     public void canMoveGemGroupLeftAndRight(){
-        int initialPosition = gemGroup.getPosition();
+        gemGroup.setXPosition(initialPosition);
         gemControls.moveLeft();
-        assertEquals(initialPosition -1, gemGroup.getPosition() );
+        assertEquals(initialPosition -1, gemGroup.getXPosition() );
         gemControls.moveLeft();
-        assertEquals(initialPosition -2, gemGroup.getPosition() );
+        assertEquals(initialPosition -2, gemGroup.getXPosition() );
 
         gemControls.moveRight();
-        assertEquals(initialPosition -1 , gemGroup.getPosition() );
+        assertEquals(initialPosition -1 , gemGroup.getXPosition() );
         gemControls.moveRight();
-        assertEquals(initialPosition, gemGroup.getPosition());
+        assertEquals(initialPosition, gemGroup.getXPosition());
         gemControls.moveRight();
-        assertEquals(initialPosition + 1, gemGroup.getPosition());
+        assertEquals(initialPosition + 1, gemGroup.getXPosition());
     }
 
 
@@ -65,7 +67,7 @@ public class GemControlsTest {
     public void cannotMoveLeftIfVerticalAndAtFirstPosition(){
 
         changeAndAssertOrientation(GemGroup.Orientation.VERTICAL);
-        moveLeftTillAtPosition(0);
+        gemGroup.setXPosition(0);
         gemControls.moveLeft();
         assertPosition(0);
     }
@@ -73,29 +75,28 @@ public class GemControlsTest {
 
     @Test
     public void cannotMoveLeftIfHorizontalAndFirstGemIsAtLeftEdge(){
-        changeAndAssertOrientation(GemGroup.Orientation.HORIZONTAL);
-
         int horizontalLeftLimit = numberOfGemsPerGroup /2;
-        moveLeftTillAtPosition(horizontalLeftLimit);
+        gemGroup.rotateToHorizontal();
+        gemGroup.setXPosition(horizontalLeftLimit);
         gemControls.moveLeft();
         assertPosition(horizontalLeftLimit);
     }
 
 
-    @Test
+    @Test(timeout = 500)
     public void cannotMoveRightIfVerticalAndAtLastPosition(){
-        changeAndAssertOrientation(GemGroup.Orientation.VERTICAL);
+        gemGroup.rotateToVertical();
         int rightmostIndexForVertical = gemGrid.getNumberOfColumns() -1;
-        moveRightTillAtPosition(rightmostIndexForVertical);
+        gemGroup.setXPosition(rightmostIndexForVertical);
         gemControls.moveRight();
         assertPosition(rightmostIndexForVertical);
     }
 
 
-    @Test
+    @Test(timeout = 1000)
     public void cannotMoveRightIfHorizontalAndAtLastPosition(){
-        changeAndAssertOrientation(GemGroup.Orientation.HORIZONTAL);
-        moveRightTillAtPosition(rightmostIndexForHorizontal);
+        gemGroup.rotateToHorizontal();
+        gemGroup.setXPosition(rightmostIndexForHorizontal);
         gemControls.moveRight();
         assertPosition(rightmostIndexForHorizontal);
     }
@@ -104,16 +105,16 @@ public class GemControlsTest {
     @Test
     public void canRotateInDefaultPosition(){
         changeAndAssertOrientation(GemGroup.Orientation.VERTICAL);
+        gemGroup.setXPosition(5);
         gemControls.rotate();
         assertEquals(GemGroup.Orientation.HORIZONTAL, gemGroup.getOrientation());
-
     }
 
 
     @Test
     public void cannotRotateIfVerticalInFirstPosition(){
         changeAndAssertOrientation(GemGroup.Orientation.VERTICAL);
-        moveLeftTillAtPosition(0);
+        gemGroup.setXPosition(0);
         gemControls.rotate();
         assertEquals(GemGroup.Orientation.VERTICAL, gemGroup.getOrientation());
     }
@@ -130,10 +131,10 @@ public class GemControlsTest {
 
     @Test(timeout = 1000)
     public void cannotRotateIfVerticalAndColumnTooCloseToTheRight(){
-        int dropPosition = 3;
+        int columnIndex = 3;
         changeAndAssertOrientation(GemGroup.Orientation.VERTICAL);
-        gemGroup.setPosition(dropPosition);
-        addVerticalGemsToGridAtPosition(dropPosition+1);
+        gemGroup.setXPosition(columnIndex -1);
+        addVerticalGemsToGridAtPosition(columnIndex);
         // the already-placed gems should be in y position 0,1,2
         // if the dropping gemGroups lowest gem is adjacent to position 2, it should still be possible to rotate the gem group, as rotations are clockwise
         //  but when the lowest gem in the dropping gemGroup is at position 1,
@@ -145,13 +146,49 @@ public class GemControlsTest {
 
 
     @Test(timeout = 1000)
-    public void cannotRotateIfVerticalAndColumnTooCloseToTheLeft(){
-        int dropPosition = 3;
-        changeAndAssertOrientation(GemGroup.Orientation.VERTICAL);
-        gemGroup.setPosition(dropPosition);
+    public void canRotateIfVerticalAndCloseToAColumn(){
+        int columnIndex = 3;
+        int safeDistance = 2;
+        gemGroup.rotateToVertical();
+        gemGroup.setXPosition(columnIndex + safeDistance);
+        addVerticalGemsToGridAtPosition(columnIndex);
+        addVerticalGemsToGridAtPosition(columnIndex);
+        dropGemGroupTo(5);
+        assertRotationToHorizontal();
 
-        addVerticalGemsToGridAtPosition(dropPosition -1);
-        dropGemGroupTo(1);
+        gemGroup.setXPosition(columnIndex - safeDistance);
+        gemGroup.rotateToVertical();
+        assertRotationToHorizontal();
+    }
+
+
+    @Test(timeout = 1000)
+    public void canRotateIfAdjacentAndAboveAColumn(){
+        int columnIndex = 3;
+        int distance = 1;
+        gemGroup.rotateToVertical();
+        gemGroup.setXPosition(columnIndex - distance);
+        addVerticalGemsToGridAtPosition(columnIndex);
+        addVerticalGemsToGridAtPosition(columnIndex);
+        dropGemGroupTo(6);
+        assertRotationToHorizontal();
+    }
+
+
+    private void assertRotationToHorizontal(){
+        gemControls.rotate();
+        assertEquals(GemGroup.Orientation.HORIZONTAL, gemGroup.getOrientation());
+    }
+
+
+    @Test(timeout = 1000)
+    public void cannotRotateIfVerticalAndColumnTooCloseToTheLeft(){
+        int columnIndex = 3;
+        changeAndAssertOrientation(GemGroup.Orientation.VERTICAL);
+        gemGroup.setXPosition(columnIndex + 1);
+
+        addVerticalGemsToGridAtPosition(columnIndex);
+        dropGemGroupTo(2);
         gemControls.rotate();
         assertVerticalOrientation();
     }
@@ -160,7 +197,7 @@ public class GemControlsTest {
     @Test
     public void cannotMoveLeftIfColumnToTheLeft(){
         int dropPosition = 5;
-        gemGroup.setPosition(dropPosition);
+        gemGroup.setXPosition(dropPosition);
         addVerticalGemsToGridAtPosition(dropPosition -1);
         dropGemGroupTo(4);
         gemControls.moveLeft();
@@ -176,7 +213,7 @@ public class GemControlsTest {
     @Test(timeout = 1000)
     public void cannotMoveRightIfColumnToTheRight(){
         int dropPosition = 5;
-        gemGroup.setPosition(dropPosition);
+        gemGroup.setXPosition(dropPosition);
         addVerticalGemsToGridAtPosition(dropPosition +1);
         dropGemGroupTo(4);
         gemControls.moveRight();
@@ -193,8 +230,8 @@ public class GemControlsTest {
     }
 
 
-    private void dropGemGroupTo(int yPosition){
-        while(gemGroup.getBottomPosition() > yPosition){
+    private void dropGemGroupTo(int yBottomPosition){
+        while(gemGroup.getBottomPosition() > yBottomPosition){
             gemGroup.drop();
         }
     }
@@ -207,7 +244,8 @@ public class GemControlsTest {
 
 
     private void moveRightTillAtPosition(int position){
-        while(gemGroup.getPosition() < position){
+
+        while(gemGroup.getXPosition() < position){
             gemControls.moveRight();
         }
         assertPosition(position);
@@ -220,7 +258,7 @@ public class GemControlsTest {
 
 
     private void moveLeftTillAtPosition(int position){
-        while(gemGroup.getPosition() > position){
+        while(gemGroup.getXPosition() > position){
             gemControls.moveLeft();
         }
         assertPosition(position);
@@ -228,7 +266,7 @@ public class GemControlsTest {
 
 
     private void assertPosition(int expected){
-        assertEquals(expected, gemGroup.getPosition());
+        assertEquals(expected, gemGroup.getXPosition());
     }
 
 

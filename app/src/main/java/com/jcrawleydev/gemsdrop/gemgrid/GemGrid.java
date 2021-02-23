@@ -84,7 +84,7 @@ public class GemGrid {
         if(gemGroup.getOrientation() == GemGroup.Orientation.HORIZONTAL){
             return areAllGemsConnectingToColumns(gemGroup);
         }
-        return gemGroup.getBottomPosition() <= getColumnHeight(gemGroup.getPosition());
+        return gemGroup.getBottomPosition() <= getColumnHeight(gemGroup.getXPosition());
     }
 
 
@@ -95,7 +95,7 @@ public class GemGrid {
         boolean hasGemBeenAdded = false;
         List<Gem> gems = gemGroup.getGridGems();
 
-        for(int i=0, position = gemGroup.getBasePosition(); i< gems.size();i++, position ++){
+        for(int i = 0, position = gemGroup.getBaseXPosition(); i< gems.size(); i++, position ++){
             Gem gem = gems.get(i);
             if(gemColumns.get(position).size() >= gemGroup.getBottomPosition()){
                 add(gem, position);
@@ -174,7 +174,7 @@ public class GemGrid {
 
     public void add(GemGroup gemGroup) {
         List<Gem> gems = gemGroup.getCopyOfGemsToAddToGrid();
-        int position = gemGroup.getPosition();
+        int position = gemGroup.getXPosition();
 
         if (gemGroup.getOrientation() == GemGroup.Orientation.HORIZONTAL) {
             addHorizontal(gems, position);
