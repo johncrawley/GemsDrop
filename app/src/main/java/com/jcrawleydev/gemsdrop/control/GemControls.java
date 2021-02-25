@@ -32,11 +32,12 @@ public class GemControls {
         isActivated = true;
     }
 
-    public void engageQuickDrop(){
+
+    public void enableQuickDrop(){
         if(gemGroup == null){
             return;
         }
-        gemGroup.engageQuickDrop();
+        gemGroup.enableQuickDrop();
     }
 
 

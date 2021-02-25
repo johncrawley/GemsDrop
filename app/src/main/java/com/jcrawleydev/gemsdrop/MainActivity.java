@@ -108,6 +108,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
 
     private void startGemDrop(){
+
+        final int GEM_DROP_TASK_INTERVAL = 40;
+
         if(hasGemDropStarted){
             return;
         }
@@ -119,12 +122,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         AnimateTask animateTask = new AnimateTask(gemGroupView);
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
-        gemDropFuture = executor.scheduleWithFixedDelay(gemDropTask, 0, 250, TimeUnit.MILLISECONDS);
+        gemDropFuture = executor.scheduleWithFixedDelay(gemDropTask, 0, GEM_DROP_TASK_INTERVAL, TimeUnit.MILLISECONDS);
         animateFuture = executor.scheduleWithFixedDelay(animateTask, 0, 20, TimeUnit.MILLISECONDS);
     }
 
 
     public void quickDropRemainingGems(){
+        gemGroup.enableQuickDrop();
         QuickDropTask quickDropTask = new QuickDropTask(this, gemGroup, gemGroupView, gemGrid, gemGridView);
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
         gemControls.deactivate();

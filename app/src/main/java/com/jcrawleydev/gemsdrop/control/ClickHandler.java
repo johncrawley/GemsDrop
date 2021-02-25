@@ -11,7 +11,7 @@ public class ClickHandler {
         this.gemControls = gemControls;
         leftLimit = screenWidth /3;
         rotateLimit = screenWidth /3 * 2;
-        dropYThreshold = (screenHeight / 6) * 5;
+        dropYThreshold = (screenHeight / 3) * 2;
     }
 
     public void click(int x, int y){
@@ -48,7 +48,7 @@ public class ClickHandler {
 
     private void quickDrop(){
         gemControls.deactivate();
-        gemControls.engageQuickDrop();
+        gemControls.enableQuickDrop();
     }
 
 }

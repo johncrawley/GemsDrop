@@ -31,10 +31,7 @@ public class GemGroupFactory {
             Gem gem = new Gem(getRandomColor());
             gems.add(gem);
         }
-        GemGroup gemGroup = new GemGroup(INITIAL_POSITION, GEMS_INITIAL_Y, GemGroup.Orientation.VERTICAL, gems, GEM_WIDTH, floorY);
-
-        gemGroup.setDropMultiple(.5f);
-        return gemGroup;
+        return new GemGroup(INITIAL_POSITION, GEMS_INITIAL_Y, GemGroup.Orientation.VERTICAL, gems, GEM_WIDTH, floorY);
     }
 
 

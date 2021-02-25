@@ -12,13 +12,12 @@ public class GemGroup {
     private List<Gem> reversedOrderGems;
     private Orientation orientation;
     private DetailedOrientation detailedOrientation = DetailedOrientation.FIRST_TO_LAST;
-    private int x,y, xPosition, dropIncrement, gemWidth, middleYPosition, floorY;
-    private float dropMultiple = 0f;
-    private float currentDropIncrement = 0f;
+    private int x,y, xPosition, gemWidth, middleYPosition, floorY;
     public enum DetailedOrientation { FIRST_TO_LAST, TOP_TO_BOTTOM, LAST_TO_FIRST, BOTTOM_TO_TOP }
     public enum Orientation { HORIZONTAL, VERTICAL }
     private GemRotater gemRotater;
     private boolean wasUpdated;
+    private GemGroupDropper gemGroupDropper;
 
 
     public GemGroup(int initialPosition, int initialY, Orientation orientation, List<Gem> gems, int gemWidth,  int floorY){
@@ -37,6 +36,7 @@ public class GemGroup {
         }
         this.gemRotater = new GemRotater(this, gemWidth);
         gemRotater.setGemCoordinates(this);
+        gemGroupDropper = new GemGroupDropper(this, gemWidth);
     }
 
 
@@ -52,12 +52,6 @@ public class GemGroup {
 
     public void setUpdated(boolean updated){
         this.wasUpdated = updated;
-    }
-
-
-    public void setDropMultiple(float dropMultiple){
-        this.dropMultiple = dropMultiple;
-        this.dropIncrement = (int)(gemWidth * dropMultiple);
     }
 
 
@@ -95,6 +89,15 @@ public class GemGroup {
     public void decrementPosition(){
         x -= gemWidth;
         xPosition--;
+        wasUpdated = true;
+    }
+
+    public void decrementMiddleYPosition(){
+        middleYPosition--;
+    }
+
+    public void increaseYBy(int dropIncrement){
+        y += dropIncrement;
         wasUpdated = true;
     }
 
@@ -192,22 +195,11 @@ public class GemGroup {
 
 
     public void drop(){
-        currentDropIncrement += dropMultiple;
-        while(currentDropIncrement >= 1){
-            currentDropIncrement -= 1;
-            middleYPosition --;
-        }
-        y += dropIncrement;
-        wasUpdated = true;
+        gemGroupDropper.drop();
     }
 
-    private boolean isQuickDropEngaged = false;
-    public void engageQuickDrop(){
-        if(isQuickDropEngaged){
-            return;
-        }
-        dropMultiple *= 4;
-        isQuickDropEngaged = true;
+    public void enableQuickDrop(){
+        gemGroupDropper.enableQuickDrop();
     }
 
 
