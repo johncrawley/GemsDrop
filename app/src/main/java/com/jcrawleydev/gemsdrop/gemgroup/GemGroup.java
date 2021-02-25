@@ -40,11 +40,6 @@ public class GemGroup {
     }
 
 
-    private void setupMiddleYPosition(){
-        this.middleYPosition = ((floorY - y) / gemWidth) -1;
-    }
-
-
     public void setGemWidth(int width){
         this.gemWidth = width;
     }
@@ -181,15 +176,6 @@ public class GemGroup {
     }
 
 
-    private List<Gem> copyOf(List<Gem> gems){
-        List<Gem> copiedList = new ArrayList<>(gems.size());
-        for(Gem gem: gems){
-            copiedList.add(gem.clone());
-        }
-        return copiedList;
-    }
-
-
     public int getNumberOfGems(){
         return gems.size();
     }
@@ -213,6 +199,15 @@ public class GemGroup {
         }
         y += dropIncrement;
         wasUpdated = true;
+    }
+
+    private boolean isQuickDropEngaged = false;
+    public void engageQuickDrop(){
+        if(isQuickDropEngaged){
+            return;
+        }
+        dropMultiple *= 4;
+        isQuickDropEngaged = true;
     }
 
 
@@ -242,5 +237,23 @@ public class GemGroup {
         }
         return positions;
     }
+
+
+    private void setupMiddleYPosition(){
+        this.middleYPosition = ((floorY - y) / gemWidth) -1;
+    }
+
+
+
+    private List<Gem> copyOf(List<Gem> gems){
+        List<Gem> copiedList = new ArrayList<>(gems.size());
+        for(Gem gem: gems){
+            copiedList.add(gem.clone());
+        }
+        return copiedList;
+    }
+
+
+
 
 }

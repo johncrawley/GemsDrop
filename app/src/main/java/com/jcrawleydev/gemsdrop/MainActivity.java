@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         gemGridView = new GemGridView(gemGridTransparentView, gemGrid, 150, floorY);
         evaluator = new Evaluator(gemGrid, 3);
         gemControls = new GemControls(gemGrid);
-        clickHandler = new ClickHandler(gemControls, width);
+        clickHandler = new ClickHandler(gemControls, width, height);
     }
 
 
@@ -90,7 +90,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         if(e.getAction() != MotionEvent.ACTION_DOWN){
             return true;
         }
-        clickHandler.click((int)e.getX());
+        int x = (int)e.getX();
+        int y = (int)e.getY();
+        clickHandler.click(x, y);
         startGemDrop();
         return true;
     }
@@ -136,10 +138,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         gemGroupView.drawIfUpdated();
     }
 
+
     public void finishQuickDrop(){
         quickDropFuture.cancel(false);
         evaluateStep();
     }
+
 
     public void evaluateStep(){
         evaluator.evaluate();

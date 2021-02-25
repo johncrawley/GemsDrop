@@ -1,17 +1,25 @@
 package com.jcrawleydev.gemsdrop.control;
 
+
 public class ClickHandler {
 
     private GemControls gemControls;
     private int leftLimit, rotateLimit;
+    private int dropYThreshold;
 
-    public ClickHandler(GemControls gemControls, int screenWidth){
+    public ClickHandler(GemControls gemControls, int screenWidth, int screenHeight){
         this.gemControls = gemControls;
         leftLimit = screenWidth /3;
         rotateLimit = screenWidth /3 * 2;
+        dropYThreshold = (screenHeight / 6) * 5;
     }
 
-    public void click(int x){
+    public void click(int x, int y){
+        if(y > dropYThreshold){
+            quickDrop();
+            return;
+        }
+
         if(x < leftLimit){
             moveLeft();
             return;
@@ -36,6 +44,11 @@ public class ClickHandler {
 
     private void rotate(){
         gemControls.rotate();
+    }
+
+    private void quickDrop(){
+        gemControls.deactivate();
+        gemControls.engageQuickDrop();
     }
 
 }

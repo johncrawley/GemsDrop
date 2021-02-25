@@ -32,6 +32,14 @@ public class GemControls {
         isActivated = true;
     }
 
+    public void engageQuickDrop(){
+        if(gemGroup == null){
+            return;
+        }
+        gemGroup.engageQuickDrop();
+    }
+
+
     public void moveLeft(){
         if(isGemGroupNullOrDeactivated()){
             return;
