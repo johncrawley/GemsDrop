@@ -46,8 +46,7 @@ public class ClickHandler {
         gemControls.rotate();
     }
 
-    private void quickDrop(){
-        gemControls.deactivate();
+    private void quickDrop(){;
         gemControls.enableQuickDrop();
     }
 

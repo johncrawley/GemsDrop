@@ -34,9 +34,10 @@ public class GemControls {
 
 
     public void enableQuickDrop(){
-        if(gemGroup == null){
+        if(isGemGroupNullOrDeactivated()){
             return;
         }
+        deactivate();
         gemGroup.enableQuickDrop();
     }
 
