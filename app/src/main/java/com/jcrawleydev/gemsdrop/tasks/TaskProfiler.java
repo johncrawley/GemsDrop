@@ -1,7 +1,5 @@
-package com.jcrawleydev.gemsdrop;
+package com.jcrawleydev.gemsdrop.tasks;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class TaskProfiler {
 

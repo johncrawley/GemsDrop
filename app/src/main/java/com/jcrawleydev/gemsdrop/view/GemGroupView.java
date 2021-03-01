@@ -22,9 +22,9 @@ public class GemGroupView implements UpdatableView{
     private GemGroup gemGroup;
 
 
-    public GemGroupView(View view, Context context, GemGroup gemGroup){
+    public GemGroupView(View view, BitmapLoader bitmapLoader, GemGroup gemGroup){
         transparentView = (TransparentView)view;
-        bitmapLoader = new BitmapLoader(context);
+        this.bitmapLoader = bitmapLoader;
         linkBitmapsToColorsAndAssignWidths();
         setGemGroup(gemGroup);
     }
