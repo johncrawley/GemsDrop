@@ -1,6 +1,6 @@
 package com.jcrawleydev.gemsdrop.tasks;
 
-import com.jcrawleydev.gemsdrop.MainActivity;
+import com.jcrawleydev.gemsdrop.action.ActionMediator;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.view.GemGridView;
 
@@ -9,13 +9,15 @@ public class GemGridGravityTask implements Runnable {
 
     private GemGrid gemGrid;
     private GemGridView gemGridView;
-    private MainActivity mainActivity;
+    private ActionMediator actionManager;
 
-    public GemGridGravityTask(GemGrid gemGrid, GemGridView gemGridView, MainActivity mainActivity){
-        this.gemGrid = gemGrid;
+
+    public GemGridGravityTask(GemGridView gemGridView, ActionMediator actionManager){
         this.gemGridView = gemGridView;
-        this.mainActivity = mainActivity;
+        this.gemGrid = gemGridView.getGemGrid();
+        this.actionManager = actionManager;
     }
+
 
     public void run(){
         gemGrid.dropGems();
@@ -23,7 +25,7 @@ public class GemGridGravityTask implements Runnable {
             gemGridView.draw();
         }
          else{
-             mainActivity.stopGravity();
+             actionManager.stopGridGravity();
         }
     }
 

@@ -29,6 +29,10 @@ public class GemGridView implements UpdatableView{
         draw();
     }
 
+    public GemGrid getGemGrid(){
+        return gemGrid;
+    }
+
 
     public void draw(){
         transparentView.setDrawItems(gemGrid.getAllGems());
@@ -40,5 +44,7 @@ public class GemGridView implements UpdatableView{
         System.out.println("GemGridView: " + msg);
         System.out.flush();
     }
+
+
 
 }

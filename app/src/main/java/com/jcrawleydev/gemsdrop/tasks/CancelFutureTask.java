@@ -1,20 +1,20 @@
 package com.jcrawleydev.gemsdrop.tasks;
 
-import com.jcrawleydev.gemsdrop.MainActivity;
+import com.jcrawleydev.gemsdrop.action.ActionMediator;
 
 import java.util.concurrent.ScheduledFuture;
 
 public class CancelFutureTask implements Runnable {
     private ScheduledFuture future;
-    private MainActivity mainActivity;
+    private ActionMediator actionManager;
 
-    public CancelFutureTask(ScheduledFuture future, MainActivity mainActivity){
+    public CancelFutureTask(ScheduledFuture future, ActionMediator actionManager){
         this.future = future;
-        this.mainActivity = mainActivity;
+        this.actionManager = actionManager;
     }
 
     public void run(){
         future.cancel(false);
-        mainActivity.deleteMarkedGems();
+        actionManager.deleteMarkedGems();
     }
 }

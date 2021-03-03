@@ -9,9 +9,9 @@ public class FlickerMarkedGemsTask implements  Runnable {
     private GemGrid gemGrid;
     private GemGridView gemGridView;
 
-    public FlickerMarkedGemsTask(GemGrid gemGrid, GemGridView gemGridView){
-        this.gemGrid = gemGrid;
+    public FlickerMarkedGemsTask(GemGridView gemGridView){
         this.gemGridView = gemGridView;
+        this.gemGrid = gemGridView.getGemGrid();
     }
 
     public void run(){

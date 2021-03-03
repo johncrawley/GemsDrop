@@ -38,6 +38,11 @@ public class GemGroupView implements UpdatableView{
     }
 
 
+    public GemGroup getGemGroup(){
+        return this.gemGroup;
+    }
+
+
     public void setDrawItems(){
         List<DrawItem> drawItemList = new ArrayList<>(gemGroup.getGems().size());
         for(Gem gem: gemGroup.getGems()){

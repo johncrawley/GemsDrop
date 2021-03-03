@@ -125,21 +125,21 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         gemGroup = gemGroupFactory.createGemGroup();
         gemControls.setGemGroup(gemGroup);
         gemGroupView.setGemGroup(gemGroup);
-        GemDropTask gemDropTask = new GemDropTask(gemGroup, gemGrid, gemGridView, this);
+      //  GemDropTask gemDropTask = new GemDropTask(gemGroup, gemGrid, gemGridView, this);
         AnimateTask animateTask = new AnimateTask(gemGroupView);
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
-        gemDropFuture = executor.scheduleWithFixedDelay(gemDropTask, 0, GEM_DROP_TASK_INTERVAL, TimeUnit.MILLISECONDS);
+        //gemDropFuture = executor.scheduleWithFixedDelay(gemDropTask, 0, GEM_DROP_TASK_INTERVAL, TimeUnit.MILLISECONDS);
         animateFuture = executor.scheduleWithFixedDelay(animateTask, 0, 20, TimeUnit.MILLISECONDS);
     }
 
 
     public void quickDropRemainingGems(){
         gemGroup.enableQuickDrop();
-        QuickDropTask quickDropTask = new QuickDropTask(this, gemGroup, gemGroupView, gemGrid, gemGridView);
+        //QuickDropTask quickDropTask = new QuickDropTask(this, gemGroup, gemGroupView, gemGrid, gemGridView);
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
         gemControls.deactivate();
-        quickDropFuture = executor.scheduleWithFixedDelay(quickDropTask, 0, quickDropAnimationInterval, TimeUnit.MILLISECONDS);
+        //quickDropFuture = executor.scheduleWithFixedDelay(quickDropTask, 0, quickDropAnimationInterval, TimeUnit.MILLISECONDS);
     }
 
 
@@ -173,38 +173,34 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
 
     private void resetDrop(){
-        hasGemDropStarted = false;
-        gemControls.reactivate();
     }
 
 
     private void startMarkedGemsFlicker(){
-        Runnable markedGemsFlickerTask = new FlickerMarkedGemsTask(gemGrid, gemGridView);
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
-        gemsFlickerFuture = executor.scheduleWithFixedDelay(markedGemsFlickerTask, 0, FLICKER_SPEED, TimeUnit.MILLISECONDS);
+      //  Runnable markedGemsFlickerTask = new FlickerMarkedGemsTask(gemGrid, gemGridView);
+       // ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+       // gemsFlickerFuture = executor.scheduleWithFixedDelay(markedGemsFlickerTask, 0, FLICKER_SPEED, TimeUnit.MILLISECONDS);
 
-        Runnable flickerTimeoutTask = new CancelFutureTask(gemsFlickerFuture, this);
-        executor.schedule(flickerTimeoutTask, 1000, TimeUnit.MILLISECONDS);
+     //   Runnable flickerTimeoutTask = new CancelFutureTask(gemsFlickerFuture, this);
+       // executor.schedule(flickerTimeoutTask, 1000, TimeUnit.MILLISECONDS);
     }
 
 
     public void deleteMarkedGems(){
-        evaluator.deleteMarkedGems();
-        gemGridView.draw();
-        startGemGridGravityDrop();
+      //  evaluator.deleteMarkedGems();
+       // gemGridView.draw();
+        //startGemGridGravityDrop();
     }
 
 
     public void stopGravity(){
-        gemGridGravityFuture.cancel(false);
-        evaluateStep();
     }
 
 
     public void startGemGridGravityDrop(){
-        Runnable gemGridGravityTask = new GemGridGravityTask(gemGrid, gemGridView, this);
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
-        gemGridGravityFuture = executor.scheduleWithFixedDelay(gemGridGravityTask, 0, GEM_GRID_GRAVITY_INTERVAL, TimeUnit.MILLISECONDS);
+       // Runnable gemGridGravityTask = new GemGridGravityTask(gemGrid, gemGridView, this);
+       // ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+       // gemGridGravityFuture = executor.scheduleWithFixedDelay(gemGridGravityTask, 0, GEM_GRID_GRAVITY_INTERVAL, TimeUnit.MILLISECONDS);
     }
 
 
