@@ -2,6 +2,7 @@ package com.jcrawleydev.gemsdrop.action;
 
 import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
+import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
 import com.jcrawleydev.gemsdrop.view.GemGridView;
 import com.jcrawleydev.gemsdrop.view.GemGroupView;
 
@@ -15,13 +16,17 @@ public class ActionMediator {
     private GemGridGravityDropAction gemGridGravityDropAction;
 
 
-    public ActionMediator(GemGroupView gemGroupView, GemGridView gemGridView, GemControls gemControls, Evaluator evaluator){
-        gemDropAction = new GemDropAction(gemControls, gemGroupView, gemGridView, this);
+    public ActionMediator(GemGroupView gemGroupView, GemGridView gemGridView, GemControls gemControls, Evaluator evaluator, GemGroupFactory gemGroupFactory){
+        gemDropAction = new GemDropAction(this, gemControls, gemGroupView, gemGridView, gemGroupFactory);
         quickDropGemsAction = new QuickDropGemsAction(this, gemGroupView, gemControls, gemGridView);
         evaluateAction = new EvaluateAction(evaluator, this);
         flickerMarkedGemsAction = new FlickerMarkedGemsAction(gemGridView, this);
         deleteMarkedGemsAction = new DeleteMarkedGemsAction(this, evaluator, gemGridView);
         gemGridGravityDropAction = new GemGridGravityDropAction(this, gemGridView);
+    }
+
+    public void createAndDropGems(){
+        gemDropAction.start();
     }
 
     public void onAllGemsAdded(){

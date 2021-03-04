@@ -22,7 +22,7 @@ public class GemGridGravityDropAction {
 
 
     void start(){
-        final int GEM_GRID_GRAVITY_INTERVAL = 100;
+        final int GEM_GRID_GRAVITY_INTERVAL = 25;
         Runnable gemGridGravityTask = new GemGridGravityTask(gemGridView, actionManager);
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
         gemGridGravityFuture = executor.scheduleWithFixedDelay(gemGridGravityTask, 0, GEM_GRID_GRAVITY_INTERVAL, TimeUnit.MILLISECONDS);

@@ -2,6 +2,7 @@ package com.jcrawleydev.gemsdrop.action;
 
 import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
+import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
 import com.jcrawleydev.gemsdrop.tasks.AnimateTask;
 import com.jcrawleydev.gemsdrop.tasks.GemDropTask;
 import com.jcrawleydev.gemsdrop.view.GemGridView;
@@ -20,13 +21,16 @@ public class GemDropAction {
     private GemGroupView gemGroupView;
     private GemGridView gemGridView;
     private ScheduledFuture<?> gemDropFuture, animateFuture;
-    private ActionMediator actionManager;
+    private ActionMediator actionMediator;
+    private GemGroupFactory gemGroupFactory;
 
-    public GemDropAction(GemControls controls, GemGroupView gemGroupView, GemGridView gemGridView, ActionMediator actionManager){
+
+    public GemDropAction(ActionMediator actionMediator, GemControls controls, GemGroupView gemGroupView, GemGridView gemGridView, GemGroupFactory gemGroupFactory){
         this.controls = controls;
         this.gemGroupView = gemGroupView;
         this.gemGridView = gemGridView;
-        this.actionManager = actionManager;
+        this.actionMediator = actionMediator;
+        this.gemGroupFactory = gemGroupFactory;
     }
 
     public void setGemGroup(GemGroup gemGroup) {
@@ -42,9 +46,10 @@ public class GemDropAction {
                 return;
             }
             hasGemDropStarted = true;
+            gemGroup = gemGroupFactory.createGemGroup();
             controls.setGemGroup(gemGroup);
             gemGroupView.setGemGroup(gemGroup);
-            GemDropTask gemDropTask = new GemDropTask(gemGroup, gemGridView, actionManager);
+            GemDropTask gemDropTask = new GemDropTask(gemGroup, gemGridView, actionMediator);
             AnimateTask animateTask = new AnimateTask(gemGroupView);
 
             ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
