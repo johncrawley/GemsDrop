@@ -15,6 +15,7 @@ public class EvaluateAction {
 
     public void start(){
         evaluator.evaluate();
+        //TODO: good place to add score updating
         if(evaluator.hasMarkedGems()){
             actionManager.startMarkedGemsFlicker();
             return;

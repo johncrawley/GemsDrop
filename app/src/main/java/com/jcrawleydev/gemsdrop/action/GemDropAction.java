@@ -47,7 +47,7 @@ public class GemDropAction {
             }
             hasGemDropStarted = true;
             gemGroup = gemGroupFactory.createGemGroup();
-            controls.setGemGroup(gemGroup);
+            controls.activateAndSet(gemGroup);
             gemGroupView.setGemGroup(gemGroup);
             GemDropTask gemDropTask = new GemDropTask(gemGroup, gemGridView, actionMediator);
             AnimateTask animateTask = new AnimateTask(gemGroupView);

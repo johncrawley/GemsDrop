@@ -30,7 +30,6 @@ public class Evaluator {
         evaluateRows();
         evaluateColumns();
         evaluateDiagonals();
-        //deleteMarkedGems();
     }
 
     public boolean hasMarkedGems(){
@@ -70,21 +69,26 @@ public class Evaluator {
     }
 
 
-    public void addLowerHalfDiagonalsTo(List<List<Gem>> diagonals){
+    private void addLowerHalfDiagonalsTo(List<List<Gem>> diagonals){
 
         for(int i=0; i< (NUMBER_OF_ROWS - MATCH_NUMBER); i++) {
             List<Gem> diagonal = new ArrayList<>();
-            for (int j = 0 ; j < (NUMBER_OF_COLUMNS - i); j++) {
-                int colIndex = j + i;
-                List<Gem> column = gemColumns.get(colIndex);
-                if(j >= column.size()){
-                    diagonal.add(new NullGem());
-                    continue;
-                }
-                diagonal.add(column.get(j));
+            for (int currentRowIndex = 0 ; currentRowIndex < (NUMBER_OF_COLUMNS - i); currentRowIndex++) {
+                int colIndex = i + currentRowIndex;
+               addGemToDiagonal(diagonal, colIndex, currentRowIndex);
             }
             diagonals.add(diagonal);
         }
+    }
+
+
+    private void addGemToDiagonal(List<Gem> diagonal, int colIndex, int currentRowIndex){
+        List<Gem> column = gemColumns.get(colIndex);
+        if(currentRowIndex >= column.size()){
+            diagonal.add(new NullGem());
+            return;
+        }
+        diagonal.add(column.get(currentRowIndex));
     }
 
 

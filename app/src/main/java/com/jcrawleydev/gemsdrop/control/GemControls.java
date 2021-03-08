@@ -19,7 +19,8 @@ public class GemControls {
         this.gemGrid = gemGrid;
     }
 
-    public void setGemGroup(GemGroup gemGroup){
+    public void activateAndSet(GemGroup gemGroup){
+        reactivate();
         this.gemGroup = gemGroup;
     }
 

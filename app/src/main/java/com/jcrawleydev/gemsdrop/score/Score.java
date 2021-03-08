@@ -4,10 +4,13 @@ public class Score {
 
     private int currentScore = 0;
     private int baseScore;
+    private final int MULTIPLIER_INITIAL_VALUE = 1;
+    private int multiplier;
 
 
     public Score(int baseScore){
         this.baseScore = baseScore;
+        resetMultiplier();
     }
 
 
@@ -19,7 +22,15 @@ public class Score {
         currentScore = 0;
     }
 
-    public void addPointsFor(int numberOfGems, int multiplier){
+    public void incMultiplier(){
+        multiplier++;
+    }
+
+    public void resetMultiplier(){
+        multiplier = MULTIPLIER_INITIAL_VALUE;
+    }
+
+    public void addPointsFor(int numberOfGems){
         currentScore += baseScore * numberOfGems * multiplier;
     }
 
