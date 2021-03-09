@@ -6,6 +6,7 @@ import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
+import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.view.BitmapLoader;
 import com.jcrawleydev.gemsdrop.view.GemGridView;
 import com.jcrawleydev.gemsdrop.view.GemGroupView;
@@ -25,6 +26,7 @@ public class Game {
     private int gemWidth = 150;
     private Evaluator evaluator;
     private ActionMediator actionMediator;
+    private Score score;
 
 
 
@@ -67,7 +69,17 @@ public class Game {
 
 
     void init(){
-        actionMediator = new ActionMediator(gemGroupView, gemGridView, gemControls, evaluator, gemGroupFactory);
+        actionMediator = new ActionMediator.Builder()
+                .evaluator(evaluator)
+                .gemControls(gemControls)
+                .gemGroupView(gemGroupView)
+                .gridView(gemGridView)
+                .gemGroupFactory(gemGroupFactory)
+                .score(score)
+                .build();
+
+
+            //    new ActionMediator(gemGroupView, gemGridView, gemControls, evaluator, gemGroupFactory);
 
     }
 

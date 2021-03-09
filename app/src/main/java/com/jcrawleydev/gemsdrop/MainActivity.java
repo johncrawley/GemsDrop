@@ -15,7 +15,7 @@ import com.jcrawleydev.gemsdrop.view.TransparentView;
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
 
 
-    int height, width;
+    private int height, width;
     private Game game;
 
 
