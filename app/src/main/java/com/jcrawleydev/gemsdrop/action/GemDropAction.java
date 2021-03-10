@@ -3,6 +3,7 @@ package com.jcrawleydev.gemsdrop.action;
 import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
+import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.tasks.AnimateTask;
 import com.jcrawleydev.gemsdrop.tasks.GemDropTask;
 import com.jcrawleydev.gemsdrop.view.GemGridView;
@@ -23,14 +24,17 @@ public class GemDropAction {
     private ScheduledFuture<?> gemDropFuture, animateFuture;
     private ActionMediator actionMediator;
     private GemGroupFactory gemGroupFactory;
+    private Score score;
 
 
-    public GemDropAction(ActionMediator actionMediator, GemControls controls, GemGroupView gemGroupView, GemGridView gemGridView, GemGroupFactory gemGroupFactory){
+    public GemDropAction(ActionMediator actionMediator, GemControls controls, GemGroupView gemGroupView, GemGridView gemGridView, GemGroupFactory gemGroupFactory, Score score){
         this.controls = controls;
         this.gemGroupView = gemGroupView;
         this.gemGridView = gemGridView;
         this.actionMediator = actionMediator;
         this.gemGroupFactory = gemGroupFactory;
+        this.score = score;
+
     }
 
     public void setGemGroup(GemGroup gemGroup) {
@@ -46,6 +50,7 @@ public class GemDropAction {
                 return;
             }
             hasGemDropStarted = true;
+            score.resetMultiplier();
             gemGroup = gemGroupFactory.createGemGroup();
             controls.activateAndSet(gemGroup);
             gemGroupView.setGemGroup(gemGroup);

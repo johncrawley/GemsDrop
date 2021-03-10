@@ -1,11 +1,14 @@
 package com.jcrawleydev.gemsdrop.action;
 
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
+import com.jcrawleydev.gemsdrop.score.GemCountTracker;
+import com.jcrawleydev.gemsdrop.score.Score;
 
 public class EvaluateAction {
 
     private Evaluator evaluator;
     private ActionMediator actionManager;
+
 
     EvaluateAction(Evaluator evaluator, ActionMediator actionManager){
         this.evaluator = evaluator;
@@ -15,12 +18,12 @@ public class EvaluateAction {
 
     public void start(){
         evaluator.evaluate();
-        //TODO: good place to add score updating
         if(evaluator.hasMarkedGems()){
             actionManager.startMarkedGemsFlicker();
-            return;
         }
-        actionManager.resetDrop();
+        else{
+            actionManager.resetDrop();
+        }
     }
 
 }

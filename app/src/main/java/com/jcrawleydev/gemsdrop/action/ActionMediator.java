@@ -3,6 +3,7 @@ package com.jcrawleydev.gemsdrop.action;
 import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
+import com.jcrawleydev.gemsdrop.score.GemCountTracker;
 import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.view.GemGridView;
 import com.jcrawleydev.gemsdrop.view.GemGroupView;
@@ -15,15 +16,22 @@ public class ActionMediator {
     private FlickerMarkedGemsAction flickerMarkedGemsAction;
     private DeleteMarkedGemsAction deleteMarkedGemsAction;
     private GemGridGravityDropAction gemGridGravityDropAction;
+    private Score score;
 
-
-    private ActionMediator(GemGroupView gemGroupView, GemGridView gemGridView, GemControls gemControls, Evaluator evaluator, GemGroupFactory gemGroupFactory, Score score){
-        gemDropAction = new GemDropAction(this, gemControls, gemGroupView, gemGridView, gemGroupFactory);
+    private ActionMediator(GemGroupView gemGroupView,
+                           GemGridView gemGridView,
+                           GemControls gemControls,
+                           Evaluator evaluator,
+                           GemGroupFactory gemGroupFactory,
+                           Score score,
+                           GemCountTracker gemCountTracker){
+        gemDropAction = new GemDropAction(this, gemControls, gemGroupView, gemGridView, gemGroupFactory, score);
         quickDropGemsAction = new QuickDropGemsAction(this, gemGroupView, gemControls, gemGridView);
         evaluateAction = new EvaluateAction(evaluator, this);
         flickerMarkedGemsAction = new FlickerMarkedGemsAction(gemGridView, this);
-        deleteMarkedGemsAction = new DeleteMarkedGemsAction(this, evaluator, gemGridView);
+        deleteMarkedGemsAction = new DeleteMarkedGemsAction(this, evaluator, gemGridView, score, gemCountTracker);
         gemGridGravityDropAction = new GemGridGravityDropAction(this, gemGridView);
+        this.score = score;
     }
 
     public void createAndDropGems(){
@@ -62,6 +70,7 @@ public class ActionMediator {
 
     public void deleteMarkedGems(){
         deleteMarkedGemsAction.start();
+        System.out.println("SCORE: "  + score.get());
     }
 
 
@@ -84,6 +93,7 @@ public class ActionMediator {
         private Evaluator evaluator;
         private StringBuilder str;
         private GemGroupFactory gemGroupFactory;
+        private GemCountTracker gemCountTracker;
 
 
         public Builder gemGroupView(GemGroupView gemGroupView){
@@ -118,9 +128,15 @@ public class ActionMediator {
         }
 
 
+        public Builder gemCountTracker(GemCountTracker gemCountTracker){
+            this.gemCountTracker = gemCountTracker;
+            return this;
+        }
+
+
         public ActionMediator build() {
             verify();
-            return new ActionMediator(gemGroupView, gemGridView, gemControls, evaluator, gemGroupFactory, score);
+            return new ActionMediator(gemGroupView, gemGridView, gemControls, evaluator, gemGroupFactory, score, gemCountTracker);
         }
 
 

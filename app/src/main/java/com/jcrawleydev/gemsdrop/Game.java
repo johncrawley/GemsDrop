@@ -6,6 +6,7 @@ import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
+import com.jcrawleydev.gemsdrop.score.GemCountTracker;
 import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.view.BitmapLoader;
 import com.jcrawleydev.gemsdrop.view.GemGridView;
@@ -27,6 +28,7 @@ public class Game {
     private Evaluator evaluator;
     private ActionMediator actionMediator;
     private Score score;
+    private GemCountTracker gemCountTracker;
 
 
 
@@ -60,6 +62,8 @@ public class Game {
         evaluator = new Evaluator(gemGrid, 3);
         gemControls = new GemControls(gemGrid);
         clickHandler = new ClickHandler(gemControls, width, height);
+        gemCountTracker = new GemCountTracker(gemGrid);
+        score = new Score(100);
     }
 
 
@@ -76,6 +80,7 @@ public class Game {
                 .gridView(gemGridView)
                 .gemGroupFactory(gemGroupFactory)
                 .score(score)
+                .gemCountTracker(gemCountTracker)
                 .build();
 
 

@@ -22,17 +22,17 @@ public class ScoreTest {
         assertEquals(0, score.get());
         int numberOfGems = 1;
         int multiplier = 1;
-        score.addPointsFor(numberOfGems, multiplier);
+        //score.addPointsFor(numberOfGems, multiplier);
         assertEquals(BASE_SCORE, score.get());
-        score.addPointsFor(2, 2);
+        //score.addPointsFor(2, 2);
         assertEquals(BASE_SCORE * 5, score.get());
     }
 
     @Test
     public void canClearScore(){
-        score.addPointsFor(12, 3);
-        score.addPointsFor(10, 4);
-        score.addPointsFor(4, 3);
+        score.addPointsFor(12);
+        score.addPointsFor(10);
+        score.addPointsFor(4);
         score.clear();
         assertEquals(0, score.get());
 
