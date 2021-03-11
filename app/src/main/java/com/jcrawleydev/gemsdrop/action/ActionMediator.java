@@ -7,6 +7,7 @@ import com.jcrawleydev.gemsdrop.score.GemCountTracker;
 import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.view.GemGridView;
 import com.jcrawleydev.gemsdrop.view.GemGroupView;
+import com.jcrawleydev.gemsdrop.view.ScoreView;
 
 public class ActionMediator {
 
@@ -18,20 +19,22 @@ public class ActionMediator {
     private GemGridGravityDropAction gemGridGravityDropAction;
     private Score score;
 
+
     private ActionMediator(GemGroupView gemGroupView,
                            GemGridView gemGridView,
                            GemControls gemControls,
                            Evaluator evaluator,
                            GemGroupFactory gemGroupFactory,
-                           Score score,
+                           ScoreView scoreView,
                            GemCountTracker gemCountTracker){
+        this.score = scoreView.getScore();
         gemDropAction = new GemDropAction(this, gemControls, gemGroupView, gemGridView, gemGroupFactory, score);
         quickDropGemsAction = new QuickDropGemsAction(this, gemGroupView, gemControls, gemGridView);
         evaluateAction = new EvaluateAction(evaluator, this);
         flickerMarkedGemsAction = new FlickerMarkedGemsAction(gemGridView, this);
-        deleteMarkedGemsAction = new DeleteMarkedGemsAction(this, evaluator, gemGridView, score, gemCountTracker);
+        deleteMarkedGemsAction = new DeleteMarkedGemsAction(this, evaluator, gemGridView, scoreView, gemCountTracker);
         gemGridGravityDropAction = new GemGridGravityDropAction(this, gemGridView);
-        this.score = score;
+
     }
 
     public void createAndDropGems(){
@@ -87,6 +90,7 @@ public class ActionMediator {
     public static class Builder{
 
         private Score score;
+        private ScoreView scoreView;
         private GemGroupView gemGroupView;
         private GemGridView gemGridView;
         private GemControls gemControls;
@@ -122,8 +126,9 @@ public class ActionMediator {
         }
 
 
-        public Builder score(Score score){
-            this.score = score;
+        public Builder scoreView(ScoreView scoreView){
+            this.scoreView = scoreView;
+            this.score = scoreView.getScore();
             return this;
         }
 
@@ -136,7 +141,7 @@ public class ActionMediator {
 
         public ActionMediator build() {
             verify();
-            return new ActionMediator(gemGroupView, gemGridView, gemControls, evaluator, gemGroupFactory, score, gemCountTracker);
+            return new ActionMediator(gemGroupView, gemGridView, gemControls, evaluator, gemGroupFactory, scoreView, gemCountTracker);
         }
 
 

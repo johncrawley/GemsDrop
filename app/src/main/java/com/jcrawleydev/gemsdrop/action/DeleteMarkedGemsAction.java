@@ -4,6 +4,7 @@ import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.score.GemCountTracker;
 import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.view.GemGridView;
+import com.jcrawleydev.gemsdrop.view.ScoreView;
 
 public class DeleteMarkedGemsAction {
 
@@ -13,12 +14,14 @@ public class DeleteMarkedGemsAction {
     private GemGridView gemGridView;
     private Score score;
     private GemCountTracker gemCountTracker;
+    private ScoreView scoreView;
 
-    public DeleteMarkedGemsAction(ActionMediator actionManager, Evaluator evaluator, GemGridView gemGridView, Score score, GemCountTracker gemCountTracker){
+    public DeleteMarkedGemsAction(ActionMediator actionManager, Evaluator evaluator, GemGridView gemGridView, ScoreView scoreView, GemCountTracker gemCountTracker){
         this.actionManager = actionManager;
         this.evaluator = evaluator;
         this.gemGridView = gemGridView;
-        this.score = score;
+        this.score = scoreView.getScore();
+        this.scoreView = scoreView;
         this.gemCountTracker = gemCountTracker;
     }
 
@@ -29,6 +32,7 @@ public class DeleteMarkedGemsAction {
         int count = gemCountTracker.getDifference();
         score.addPointsFor(count);
         score.incMultiplier();
+        scoreView.draw();
         gemGridView.draw();
         actionManager.startGemGridGravityDrop();
     }

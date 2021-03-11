@@ -10,6 +10,7 @@ import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.view.View;
 
+import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.Nullable;
@@ -19,6 +20,7 @@ public class TransparentView extends View {
     private int canvasTranslateX,canvasTranslateY, width, height;
     private int angle = 0;
     private List<DrawItem> items;
+    private List<TextItem> textItems;
     private Paint paint;
     private Canvas canvasBitmap;
     private boolean isViewDrawn = false;
@@ -31,12 +33,14 @@ public class TransparentView extends View {
     public TransparentView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         initPaint();
+        textItems = Collections.emptyList();
     }
 
 
     public TransparentView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initPaint();
+        textItems = Collections.emptyList();
     }
 
 
@@ -57,6 +61,13 @@ public class TransparentView extends View {
     public void setDrawItems(List<DrawItem> items){
         this.items = items;
     }
+
+
+    public void setTextItems(List<TextItem> items){
+        this.textItems = items;
+    }
+
+
 
 
     public void setDimensions(int width, int height){
@@ -126,6 +137,12 @@ public class TransparentView extends View {
                 continue;
             }
             canvasBitmap.drawBitmap(item.getBitmap(), item.getX(), item.getY(), paint);
+        }
+
+        for(TextItem item: textItems){
+            paint.setColor(item.getColor());
+            paint.setTextSize(30f);
+            canvasBitmap.drawText(item.getText(), item.getX(), item.getY(), paint);
         }
     }
 

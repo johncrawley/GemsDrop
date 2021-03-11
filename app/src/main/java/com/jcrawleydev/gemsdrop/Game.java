@@ -11,6 +11,7 @@ import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.view.BitmapLoader;
 import com.jcrawleydev.gemsdrop.view.GemGridView;
 import com.jcrawleydev.gemsdrop.view.GemGroupView;
+import com.jcrawleydev.gemsdrop.view.ScoreView;
 import com.jcrawleydev.gemsdrop.view.TransparentView;
 
 
@@ -29,6 +30,7 @@ public class Game {
     private ActionMediator actionMediator;
     private Score score;
     private GemCountTracker gemCountTracker;
+    private ScoreView scoreView;
 
 
 
@@ -63,7 +65,6 @@ public class Game {
         gemControls = new GemControls(gemGrid);
         clickHandler = new ClickHandler(gemControls, width, height);
         gemCountTracker = new GemCountTracker(gemGrid);
-        score = new Score(100);
     }
 
 
@@ -72,6 +73,12 @@ public class Game {
     }
 
 
+    void initScoreView(TransparentView v, BitmapLoader bitmapLoader){
+        score = new Score(100);
+        scoreView = new ScoreView(v, score, bitmapLoader);
+        scoreView.draw();
+    }
+
     void init(){
         actionMediator = new ActionMediator.Builder()
                 .evaluator(evaluator)
@@ -79,7 +86,7 @@ public class Game {
                 .gemGroupView(gemGroupView)
                 .gridView(gemGridView)
                 .gemGroupFactory(gemGroupFactory)
-                .score(score)
+                .scoreView(scoreView)
                 .gemCountTracker(gemCountTracker)
                 .build();
 

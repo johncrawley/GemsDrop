@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private Game game;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,15 +28,18 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         assignScreenDimensions();
         TransparentView gemGroupTransparentView = findViewById(R.id.gemGroupView);
         TransparentView gemGridTransparentView = findViewById(R.id.gemGridView);
+        TransparentView scoreTransparentView = findViewById(R.id.scoreView);
         gemGroupTransparentView.setDimensions(width, height);
         gemGroupTransparentView.translateXToMiddle();
         gemGridTransparentView.setDimensions(width, height);
+        scoreTransparentView.setDimensions(width, height);
         gemGroupTransparentView.setOnTouchListener(this);
         gemGridTransparentView.setOnTouchListener(this);
         game = new Game(width, height);
         BitmapLoader bitmapLoader = new BitmapLoader(this);
         game.initGemGridView(gemGridTransparentView);
         game.initGemGroupView(gemGroupTransparentView, bitmapLoader);
+        game.initScoreView(scoreTransparentView, bitmapLoader);
         game.init();
     }
 
