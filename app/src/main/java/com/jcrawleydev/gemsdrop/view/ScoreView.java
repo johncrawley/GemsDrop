@@ -16,18 +16,14 @@ public class ScoreView implements TextItem {
     private TransparentView transparentView;
     private Score score;
 
-    public ScoreView(View view, Score score, BitmapLoader bitmapLoader){
+    public ScoreView(View view, Score score, BitmapLoader bitmapLoader, int height){
         this.transparentView = (TransparentView) view;
         this.score = score;
         transparentView.setTextItems(Collections.singletonList(this));
-
-        Bitmap bm = bitmapLoader.get( R.drawable.jewel_yellow);
-
-        //currently need this to display the score, will check up later
-        Gem gem = new Gem(Gem.Color.YELLOW);
-        gem.setBitmap(bm);
-        gem.setXY(-300,-300);
-        transparentView.setDrawItems(Collections.singletonList(gem));
+        transparentView.setTextColor(Color.WHITE);
+        float textSize = (float) height / 15;
+        System.out.println("ScoreView, text size: " + textSize);
+        transparentView.setTextSize(textSize);
     }
 
     public Score getScore(){

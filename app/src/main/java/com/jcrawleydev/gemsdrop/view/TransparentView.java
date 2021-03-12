@@ -44,6 +44,16 @@ public class TransparentView extends View {
     }
 
 
+    public void setTextSize(float size){
+        paint.setTextSize(size);
+
+    }
+
+    public void setTextColor(int color){
+        paint.setColor(color);
+    }
+
+
     public void setTranslateY(int y){
         this.canvasTranslateY = y;
     }
@@ -66,8 +76,6 @@ public class TransparentView extends View {
     public void setTextItems(List<TextItem> items){
         this.textItems = items;
     }
-
-
 
 
     public void setDimensions(int width, int height){
@@ -129,6 +137,13 @@ public class TransparentView extends View {
 
 
     private void drawItems(){
+        drawDrawItems();
+        drawTextItems();
+
+    }
+
+
+    private void drawDrawItems(){
         if(items == null){
             return;
         }
@@ -138,14 +153,14 @@ public class TransparentView extends View {
             }
             canvasBitmap.drawBitmap(item.getBitmap(), item.getX(), item.getY(), paint);
         }
-
-        for(TextItem item: textItems){
-            paint.setColor(item.getColor());
-            paint.setTextSize(30f);
-            canvasBitmap.drawText(item.getText(), item.getX(), item.getY(), paint);
-        }
     }
 
+    private void drawTextItems(){
 
+        for(TextItem item: textItems){
+            canvasBitmap.drawText(item.getText(), item.getX(), item.getY(), paint);
+        }
+
+    }
 
 }

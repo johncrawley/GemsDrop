@@ -75,7 +75,7 @@ public class Game {
 
     void initScoreView(TransparentView v, BitmapLoader bitmapLoader){
         score = new Score(100);
-        scoreView = new ScoreView(v, score, bitmapLoader);
+        scoreView = new ScoreView(v, score, bitmapLoader, height);
         scoreView.draw();
     }
 
