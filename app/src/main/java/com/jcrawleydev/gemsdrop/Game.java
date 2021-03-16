@@ -25,7 +25,7 @@ public class Game {
     private GemGridView gemGridView;
     private ClickHandler clickHandler;
     private GemControls gemControls;
-    private int gemWidth = 150;
+    private int gemWidth;
     private Evaluator evaluator;
     private ActionMediator actionMediator;
     private Score score;
@@ -34,12 +34,12 @@ public class Game {
 
 
 
-    public Game(int screenWidth, int screenHeight){
+    public Game(int screenWidth, int screenHeight, int gemWidth){
         this.width = screenWidth;
         this.height = screenHeight;
-        int initialY = gemWidth * -2;
+        this.gemWidth = gemWidth;
+        int initialY = this.gemWidth * -2;
         floorY = height - (height /10);
-
 
         gemGroupFactory = new GemGroupFactory.Builder()
                 .withInitialY(initialY)
@@ -60,7 +60,7 @@ public class Game {
     void initGemGridView(TransparentView v){
         gemGrid = new GemGrid(7,12);
         gemGrid.setDropIncrement(gemWidth / 5);
-        gemGridView = new GemGridView(v, gemGrid, 150, floorY);
+        gemGridView = new GemGridView(v, gemGrid, gemWidth, floorY);
         evaluator = new Evaluator(gemGrid, 3);
         gemControls = new GemControls(gemGrid);
         clickHandler = new ClickHandler(gemControls, width, height);

@@ -9,15 +9,22 @@ import android.graphics.drawable.VectorDrawable;
 public class BitmapLoader {
 
     private Context context;
+    private int width;
 
-    public BitmapLoader(Context context){
+    public BitmapLoader(Context context, int width){
+
         this.context = context;
+        this.width = width;
     }
+
+
 
     public Bitmap get(int resId) {
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inSampleSize = 1;
-        return BitmapFactory.decodeResource(context.getResources(), resId, opts);
+        Bitmap bm = BitmapFactory.decodeResource(context.getResources(), resId, opts);
+
+        return Bitmap.createScaledBitmap(bm,width, width, true);
     }
 
 

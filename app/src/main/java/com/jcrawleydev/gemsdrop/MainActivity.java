@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private int height, width;
     private Game game;
-
+    private int gemWidth;
 
 
     @Override
@@ -35,8 +35,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         scoreTransparentView.setDimensions(width, height);
         gemGroupTransparentView.setOnTouchListener(this);
         gemGridTransparentView.setOnTouchListener(this);
-        game = new Game(width, height);
-        BitmapLoader bitmapLoader = new BitmapLoader(this);
+        game = new Game(width, height, gemWidth);
+        BitmapLoader bitmapLoader = new BitmapLoader(this, gemWidth);
         game.initGemGridView(gemGridTransparentView);
         game.initGemGroupView(gemGroupTransparentView, bitmapLoader);
         game.initScoreView(scoreTransparentView, bitmapLoader);
@@ -60,6 +60,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         height = displayMetrics.heightPixels;
         width = displayMetrics.widthPixels;
+        assignGemWidth(width, height);
+    }
+
+    private void assignGemWidth(int width, int height){
+        int longestDimen = Math.max(width, height);
+        this.gemWidth = longestDimen / 14;
     }
 
 }
