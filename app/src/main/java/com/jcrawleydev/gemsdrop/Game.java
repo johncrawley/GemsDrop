@@ -31,6 +31,7 @@ public class Game {
     private Score score;
     private GemCountTracker gemCountTracker;
     private ScoreView scoreView;
+    private SoundPlayer soundPlayer;
 
 
 
@@ -88,6 +89,7 @@ public class Game {
                 .gemGroupFactory(gemGroupFactory)
                 .scoreView(scoreView)
                 .gemCountTracker(gemCountTracker)
+                .soundPlayer(soundPlayer)
                 .build();
 
 

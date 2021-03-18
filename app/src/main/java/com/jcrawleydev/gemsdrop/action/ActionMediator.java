@@ -1,5 +1,6 @@
 package com.jcrawleydev.gemsdrop.action;
 
+import com.jcrawleydev.gemsdrop.SoundPlayer;
 import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
@@ -19,27 +20,28 @@ public class ActionMediator {
     private GemGridGravityDropAction gemGridGravityDropAction;
     private Score score;
 
-
     private ActionMediator(GemGroupView gemGroupView,
                            GemGridView gemGridView,
                            GemControls gemControls,
                            Evaluator evaluator,
                            GemGroupFactory gemGroupFactory,
                            ScoreView scoreView,
-                           GemCountTracker gemCountTracker){
+                           GemCountTracker gemCountTracker,
+                           SoundPlayer soundPlayer){
         this.score = scoreView.getScore();
         gemDropAction = new GemDropAction(this, gemControls, gemGroupView, gemGridView, gemGroupFactory, score);
         quickDropGemsAction = new QuickDropGemsAction(this, gemGroupView, gemControls, gemGridView);
         evaluateAction = new EvaluateAction(evaluator, this);
         flickerMarkedGemsAction = new FlickerMarkedGemsAction(gemGridView, this);
-        deleteMarkedGemsAction = new DeleteMarkedGemsAction(this, evaluator, gemGridView, scoreView, gemCountTracker);
+        deleteMarkedGemsAction = new DeleteMarkedGemsAction(this, evaluator, gemGridView, scoreView, gemCountTracker, soundPlayer);
         gemGridGravityDropAction = new GemGridGravityDropAction(this, gemGridView);
-
     }
+
 
     public void createAndDropGems(){
         gemDropAction.start();
     }
+
 
     public void onAllGemsAdded(){
         gemDropAction.cancelFutures();
@@ -98,6 +100,7 @@ public class ActionMediator {
         private StringBuilder str;
         private GemGroupFactory gemGroupFactory;
         private GemCountTracker gemCountTracker;
+        private SoundPlayer soundPlayer;
 
 
         public Builder gemGroupView(GemGroupView gemGroupView){
@@ -138,10 +141,15 @@ public class ActionMediator {
             return this;
         }
 
+        public Builder soundPlayer(SoundPlayer soundPlayer){
+            this.soundPlayer = soundPlayer;
+            return this;
+        }
+
 
         public ActionMediator build() {
             verify();
-            return new ActionMediator(gemGroupView, gemGridView, gemControls, evaluator, gemGroupFactory, scoreView, gemCountTracker);
+            return new ActionMediator(gemGroupView, gemGridView, gemControls, evaluator, gemGroupFactory, scoreView, gemCountTracker, soundPlayer);
         }
 
 

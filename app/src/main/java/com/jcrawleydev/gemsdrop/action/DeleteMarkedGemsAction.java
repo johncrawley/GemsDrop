@@ -1,5 +1,6 @@
 package com.jcrawleydev.gemsdrop.action;
 
+import com.jcrawleydev.gemsdrop.SoundPlayer;
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.score.GemCountTracker;
 import com.jcrawleydev.gemsdrop.score.Score;
@@ -15,14 +16,16 @@ public class DeleteMarkedGemsAction {
     private Score score;
     private GemCountTracker gemCountTracker;
     private ScoreView scoreView;
+    private SoundPlayer soundPlayer;
 
-    public DeleteMarkedGemsAction(ActionMediator actionManager, Evaluator evaluator, GemGridView gemGridView, ScoreView scoreView, GemCountTracker gemCountTracker){
+    public DeleteMarkedGemsAction(ActionMediator actionManager, Evaluator evaluator, GemGridView gemGridView, ScoreView scoreView, GemCountTracker gemCountTracker, SoundPlayer soundPlayer){
         this.actionManager = actionManager;
         this.evaluator = evaluator;
         this.gemGridView = gemGridView;
         this.score = scoreView.getScore();
         this.scoreView = scoreView;
         this.gemCountTracker = gemCountTracker;
+        this.soundPlayer = soundPlayer;
     }
 
 
@@ -31,6 +34,7 @@ public class DeleteMarkedGemsAction {
         evaluator.deleteMarkedGems();
         int count = gemCountTracker.getDifference();
         score.addPointsFor(count);
+        soundPlayer.playGemDisappearSound(score.getMultiplier());
         score.incMultiplier();
         scoreView.draw();
         gemGridView.draw();

@@ -25,6 +25,10 @@ public class Score {
         multiplier++;
     }
 
+    public int getMultiplier(){
+        return multiplier;
+    }
+
     public void resetMultiplier(){
         multiplier = MULTIPLIER_INITIAL_VALUE;
     }
