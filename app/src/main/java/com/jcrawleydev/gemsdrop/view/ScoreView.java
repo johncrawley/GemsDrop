@@ -1,7 +1,11 @@
 package com.jcrawleydev.gemsdrop.view;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.view.View;
 
 import com.jcrawleydev.gemsdrop.R;
@@ -11,20 +15,49 @@ import com.jcrawleydev.gemsdrop.score.Score;
 
 import java.util.Collections;
 
-public class ScoreView implements TextItem {
+public class ScoreView implements TextItem, DrawableItem {
 
-    private TransparentView transparentView;
-    private Score score;
+    private final TransparentView transparentView;
+    private final Score score;
+    private int scoreBarHeight, scoreBarWidth;
+    private int textX, textY;
+    private float textSize;
+    private final Context context;
+    private final int height, width;
 
-    public ScoreView(View view, Score score, BitmapLoader bitmapLoader, int height){
+    public ScoreView(Context context, View view, Score score, BitmapLoader bitmapLoader, int width, int height){
+        this.context = context;
         this.transparentView = (TransparentView) view;
         this.score = score;
-        transparentView.setTextItems(Collections.singletonList(this));
-        transparentView.setTextColor(Color.WHITE);
-        float textSize = (float) height / 15;
-        System.out.println("ScoreView, text size: " + textSize);
-        transparentView.setTextSize(textSize);
+        this.width = width;
+        this.height = height;
+
+        transparentView.addDrawableItem(this);
+        setupDimensions(view);
+
     }
+
+
+    private void setupDimensions(View view){
+
+        textSize = (float) height / getInt(R.integer.score_board_text_height_ratio);
+        scoreBarWidth = width;
+        scoreBarHeight = height / getInt(R.integer.score_board_height_ratio);;
+        textX = scoreBarWidth /5;
+        textY = scoreBarHeight - (height / getInt(R.integer.score_board_text_position_y_offset));
+        log("setupDimensions(), Scorebar text X and Y: " + textX + "," + textY + " ... scoreBarWidth: " + scoreBarWidth);
+
+
+    }
+
+    private int getInt(int resId){
+        return context.getResources().getInteger(resId);
+    }
+
+    private void log(String msg){
+        System.out.println("^^^ ScoreView : " + msg);
+    }
+
 
     public Score getScore(){
         return this.score;
@@ -32,7 +65,13 @@ public class ScoreView implements TextItem {
 
     @Override
     public String getText(){
-        return "SCORE: " + score.get();
+        return context.getString(R.string.score) + " " + score.get();
+    }
+
+    
+    @Override
+    public Bitmap getBitmap() {
+        return null;
     }
 
     @Override
@@ -46,6 +85,23 @@ public class ScoreView implements TextItem {
     }
 
     @Override
+    public boolean isVisible() {
+        return false;
+    }
+
+
+    @Override
+    public void draw(Canvas canvas, Paint paint) {
+        Rect scoreBoardBackgroundRect = new Rect(0,0, scoreBarWidth, scoreBarHeight);
+        paint.setColor(Color.DKGRAY);
+        canvas.drawRect(scoreBoardBackgroundRect, paint);
+        paint.setColor(Color.GRAY);
+        paint.setTextSize(textSize);
+        canvas.drawText(getText(), textX, textY, paint);
+    }
+
+
+    @Override
     public int getColor(){
         return Color.WHITE;
     }
@@ -54,6 +110,7 @@ public class ScoreView implements TextItem {
 
     public void draw(){
         System.out.println("Score updating transparent view");
+
         transparentView.invalidate();
     }
 

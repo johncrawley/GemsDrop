@@ -10,6 +10,7 @@ import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class TransparentView extends View {
     private Paint paint;
     private Canvas canvasBitmap;
     private boolean isViewDrawn = false;
+    private List<DrawableItem> drawableItems;
 
 
     public TransparentView(Context context) {
@@ -33,14 +35,20 @@ public class TransparentView extends View {
     public TransparentView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         initPaint();
-        textItems = Collections.emptyList();
+        initItems();
     }
 
 
     public TransparentView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initPaint();
+        initItems();
+    }
+
+
+    public void initItems(){
         textItems = Collections.emptyList();
+        drawableItems = new ArrayList<>();
     }
 
 
@@ -48,6 +56,12 @@ public class TransparentView extends View {
         paint.setTextSize(size);
 
     }
+
+
+    public void addDrawableItem(DrawableItem drawableItem){
+        drawableItems.add(drawableItem);
+    }
+
 
     public void setTextColor(int color){
         paint.setColor(color);
@@ -139,7 +153,7 @@ public class TransparentView extends View {
     private void drawItems(){
         drawDrawItems();
         drawTextItems();
-
+        drawDrawableItems();
     }
 
 
@@ -156,11 +170,16 @@ public class TransparentView extends View {
     }
 
     private void drawTextItems(){
-
         for(TextItem item: textItems){
             canvasBitmap.drawText(item.getText(), item.getX(), item.getY(), paint);
         }
+    }
 
+
+    private void drawDrawableItems(){
+        for(DrawableItem drawableItem : drawableItems){
+            drawableItem.draw(canvasBitmap, paint);
+        }
     }
 
 }

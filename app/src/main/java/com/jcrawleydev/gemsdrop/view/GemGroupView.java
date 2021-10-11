@@ -15,10 +15,10 @@ import java.util.Map;
 
 public class GemGroupView implements UpdatableView{
 
-    private TransparentView transparentView;
+    private final TransparentView transparentView;
     private int GEM_WIDTH;
     private Map<Gem.Color, Bitmap> gemColorMap;
-    private BitmapLoader bitmapLoader;
+    private final BitmapLoader bitmapLoader;
     private GemGroup gemGroup;
 
 

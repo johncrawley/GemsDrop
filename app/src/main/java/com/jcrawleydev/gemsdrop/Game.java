@@ -1,5 +1,7 @@
 package com.jcrawleydev.gemsdrop;
 
+import android.content.Context;
+
 import com.jcrawleydev.gemsdrop.action.ActionMediator;
 import com.jcrawleydev.gemsdrop.control.ClickHandler;
 import com.jcrawleydev.gemsdrop.control.GemControls;
@@ -17,28 +19,27 @@ import com.jcrawleydev.gemsdrop.view.TransparentView;
 
 public class Game {
 
-    private GemGroupFactory gemGroupFactory;
+    private final GemGroupFactory gemGroupFactory;
     private GemGroupView gemGroupView;
-    private int height, width;
-    private int floorY;
-    private GemGrid gemGrid;
+    private final int height;
+    private final int width;
+    private final int floorY;
     private GemGridView gemGridView;
     private ClickHandler clickHandler;
     private GemControls gemControls;
-    private int gemWidth;
+    private final int gemWidth;
     private Evaluator evaluator;
     private ActionMediator actionMediator;
-    private Score score;
     private GemCountTracker gemCountTracker;
     private ScoreView scoreView;
-    private SoundPlayer soundPlayer;
+    private final Context context;
 
 
-
-    public Game(int screenWidth, int screenHeight, int gemWidth){
+    public Game(Context context, int screenWidth, int screenHeight, int gemWidth){
         this.width = screenWidth;
         this.height = screenHeight;
         this.gemWidth = gemWidth;
+        this.context = context;
         int initialY = this.gemWidth * -2;
         floorY = height - (height /10);
 
@@ -59,7 +60,7 @@ public class Game {
 
 
     void initGemGridView(TransparentView v){
-        gemGrid = new GemGrid(7,12);
+        GemGrid gemGrid = new GemGrid(7, 12);
         gemGrid.setDropIncrement(gemWidth / 5);
         gemGridView = new GemGridView(v, gemGrid, gemWidth, floorY);
         evaluator = new Evaluator(gemGrid, 3);
@@ -74,13 +75,15 @@ public class Game {
     }
 
 
-    void initScoreView(TransparentView v, BitmapLoader bitmapLoader){
-        score = new Score(100);
-        scoreView = new ScoreView(v, score, bitmapLoader, height);
+    void initScoreView(TransparentView transparentView, BitmapLoader bitmapLoader){
+        Score score = new Score(100);
+        scoreView = new ScoreView(context, transparentView, score, bitmapLoader, width, height);
         scoreView.draw();
     }
 
+
     void init(){
+        SoundPlayer soundPlayer = new SoundPlayer();
         actionMediator = new ActionMediator.Builder()
                 .evaluator(evaluator)
                 .gemControls(gemControls)
@@ -91,12 +94,6 @@ public class Game {
                 .gemCountTracker(gemCountTracker)
                 .soundPlayer(soundPlayer)
                 .build();
-
-
-            //    new ActionMediator(gemGroupView, gemGridView, gemControls, evaluator, gemGroupFactory);
-
     }
-
-
 
 }
