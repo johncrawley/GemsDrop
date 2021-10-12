@@ -3,19 +3,17 @@ import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 
 public class GemGridView implements UpdatableView{
 
-    private GemGrid gemGrid;
-    private final int GEM_SIZE;
-    private TransparentView transparentView;
+    private final GemGrid gemGrid;
+    private final TransparentView transparentView;
     private boolean wasUpdated;
 
     public GemGridView(TransparentView transparentView, GemGrid gemGrid, int gem_size, int floorY){
-
         this.gemGrid = gemGrid;
-        this.GEM_SIZE = gem_size;
         this.transparentView = transparentView;
+
         gemGrid.setFloorY(floorY);
-        gemGrid.setGemSize(GEM_SIZE);
-        gemGrid.setStartingX(0);
+        gemGrid.setGemSize(gem_size);
+        gemGrid.setStartingX(gem_size /2);
         draw();
     }
 
@@ -27,6 +25,7 @@ public class GemGridView implements UpdatableView{
         draw();
     }
 
+
     public GemGrid getGemGrid(){
         return gemGrid;
     }
@@ -37,6 +36,7 @@ public class GemGridView implements UpdatableView{
         log("Just set draw items: number of gems: " + gemGrid.gemCount());
         transparentView.invalidate();
     }
+
 
     private void log(String msg){
         System.out.println("GemGridView: " + msg);

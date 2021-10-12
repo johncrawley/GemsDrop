@@ -38,7 +38,7 @@ public class Game {
     public Game(Context context, int screenWidth, int screenHeight, int gemWidth){
         this.width = screenWidth;
         this.height = screenHeight;
-        this.gemWidth = gemWidth;
+        this.gemWidth = screenWidth/8;
         this.context = context;
         int initialY = this.gemWidth * -2;
         floorY = height - (height /10);
