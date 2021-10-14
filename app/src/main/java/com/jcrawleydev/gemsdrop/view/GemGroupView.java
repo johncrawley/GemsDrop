@@ -1,6 +1,5 @@
 package com.jcrawleydev.gemsdrop.view;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
 
@@ -16,15 +15,16 @@ import java.util.Map;
 public class GemGroupView implements UpdatableView{
 
     private final TransparentView transparentView;
-    private int GEM_WIDTH;
+    private int gemWidth;
     private Map<Gem.Color, Bitmap> gemColorMap;
     private final BitmapLoader bitmapLoader;
     private GemGroup gemGroup;
 
 
-    public GemGroupView(View view, BitmapLoader bitmapLoader, GemGroup gemGroup){
+    public GemGroupView(View view, BitmapLoader bitmapLoader, GemGroup gemGroup, int gemWidth){
         transparentView = (TransparentView)view;
         this.bitmapLoader = bitmapLoader;
+        this.gemWidth = gemWidth;
         linkBitmapsToColorsAndAssignWidths();
         setGemGroup(gemGroup);
     }
@@ -32,7 +32,7 @@ public class GemGroupView implements UpdatableView{
 
     public void setGemGroup(GemGroup gemGroup){
         this.gemGroup = gemGroup;
-        gemGroup.setGemWidth(GEM_WIDTH);
+        gemGroup.setGemWidth(gemWidth);
         setBitmapReferences();
         setDrawItems();
     }
@@ -45,9 +45,7 @@ public class GemGroupView implements UpdatableView{
 
     public void setDrawItems(){
         List<DrawItem> drawItemList = new ArrayList<>(gemGroup.getGems().size());
-        for(Gem gem: gemGroup.getGems()){
-            drawItemList.add(gem);
-        }
+        drawItemList.addAll(gemGroup.getGems());
         transparentView.setDrawItems(drawItemList);
     }
 
@@ -88,12 +86,12 @@ public class GemGroupView implements UpdatableView{
     private void link(Gem.Color color, int drawableId){
         gemColorMap.put(color, bitmapLoader.get(drawableId));
         Bitmap bm = bitmapLoader.get(drawableId);
-        assignWidths(bm);
+        //assignWidths(bm);
     }
 
 
     private void assignWidths(Bitmap bm){
-        GEM_WIDTH = bm.getWidth();
+        gemWidth = bm.getWidth();
     }
 
 }

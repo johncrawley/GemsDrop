@@ -9,20 +9,22 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class GemGroupFactory {
 
-    private  int NUMBER_OF_GEMS;
-    private  int GEMS_INITIAL_Y;
-    private  int INITIAL_POSITION;
-    private  List<Gem.Color> colors;
-    private  int floorY;
+    private final int NUMBER_OF_GEMS;
+    private final int GEMS_INITIAL_Y;
+    private final int INITIAL_POSITION;
+    private final List<Gem.Color> colors;
+    private final int floorY;
     private final int GEM_WIDTH;
+    private final int borderWidth;
 
-    private GemGroupFactory(int numberOfGems, int initialPosition, int gemsInitialY, int gemWidth, int floorY){
+    private GemGroupFactory(int numberOfGems, int initialPosition, int gemsInitialY, int gemWidth, int floorY, int borderWidth){
         this.NUMBER_OF_GEMS = numberOfGems;
         this.INITIAL_POSITION = initialPosition;
         this.GEMS_INITIAL_Y = gemsInitialY;
         colors = Arrays.asList(Gem.Color.values());
         this.floorY = floorY;
         this.GEM_WIDTH = gemWidth;
+        this.borderWidth = borderWidth;
     }
 
     public GemGroup createGemGroup(){
@@ -31,7 +33,7 @@ public class GemGroupFactory {
             Gem gem = new Gem(getRandomColor());
             gems.add(gem);
         }
-        return new GemGroup(INITIAL_POSITION, GEMS_INITIAL_Y, GemGroup.Orientation.VERTICAL, gems, GEM_WIDTH, floorY);
+        return new GemGroup(INITIAL_POSITION, GEMS_INITIAL_Y, GemGroup.Orientation.VERTICAL, gems, GEM_WIDTH, floorY, borderWidth);
     }
 
 
@@ -47,7 +49,7 @@ public class GemGroupFactory {
 
         public Builder(){}
 
-       private int numberOfGems, initialPosition, gemsInitialY, gemWidth, floorY;
+       private int numberOfGems, initialPosition, gemsInitialY, gemWidth, floorY, borderWidth;
 
         public Builder withInitialY(int initialY){
             this.gemsInitialY = initialY;
@@ -69,13 +71,19 @@ public class GemGroupFactory {
             return this;
         }
 
+
+        public Builder withBorderWidth(int borderWidth){
+            this.borderWidth = borderWidth;
+            return this;
+        }
+
         public Builder withFloorAt(int floorY){
             this.floorY = floorY;
             return this;
         }
 
         public GemGroupFactory build(){
-            return new GemGroupFactory(numberOfGems, initialPosition, gemsInitialY, gemWidth, floorY);
+            return new GemGroupFactory(numberOfGems, initialPosition, gemsInitialY, gemWidth, floorY, borderWidth);
         }
 
     }

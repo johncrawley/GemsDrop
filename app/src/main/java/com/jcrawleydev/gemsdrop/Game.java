@@ -33,14 +33,16 @@ public class Game {
     private GemCountTracker gemCountTracker;
     private ScoreView scoreView;
     private final Context context;
+    private final int borderWidth;
 
 
     public Game(Context context, int screenWidth, int screenHeight, int gemWidth){
         this.width = screenWidth;
         this.height = screenHeight;
-        this.gemWidth = screenWidth/8;
+        this.gemWidth = gemWidth;
         this.context = context;
-        int initialY = this.gemWidth * -2;
+        this.borderWidth = gemWidth /2;
+        int initialY = this.gemWidth * -4;
         floorY = height - (height /10);
 
         gemGroupFactory = new GemGroupFactory.Builder()
@@ -49,6 +51,7 @@ public class Game {
                 .withNumerOfGems(3)
                 .withInitialPosition(4)
                 .withFloorAt(floorY)
+                .withBorderWidth(borderWidth)
                 .build();
     }
 
@@ -62,7 +65,7 @@ public class Game {
     void initGemGridView(TransparentView v){
         GemGrid gemGrid = new GemGrid(7, 12);
         gemGrid.setDropIncrement(gemWidth / 5);
-        gemGridView = new GemGridView(v, gemGrid, gemWidth, floorY);
+        gemGridView = new GemGridView(v, gemGrid, gemWidth, floorY, borderWidth);
         evaluator = new Evaluator(gemGrid, 3);
         gemControls = new GemControls(gemGrid);
         clickHandler = new ClickHandler(gemControls, width, height);
@@ -71,7 +74,7 @@ public class Game {
 
 
     void initGemGroupView(TransparentView v, BitmapLoader bitmapLoader){
-        gemGroupView = new GemGroupView(v, bitmapLoader, gemGroupFactory.createGemGroup());
+        gemGroupView = new GemGroupView(v, bitmapLoader, gemGroupFactory.createGemGroup(), gemWidth);
     }
 
 

@@ -96,9 +96,7 @@ public class GemGridTest {
         addRandomGems();
         addRandomGems();
         addRandomGems();
-        List<Gem.Color> colors = gemGrid.getRemainingColors();
         assertEquals(9, gemGrid.gemCount());
-
     }
 
 
@@ -409,7 +407,8 @@ public class GemGridTest {
 
 
     private void addGems(int position, GemGroup.Orientation orientation, Gem.Color color1, Gem.Color color2, Gem.Color color3){
-        GemGroup gemGroup = Utils.createGemGroup(position, orientation, color1, color2, color3);
+        int borderWidth = 30;
+        GemGroup gemGroup = Utils.createGemGroup(position, orientation, color1, color2, color3, borderWidth);
         gemGrid.add(gemGroup);
     }
 

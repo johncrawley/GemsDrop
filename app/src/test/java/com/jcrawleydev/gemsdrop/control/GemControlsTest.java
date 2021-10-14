@@ -18,20 +18,23 @@ public class GemControlsTest {
     private static GemGrid gemGrid;
     private GemControls gemControls;
     private GemGroup gemGroup;
-    private static int numberOfGemsPerGroup = 3;
+    private final static int numberOfGemsPerGroup = 3;
     private int rightmostIndexForHorizontal = 0;
-    private int initialPosition = 5;
+    private final int initialPosition = 5;
+    private static int borderWidth;
 
     @BeforeClass
     public static void initialSetup(){
         gemGrid = new GemGrid(8, 12);
         int gemWidth = 150;
+        borderWidth = gemWidth/2;
         gemGroupFactory = new GemGroupFactory.Builder()
                 .withInitialY(16)
                 .withGemWidth(gemWidth)
                 .withNumerOfGems(numberOfGemsPerGroup)
                 .withInitialPosition(0)
                 .withFloorAt(1300)
+                .withBorderWidth(borderWidth)
                 .build();
     }
 
@@ -238,7 +241,7 @@ public class GemControlsTest {
 
 
     private void addVerticalGemsToGridAtPosition(int position){
-        GemGroup gemGroupToAdd = Utils.createGemGroup(position, GemGroup.Orientation.VERTICAL, Gem.Color.RED, Gem.Color.BLUE, Gem.Color.GREEN);
+        GemGroup gemGroupToAdd = Utils.createGemGroup(position, GemGroup.Orientation.VERTICAL, Gem.Color.RED, Gem.Color.BLUE, Gem.Color.GREEN, borderWidth);
         gemGrid.add(gemGroupToAdd);
     }
 

@@ -15,17 +15,17 @@ public class GemGroup {
     private int x,y, xPosition, gemWidth, middleYPosition, floorY;
     public enum DetailedOrientation { FIRST_TO_LAST, TOP_TO_BOTTOM, LAST_TO_FIRST, BOTTOM_TO_TOP }
     public enum Orientation { HORIZONTAL, VERTICAL }
-    private GemRotater gemRotater;
+    private final GemRotater gemRotater;
     private boolean wasUpdated;
-    private GemGroupDropper gemGroupDropper;
+    private final GemGroupDropper gemGroupDropper;
 
 
-    public GemGroup(int initialPosition, int initialY, Orientation orientation, List<Gem> gems, int gemWidth,  int floorY){
+    public GemGroup(int initialPosition, int initialY, Orientation orientation, List<Gem> gems, int gemWidth,  int floorY, int borderWidth){
         this.xPosition = initialPosition;
         this.gems = new ArrayList<>(gems);
         this.gemWidth = gemWidth;
         this.floorY = floorY;
-        this.x = (initialPosition * gemWidth) + gemWidth /2;
+        this.x = borderWidth + (initialPosition * gemWidth) + gemWidth /2;
         this.y = initialY;
         setupMiddleYPosition();
         this.reversedOrderGems = new ArrayList<>(gems);
