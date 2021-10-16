@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -15,14 +14,13 @@ import android.view.View;
 import com.jcrawleydev.gemsdrop.view.BitmapLoader;
 import com.jcrawleydev.gemsdrop.view.TransparentView;
 
-import androidx.core.content.res.ResourcesCompat;
-
 
 public class MainActivity extends Activity implements View.OnTouchListener {
 
     private int height, width;
     private Game game;
     private int gemWidth;
+    private int gemGridBorder;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -37,7 +35,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         setBackground();
         gemGroupTransparentView.setDimensions(width, height);
         gemGroupTransparentView.translateXToMiddle();
-        gemGridTransparentView.setDimensions(width, height);
+        gemGridTransparentView.setDimensions(width - gemGridBorder, height);
         scoreTransparentView.setDimensions(width, height);
         gemGroupTransparentView.setOnTouchListener(this);
         gemGridTransparentView.setOnTouchListener(this);
@@ -69,13 +67,14 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         height = displayMetrics.heightPixels;
         width = displayMetrics.widthPixels;
         assignGemWidth(width, height);
+        gemGridBorder = gemWidth /2;
     }
+
 
     private void setBackground(){
         Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.background_pattern_1);
         BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(), bm);
         bitmapDrawable.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-
         //        bitmapDrawable.setBounds(canvas.getClipBounds());
         //      bitmapDrawable.draw(canvas);
     }
@@ -83,7 +82,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
     private void assignGemWidth(int width, int height){
         int shortestDimension = Math.min(width, height);
-        this.gemWidth = shortestDimension / getResources().getInteger(R.integer.number_of_columns) + 1;
+        int numberOfColumns = getResources().getInteger(R.integer.number_of_columns);
+        this.gemWidth = shortestDimension / (numberOfColumns + 1);
     }
 
 }
