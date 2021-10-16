@@ -11,6 +11,7 @@ import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
 import com.jcrawleydev.gemsdrop.score.GemCountTracker;
 import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.view.BitmapLoader;
+import com.jcrawleydev.gemsdrop.view.BorderView;
 import com.jcrawleydev.gemsdrop.view.GemGridView;
 import com.jcrawleydev.gemsdrop.view.GemGroupView;
 import com.jcrawleydev.gemsdrop.view.ScoreView;
@@ -21,6 +22,7 @@ public class Game {
 
     private final GemGroupFactory gemGroupFactory;
     private GemGroupView gemGroupView;
+    private BorderView borderView;
     private final int height;
     private final int width;
     private final int floorY;
@@ -82,6 +84,14 @@ public class Game {
         Score score = new Score(100);
         scoreView = new ScoreView(context, transparentView, score, bitmapLoader, width, height);
         scoreView.draw();
+    }
+
+
+    void initBorder(TransparentView transparentView, BitmapLoader bitmapLoader){
+        Score score = new Score(100);
+        borderView = new BorderView(transparentView, bitmapLoader);
+        borderView.setPatternImage(R.drawable.background_pattern_1);
+        borderView.draw();
     }
 
 

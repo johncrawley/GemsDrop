@@ -9,11 +9,8 @@ import android.graphics.Rect;
 import android.view.View;
 
 import com.jcrawleydev.gemsdrop.R;
-import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.score.Score;
-
-
-import java.util.Collections;
+import com.jcrawleydev.gemsdrop.view.item.DrawableItem;
 
 public class ScoreView implements TextItem, DrawableItem {
 

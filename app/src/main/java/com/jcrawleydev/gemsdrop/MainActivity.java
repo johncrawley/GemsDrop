@@ -32,11 +32,15 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         TransparentView gemGroupTransparentView = findViewById(R.id.gemGroupView);
         TransparentView gemGridTransparentView = findViewById(R.id.gemGridView);
         TransparentView scoreTransparentView = findViewById(R.id.scoreView);
+        TransparentView borderView = findViewById(R.id.borderView);
+
         setBackground();
         gemGroupTransparentView.setDimensions(width, height);
         gemGroupTransparentView.translateXToMiddle();
         gemGridTransparentView.setDimensions(width - gemGridBorder, height);
         scoreTransparentView.setDimensions(width, height);
+        borderView.setDimensions(width, height);
+
         gemGroupTransparentView.setOnTouchListener(this);
         gemGridTransparentView.setOnTouchListener(this);
 
@@ -45,6 +49,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         game.initGemGridView(gemGridTransparentView);
         game.initGemGroupView(gemGroupTransparentView, bitmapLoader);
         game.initScoreView(scoreTransparentView, bitmapLoader);
+        game.initBorder(borderView, bitmapLoader);
         game.init();
     }
 

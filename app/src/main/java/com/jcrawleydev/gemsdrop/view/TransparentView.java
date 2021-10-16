@@ -10,6 +10,8 @@ import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.jcrawleydev.gemsdrop.view.item.DrawableItem;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

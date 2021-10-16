@@ -1,4 +1,4 @@
-package com.jcrawleydev.gemsdrop.view;
+package com.jcrawleydev.gemsdrop.view.item;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
