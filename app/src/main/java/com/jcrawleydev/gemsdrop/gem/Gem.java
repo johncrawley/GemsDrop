@@ -1,12 +1,15 @@
 package com.jcrawleydev.gemsdrop.gem;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 
 import com.jcrawleydev.gemsdrop.view.DrawItem;
+import com.jcrawleydev.gemsdrop.view.item.DrawableItem;
 
 import androidx.annotation.NonNull;
 
-public class Gem implements DrawItem, Cloneable {
+public class Gem implements DrawItem, DrawableItem, Cloneable {
 
     public enum Color {
         BLUE("B"),
@@ -32,11 +35,20 @@ public class Gem implements DrawItem, Cloneable {
     private int x,y;
     private Bitmap bitmap;
     private boolean visible;
+    private Paint paint;
 
 
     public Gem(Color color){
         this.color = color;
         this.visible = true;
+        paint = new Paint();
+    }
+
+
+    public Gem(Color color, Paint paint){
+        this.color = color;
+        this.visible = true;
+        this.paint = paint;
     }
 
 
@@ -115,6 +127,15 @@ public class Gem implements DrawItem, Cloneable {
     @Override
     public boolean isVisible(){
         return this.visible;
+    }
+
+    @Override
+    public void draw(Canvas canvas, Paint paint) {
+        if(!isVisible()){
+            return;
+        }
+        canvas.drawBitmap(bitmap, x, y, this.paint);
+
     }
 
     public void setInvisible(){

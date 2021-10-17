@@ -1,6 +1,7 @@
 package com.jcrawleydev.gemsdrop.gemgroup;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
+import com.jcrawleydev.gemsdrop.gem.GemPaintOptions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +17,7 @@ public class GemGroupFactory {
     private final int floorY;
     private final int GEM_WIDTH;
     private final int borderWidth;
+    private final GemPaintOptions gemPaintOptions;
 
     private GemGroupFactory(int numberOfGems, int initialPosition, int gemsInitialY, int gemWidth, int floorY, int borderWidth){
         this.NUMBER_OF_GEMS = numberOfGems;
@@ -25,12 +27,13 @@ public class GemGroupFactory {
         this.floorY = floorY;
         this.GEM_WIDTH = gemWidth;
         this.borderWidth = borderWidth;
+        gemPaintOptions = new GemPaintOptions(gemWidth);
     }
 
     public GemGroup createGemGroup(){
         List<Gem> gems = new ArrayList<>();
         for(int i=0; i< NUMBER_OF_GEMS; i++){
-            Gem gem = new Gem(getRandomColor());
+            Gem gem = new Gem(getRandomColor(), gemPaintOptions.getGemPaint());
             gems.add(gem);
         }
         return new GemGroup(INITIAL_POSITION, GEMS_INITIAL_Y, GemGroup.Orientation.VERTICAL, gems, GEM_WIDTH, floorY, borderWidth);

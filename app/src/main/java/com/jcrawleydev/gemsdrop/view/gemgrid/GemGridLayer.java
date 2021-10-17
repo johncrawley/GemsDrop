@@ -8,14 +8,13 @@ public class GemGridLayer implements UpdatableView {
     private final GemGrid gemGrid;
     private final TransparentView transparentView;
     private boolean wasUpdated;
-    BackgroundItem backgroundItem;
-
+    private final BackgroundItem backgroundItem;
 
     public GemGridLayer(TransparentView transparentView, GemGrid gemGrid, int gemSize, int viewWidth, int floorY, int borderWidth){
         this.gemGrid = gemGrid;
         int topBorderWidth = 0;
         this.transparentView = transparentView;
-        BackgroundItem backgroundItem = new BackgroundItem(viewWidth, borderWidth, topBorderWidth, floorY);
+        backgroundItem = new BackgroundItem(viewWidth, borderWidth, topBorderWidth, floorY);
         transparentView.addDrawableItem(backgroundItem);
         gemGrid.setFloorY(floorY);
         gemGrid.setGemSize(gemSize);
@@ -37,7 +36,10 @@ public class GemGridLayer implements UpdatableView {
 
 
     public void draw(){
-        transparentView.setDrawItems(gemGrid.getAllGems());
+       // transparentView.setDrawItems(gemGrid.getAllGems());
+        transparentView.clearDrawableItems();
+        transparentView.addDrawableItem(backgroundItem);
+        transparentView.addDrawableItems(gemGrid.getAllGems());
         transparentView.invalidate();
     }
 

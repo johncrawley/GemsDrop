@@ -60,10 +60,6 @@ public class TransparentView extends View {
     }
 
 
-    public void addDrawableItem(DrawableItem drawableItem){
-        drawableItems.add(drawableItem);
-    }
-
 
     public void setTextColor(int color){
         paint.setColor(color);
@@ -86,6 +82,21 @@ public class TransparentView extends View {
 
     public void setDrawItems(List<DrawItem> items){
         this.items = items;
+    }
+
+
+
+    public void addDrawableItem(DrawableItem drawableItem){
+        drawableItems.add(drawableItem);
+    }
+
+    public void addDrawableItems(List<DrawableItem> items){
+        this.drawableItems.addAll(items);
+    }
+
+
+    public void clearDrawableItems(){
+        this.drawableItems.clear();
     }
 
 
@@ -179,7 +190,8 @@ public class TransparentView extends View {
 
 
     private void drawDrawableItems(){
-        for(DrawableItem drawableItem : drawableItems){
+        List<DrawableItem> items = new ArrayList<>(drawableItems);
+        for(DrawableItem drawableItem : items){
             drawableItem.draw(canvasBitmap, paint);
         }
     }

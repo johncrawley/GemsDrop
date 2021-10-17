@@ -3,6 +3,7 @@ package com.jcrawleydev.gemsdrop.gemgrid;
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.view.DrawItem;
+import com.jcrawleydev.gemsdrop.view.item.DrawableItem;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -138,8 +139,8 @@ public class GemGrid {
     }
 
 
-    public List<DrawItem> getAllGems(){
-        List<DrawItem> allGems = new ArrayList<>(NUMBER_OF_COLUMNS * NUMBER_OF_ROWS);
+    public List<DrawableItem> getAllGems(){
+        List<DrawableItem> allGems = new ArrayList<>(NUMBER_OF_COLUMNS * NUMBER_OF_ROWS);
         for(List<Gem> column : gemColumns){
             allGems.addAll(column);
         }
