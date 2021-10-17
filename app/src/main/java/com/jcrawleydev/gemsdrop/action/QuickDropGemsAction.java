@@ -2,7 +2,7 @@ package com.jcrawleydev.gemsdrop.action;
 
 import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.tasks.QuickDropTask;
-import com.jcrawleydev.gemsdrop.view.GemGridView;
+import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 import com.jcrawleydev.gemsdrop.view.GemGroupView;
 
 import java.util.concurrent.Executors;
@@ -17,10 +17,10 @@ public class QuickDropGemsAction {
     private ActionMediator actionManager;
     private GemGroupView gemGroupView;
     private GemControls controls;
-    private GemGridView gemGridView;
+    private GemGridLayer gemGridView;
 
 
-    public QuickDropGemsAction(ActionMediator actionManager, GemGroupView gemGroupView, GemControls controls, GemGridView gemGridView){
+    public QuickDropGemsAction(ActionMediator actionManager, GemGroupView gemGroupView, GemControls controls, GemGridLayer gemGridView){
         this.actionManager = actionManager;
         this.gemGroupView = gemGroupView;
         this.controls = controls;

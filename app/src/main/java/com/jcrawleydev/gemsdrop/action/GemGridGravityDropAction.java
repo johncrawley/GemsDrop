@@ -1,7 +1,7 @@
 package com.jcrawleydev.gemsdrop.action;
 
 import com.jcrawleydev.gemsdrop.tasks.GemGridGravityTask;
-import com.jcrawleydev.gemsdrop.view.GemGridView;
+import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -11,11 +11,11 @@ import java.util.concurrent.TimeUnit;
 public class GemGridGravityDropAction {
 
     private ScheduledFuture<?> gemGridGravityFuture;
-    private GemGridView gemGridView;
+    private GemGridLayer gemGridView;
     private ActionMediator actionManager;
 
 
-    public GemGridGravityDropAction(ActionMediator actionManager, GemGridView gemGridView){
+    public GemGridGravityDropAction(ActionMediator actionManager, GemGridLayer gemGridView){
         this.actionManager = actionManager;
         this.gemGridView = gemGridView;
     }

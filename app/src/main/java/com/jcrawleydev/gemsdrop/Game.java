@@ -12,7 +12,7 @@ import com.jcrawleydev.gemsdrop.score.GemCountTracker;
 import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.view.BitmapLoader;
 import com.jcrawleydev.gemsdrop.view.BorderView;
-import com.jcrawleydev.gemsdrop.view.GemGridView;
+import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 import com.jcrawleydev.gemsdrop.view.GemGroupView;
 import com.jcrawleydev.gemsdrop.view.ScoreView;
 import com.jcrawleydev.gemsdrop.view.TransparentView;
@@ -26,7 +26,7 @@ public class Game {
     private final int height;
     private final int width;
     private final int floorY;
-    private GemGridView gemGridView;
+    private GemGridLayer gemGridLayer;
     private ClickHandler clickHandler;
     private GemControls gemControls;
     private final int gemWidth;
@@ -67,7 +67,7 @@ public class Game {
     void initGemGridView(TransparentView v){
         GemGrid gemGrid = new GemGrid(7, 12);
         gemGrid.setDropIncrement(gemWidth / 5);
-        gemGridView = new GemGridView(v, gemGrid, gemWidth, floorY, borderWidth);
+        gemGridLayer = new GemGridLayer(v, gemGrid, gemWidth, width, floorY, borderWidth);
         evaluator = new Evaluator(gemGrid, 3);
         gemControls = new GemControls(gemGrid);
         clickHandler = new ClickHandler(gemControls, width, height);
@@ -101,7 +101,7 @@ public class Game {
                 .evaluator(evaluator)
                 .gemControls(gemControls)
                 .gemGroupView(gemGroupView)
-                .gridView(gemGridView)
+                .gridView(gemGridLayer)
                 .gemGroupFactory(gemGroupFactory)
                 .scoreView(scoreView)
                 .gemCountTracker(gemCountTracker)

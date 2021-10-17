@@ -153,9 +153,9 @@ public class TransparentView extends View {
 
 
     private void drawItems(){
+        drawDrawableItems();
         drawDrawItems();
         drawTextItems();
-        drawDrawableItems();
     }
 
 

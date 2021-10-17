@@ -6,7 +6,7 @@ import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
 import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.tasks.AnimateTask;
 import com.jcrawleydev.gemsdrop.tasks.GemDropTask;
-import com.jcrawleydev.gemsdrop.view.GemGridView;
+import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 import com.jcrawleydev.gemsdrop.view.GemGroupView;
 
 import java.util.concurrent.Executors;
@@ -20,14 +20,14 @@ public class GemDropAction {
     private GemGroup gemGroup;
     private GemControls controls;
     private GemGroupView gemGroupView;
-    private GemGridView gemGridView;
+    private GemGridLayer gemGridView;
     private ScheduledFuture<?> gemDropFuture, animateFuture;
     private ActionMediator actionMediator;
     private GemGroupFactory gemGroupFactory;
     private Score score;
 
 
-    public GemDropAction(ActionMediator actionMediator, GemControls controls, GemGroupView gemGroupView, GemGridView gemGridView, GemGroupFactory gemGroupFactory, Score score){
+    public GemDropAction(ActionMediator actionMediator, GemControls controls, GemGroupView gemGroupView, GemGridLayer gemGridView, GemGroupFactory gemGroupFactory, Score score){
         this.controls = controls;
         this.gemGroupView = gemGroupView;
         this.gemGridView = gemGridView;

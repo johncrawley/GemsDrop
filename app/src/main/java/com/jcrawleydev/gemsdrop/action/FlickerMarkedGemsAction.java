@@ -2,7 +2,7 @@ package com.jcrawleydev.gemsdrop.action;
 
 import com.jcrawleydev.gemsdrop.tasks.CancelFutureTask;
 import com.jcrawleydev.gemsdrop.tasks.FlickerMarkedGemsTask;
-import com.jcrawleydev.gemsdrop.view.GemGridView;
+import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -12,10 +12,10 @@ import java.util.concurrent.TimeUnit;
 public class FlickerMarkedGemsAction {
 
     private ActionMediator actionManager;
-    private GemGridView gemGridView;
+    private GemGridLayer gemGridView;
 
 
-    public FlickerMarkedGemsAction(GemGridView gemGridView, ActionMediator actionManager){
+    public FlickerMarkedGemsAction(GemGridLayer gemGridView, ActionMediator actionManager){
         this.gemGridView = gemGridView;
         this.actionManager = actionManager;
     }

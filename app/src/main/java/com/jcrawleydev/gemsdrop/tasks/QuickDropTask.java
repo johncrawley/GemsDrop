@@ -3,7 +3,7 @@ package com.jcrawleydev.gemsdrop.tasks;
 import com.jcrawleydev.gemsdrop.action.ActionMediator;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
-import com.jcrawleydev.gemsdrop.view.GemGridView;
+import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 import com.jcrawleydev.gemsdrop.view.GemGroupView;
 
 
@@ -12,10 +12,10 @@ public class QuickDropTask implements Runnable{
     private ActionMediator actionManager;
     private GemGroup gemGroup;
     private GemGrid gemGrid;
-    private GemGridView gemGridView;
+    private GemGridLayer gemGridView;
     private GemGroupView gemGroupView;
 
-    public QuickDropTask(ActionMediator actionManager, GemGroupView gemGroupView, GemGridView gemGridView) {
+    public QuickDropTask(ActionMediator actionManager, GemGroupView gemGroupView, GemGridLayer gemGridView) {
         this.actionManager = actionManager;
         this.gemGroupView = gemGroupView;
         this.gemGridView = gemGridView;

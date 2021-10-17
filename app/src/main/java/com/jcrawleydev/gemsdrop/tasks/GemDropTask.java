@@ -4,16 +4,16 @@ import com.jcrawleydev.gemsdrop.action.ActionMediator;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.MainActivity;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
-import com.jcrawleydev.gemsdrop.view.GemGridView;
+import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 
 public class GemDropTask implements Runnable{
     private GemGroup gemGroup;
     private MainActivity mainActivity;
     private GemGrid gemGrid;
-    private GemGridView gemGridView;
+    private GemGridLayer gemGridView;
     private ActionMediator actionManager;
 
-    public GemDropTask(GemGroup gemGroup, GemGridView gemGridView, ActionMediator actionManager){
+    public GemDropTask(GemGroup gemGroup, GemGridLayer gemGridView, ActionMediator actionManager){
         this.gemGroup = gemGroup;
         this.gemGridView = gemGridView;
         this.gemGrid = gemGridView.getGemGrid();

@@ -1,18 +1,24 @@
-package com.jcrawleydev.gemsdrop.view;
+package com.jcrawleydev.gemsdrop.view.gemgrid;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
+import com.jcrawleydev.gemsdrop.view.TransparentView;
+import com.jcrawleydev.gemsdrop.view.UpdatableView;
 
-public class GemGridView implements UpdatableView{
+public class GemGridLayer implements UpdatableView {
 
     private final GemGrid gemGrid;
     private final TransparentView transparentView;
     private boolean wasUpdated;
+    BackgroundItem backgroundItem;
 
-    public GemGridView(TransparentView transparentView, GemGrid gemGrid, int gem_size, int floorY, int borderWidth){
+
+    public GemGridLayer(TransparentView transparentView, GemGrid gemGrid, int gemSize, int viewWidth, int floorY, int borderWidth){
         this.gemGrid = gemGrid;
+        int topBorderWidth = 0;
         this.transparentView = transparentView;
-
+        BackgroundItem backgroundItem = new BackgroundItem(viewWidth, borderWidth, topBorderWidth, floorY);
+        transparentView.addDrawableItem(backgroundItem);
         gemGrid.setFloorY(floorY);
-        gemGrid.setGemSize(gem_size);
+        gemGrid.setGemSize(gemSize);
         gemGrid.setStartingX(borderWidth);
         draw();
     }

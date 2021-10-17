@@ -2,17 +2,17 @@ package com.jcrawleydev.gemsdrop.tasks;
 
 import com.jcrawleydev.gemsdrop.action.ActionMediator;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
-import com.jcrawleydev.gemsdrop.view.GemGridView;
+import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 
 // runs after gems have beeen deleted
 public class GemGridGravityTask implements Runnable {
 
     private GemGrid gemGrid;
-    private GemGridView gemGridView;
+    private GemGridLayer gemGridView;
     private ActionMediator actionManager;
 
 
-    public GemGridGravityTask(GemGridView gemGridView, ActionMediator actionManager){
+    public GemGridGravityTask(GemGridLayer gemGridView, ActionMediator actionManager){
         this.gemGridView = gemGridView;
         this.gemGrid = gemGridView.getGemGrid();
         this.actionManager = actionManager;

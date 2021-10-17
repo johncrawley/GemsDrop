@@ -6,7 +6,7 @@ import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
 import com.jcrawleydev.gemsdrop.score.GemCountTracker;
 import com.jcrawleydev.gemsdrop.score.Score;
-import com.jcrawleydev.gemsdrop.view.GemGridView;
+import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 import com.jcrawleydev.gemsdrop.view.GemGroupView;
 import com.jcrawleydev.gemsdrop.view.ScoreView;
 
@@ -21,7 +21,7 @@ public class ActionMediator {
     private Score score;
 
     private ActionMediator(GemGroupView gemGroupView,
-                           GemGridView gemGridView,
+                           GemGridLayer gemGridView,
                            GemControls gemControls,
                            Evaluator evaluator,
                            GemGroupFactory gemGroupFactory,
@@ -94,7 +94,7 @@ public class ActionMediator {
         private Score score;
         private ScoreView scoreView;
         private GemGroupView gemGroupView;
-        private GemGridView gemGridView;
+        private GemGridLayer gemGridView;
         private GemControls gemControls;
         private Evaluator evaluator;
         private StringBuilder str;
@@ -123,7 +123,7 @@ public class ActionMediator {
             return this;
         }
 
-        public Builder gridView(GemGridView gemGridView){
+        public Builder gridView(GemGridLayer gemGridView){
             this.gemGridView = gemGridView;
             return this;
         }
