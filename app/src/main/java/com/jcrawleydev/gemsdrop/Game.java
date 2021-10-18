@@ -46,7 +46,7 @@ public class Game {
         this.context = context;
         this.borderWidth = gemGridBorder;
         int initialY = this.gemWidth * -4;
-        maxRows = context.getResources().getInteger(maxRows);
+        maxRows = context.getResources().getInteger(R.integer.maximum_rows);
         floorY = height - (Math.min(gemWidth,gemGridBorder));
 
         gemGroupFactory = new GemGroupFactory.Builder()

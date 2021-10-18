@@ -73,6 +73,7 @@ public class ActionMediator {
 
     public void resetDrop(){
         gemDropAction.reset();
+        gemDropAction.start();
     }
 
 

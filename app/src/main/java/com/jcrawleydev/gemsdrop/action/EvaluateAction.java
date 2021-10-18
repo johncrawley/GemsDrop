@@ -1,13 +1,12 @@
 package com.jcrawleydev.gemsdrop.action;
 
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
-import com.jcrawleydev.gemsdrop.score.GemCountTracker;
-import com.jcrawleydev.gemsdrop.score.Score;
+
 
 public class EvaluateAction {
 
-    private Evaluator evaluator;
-    private ActionMediator actionManager;
+    private final Evaluator evaluator;
+    private final ActionMediator actionManager;
 
 
     EvaluateAction(Evaluator evaluator, ActionMediator actionManager){

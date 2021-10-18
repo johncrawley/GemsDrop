@@ -56,7 +56,6 @@ public class GemDropAction {
 
 
     public void start(){
-
             if(hasGemDropStarted){
                 return;
             }

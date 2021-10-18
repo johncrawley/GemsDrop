@@ -76,7 +76,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     private void assignGemWidth(int width, int height){
         int shortestDimension = Math.min(width, height);
         int numberOfColumns = getResources().getInteger(R.integer.number_of_columns);
-        maxRows = getResources().getInteger(maxRows);
+        maxRows = getResources().getInteger(R.integer.maximum_rows);
         this.gemWidth = shortestDimension / (numberOfColumns + 1);
     }
 
