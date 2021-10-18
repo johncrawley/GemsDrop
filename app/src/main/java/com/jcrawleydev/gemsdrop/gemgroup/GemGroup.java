@@ -96,7 +96,7 @@ public class GemGroup {
         middleYPosition--;
     }
 
-    public void increaseYBy(int dropIncrement){
+    public void dropBy(int dropIncrement){
         y += dropIncrement;
         wasUpdated = true;
     }

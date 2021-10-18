@@ -18,13 +18,13 @@ public class GemDropAction {
 
     private boolean hasGemDropStarted = false;
     private GemGroup gemGroup;
-    private GemControls controls;
-    private GemGroupView gemGroupView;
-    private GemGridLayer gemGridView;
+    private final GemControls controls;
+    private final GemGroupView gemGroupView;
+    private final GemGridLayer gemGridView;
     private ScheduledFuture<?> gemDropFuture, animateFuture;
-    private ActionMediator actionMediator;
-    private GemGroupFactory gemGroupFactory;
-    private Score score;
+    private final ActionMediator actionMediator;
+    private final GemGroupFactory gemGroupFactory;
+    private final Score score;
 
 
     public GemDropAction(ActionMediator actionMediator, GemControls controls, GemGroupView gemGroupView, GemGridLayer gemGridView, GemGroupFactory gemGroupFactory, Score score){
@@ -34,8 +34,8 @@ public class GemDropAction {
         this.actionMediator = actionMediator;
         this.gemGroupFactory = gemGroupFactory;
         this.score = score;
-
     }
+
 
     public void setGemGroup(GemGroup gemGroup) {
         this.gemGroup = gemGroup;

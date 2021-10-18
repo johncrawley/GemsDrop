@@ -2,13 +2,14 @@ package com.jcrawleydev.gemsdrop.gemgroup;
 
 public class GemGroupDropper {
 
-    private GemGroup gemGroup;
+    private final GemGroup gemGroup;
     private int dropIncrement;
     private float dropFactor = 0f;
     private float currentDropIncrement = 0f;
-    private int gemWidth;
+    private final int gemWidth;
     private int currentCount;
     private boolean isQuickDropEnabled = false;
+
 
     public GemGroupDropper(GemGroup gemGroup, int gemWidth){
         this.gemGroup = gemGroup;
@@ -16,10 +17,12 @@ public class GemGroupDropper {
         setDropFactor(0.5f);
     }
 
+
     public void enableQuickDrop(){
         isQuickDropEnabled = true;
         setDropFactor(1f);
     }
+
 
     public void drop(){
         if(!shouldAnimate()){
@@ -30,7 +33,7 @@ public class GemGroupDropper {
             currentDropIncrement -= 1;
             gemGroup.decrementMiddleYPosition();
         }
-        gemGroup.increaseYBy(dropIncrement);
+        gemGroup.dropBy(dropIncrement);
     }
 
 
@@ -54,9 +57,5 @@ public class GemGroupDropper {
         this.dropFactor = dropFactor;
         this.dropIncrement = (int)(gemWidth * dropFactor);
     }
-
-
-
-
 
 }

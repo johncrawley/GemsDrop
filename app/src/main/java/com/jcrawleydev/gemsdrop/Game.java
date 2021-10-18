@@ -76,7 +76,7 @@ public class Game {
 
 
     void initGemGroupView(TransparentView v, BitmapLoader bitmapLoader){
-        gemGroupView = new GemGroupView(v, bitmapLoader, gemGroupFactory.createGemGroup(), gemWidth);
+        gemGroupView = new GemGroupView(v, bitmapLoader, gemWidth);
     }
 
 
