@@ -3,4 +3,8 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#06081E</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="scoreboard_top">#585A5A</color>
+    <color name="scoreboard_bottom">#2E2E1C</color>
+    <color name="score_text_top">#E1E143</color>
+    <color name="score_text_bottom">#E68E1E</color>
 </resources>

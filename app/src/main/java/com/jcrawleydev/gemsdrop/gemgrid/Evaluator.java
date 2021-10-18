@@ -9,8 +9,8 @@ import java.util.List;
 
 public class Evaluator {
 
-    private GemGrid gemGrid;
-    private List<List<Gem>> gemColumns;
+    private final GemGrid gemGrid;
+    private final List<List<Gem>> gemColumns;
     private final int MATCH_NUMBER;
     private final int NUMBER_OF_COLUMNS;
     private final int NUMBER_OF_ROWS;
@@ -23,14 +23,15 @@ public class Evaluator {
         this.NUMBER_OF_COLUMNS = gemGrid.getNumberOfColumns();
         this.NUMBER_OF_ROWS = gemGrid.getNumberOfRows();
         this.gemColumns = gemGrid.getGemColumns();
-
     }
+
 
     public void evaluate(){
         evaluateRows();
         evaluateColumns();
         evaluateDiagonals();
     }
+
 
     public boolean hasMarkedGems(){
         return hasMarkedGems;

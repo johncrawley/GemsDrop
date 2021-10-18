@@ -9,7 +9,7 @@ import com.jcrawleydev.gemsdrop.score.GemCountTracker;
 import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 import com.jcrawleydev.gemsdrop.view.GemGroupView;
-import com.jcrawleydev.gemsdrop.view.ScoreView;
+import com.jcrawleydev.gemsdrop.view.ScoreBoardLayer;
 
 public class ActionMediator {
 
@@ -27,7 +27,7 @@ public class ActionMediator {
                            GemControls gemControls,
                            Evaluator evaluator,
                            GemGroupFactory gemGroupFactory,
-                           ScoreView scoreView,
+                           ScoreBoardLayer scoreView,
                            GemCountTracker gemCountTracker,
                            SoundPlayer soundPlayer){
 
@@ -95,7 +95,7 @@ public class ActionMediator {
     public static class Builder{
 
         private Score score;
-        private ScoreView scoreView;
+        private ScoreBoardLayer scoreView;
         private GemGroupView gemGroupView;
         private GemGridLayer gemGridView;
         private GemControls gemControls;
@@ -133,7 +133,7 @@ public class ActionMediator {
         }
 
 
-        public Builder scoreView(ScoreView scoreView){
+        public Builder scoreView(ScoreBoardLayer scoreView){
             this.scoreView = scoreView;
             this.score = scoreView.getScore();
             return this;

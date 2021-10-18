@@ -15,7 +15,7 @@ import com.jcrawleydev.gemsdrop.view.BitmapLoader;
 import com.jcrawleydev.gemsdrop.view.BorderView;
 import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 import com.jcrawleydev.gemsdrop.view.GemGroupView;
-import com.jcrawleydev.gemsdrop.view.ScoreView;
+import com.jcrawleydev.gemsdrop.view.ScoreBoardLayer;
 import com.jcrawleydev.gemsdrop.view.TransparentView;
 
 
@@ -33,7 +33,7 @@ public class Game {
     private Evaluator evaluator;
     private ActionMediator actionMediator;
     private GemCountTracker gemCountTracker;
-    private ScoreView scoreView;
+    private ScoreBoardLayer scoreView;
     private final Context context;
     private final int borderWidth;
 
@@ -82,7 +82,7 @@ public class Game {
 
     void initScoreView(TransparentView transparentView, BitmapLoader bitmapLoader){
         Score score = new Score(100);
-        scoreView = new ScoreView(context, transparentView, score, bitmapLoader, width, height);
+        scoreView = new ScoreBoardLayer(context, transparentView, score, bitmapLoader, width, height);
         scoreView.draw();
     }
 
