@@ -2,16 +2,15 @@ package com.jcrawleydev.gemsdrop.tasks;
 
 import com.jcrawleydev.gemsdrop.action.ActionMediator;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
-import com.jcrawleydev.gemsdrop.MainActivity;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 
 public class GemDropTask implements Runnable{
-    private GemGroup gemGroup;
-    private MainActivity mainActivity;
-    private GemGrid gemGrid;
-    private GemGridLayer gemGridView;
-    private ActionMediator actionManager;
+
+    private final GemGroup gemGroup;
+    private final GemGrid gemGrid;
+    private final GemGridLayer gemGridView;
+    private final ActionMediator actionManager;
 
     public GemDropTask(GemGroup gemGroup, GemGridLayer gemGridView, ActionMediator actionManager){
         this.gemGroup = gemGroup;

@@ -11,7 +11,7 @@ public class ClickHandler {
         this.gemControls = gemControls;
         leftLimit = screenWidth /3;
         rotateLimit = screenWidth /3 * 2;
-        dropYThreshold = (screenHeight / 3) * 2;
+        dropYThreshold = (screenHeight / 5) * 4;
     }
 
 

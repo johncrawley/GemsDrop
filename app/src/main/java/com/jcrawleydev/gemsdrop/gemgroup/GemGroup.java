@@ -8,11 +8,12 @@ import java.util.List;
 
 public class GemGroup {
 
-    private List<Gem> gems;
-    private List<Gem> reversedOrderGems;
+    private final List<Gem> gems;
+    private final List<Gem> reversedOrderGems;
     private Orientation orientation;
     private DetailedOrientation detailedOrientation = DetailedOrientation.FIRST_TO_LAST;
-    private int x,y, xPosition, gemWidth, middleYPosition, floorY;
+    private int x,y, xPosition, gemWidth, middleYPosition;
+    private final int floorY;
     public enum DetailedOrientation { FIRST_TO_LAST, TOP_TO_BOTTOM, LAST_TO_FIRST, BOTTOM_TO_TOP }
     public enum Orientation { HORIZONTAL, VERTICAL }
     private final GemRotater gemRotater;
@@ -20,7 +21,7 @@ public class GemGroup {
     private final GemGroupDropper gemGroupDropper;
 
 
-    public GemGroup(int initialPosition, int initialY, Orientation orientation, List<Gem> gems, int gemWidth,  int floorY, int borderWidth){
+    public GemGroup(int initialPosition, int initialY, Orientation orientation, List<Gem> gems, int gemWidth, int floorY, int borderWidth){
         this.xPosition = initialPosition;
         this.gems = new ArrayList<>(gems);
         this.gemWidth = gemWidth;
@@ -31,12 +32,12 @@ public class GemGroup {
         this.reversedOrderGems = new ArrayList<>(gems);
         Collections.reverse(reversedOrderGems);
         this.orientation = orientation;
+        this.gemGroupDropper = new GemGroupDropper(this, gemWidth);//gemGroupDropper;
         if(orientation == Orientation.VERTICAL){
             detailedOrientation = DetailedOrientation.TOP_TO_BOTTOM;
         }
         this.gemRotater = new GemRotater(this, gemWidth);
         gemRotater.setGemCoordinates(this);
-        gemGroupDropper = new GemGroupDropper(this, gemWidth);
     }
 
 

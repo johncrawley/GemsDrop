@@ -1,12 +1,13 @@
 package com.jcrawleydev.gemsdrop.gemgroup;
 
+
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gem.GemPaintOptions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
 
 public class GemGroupFactory {
 
@@ -30,6 +31,7 @@ public class GemGroupFactory {
         gemPaintOptions = new GemPaintOptions(gemWidth);
     }
 
+
     public GemGroup createGemGroup(){
         List<Gem> gems = new ArrayList<>();
         for(int i=0; i< NUMBER_OF_GEMS; i++){
@@ -40,10 +42,8 @@ public class GemGroupFactory {
     }
 
 
-
     private Gem.Color getRandomColor(){
-        int index = ThreadLocalRandom.current().nextInt(colors.size());
-
+        int index = new Random(System.currentTimeMillis()).nextInt(colors.size());
         return colors.get(index);
     }
 
@@ -52,7 +52,7 @@ public class GemGroupFactory {
 
         public Builder(){}
 
-       private int numberOfGems, initialPosition, gemsInitialY, gemWidth, floorY, borderWidth;
+        private int numberOfGems, initialPosition, gemsInitialY, gemWidth, floorY, borderWidth;
 
         public Builder withInitialY(int initialY){
             this.gemsInitialY = initialY;
@@ -84,6 +84,7 @@ public class GemGroupFactory {
             this.floorY = floorY;
             return this;
         }
+
 
         public GemGroupFactory build(){
             return new GemGroupFactory(numberOfGems, initialPosition, gemsInitialY, gemWidth, floorY, borderWidth);

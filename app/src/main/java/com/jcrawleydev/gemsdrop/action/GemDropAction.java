@@ -3,6 +3,7 @@ package com.jcrawleydev.gemsdrop.action;
 import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
+import com.jcrawleydev.gemsdrop.gemgroup.SpeedController;
 import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.tasks.AnimateTask;
 import com.jcrawleydev.gemsdrop.tasks.GemDropTask;
@@ -25,9 +26,17 @@ public class GemDropAction {
     private final ActionMediator actionMediator;
     private final GemGroupFactory gemGroupFactory;
     private final Score score;
+    private final SpeedController speedController;
 
 
-    public GemDropAction(ActionMediator actionMediator, GemControls controls, GemGroupView gemGroupView, GemGridLayer gemGridView, GemGroupFactory gemGroupFactory, Score score){
+    public GemDropAction(SpeedController speedController,
+                         ActionMediator actionMediator,
+                         GemControls controls,
+                         GemGroupView gemGroupView,
+                         GemGridLayer gemGridView,
+                         GemGroupFactory gemGroupFactory,
+                         Score score){
+        this.speedController = speedController;
         this.controls = controls;
         this.gemGroupView = gemGroupView;
         this.gemGridView = gemGridView;
@@ -41,14 +50,21 @@ public class GemDropAction {
         this.gemGroup = gemGroup;
     }
 
+    private void log(String msg){
+        System.out.println("GemDropAction: " + msg);
+    }
+
 
     public void start(){
-            final int GEM_DROP_TASK_INTERVAL = 40;
-            final int REDRAW_INTERVAL = 20;
 
             if(hasGemDropStarted){
                 return;
             }
+            final int GEM_DROP_TASK_INTERVAL = 70 - speedController.getCurrentSpeed();
+            log("start() gem_drop_task_interval: "+  GEM_DROP_TASK_INTERVAL);
+            final int REDRAW_INTERVAL = 20;
+            speedController.update();
+
             hasGemDropStarted = true;
             score.resetMultiplier();
             gemGroup = gemGroupFactory.createGemGroup();

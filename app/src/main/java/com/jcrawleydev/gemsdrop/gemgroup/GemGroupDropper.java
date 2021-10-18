@@ -1,5 +1,6 @@
 package com.jcrawleydev.gemsdrop.gemgroup;
 
+
 public class GemGroupDropper {
 
     private final GemGroup gemGroup;

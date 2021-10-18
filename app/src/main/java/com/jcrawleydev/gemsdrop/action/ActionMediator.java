@@ -4,6 +4,7 @@ import com.jcrawleydev.gemsdrop.SoundPlayer;
 import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
+import com.jcrawleydev.gemsdrop.gemgroup.SpeedController;
 import com.jcrawleydev.gemsdrop.score.GemCountTracker;
 import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
@@ -12,15 +13,16 @@ import com.jcrawleydev.gemsdrop.view.ScoreView;
 
 public class ActionMediator {
 
-    private GemDropAction gemDropAction;
-    private QuickDropGemsAction quickDropGemsAction;
-    private EvaluateAction evaluateAction;
-    private FlickerMarkedGemsAction flickerMarkedGemsAction;
-    private DeleteMarkedGemsAction deleteMarkedGemsAction;
-    private GemGridGravityDropAction gemGridGravityDropAction;
-    private Score score;
+    private final GemDropAction gemDropAction;
+    private final QuickDropGemsAction quickDropGemsAction;
+    private final EvaluateAction evaluateAction;
+    private final FlickerMarkedGemsAction flickerMarkedGemsAction;
+    private final DeleteMarkedGemsAction deleteMarkedGemsAction;
+    private final GemGridGravityDropAction gemGridGravityDropAction;
+    private final Score score;
 
-    private ActionMediator(GemGroupView gemGroupView,
+    private ActionMediator(SpeedController speedController,
+                           GemGroupView gemGroupView,
                            GemGridLayer gemGridView,
                            GemControls gemControls,
                            Evaluator evaluator,
@@ -28,8 +30,9 @@ public class ActionMediator {
                            ScoreView scoreView,
                            GemCountTracker gemCountTracker,
                            SoundPlayer soundPlayer){
+
         this.score = scoreView.getScore();
-        gemDropAction = new GemDropAction(this, gemControls, gemGroupView, gemGridView, gemGroupFactory, score);
+        gemDropAction = new GemDropAction(speedController, this, gemControls, gemGroupView, gemGridView, gemGroupFactory, score);
         quickDropGemsAction = new QuickDropGemsAction(this, gemGroupView, gemControls, gemGridView);
         evaluateAction = new EvaluateAction(evaluator, this);
         flickerMarkedGemsAction = new FlickerMarkedGemsAction(gemGridView, this);
@@ -101,6 +104,7 @@ public class ActionMediator {
         private GemGroupFactory gemGroupFactory;
         private GemCountTracker gemCountTracker;
         private SoundPlayer soundPlayer;
+        private SpeedController speedController;
 
 
         public Builder gemGroupView(GemGroupView gemGroupView){
@@ -147,9 +151,15 @@ public class ActionMediator {
         }
 
 
+        public Builder speedController(SpeedController speedController){
+            this.speedController = speedController;
+            return this;
+        }
+
+
         public ActionMediator build() {
             verify();
-            return new ActionMediator(gemGroupView, gemGridView, gemControls, evaluator, gemGroupFactory, scoreView, gemCountTracker, soundPlayer);
+            return new ActionMediator(speedController, gemGroupView, gemGridView, gemControls, evaluator, gemGroupFactory, scoreView, gemCountTracker, soundPlayer);
         }
 
 
@@ -159,6 +169,7 @@ public class ActionMediator {
             appendErrorIfNull(gemGridView, "gemGridView");
             appendErrorIfNull(gemControls, "gemControls");
             appendErrorIfNull(gemGroupFactory, "gemGroupFactory");
+            appendErrorIfNull(speedController, "speedController");
             appendErrorIfNull(score, "score");
             String errorStr = str.toString();
 

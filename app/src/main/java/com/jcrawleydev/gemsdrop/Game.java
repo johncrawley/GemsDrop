@@ -8,6 +8,7 @@ import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
+import com.jcrawleydev.gemsdrop.gemgroup.SpeedController;
 import com.jcrawleydev.gemsdrop.score.GemCountTracker;
 import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.view.BitmapLoader;
@@ -22,7 +23,6 @@ public class Game {
 
     private final GemGroupFactory gemGroupFactory;
     private GemGroupView gemGroupView;
-    private BorderView borderView;
     private final int height;
     private final int width;
     private final int floorY;
@@ -89,7 +89,7 @@ public class Game {
 
     void initBorder(TransparentView transparentView, BitmapLoader bitmapLoader){
         Score score = new Score(100);
-        borderView = new BorderView(transparentView, bitmapLoader);
+        BorderView borderView = new BorderView(transparentView, bitmapLoader);
         borderView.setPatternImage(R.drawable.background_pattern_1);
         borderView.draw();
     }
@@ -106,6 +106,7 @@ public class Game {
                 .scoreView(scoreView)
                 .gemCountTracker(gemCountTracker)
                 .soundPlayer(soundPlayer)
+                .speedController(new SpeedController(context))
                 .build();
     }
 
