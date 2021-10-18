@@ -38,14 +38,14 @@ public class Game {
     private final int borderWidth;
 
 
-    public Game(Context context, int screenWidth, int screenHeight, int gemWidth){
+    public Game(Context context, int screenWidth, int screenHeight, int gemWidth, int gemGridBorder){
         this.width = screenWidth;
         this.height = screenHeight;
         this.gemWidth = gemWidth;
         this.context = context;
-        this.borderWidth = gemWidth /2;
+        this.borderWidth = gemGridBorder;
         int initialY = this.gemWidth * -4;
-        floorY = height - (height /10);
+        floorY = height - (Math.min(gemWidth,gemGridBorder));
 
         gemGroupFactory = new GemGroupFactory.Builder()
                 .withInitialY(initialY)

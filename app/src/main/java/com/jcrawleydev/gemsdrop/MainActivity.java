@@ -39,7 +39,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         gemGroupTransparentView.setOnTouchListener(this);
         gemGridTransparentView.setOnTouchListener(this);
 
-        game = new Game(getApplicationContext(), width, height, gemWidth);
+        game = new Game(getApplicationContext(), width, height, gemWidth, gemGridBorder);
         BitmapLoader bitmapLoader = new BitmapLoader(this, gemWidth);
         game.initGemGridView(gemGridTransparentView);
         game.initGemGroupView(gemGroupTransparentView, bitmapLoader);
@@ -67,7 +67,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         height = displayMetrics.heightPixels;
         width = displayMetrics.widthPixels;
         assignGemWidth(width, height);
-        gemGridBorder = gemWidth /2;
+        int numberOColumns = getResources().getInteger(R.integer.number_of_columns);
+        gemGridBorder = (width - (gemWidth * numberOColumns))/2;
     }
 
 
