@@ -2,10 +2,6 @@ package com.jcrawleydev.gemsdrop;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Shader;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -34,7 +30,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         TransparentView scoreTransparentView = findViewById(R.id.scoreView);
         TransparentView borderView = findViewById(R.id.borderView);
 
-        setBackground();
         gemGroupTransparentView.setDimensions(width, height);
         gemGroupTransparentView.translateXToMiddle();
         gemGridTransparentView.setDimensions(width - gemGridBorder, height);
@@ -73,15 +68,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         width = displayMetrics.widthPixels;
         assignGemWidth(width, height);
         gemGridBorder = gemWidth /2;
-    }
-
-
-    private void setBackground(){
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.background_pattern_1);
-        BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(), bm);
-        bitmapDrawable.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-        //        bitmapDrawable.setBounds(canvas.getClipBounds());
-        //      bitmapDrawable.draw(canvas);
     }
 
 

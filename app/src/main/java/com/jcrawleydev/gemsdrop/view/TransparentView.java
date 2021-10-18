@@ -192,7 +192,9 @@ public class TransparentView extends View {
     private void drawDrawableItems(){
         List<DrawableItem> items = new ArrayList<>(drawableItems);
         for(DrawableItem drawableItem : items){
-            drawableItem.draw(canvasBitmap, paint);
+            if(drawableItem != null) {
+                drawableItem.draw(canvasBitmap, paint);
+            }
         }
     }
 
