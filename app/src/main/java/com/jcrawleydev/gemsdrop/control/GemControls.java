@@ -5,7 +5,7 @@ import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 
 public class GemControls {
 
-    private GemGrid gemGrid;
+    private final GemGrid gemGrid;
     private GemGroup gemGroup;
     private boolean isActivated = true;
 
@@ -18,6 +18,7 @@ public class GemControls {
     public GemControls(GemGrid gemGrid){
         this.gemGrid = gemGrid;
     }
+
 
     public void activateAndSet(GemGroup gemGroup){
         reactivate();
@@ -54,6 +55,7 @@ public class GemControls {
         gemGroup.decrementPosition();
     }
 
+
     private boolean aGemColumnIsToTheLeft(){
         int colIndex = gemGroup.getBaseXPosition() -1;
         if(colIndex < 0){
@@ -62,6 +64,7 @@ public class GemControls {
         return isColumnTallerThanLowestFallingGem(colIndex);
     }
 
+
     private boolean aGemColumnIsToTheRight(){
         int colIndex = gemGroup.getEndXPosition() + 1;
         if(colIndex > gemGrid.getNumberOfColumns()){
@@ -69,6 +72,7 @@ public class GemControls {
         }
         return isColumnTallerThanLowestFallingGem(colIndex);
     }
+
 
     private boolean isColumnTallerThanLowestFallingGem(int colIndex){
         return gemGrid.getColumnHeight(colIndex) >= gemGroup.getBottomPosition();
@@ -160,6 +164,5 @@ public class GemControls {
     private boolean isGemGroupNullOrDeactivated(){
         return gemGroup == null || !isActivated;
     }
-
 
 }
