@@ -36,6 +36,7 @@ public class Game {
     private ScoreBoardLayer scoreView;
     private final Context context;
     private final int borderWidth;
+    private int maxRows;
 
 
     public Game(Context context, int screenWidth, int screenHeight, int gemWidth, int gemGridBorder){
@@ -45,6 +46,7 @@ public class Game {
         this.context = context;
         this.borderWidth = gemGridBorder;
         int initialY = this.gemWidth * -4;
+        maxRows = context.getResources().getInteger(maxRows);
         floorY = height - (Math.min(gemWidth,gemGridBorder));
 
         gemGroupFactory = new GemGroupFactory.Builder()
