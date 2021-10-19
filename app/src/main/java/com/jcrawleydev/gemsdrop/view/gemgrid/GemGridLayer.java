@@ -36,19 +36,11 @@ public class GemGridLayer implements UpdatableView {
 
 
     public void draw(){
-       // transparentView.setDrawItems(gemGrid.getAllGems());
         transparentView.clearDrawableItems();
         transparentView.addDrawableItem(backgroundItem);
         transparentView.addDrawableItems(gemGrid.getAllGems());
         transparentView.invalidate();
     }
-
-
-    private void log(String msg){
-        System.out.println("GemGridView: " + msg);
-        System.out.flush();
-    }
-
 
 
 }

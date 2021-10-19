@@ -16,9 +16,10 @@ public class GemGroup {
     private final int floorY;
     public enum DetailedOrientation { FIRST_TO_LAST, TOP_TO_BOTTOM, LAST_TO_FIRST, BOTTOM_TO_TOP }
     public enum Orientation { HORIZONTAL, VERTICAL }
-    private final GemRotater gemRotater;
+    private final GemRotator gemRotator;
     private boolean wasUpdated;
     private final GemGroupDropper gemGroupDropper;
+    private boolean isFirstDrop = true;
 
 
     public GemGroup(int initialPosition, int initialY, Orientation orientation, List<Gem> gems, int gemWidth, int floorY, int borderWidth){
@@ -26,8 +27,7 @@ public class GemGroup {
         this.gems = new ArrayList<>(gems);
         this.gemWidth = gemWidth;
         this.floorY = floorY;
-        this.x = borderWidth + (initialPosition * gemWidth) + gemWidth /2;
-        this.y = initialY;
+        assignXYFrom(borderWidth, initialPosition, initialY);
         setupMiddleYPosition();
         this.reversedOrderGems = new ArrayList<>(gems);
         Collections.reverse(reversedOrderGems);
@@ -36,13 +36,26 @@ public class GemGroup {
         if(orientation == Orientation.VERTICAL){
             detailedOrientation = DetailedOrientation.TOP_TO_BOTTOM;
         }
-        this.gemRotater = new GemRotater(this, gemWidth);
-        gemRotater.setGemCoordinates(this);
+        this.gemRotator = new GemRotator(this, gemWidth);
+        gemRotator.setGemCoordinates(this);
+    }
+
+
+    private void assignXYFrom(int borderWidth, int initialPosition, int initialY){
+        this.x = borderWidth + (initialPosition * gemWidth) + gemWidth /2;
+        this.y = initialY;
     }
 
 
     public void setGemWidth(int width){
         this.gemWidth = width;
+    }
+
+
+    public void setGemsVisible(){
+        for(Gem gem: gems){
+            gem.setVisible();
+        }
     }
 
 
@@ -116,7 +129,7 @@ public class GemGroup {
 
 
     public void rotate(){
-        gemRotater.rotate();
+        gemRotator.rotate();
         wasUpdated = true;
     }
 
@@ -196,8 +209,13 @@ public class GemGroup {
 
 
     public void drop(){
+        if(isFirstDrop){
+            setGemsVisible();
+            isFirstDrop = false;
+        }
         gemGroupDropper.drop();
     }
+
 
     public void enableQuickDrop(){
         gemGroupDropper.enableQuickDrop();
@@ -245,8 +263,6 @@ public class GemGroup {
         }
         return copiedList;
     }
-
-
 
 
 }

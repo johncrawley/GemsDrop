@@ -43,8 +43,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         game = new Game(getApplicationContext(), width, height, gemWidth, gemGridBorder);
         BitmapLoader bitmapLoader = new BitmapLoader(this, gemWidth);
         game.initGemGridView(gemGridTransparentView);
-        game.initGemGroupView(gemGroupTransparentView, bitmapLoader);
-        game.initScoreView(scoreTransparentView, bitmapLoader);
+        game.initGemGroupLayer(gemGroupTransparentView, bitmapLoader);
+        game.initScoreView(scoreTransparentView);
         game.initBorder(borderView, bitmapLoader);
         game.init();
     }

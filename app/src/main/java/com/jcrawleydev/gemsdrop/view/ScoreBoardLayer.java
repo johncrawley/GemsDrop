@@ -30,14 +30,14 @@ public class ScoreBoardLayer implements TextItem, DrawableItem {
     private Paint scoreboardPaint;
     private Rect scoreTextBackgroundRect;
 
-    public ScoreBoardLayer(Context context, View view, Score score, BitmapLoader bitmapLoader, int width, int height){
+    public ScoreBoardLayer(Context context, View view, Score score, int width, int height){
         this.context = context;
         this.transparentView = (TransparentView) view;
         this.score = score;
         this.width = width;
         this.height = height;
         transparentView.addDrawableItem(this);
-        setupDimensions(view);
+        setupDimensions();
         setupScorePaint();
         setupBackgroundPaint();
         setupScoreTextBackgroundRect();
@@ -87,10 +87,10 @@ public class ScoreBoardLayer implements TextItem, DrawableItem {
     }
 
 
-    private void setupDimensions(View view){
+    private void setupDimensions(){
         textSize = (float) height / getInt(R.integer.score_board_text_height_ratio);
         scoreBarWidth = width;
-        scoreBarHeight = height / getInt(R.integer.score_board_height_ratio);;
+        scoreBarHeight = height / getInt(R.integer.score_board_height_ratio);
         textX = scoreBarWidth / getInt(R.integer.score_position_relative_x);
         textY = scoreBarHeight - (height / getInt(R.integer.score_board_text_position_y_offset));
     }
@@ -149,8 +149,6 @@ public class ScoreBoardLayer implements TextItem, DrawableItem {
 
 
     public void draw(){
-        System.out.println("Score updating transparent view");
-
         transparentView.invalidate();
     }
 

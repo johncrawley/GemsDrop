@@ -8,7 +8,7 @@ import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.tasks.AnimateTask;
 import com.jcrawleydev.gemsdrop.tasks.GemDropTask;
 import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
-import com.jcrawleydev.gemsdrop.view.GemGroupView;
+import com.jcrawleydev.gemsdrop.view.GemGroupLayer;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -20,7 +20,7 @@ public class GemDropAction {
     private boolean hasGemDropStarted = false;
     private GemGroup gemGroup;
     private final GemControls controls;
-    private final GemGroupView gemGroupView;
+    private final GemGroupLayer gemGroupLayer;
     private final GemGridLayer gemGridView;
     private ScheduledFuture<?> gemDropFuture, animateFuture;
     private final ActionMediator actionMediator;
@@ -32,13 +32,13 @@ public class GemDropAction {
     public GemDropAction(SpeedController speedController,
                          ActionMediator actionMediator,
                          GemControls controls,
-                         GemGroupView gemGroupView,
+                         GemGroupLayer gemGroupLayer,
                          GemGridLayer gemGridView,
                          GemGroupFactory gemGroupFactory,
                          Score score){
         this.speedController = speedController;
         this.controls = controls;
-        this.gemGroupView = gemGroupView;
+        this.gemGroupLayer = gemGroupLayer;
         this.gemGridView = gemGridView;
         this.actionMediator = actionMediator;
         this.gemGroupFactory = gemGroupFactory;
@@ -50,17 +50,15 @@ public class GemDropAction {
         this.gemGroup = gemGroup;
     }
 
-    private void log(String msg){
-        System.out.println("GemDropAction: " + msg);
-    }
-
 
     public void start(){
             if(hasGemDropStarted){
                 return;
             }
+            if(animateFuture != null){
+                animateFuture.cancel(false);
+            }
             final int GEM_DROP_TASK_INTERVAL = 70 - speedController.getCurrentSpeed();
-            log("start() gem_drop_task_interval: "+  GEM_DROP_TASK_INTERVAL);
             final int REDRAW_INTERVAL = 20;
             speedController.update();
 
@@ -68,9 +66,9 @@ public class GemDropAction {
             score.resetMultiplier();
             gemGroup = gemGroupFactory.createGemGroup();
             controls.activateAndSet(gemGroup);
-            gemGroupView.setGemGroup(gemGroup);
+            gemGroupLayer.setGemGroup(gemGroup);
             GemDropTask gemDropTask = new GemDropTask(gemGroup, gemGridView, actionMediator);
-            AnimateTask animateTask = new AnimateTask(gemGroupView);
+            AnimateTask animateTask = new AnimateTask(gemGroupLayer);
 
             ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
             gemDropFuture = executor.scheduleWithFixedDelay(gemDropTask, 0, GEM_DROP_TASK_INTERVAL, TimeUnit.MILLISECONDS);
@@ -81,12 +79,13 @@ public class GemDropAction {
     public void cancelFutures(){
         gemDropFuture.cancel(false);
         animateFuture.cancel(false);
-        gemGroupView.drawIfUpdated();
+        gemGroupLayer.drawIfUpdated();
     }
 
 
     public void reset(){
         hasGemDropStarted = false;
+        gemGroupLayer.wipe();
         controls.reactivate();
     }
 

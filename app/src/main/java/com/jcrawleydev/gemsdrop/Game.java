@@ -14,7 +14,7 @@ import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.view.BitmapLoader;
 import com.jcrawleydev.gemsdrop.view.BorderView;
 import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
-import com.jcrawleydev.gemsdrop.view.GemGroupView;
+import com.jcrawleydev.gemsdrop.view.GemGroupLayer;
 import com.jcrawleydev.gemsdrop.view.ScoreBoardLayer;
 import com.jcrawleydev.gemsdrop.view.TransparentView;
 
@@ -22,7 +22,7 @@ import com.jcrawleydev.gemsdrop.view.TransparentView;
 public class Game {
 
     private final GemGroupFactory gemGroupFactory;
-    private GemGroupView gemGroupView;
+    private GemGroupLayer gemGroupView;
     private final int height;
     private final int width;
     private final int floorY;
@@ -77,20 +77,19 @@ public class Game {
     }
 
 
-    void initGemGroupView(TransparentView v, BitmapLoader bitmapLoader){
-        gemGroupView = new GemGroupView(v, bitmapLoader, gemWidth);
+    void initGemGroupLayer(TransparentView v, BitmapLoader bitmapLoader){
+        gemGroupView = new GemGroupLayer(v, bitmapLoader);
     }
 
 
-    void initScoreView(TransparentView transparentView, BitmapLoader bitmapLoader){
+    void initScoreView(TransparentView transparentView){
         Score score = new Score(100);
-        scoreView = new ScoreBoardLayer(context, transparentView, score, bitmapLoader, width, height);
+        scoreView = new ScoreBoardLayer(context, transparentView, score, width, height);
         scoreView.draw();
     }
 
 
     void initBorder(TransparentView transparentView, BitmapLoader bitmapLoader){
-        Score score = new Score(100);
         BorderView borderView = new BorderView(transparentView, bitmapLoader);
         borderView.setPatternImage(R.drawable.background_pattern_1);
         borderView.draw();

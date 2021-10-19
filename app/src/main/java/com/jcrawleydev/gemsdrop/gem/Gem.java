@@ -116,18 +116,22 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
         return this instanceof NullGem || this.getColor() != otherGem.getColor();
     }
 
+
     public void setDeleteCandidateFlag(){
         deletionCandidateFlag = true;
     }
+
 
     public void resetDeleteCandidateFlag(){
         deletionCandidateFlag = false;
     }
 
+
     @Override
     public boolean isVisible(){
         return this.visible;
     }
+
 
     @Override
     public void draw(Canvas canvas, Paint paint) {
@@ -135,8 +139,8 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
             return;
         }
         canvas.drawBitmap(bitmap, x, y, this.paint);
-
     }
+
 
     public void setInvisible(){
         this.visible = false;
@@ -149,7 +153,7 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
 
     @Override
     public Gem clone(){
-        Gem gem= new Gem(Color.BLUE);
+        Gem gem = new Gem(Color.BLUE);
         try{
             gem = (Gem) super.clone();
         }catch(CloneNotSupportedException e){

@@ -13,17 +13,13 @@ import android.view.View;
 import com.jcrawleydev.gemsdrop.view.item.DrawableItem;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.Nullable;
 
 public class TransparentView extends View {
 
-    private int canvasTranslateX,canvasTranslateY, width, height;
-    private int angle = 0;
-    private List<DrawItem> items;
-    private List<TextItem> textItems;
+    private int canvasTranslateX, canvasTranslateY, width, height;
     private Paint paint;
     private Canvas canvasBitmap;
     private boolean isViewDrawn = false;
@@ -49,20 +45,7 @@ public class TransparentView extends View {
 
 
     public void initItems(){
-        textItems = Collections.emptyList();
         drawableItems = new ArrayList<>();
-    }
-
-
-    public void setTextSize(float size){
-        paint.setTextSize(size);
-
-    }
-
-
-
-    public void setTextColor(int color){
-        paint.setColor(color);
     }
 
 
@@ -73,17 +56,6 @@ public class TransparentView extends View {
     public void setTranslateX(int x){
         this.canvasTranslateX = x;
     }
-
-
-    public void updateAndDraw(){
-         //angle = (angle + 15) % 360;
-    }
-
-
-    public void setDrawItems(List<DrawItem> items){
-        this.items = items;
-    }
-
 
 
     public void addDrawableItem(DrawableItem drawableItem){
@@ -97,11 +69,6 @@ public class TransparentView extends View {
 
     public void clearDrawableItems(){
         this.drawableItems.clear();
-    }
-
-
-    public void setTextItems(List<TextItem> items){
-        this.textItems = items;
     }
 
 
@@ -153,10 +120,6 @@ public class TransparentView extends View {
         canvasBitmap = new Canvas(bitmap);
         canvasBitmap.save();
         canvasBitmap.translate(canvasTranslateX, canvasTranslateY);
-
-        if(angle != 0){
-            canvasBitmap.rotate(angle);
-        }
         drawItems();
         canvasBitmap.restore();
         return bitmap;
@@ -165,27 +128,6 @@ public class TransparentView extends View {
 
     private void drawItems(){
         drawDrawableItems();
-        drawDrawItems();
-        drawTextItems();
-    }
-
-
-    private void drawDrawItems(){
-        if(items == null){
-            return;
-        }
-        for(DrawItem item : items){
-            if(!item.isVisible()) {
-                continue;
-            }
-            canvasBitmap.drawBitmap(item.getBitmap(), item.getX(), item.getY(), paint);
-        }
-    }
-
-    private void drawTextItems(){
-        for(TextItem item: textItems){
-            canvasBitmap.drawText(item.getText(), item.getX(), item.getY(), paint);
-        }
     }
 
 

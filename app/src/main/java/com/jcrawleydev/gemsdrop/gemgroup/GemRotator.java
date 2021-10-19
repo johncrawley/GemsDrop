@@ -6,18 +6,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GemRotater {
+public class GemRotator  {
 
 
     private final int GEM_WIDTH;
     private final int HALF_WIDTH;
     private List<Gem> gems;
-    private int numberOfGems;
+    private final int numberOfGems;
     private GemGroup gemGroup;
     private Map<GemGroup.DetailedOrientation, GemGroup.DetailedOrientation> nextDetailedOrientation;
 
 
-    public GemRotater(GemGroup gemGroup, int gemWidth){
+    public GemRotator(GemGroup gemGroup, int gemWidth){
          GEM_WIDTH = gemWidth;
          HALF_WIDTH = gemWidth /2;
          this.gemGroup = gemGroup;
@@ -34,6 +34,7 @@ public class GemRotater {
         nextDetailedOrientation.put(GemGroup.DetailedOrientation.TOP_TO_BOTTOM, GemGroup.DetailedOrientation.LAST_TO_FIRST);
         nextDetailedOrientation.put(GemGroup.DetailedOrientation.LAST_TO_FIRST, GemGroup.DetailedOrientation.BOTTOM_TO_TOP);
     }
+
 
     public void setGemCoordinates(GemGroup gemGroup){
         this.gemGroup = gemGroup;

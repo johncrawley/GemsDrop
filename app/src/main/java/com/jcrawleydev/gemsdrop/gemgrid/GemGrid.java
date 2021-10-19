@@ -2,7 +2,6 @@ package com.jcrawleydev.gemsdrop.gemgrid;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
-import com.jcrawleydev.gemsdrop.view.DrawItem;
 import com.jcrawleydev.gemsdrop.view.item.DrawableItem;
 
 import java.util.ArrayList;
@@ -71,15 +70,14 @@ public class GemGrid {
                     continue;
                 }
                 gem.setVisible();
-
             }
         }
     }
 
 
     public boolean shouldAdd(GemGroup gemGroup) {
-        final int FLOOR_POSITON = 1;
-        if(gemGroup.getBottomPosition() <= FLOOR_POSITON){
+        final int FLOOR_POSITION = 1;
+        if(gemGroup.getBottomPosition() <= FLOOR_POSITION){
             return true;
         }
         if(gemGroup.getOrientation() == GemGroup.Orientation.HORIZONTAL){

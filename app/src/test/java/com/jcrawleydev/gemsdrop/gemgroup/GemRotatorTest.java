@@ -9,14 +9,14 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class GemRotaterTest {
+public class GemRotatorTest {
 
 
     private final int GEM_WIDTH = 150;
     private final int NUMBER_OF_GEMS = 3;
     private final GemGroup.Orientation INITIAL_ORIENTATION = GemGroup.Orientation.VERTICAL;
     private GemGroup gemGroup;
-    private GemRotater gemRotater;
+    private GemRotator gemRotater;
     private List<Gem> gems;
 
     @Before
@@ -30,7 +30,7 @@ public class GemRotaterTest {
                 .build().createGemGroup();
 
         gems = gemGroup.getGems();
-        gemRotater = new GemRotater(gemGroup, GEM_WIDTH);
+        gemRotater = new GemRotator(gemGroup, GEM_WIDTH);
     }
 
     @Test

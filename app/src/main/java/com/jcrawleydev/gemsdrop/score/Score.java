@@ -3,8 +3,7 @@ package com.jcrawleydev.gemsdrop.score;
 public class Score {
 
     private int currentScore = 0;
-    private int basePoints;
-    private final int MULTIPLIER_INITIAL_VALUE = 1;
+    private final int basePoints;
     private int multiplier;
 
     public Score(int basePoints){
@@ -30,14 +29,12 @@ public class Score {
     }
 
     public void resetMultiplier(){
-        multiplier = MULTIPLIER_INITIAL_VALUE;
+        multiplier = 1;
     }
 
     public void addPointsFor(int numberOfGems){
         currentScore += basePoints * numberOfGems * multiplier;
     }
-
-
 
 
 }

@@ -8,7 +8,7 @@ import com.jcrawleydev.gemsdrop.gemgroup.SpeedController;
 import com.jcrawleydev.gemsdrop.score.GemCountTracker;
 import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
-import com.jcrawleydev.gemsdrop.view.GemGroupView;
+import com.jcrawleydev.gemsdrop.view.GemGroupLayer;
 import com.jcrawleydev.gemsdrop.view.ScoreBoardLayer;
 
 public class ActionMediator {
@@ -22,7 +22,7 @@ public class ActionMediator {
     private final Score score;
 
     private ActionMediator(SpeedController speedController,
-                           GemGroupView gemGroupView,
+                           GemGroupLayer gemGroupView,
                            GemGridLayer gemGridView,
                            GemControls gemControls,
                            Evaluator evaluator,
@@ -49,8 +49,8 @@ public class ActionMediator {
     public void onAllGemsAdded(){
         gemDropAction.cancelFutures();
         evaluateGemsInGrid();
-
     }
+
 
     public void evaluateGemsInGrid(){
         evaluateAction.start();
@@ -70,6 +70,7 @@ public class ActionMediator {
     public void startMarkedGemsFlicker(){
         flickerMarkedGemsAction.start();
     }
+
 
     public void resetDrop(){
         gemDropAction.reset();
@@ -97,7 +98,7 @@ public class ActionMediator {
 
         private Score score;
         private ScoreBoardLayer scoreView;
-        private GemGroupView gemGroupView;
+        private GemGroupLayer gemGroupView;
         private GemGridLayer gemGridView;
         private GemControls gemControls;
         private Evaluator evaluator;
@@ -108,7 +109,7 @@ public class ActionMediator {
         private SpeedController speedController;
 
 
-        public Builder gemGroupView(GemGroupView gemGroupView){
+        public Builder gemGroupView(GemGroupLayer gemGroupView){
             this.gemGroupView = gemGroupView;
             return this;
         }

@@ -38,6 +38,7 @@ public class GemGroupFactory {
          random = new Random(System.currentTimeMillis());
         for(int i=0; i< NUMBER_OF_GEMS; i++){
             Gem gem = new Gem(getRandomColor(), gemPaintOptions.getGemPaint());
+            gem.setInvisible();
             gems.add(gem);
         }
         return new GemGroup(INITIAL_POSITION, GEMS_INITIAL_Y, GemGroup.Orientation.VERTICAL, gems, GEM_WIDTH, floorY, borderWidth);
