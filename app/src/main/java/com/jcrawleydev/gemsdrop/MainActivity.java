@@ -19,6 +19,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     private int gemGridBorder;
     private int maxRows;
     private int numberOColumns;
+    private int scoreBarHeight;
+    private int floorY;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -41,7 +43,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         gemGroupTransparentView.setOnTouchListener(this);
         gemGridTransparentView.setOnTouchListener(this);
 
-        game = new Game(getApplicationContext(), width, height, gemWidth, gemGridBorder, numberOColumns);
+        game = new Game(getApplicationContext(), width, height, gemWidth, gemGridBorder, numberOColumns, scoreBarHeight, floorY);
         BitmapLoader bitmapLoader = new BitmapLoader(this, gemWidth);
         game.initGemGridView(gemGridTransparentView);
         game.initGemGroupLayer(gemGroupTransparentView, bitmapLoader);
@@ -70,14 +72,17 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         width = displayMetrics.widthPixels;
         assignGemWidth(width, height);
         numberOColumns = getResources().getInteger(R.integer.number_of_columns);
+        maxRows = getResources().getInteger(R.integer.maximum_rows);
         gemGridBorder = (width - (gemWidth * numberOColumns))/2;
+        floorY = height - (Math.min(gemWidth,gemGridBorder));
+        scoreBarHeight =  floorY - ((gemWidth * maxRows));
+        System.out.println("^^^** MainActivity.assignScreenDimensions() scoreBarHeight: " + scoreBarHeight);
     }
 
 
     private void assignGemWidth(int width, int height){
         int shortestDimension = Math.min(width, height);
         int numberOfColumns = getResources().getInteger(R.integer.number_of_columns);
-        maxRows = getResources().getInteger(R.integer.maximum_rows);
         this.gemWidth = shortestDimension / (numberOfColumns + 1);
     }
 

@@ -21,7 +21,8 @@ public class ScoreBoardLayer implements TextItem, DrawableItem {
 
     private final TransparentView transparentView;
     private final Score score;
-    private int scoreBarHeight, scoreBarWidth;
+    private final int scoreBarHeight;
+    private int scoreBarWidth;
     private int textX, textY;
     private float textSize;
     private final Context context;
@@ -30,21 +31,23 @@ public class ScoreBoardLayer implements TextItem, DrawableItem {
     private Paint scoreboardPaint;
     private Rect scoreTextBackgroundRect;
 
-    public ScoreBoardLayer(Context context, View view, Score score, int width, int height){
+    public ScoreBoardLayer(Context context, View view, Score score, int width, int height, int scoreBarHeight){
         this.context = context;
         this.transparentView = (TransparentView) view;
         this.score = score;
         this.width = width;
         this.height = height;
         transparentView.addDrawableItem(this);
+        this.scoreBarHeight = scoreBarHeight;
         setupDimensions();
         setupScorePaint();
         setupBackgroundPaint();
         setupScoreTextBackgroundRect();
     }
 
+
     private void setupScoreTextBackgroundRect(){
-        int verticalBorder = scoreBarHeight / 5;
+        int verticalBorder = scoreBarHeight / 4;
         int top = verticalBorder / 2;
         int height = scoreBarHeight - verticalBorder;
         int bottom = top + height;
@@ -75,12 +78,11 @@ public class ScoreBoardLayer implements TextItem, DrawableItem {
     private void setupBackgroundPaint(){
         int topColor = context.getColor(R.color.scoreboard_top);
         int bottomColor = context.getColor(R.color.scoreboard_bottom);
-        int scoreBoardHeight = scoreBarHeight;
         scoreboardPaint = new Paint();
         scoreboardPaint.setShader(new LinearGradient( 0,
                 0,
                 0,
-                scoreBoardHeight,
+                scoreBarHeight,
                 topColor,
                 bottomColor,
                 Shader.TileMode.CLAMP));
@@ -90,9 +92,9 @@ public class ScoreBoardLayer implements TextItem, DrawableItem {
     private void setupDimensions(){
         textSize = (float) height / getInt(R.integer.score_board_text_height_ratio);
         scoreBarWidth = width;
-        scoreBarHeight = height / getInt(R.integer.score_board_height_ratio);
+        //scoreBarHeight = height / getInt(R.integer.score_board_height_ratio);
         textX = scoreBarWidth / getInt(R.integer.score_position_relative_x);
-        textY = scoreBarHeight - (height / getInt(R.integer.score_board_text_position_y_offset));
+        textY = scoreBarHeight - (scoreBarHeight / 3);//- (height / getInt(R.integer.score_board_text_position_y_offset));
     }
 
 

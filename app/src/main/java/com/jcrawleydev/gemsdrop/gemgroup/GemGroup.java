@@ -243,14 +243,6 @@ public class GemGroup {
     }
 
 
-    public int getNextBottomPosition(){
-        if( orientation == Orientation.HORIZONTAL){
-            return middleYPosition + 1;
-        }
-        return (middleYPosition + getNumberOfGems() /2) -1;
-    }
-
-
     public List<Integer> getGemPositions(){
         List<Integer> positions = new ArrayList<>();
         int leftMostPosition = xPosition - getNumberOfGems() / 2;

@@ -12,14 +12,14 @@ import android.view.View;
 import com.jcrawleydev.gemsdrop.view.item.DrawableItem;
 
 
-public class BorderView implements DrawableItem {
+public class BorderLayer implements DrawableItem {
 
     private final TransparentView transparentView;
     private final BitmapLoader bitmapLoader;
     private Bitmap patternBitmap;
 
 
-    public BorderView(View view, BitmapLoader bitmapLoader){
+    public BorderLayer(View view, BitmapLoader bitmapLoader){
         transparentView = (TransparentView)view;
         this.bitmapLoader = bitmapLoader;
         transparentView.addDrawableItem(this);

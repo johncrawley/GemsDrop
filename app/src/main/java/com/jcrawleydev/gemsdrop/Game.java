@@ -12,7 +12,7 @@ import com.jcrawleydev.gemsdrop.gemgroup.SpeedController;
 import com.jcrawleydev.gemsdrop.score.GemCountTracker;
 import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.view.BitmapLoader;
-import com.jcrawleydev.gemsdrop.view.BorderView;
+import com.jcrawleydev.gemsdrop.view.BorderLayer;
 import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 import com.jcrawleydev.gemsdrop.view.GemGroupLayer;
 import com.jcrawleydev.gemsdrop.view.ScoreBoardLayer;
@@ -37,18 +37,21 @@ public class Game {
     private final Context context;
     private final int borderWidth;
     private int maxRows;
+    private final int scoreBarHeight;
 
 
-    public Game(Context context, int screenWidth, int screenHeight, int gemWidth, int gemGridBorder, int numberOfColumns){
+    public Game(Context context, int screenWidth, int screenHeight, int gemWidth, int gemGridBorder, int numberOfColumns, int scoreBarHeight, int floorY){
         this.width = screenWidth;
         this.height = screenHeight;
         this.gemWidth = gemWidth;
         this.context = context;
         this.borderWidth = gemGridBorder;
+        this.scoreBarHeight = scoreBarHeight;
+        this.floorY = floorY;
         int numberOfGems = 3;
         maxRows = context.getResources().getInteger(R.integer.maximum_rows);
-        floorY = height - (Math.min(gemWidth,gemGridBorder));
-        int initialY = floorY - ((maxRows + numberOfGems)* gemWidth);
+        int initialY = floorY - ((maxRows + numberOfGems) * gemWidth);
+        System.out.println("^^^** Game() floorY : " + floorY + " height: " + height);
 
         gemGroupFactory = new GemGroupFactory.Builder()
                 .withInitialY(initialY)
@@ -85,13 +88,13 @@ public class Game {
 
     void initScoreView(TransparentView transparentView){
         Score score = new Score(100);
-        scoreView = new ScoreBoardLayer(context, transparentView, score, width, height);
+        scoreView = new ScoreBoardLayer(context, transparentView, score, width, height, scoreBarHeight);
         scoreView.draw();
     }
 
 
     void initBorder(TransparentView transparentView, BitmapLoader bitmapLoader){
-        BorderView borderView = new BorderView(transparentView, bitmapLoader);
+        BorderLayer borderView = new BorderLayer(transparentView, bitmapLoader);
         borderView.setPatternImage(R.drawable.background_pattern_1);
         borderView.draw();
     }
