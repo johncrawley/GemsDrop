@@ -85,7 +85,7 @@ public class GemGrid {
         }
         return gemGroup.getBottomPosition() <= getColumnHeight(gemGroup.getXPosition());
     }
-
+    
 
     public boolean addAnyFrom(GemGroup gemGroup){
         if(isVertical(gemGroup)) {
@@ -103,6 +103,7 @@ public class GemGrid {
         }
         return hasGemBeenAdded;
     }
+
 
     public List<Gem.Color> getRemainingColors(){
         Set<Gem.Color> colors = new HashSet<>();

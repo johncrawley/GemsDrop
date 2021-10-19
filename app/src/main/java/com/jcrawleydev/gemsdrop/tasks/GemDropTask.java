@@ -21,7 +21,6 @@ public class GemDropTask implements Runnable{
 
 
     public void run(){
-
         if(gemGrid.shouldAdd(gemGroup)) {
             gemGrid.add(gemGroup);
             gemGridView.draw();

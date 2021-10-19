@@ -44,6 +44,8 @@ public class GemGroup {
     private void assignXYFrom(int borderWidth, int initialPosition, int initialY){
         this.x = borderWidth + (initialPosition * gemWidth) + gemWidth /2;
         this.y = initialY;
+        y+= getYRemainderFromFloor();
+        y+=3;
     }
 
 
@@ -109,6 +111,7 @@ public class GemGroup {
     public void decrementMiddleYPosition(){
         middleYPosition--;
     }
+
 
     public void dropBy(int dropIncrement){
         y += dropIncrement;
@@ -240,6 +243,14 @@ public class GemGroup {
     }
 
 
+    public int getNextBottomPosition(){
+        if( orientation == Orientation.HORIZONTAL){
+            return middleYPosition + 1;
+        }
+        return (middleYPosition + getNumberOfGems() /2) -1;
+    }
+
+
     public List<Integer> getGemPositions(){
         List<Integer> positions = new ArrayList<>();
         int leftMostPosition = xPosition - getNumberOfGems() / 2;
@@ -254,6 +265,10 @@ public class GemGroup {
         this.middleYPosition = ((floorY - y) / gemWidth) -1;
     }
 
+
+    private int getYRemainderFromFloor(){
+        return floorY % y;
+    }
 
 
     private List<Gem> copyOf(List<Gem> gems){

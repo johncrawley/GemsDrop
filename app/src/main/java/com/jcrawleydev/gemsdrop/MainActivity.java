@@ -18,6 +18,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     private int gemWidth;
     private int gemGridBorder;
     private int maxRows;
+    private int numberOColumns;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -40,7 +41,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         gemGroupTransparentView.setOnTouchListener(this);
         gemGridTransparentView.setOnTouchListener(this);
 
-        game = new Game(getApplicationContext(), width, height, gemWidth, gemGridBorder);
+        game = new Game(getApplicationContext(), width, height, gemWidth, gemGridBorder, numberOColumns);
         BitmapLoader bitmapLoader = new BitmapLoader(this, gemWidth);
         game.initGemGridView(gemGridTransparentView);
         game.initGemGroupLayer(gemGroupTransparentView, bitmapLoader);
@@ -68,7 +69,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         height = displayMetrics.heightPixels;
         width = displayMetrics.widthPixels;
         assignGemWidth(width, height);
-        int numberOColumns = getResources().getInteger(R.integer.number_of_columns);
+        numberOColumns = getResources().getInteger(R.integer.number_of_columns);
         gemGridBorder = (width - (gemWidth * numberOColumns))/2;
     }
 

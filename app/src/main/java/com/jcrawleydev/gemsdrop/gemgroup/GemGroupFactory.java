@@ -12,8 +12,8 @@ import java.util.Random;
 public class GemGroupFactory {
 
     private final int NUMBER_OF_GEMS;
-    private final int GEMS_INITIAL_Y;
-    private final int INITIAL_POSITION;
+    private final int gemsInitialY;
+    private final int initialColumnPosition;
     private final List<Gem.Color> colors;
     private final int floorY;
     private final int GEM_WIDTH;
@@ -23,8 +23,8 @@ public class GemGroupFactory {
 
     private GemGroupFactory(int numberOfGems, int initialPosition, int gemsInitialY, int gemWidth, int floorY, int borderWidth){
         this.NUMBER_OF_GEMS = numberOfGems;
-        this.INITIAL_POSITION = initialPosition;
-        this.GEMS_INITIAL_Y = gemsInitialY;
+        this.initialColumnPosition = initialPosition;
+        this.gemsInitialY = gemsInitialY;
         colors = Arrays.asList(Gem.Color.values());
         this.floorY = floorY;
         this.GEM_WIDTH = gemWidth;
@@ -41,7 +41,7 @@ public class GemGroupFactory {
             gem.setInvisible();
             gems.add(gem);
         }
-        return new GemGroup(INITIAL_POSITION, GEMS_INITIAL_Y, GemGroup.Orientation.VERTICAL, gems, GEM_WIDTH, floorY, borderWidth);
+        return new GemGroup(initialColumnPosition, gemsInitialY, GemGroup.Orientation.VERTICAL, gems, GEM_WIDTH, floorY, borderWidth);
     }
 
 

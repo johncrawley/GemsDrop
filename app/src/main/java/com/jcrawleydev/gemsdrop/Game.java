@@ -39,21 +39,22 @@ public class Game {
     private int maxRows;
 
 
-    public Game(Context context, int screenWidth, int screenHeight, int gemWidth, int gemGridBorder){
+    public Game(Context context, int screenWidth, int screenHeight, int gemWidth, int gemGridBorder, int numberOfColumns){
         this.width = screenWidth;
         this.height = screenHeight;
         this.gemWidth = gemWidth;
         this.context = context;
         this.borderWidth = gemGridBorder;
-        int initialY = this.gemWidth * -4;
+        int numberOfGems = 3;
         maxRows = context.getResources().getInteger(R.integer.maximum_rows);
         floorY = height - (Math.min(gemWidth,gemGridBorder));
+        int initialY = floorY - ((maxRows + numberOfGems)* gemWidth);
 
         gemGroupFactory = new GemGroupFactory.Builder()
                 .withInitialY(initialY)
                 .withGemWidth(gemWidth)
-                .withNumerOfGems(3)
-                .withInitialPosition(4)
+                .withNumerOfGems(numberOfGems)
+                .withInitialPosition(numberOfColumns /2)
                 .withFloorAt(floorY)
                 .withBorderWidth(borderWidth)
                 .build();
