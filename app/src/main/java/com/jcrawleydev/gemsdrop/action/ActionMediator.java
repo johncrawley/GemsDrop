@@ -29,15 +29,17 @@ public class ActionMediator {
                            GemGroupFactory gemGroupFactory,
                            ScoreBoardLayer scoreView,
                            GemCountTracker gemCountTracker,
-                           SoundPlayer soundPlayer){
+                           SoundPlayer soundPlayer,
+                           int gravityInterval,
+                           int gridGravityDistanceFactor){
 
         this.score = scoreView.getScore();
         gemDropAction = new GemDropAction(speedController, this, gemControls, gemGroupView, gemGridView, gemGroupFactory, score);
-        quickDropGemsAction = new QuickDropGemsAction(this, gemGroupView, gemControls, gemGridView);
+        quickDropGemsAction = new QuickDropGemsAction(this, gemGroupView, gemControls, gemGridView, gravityInterval);
         evaluateAction = new EvaluateAction(evaluator, this);
         flickerMarkedGemsAction = new FlickerMarkedGemsAction(gemGridView, this);
         deleteMarkedGemsAction = new DeleteMarkedGemsAction(this, evaluator, gemGridView, scoreView, gemCountTracker, soundPlayer);
-        gemGridGravityDropAction = new GemGridGravityDropAction(this, gemGridView);
+        gemGridGravityDropAction = new GemGridGravityDropAction(this, gemGridView, gravityInterval, gridGravityDistanceFactor);
     }
 
 
@@ -107,6 +109,8 @@ public class ActionMediator {
         private GemCountTracker gemCountTracker;
         private SoundPlayer soundPlayer;
         private SpeedController speedController;
+        private int gravityInterval;
+        private int gridGravityDistanceFactor;
 
 
         public Builder gemGroupView(GemGroupLayer gemGroupView){
@@ -142,6 +146,12 @@ public class ActionMediator {
         }
 
 
+        public Builder gridGravityDistanceFactor(int gridGravityDistanceFactor){
+            this.gridGravityDistanceFactor = gridGravityDistanceFactor;
+            return this;
+        }
+
+
         public Builder gemCountTracker(GemCountTracker gemCountTracker){
             this.gemCountTracker = gemCountTracker;
             return this;
@@ -159,19 +169,37 @@ public class ActionMediator {
         }
 
 
+        public Builder gravityInterval(int gravityInterval){
+            this.gravityInterval = gravityInterval;
+            return this;
+        }
+
+
         public ActionMediator build() {
             verify();
-            return new ActionMediator(speedController, gemGroupView, gemGridView, gemControls, evaluator, gemGroupFactory, scoreView, gemCountTracker, soundPlayer);
+            return new ActionMediator(speedController,
+                    gemGroupView,
+                    gemGridView,
+                    gemControls,
+                    evaluator,
+                    gemGroupFactory,
+                    scoreView,
+                    gemCountTracker,
+                    soundPlayer,
+                    gravityInterval,
+                    gridGravityDistanceFactor);
         }
 
 
         private void verify () {
-            str = new StringBuilder("");
+            str = new StringBuilder();
             appendErrorIfNull(gemGroupView, "gemGroupView");
             appendErrorIfNull(gemGridView, "gemGridView");
             appendErrorIfNull(gemControls, "gemControls");
             appendErrorIfNull(gemGroupFactory, "gemGroupFactory");
             appendErrorIfNull(speedController, "speedController");
+            appendErrorIfNull(gravityInterval, "gravityInterval");
+            appendErrorIfNull(gridGravityDistanceFactor, "gridGravityDistanceFactor");
             appendErrorIfNull(score, "score");
             String errorStr = str.toString();
 

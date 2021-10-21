@@ -9,17 +9,16 @@ import com.jcrawleydev.gemsdrop.view.GemGroupLayer;
 
 public class QuickDropTask implements Runnable{
 
-    private ActionMediator actionManager;
-    private GemGroup gemGroup;
-    private GemGrid gemGrid;
-    private GemGridLayer gemGridView;
-    private GemGroupLayer gemGroupView;
+    private final ActionMediator actionManager;
+    private final GemGroup gemGroup;
+    private final GemGrid gemGrid;
+    private final GemGridLayer gemGridView;
+    private final GemGroupLayer gemGroupView;
 
     public QuickDropTask(ActionMediator actionManager, GemGroupLayer gemGroupView, GemGridLayer gemGridView) {
         this.actionManager = actionManager;
         this.gemGroupView = gemGroupView;
         this.gemGridView = gemGridView;
-
         this.gemGroup = gemGroupView.getGemGroup();
         this.gemGrid = gemGridView.getGemGrid();
     }

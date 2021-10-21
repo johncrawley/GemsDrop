@@ -113,7 +113,7 @@ public class Game {
 
     void initGemGridView(TransparentView v){
         GemGrid gemGrid = new GemGrid(7, 12);
-        gemGrid.setDropIncrement(gemWidth / 5);
+        gemGrid.setDropIncrement(gemWidth / getInt(R.integer.gem_grid_gravity_drop_distance_factor));
         gemGridLayer = new GemGridLayer(v, gemGrid, gemWidth, width, floorY, borderWidth);
         evaluator = new Evaluator(gemGrid, 3);
         gemControls = new GemControls(gemGrid);
@@ -153,7 +153,14 @@ public class Game {
                 .gemCountTracker(gemCountTracker)
                 .soundPlayer(soundPlayer)
                 .speedController(new SpeedController(context))
+                .gravityInterval(getInt(R.integer.gravity_interval))
+                .gridGravityDistanceFactor(getInt(R.integer.gem_grid_gravity_drop_distance_factor))
                 .build();
+    }
+
+
+    private int getInt(int resId){
+        return context.getResources().getInteger(resId);
     }
 
 }

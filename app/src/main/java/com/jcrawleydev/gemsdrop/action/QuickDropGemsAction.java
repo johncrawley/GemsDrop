@@ -14,27 +14,28 @@ import java.util.concurrent.TimeUnit;
 public class QuickDropGemsAction {
 
     private ScheduledFuture<?> quickDropFuture;
-    private ActionMediator actionManager;
-    private GemGroupLayer gemGroupView;
-    private GemControls controls;
-    private GemGridLayer gemGridView;
+    private final ActionMediator actionManager;
+    private final GemGroupLayer gemGroupView;
+    private final GemControls controls;
+    private final GemGridLayer gemGridView;
+    private final int gravityInterval;
 
 
-    public QuickDropGemsAction(ActionMediator actionManager, GemGroupLayer gemGroupView, GemControls controls, GemGridLayer gemGridView){
+    public QuickDropGemsAction(ActionMediator actionManager, GemGroupLayer gemGroupView, GemControls controls, GemGridLayer gemGridView, int gravityInterval){
         this.actionManager = actionManager;
         this.gemGroupView = gemGroupView;
         this.controls = controls;
         this.gemGridView = gemGridView;
+        this.gravityInterval = gravityInterval;
     }
 
 
     public void start(){
-        int quickDropAnimationInterval = 70;
         gemGroupView.getGemGroup().enableQuickDrop();
         QuickDropTask quickDropTask = new QuickDropTask(actionManager, gemGroupView, gemGridView);
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
         controls.deactivate();
-        quickDropFuture = executor.scheduleWithFixedDelay(quickDropTask, 0, quickDropAnimationInterval, TimeUnit.MILLISECONDS);
+        quickDropFuture = executor.scheduleWithFixedDelay(quickDropTask, 0, gravityInterval, TimeUnit.MILLISECONDS);
     }
 
 

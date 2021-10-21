@@ -7,9 +7,9 @@ import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 // runs after gems have beeen deleted
 public class GemGridGravityTask implements Runnable {
 
-    private GemGrid gemGrid;
-    private GemGridLayer gemGridView;
-    private ActionMediator actionManager;
+    private final GemGrid gemGrid;
+    private final GemGridLayer gemGridView;
+    private final ActionMediator actionManager;
 
 
     public GemGridGravityTask(GemGridLayer gemGridView, ActionMediator actionManager){

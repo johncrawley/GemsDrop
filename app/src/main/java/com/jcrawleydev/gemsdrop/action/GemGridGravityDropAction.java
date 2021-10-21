@@ -11,21 +11,23 @@ import java.util.concurrent.TimeUnit;
 public class GemGridGravityDropAction {
 
     private ScheduledFuture<?> gemGridGravityFuture;
-    private GemGridLayer gemGridView;
-    private ActionMediator actionManager;
+    private final GemGridLayer gemGridView;
+    private final ActionMediator actionManager;
+    private final int gravityInterval;
+    private final int distanceFactor;
 
-
-    public GemGridGravityDropAction(ActionMediator actionManager, GemGridLayer gemGridView){
+    public GemGridGravityDropAction(ActionMediator actionManager, GemGridLayer gemGridView, int gravityInterval, int distanceFactor){
         this.actionManager = actionManager;
         this.gemGridView = gemGridView;
+        this.gravityInterval = gravityInterval;
+        this.distanceFactor = distanceFactor;
     }
 
 
     void start(){
-        final int GEM_GRID_GRAVITY_INTERVAL = 25;
         Runnable gemGridGravityTask = new GemGridGravityTask(gemGridView, actionManager);
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
-        gemGridGravityFuture = executor.scheduleWithFixedDelay(gemGridGravityTask, 0, GEM_GRID_GRAVITY_INTERVAL, TimeUnit.MILLISECONDS);
+        gemGridGravityFuture = executor.scheduleWithFixedDelay(gemGridGravityTask, 0, gravityInterval/ distanceFactor, TimeUnit.MILLISECONDS);
     }
 
 
