@@ -11,6 +11,10 @@ import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
 import com.jcrawleydev.gemsdrop.gemgroup.SpeedController;
 import com.jcrawleydev.gemsdrop.score.GemCountTracker;
 import com.jcrawleydev.gemsdrop.score.Score;
+import com.jcrawleydev.gemsdrop.state.GameOverState;
+import com.jcrawleydev.gemsdrop.state.GameState;
+import com.jcrawleydev.gemsdrop.state.InGameState;
+import com.jcrawleydev.gemsdrop.state.TitleState;
 import com.jcrawleydev.gemsdrop.view.BitmapLoader;
 import com.jcrawleydev.gemsdrop.view.BorderLayer;
 import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
@@ -36,8 +40,11 @@ public class Game {
     private ScoreBoardLayer scoreView;
     private final Context context;
     private final int borderWidth;
-    private int maxRows;
     private final int scoreBarHeight;
+    private GameState currentGameState;
+    private GameState titleState;
+    private GameState gameOverState;
+    private GameState inGameState;
 
 
     public Game(Context context, int screenWidth, int screenHeight, int gemWidth, int gemGridBorder, int numberOfColumns, int scoreBarHeight, int floorY){
@@ -49,9 +56,9 @@ public class Game {
         this.scoreBarHeight = scoreBarHeight;
         this.floorY = floorY;
         int numberOfGems = 3;
-        maxRows = context.getResources().getInteger(R.integer.maximum_rows);
+        int maxRows = context.getResources().getInteger(R.integer.maximum_rows);
         int initialY = floorY - ((maxRows + numberOfGems) * gemWidth);
-        System.out.println("^^^** Game() floorY : " + floorY + " height: " + height);
+
 
         gemGroupFactory = new GemGroupFactory.Builder()
                 .withInitialY(initialY)
@@ -61,11 +68,45 @@ public class Game {
                 .withFloorAt(floorY)
                 .withBorderWidth(borderWidth)
                 .build();
+
+        initGameStates();
     }
+
+
+    private void initGameStates(){
+        titleState = new TitleState(this);
+        inGameState = new InGameState(this);
+        gameOverState = new GameOverState(this);
+        currentGameState = titleState;
+    }
+
+
+    public void loadGameOverState(){
+        currentGameState.stop();
+        currentGameState = gameOverState;
+        currentGameState.start();
+    }
+
+
+    public void loadTitleState(){
+        currentGameState.stop();
+        currentGameState = titleState;
+        currentGameState.start();
+    }
+
+
+    public void loadInGameState(){
+        currentGameState.stop();
+        currentGameState = inGameState;
+        currentGameState.start();
+    }
+
+
 
 
     void click(int x, int y){
         clickHandler.click(x,y);
+        currentGameState.click(x,y);
         actionMediator.createAndDropGems();
     }
 

@@ -17,7 +17,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     private Game game;
     private int gemWidth;
     private int gemGridBorder;
-    private int maxRows;
     private int numberOColumns;
     private int scoreBarHeight;
     private int floorY;
@@ -72,7 +71,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         width = displayMetrics.widthPixels;
         assignGemWidth(width, height);
         numberOColumns = getResources().getInteger(R.integer.number_of_columns);
-        maxRows = getResources().getInteger(R.integer.maximum_rows);
+        int maxRows = getResources().getInteger(R.integer.maximum_rows);
         gemGridBorder = (width - (gemWidth * numberOColumns))/2;
         floorY = height - (Math.min(gemWidth,gemGridBorder));
         scoreBarHeight =  floorY - ((gemWidth * maxRows));
