@@ -154,6 +154,7 @@ public class Game {
                 .soundPlayer(soundPlayer)
                 .speedController(new SpeedController(context))
                 .gravityInterval(getInt(R.integer.gravity_interval))
+                .flickerMarkedGemsTime(getInt(R.integer.disappearing_gems_flicker_time))
                 .gridGravityDistanceFactor(getInt(R.integer.gem_grid_gravity_drop_distance_factor))
                 .build();
     }

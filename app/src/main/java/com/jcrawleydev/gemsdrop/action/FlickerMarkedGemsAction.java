@@ -11,13 +11,15 @@ import java.util.concurrent.TimeUnit;
 
 public class FlickerMarkedGemsAction {
 
-    private ActionMediator actionManager;
-    private GemGridLayer gemGridView;
+    private final ActionMediator actionManager;
+    private final GemGridLayer gemGridView;
+    private final int flickerMarkedGemsTime;
 
 
-    public FlickerMarkedGemsAction(GemGridLayer gemGridView, ActionMediator actionManager){
+    public FlickerMarkedGemsAction(GemGridLayer gemGridView, ActionMediator actionManager, int flickerMarkedGemsTime){
         this.gemGridView = gemGridView;
         this.actionManager = actionManager;
+        this.flickerMarkedGemsTime = flickerMarkedGemsTime;
     }
 
 
@@ -30,7 +32,7 @@ public class FlickerMarkedGemsAction {
         gemsFlickerFuture = executor.scheduleWithFixedDelay(markedGemsFlickerTask, 0, FLICKER_SPEED, TimeUnit.MILLISECONDS);
 
         Runnable flickerTimeoutTask = new CancelFutureTask(gemsFlickerFuture, actionManager);
-        executor.schedule(flickerTimeoutTask, 1000, TimeUnit.MILLISECONDS);
+        executor.schedule(flickerTimeoutTask, flickerMarkedGemsTime, TimeUnit.MILLISECONDS);
     }
 
 }

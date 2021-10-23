@@ -6,8 +6,8 @@ import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 //Makes gems flicker before they are deleted
 public class FlickerMarkedGemsTask implements  Runnable {
 
-    private GemGrid gemGrid;
-    private GemGridLayer gemGridView;
+    private final GemGrid gemGrid;
+    private final GemGridLayer gemGridView;
 
     public FlickerMarkedGemsTask(GemGridLayer gemGridView){
         this.gemGridView = gemGridView;

@@ -31,13 +31,14 @@ public class ActionMediator {
                            GemCountTracker gemCountTracker,
                            SoundPlayer soundPlayer,
                            int gravityInterval,
-                           int gridGravityDistanceFactor){
+                           int gridGravityDistanceFactor,
+                           int flickerMarkedGemsTime){
 
         this.score = scoreView.getScore();
         gemDropAction = new GemDropAction(speedController, this, gemControls, gemGroupView, gemGridView, gemGroupFactory, score);
         quickDropGemsAction = new QuickDropGemsAction(this, gemGroupView, gemControls, gemGridView, gravityInterval);
         evaluateAction = new EvaluateAction(evaluator, this);
-        flickerMarkedGemsAction = new FlickerMarkedGemsAction(gemGridView, this);
+        flickerMarkedGemsAction = new FlickerMarkedGemsAction(gemGridView, this, flickerMarkedGemsTime );
         deleteMarkedGemsAction = new DeleteMarkedGemsAction(this, evaluator, gemGridView, scoreView, gemCountTracker, soundPlayer);
         gemGridGravityDropAction = new GemGridGravityDropAction(this, gemGridView, gravityInterval, gridGravityDistanceFactor);
     }
@@ -111,6 +112,7 @@ public class ActionMediator {
         private SpeedController speedController;
         private int gravityInterval;
         private int gridGravityDistanceFactor;
+        private int flickerMarkedGemsTime;
 
 
         public Builder gemGroupView(GemGroupLayer gemGroupView){
@@ -175,6 +177,11 @@ public class ActionMediator {
         }
 
 
+        public Builder flickerMarkedGemsTime(int flickerMarkedGemsTime){
+            this.flickerMarkedGemsTime = flickerMarkedGemsTime;
+            return this;
+        }
+
         public ActionMediator build() {
             verify();
             return new ActionMediator(speedController,
@@ -187,7 +194,8 @@ public class ActionMediator {
                     gemCountTracker,
                     soundPlayer,
                     gravityInterval,
-                    gridGravityDistanceFactor);
+                    gridGravityDistanceFactor,
+                    flickerMarkedGemsTime);
         }
 
 
@@ -200,6 +208,7 @@ public class ActionMediator {
             appendErrorIfNull(speedController, "speedController");
             appendErrorIfNull(gravityInterval, "gravityInterval");
             appendErrorIfNull(gridGravityDistanceFactor, "gridGravityDistanceFactor");
+            appendErrorIfNull(flickerMarkedGemsTime, "flickerMarkedGemsTime");
             appendErrorIfNull(score, "score");
             String errorStr = str.toString();
 
