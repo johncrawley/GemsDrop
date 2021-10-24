@@ -1,13 +1,19 @@
 package com.jcrawleydev.gemsdrop.state;
 
+import android.view.View;
+import android.view.animation.TranslateAnimation;
+
 import com.jcrawleydev.gemsdrop.Game;
 
 public class TitleState implements GameState {
 
-    public Game game;
+    private final Game game;
+    private final View titleView;
 
-    public TitleState(Game game){
+
+    public TitleState(Game game, View titleView){
         this.game = game;
+        this.titleView = titleView;
     }
 
 
@@ -22,6 +28,15 @@ public class TitleState implements GameState {
 
     @Override
     public void click(int x, int y) {
+
+        TranslateAnimation animate = new TranslateAnimation(
+                0,
+                0,
+                0,
+                titleView.getHeight());
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        titleView.startAnimation(animate);
 
     }
 }

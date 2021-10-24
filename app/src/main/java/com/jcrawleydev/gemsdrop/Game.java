@@ -1,6 +1,7 @@
 package com.jcrawleydev.gemsdrop;
 
 import android.content.Context;
+import android.view.View;
 
 import com.jcrawleydev.gemsdrop.action.ActionMediator;
 import com.jcrawleydev.gemsdrop.control.ClickHandler;
@@ -45,9 +46,18 @@ public class Game {
     private GameState titleState;
     private GameState gameOverState;
     private GameState inGameState;
+    private final View titleView;
 
 
-    public Game(Context context, int screenWidth, int screenHeight, int gemWidth, int gemGridBorder, int numberOfColumns, int scoreBarHeight, int floorY){
+    public Game(Context context,
+                int screenWidth,
+                int screenHeight,
+                int gemWidth,
+                int gemGridBorder,
+                int numberOfColumns,
+                int scoreBarHeight,
+                int floorY,
+                View titleView){
         this.width = screenWidth;
         this.height = screenHeight;
         this.gemWidth = gemWidth;
@@ -58,6 +68,7 @@ public class Game {
         int numberOfGems = 3;
         int maxRows = context.getResources().getInteger(R.integer.maximum_rows);
         int initialY = floorY - ((maxRows + numberOfGems) * gemWidth);
+        this.titleView = titleView;
 
 
         gemGroupFactory = new GemGroupFactory.Builder()
@@ -74,7 +85,7 @@ public class Game {
 
 
     private void initGameStates(){
-        titleState = new TitleState(this);
+        titleState = new TitleState(this, titleView);
         inGameState = new InGameState(this);
         gameOverState = new GameOverState(this);
         currentGameState = titleState;
