@@ -39,7 +39,6 @@ public class Game {
     private ActionMediator actionMediator;
     private GemCountTracker gemCountTracker;
     private ScoreBoardLayer scoreView;
-    private final Context context;
     private final int borderWidth;
     private final int scoreBarHeight;
     private GameState currentGameState;
@@ -47,9 +46,10 @@ public class Game {
     private GameState gameOverState;
     private GameState inGameState;
     private final View titleView;
+    private final MainActivity activity;
 
 
-    public Game(Context context,
+    public Game(MainActivity activity,
                 int screenWidth,
                 int screenHeight,
                 int gemWidth,
@@ -61,12 +61,12 @@ public class Game {
         this.width = screenWidth;
         this.height = screenHeight;
         this.gemWidth = gemWidth;
-        this.context = context;
+        this.activity = activity;
         this.borderWidth = gemGridBorder;
         this.scoreBarHeight = scoreBarHeight;
         this.floorY = floorY;
         int numberOfGems = 3;
-        int maxRows = context.getResources().getInteger(R.integer.maximum_rows);
+        int maxRows = activity.getResources().getInteger(R.integer.maximum_rows);
         int initialY = floorY - ((maxRows + numberOfGems) * gemWidth);
         this.titleView = titleView;
 
@@ -85,10 +85,11 @@ public class Game {
 
 
     private void initGameStates(){
-        titleState = new TitleState(this, titleView);
+        titleState = new TitleState(activity,this, titleView, height);
         inGameState = new InGameState(this);
         gameOverState = new GameOverState(this);
         currentGameState = titleState;
+        currentGameState.start();
     }
 
 
@@ -111,8 +112,6 @@ public class Game {
         currentGameState = inGameState;
         currentGameState.start();
     }
-
-
 
 
     void click(int x, int y){
@@ -140,7 +139,7 @@ public class Game {
 
     void initScoreView(TransparentView transparentView){
         Score score = new Score(100);
-        scoreView = new ScoreBoardLayer(context, transparentView, score, width, height, scoreBarHeight);
+        scoreView = new ScoreBoardLayer(activity, transparentView, score, width, height, scoreBarHeight);
         scoreView.draw();
     }
 
@@ -163,7 +162,7 @@ public class Game {
                 .scoreView(scoreView)
                 .gemCountTracker(gemCountTracker)
                 .soundPlayer(soundPlayer)
-                .speedController(new SpeedController(context))
+                .speedController(new SpeedController(activity))
                 .gravityInterval(getInt(R.integer.gravity_interval))
                 .flickerMarkedGemsTime(getInt(R.integer.disappearing_gems_flicker_time))
                 .gridGravityDistanceFactor(getInt(R.integer.gem_grid_gravity_drop_distance_factor))
@@ -172,7 +171,7 @@ public class Game {
 
 
     private int getInt(int resId){
-        return context.getResources().getInteger(resId);
+        return activity.getResources().getInteger(resId);
     }
 
 }

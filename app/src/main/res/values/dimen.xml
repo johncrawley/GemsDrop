@@ -2,5 +2,5 @@
 <resources>
 
     <dimen name="title_text_size">56sp</dimen>
-    <dimen name="tap_to_play_text_size">46sp</dimen>
+    <dimen name="tap_to_play_text_size">32sp</dimen>
 </resources>

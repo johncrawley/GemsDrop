@@ -96,7 +96,7 @@ public class TransparentView extends View {
         if (!isViewDrawn)
             defaultAttributes();
         isViewDrawn = true;
-        Bitmap bitmap = bitmapDraw();
+        Bitmap bitmap = drawBitmap();
         float bitmapX = 0;
         int bitmapY = 0;
         canvas.drawBitmap(bitmap, bitmapX, bitmapY, null);
@@ -114,7 +114,7 @@ public class TransparentView extends View {
     }
 
 
-    private Bitmap bitmapDraw() {
+    private Bitmap drawBitmap() {
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         bitmap.eraseColor(Color.TRANSPARENT);
         canvasBitmap = new Canvas(bitmap);

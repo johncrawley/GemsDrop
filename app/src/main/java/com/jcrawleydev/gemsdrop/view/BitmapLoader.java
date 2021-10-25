@@ -8,8 +8,8 @@ import android.graphics.drawable.VectorDrawable;
 
 public class BitmapLoader {
 
-    private Context context;
-    private int width;
+    private final Context context;
+    private final int width;
 
     public BitmapLoader(Context context, int width){
 
@@ -24,7 +24,7 @@ public class BitmapLoader {
         opts.inSampleSize = 1;
         Bitmap bm = BitmapFactory.decodeResource(context.getResources(), resId, opts);
 
-        return Bitmap.createScaledBitmap(bm,width, width, true);
+        return Bitmap.createScaledBitmap(bm, width, width, true);
     }
 
 

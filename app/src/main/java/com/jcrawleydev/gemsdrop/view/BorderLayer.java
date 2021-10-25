@@ -28,7 +28,6 @@ public class BorderLayer implements DrawableItem {
 
     public void setPatternImage(int drawableId){
         patternBitmap = bitmapLoader.get(drawableId);
-
     }
 
 
@@ -37,25 +36,28 @@ public class BorderLayer implements DrawableItem {
         return null;
     }
 
+
     @Override
     public int getX() {
         return 0;
     }
+
 
     @Override
     public int getY() {
         return 0;
     }
 
+
     @Override
     public boolean isVisible() {
         return true;
     }
 
+
     public void draw(){
         transparentView.invalidate();
     }
-
 
 
     @Override
