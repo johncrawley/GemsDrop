@@ -1,6 +1,5 @@
 package com.jcrawleydev.gemsdrop;
 
-import android.content.Context;
 import android.view.View;
 
 import com.jcrawleydev.gemsdrop.action.ActionMediator;

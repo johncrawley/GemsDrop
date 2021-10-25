@@ -12,7 +12,6 @@ public class BitmapLoader {
     private final int width;
 
     public BitmapLoader(Context context, int width){
-
         this.context = context;
         this.width = width;
     }

@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import com.jcrawleydev.gemsdrop.R;
 import com.jcrawleydev.gemsdrop.view.DrawItem;
 import com.jcrawleydev.gemsdrop.view.item.DrawableItem;
 
@@ -12,15 +13,18 @@ import androidx.annotation.NonNull;
 public class Gem implements DrawItem, DrawableItem, Cloneable {
 
     public enum Color {
-        BLUE("B"),
-        RED("R"),
-        GREEN("G"),
-        YELLOW("Y");
+        BLUE("B", R.drawable.jewel_blue),
+        RED("R", R.drawable.jewel_red),
+        GREEN("G", R.drawable.jewel_green),
+        YELLOW("Y", R.drawable.jewel_yellow),
+        PURPLE("P", R.drawable.jewel_purple);
 
-        Color(String str){
+        Color(String str, int resourceId){
             this.str = str;
+            this.resourceId = resourceId;
         }
         public String str;
+        public int resourceId;
 
         @NonNull
         public String toString(){
@@ -35,7 +39,7 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
     private int x,y;
     private Bitmap bitmap;
     private boolean visible;
-    private Paint paint;
+    private final Paint paint;
 
 
     public Gem(Color color){

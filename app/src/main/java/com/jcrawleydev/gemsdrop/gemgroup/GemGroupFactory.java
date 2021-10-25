@@ -21,6 +21,7 @@ public class GemGroupFactory {
     private final GemPaintOptions gemPaintOptions;
     private Random random;
 
+
     private GemGroupFactory(int numberOfGems, int initialPosition, int gemsInitialY, int gemWidth, int floorY, int borderWidth){
         this.NUMBER_OF_GEMS = numberOfGems;
         this.initialColumnPosition = initialPosition;
@@ -37,6 +38,7 @@ public class GemGroupFactory {
         List<Gem> gems = new ArrayList<>();
          random = new Random(System.currentTimeMillis());
         for(int i=0; i< NUMBER_OF_GEMS; i++){
+            Gem.Color gemColor = getRandomColor();
             Gem gem = new Gem(getRandomColor(), gemPaintOptions.getGemPaint());
             gem.setInvisible();
             gems.add(gem);
