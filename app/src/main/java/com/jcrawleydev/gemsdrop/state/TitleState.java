@@ -30,13 +30,14 @@ public class TitleState implements GameState {
         this.game = game;
         this.titleView = titleView;
         this.screenHeight = screenHeight;
-        textAnimation =  AnimationUtils.loadAnimation(activity, R.anim.scale_text);
+        textAnimation =  AnimationUtils.loadAnimation(activity, R.anim.text_bounce);
+        textAnimation.setRepeatCount(Animation.INFINITE);
         tapToPlayText = activity.findViewById(R.id.tapToPlayTextView);
 
         TextView titleTextView = activity.findViewById(R.id.titleTextView);
         Typeface customTypeface = ResourcesCompat.getFont(activity, R.font.pcalc_font);
         tapToPlayText.setTypeface(customTypeface);
-        titleTextView.setTypeface(customTypeface);
+      //  titleTextView.setTypeface(customTypeface);
         int topColor = activity.getColor(R.color.score_text_top);
         int bottomColor = activity.getColor(R.color.score_text_bottom);
        /* tapToPlayText.setShader(new LinearGradient( 0,
@@ -51,6 +52,7 @@ public class TitleState implements GameState {
         Shader textShader = new LinearGradient(0, 0, titleTextView.getPaint().measureText(titleTextView.getText().toString()), titleTextView.getTextSize(),
                 new int[]{topColor, bottomColor},
                 new float[]{0, 1}, Shader.TileMode.CLAMP);
+
 
       //  titleTextView.setShadowLayer(70, 10,10, Color.DKGRAY);
     }
@@ -76,6 +78,8 @@ public class TitleState implements GameState {
         animate.setDuration(500);
         animate.setFillAfter(true);
         titleView.startAnimation(animate);
+        textAnimation.cancel();
+        tapToPlayText.clearAnimation();
         game.loadInGameState();
     }
 }
