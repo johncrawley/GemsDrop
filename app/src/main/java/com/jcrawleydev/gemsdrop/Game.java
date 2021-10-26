@@ -24,9 +24,9 @@ import com.jcrawleydev.gemsdrop.view.TransparentView;
 
 
 public class Game {
-
     private final GemGroupFactory gemGroupFactory;
     private GemGroupLayer gemGroupView;
+    private final BitmapLoader bitmapLoader;
     private final int height;
     private final int width;
     private final int floorY;
@@ -46,9 +46,11 @@ public class Game {
     private GameState inGameState;
     private final View titleView;
     private final MainActivity activity;
+    private final int maxRows;
 
 
     public Game(MainActivity activity,
+                BitmapLoader bitmapLoader,
                 int screenWidth,
                 int screenHeight,
                 int gemWidth,
@@ -61,11 +63,12 @@ public class Game {
         this.height = screenHeight;
         this.gemWidth = gemWidth;
         this.activity = activity;
+        this.bitmapLoader = bitmapLoader;
         this.borderWidth = gemGridBorder;
         this.scoreBarHeight = scoreBarHeight;
         this.floorY = floorY;
         int numberOfGems = 3;
-        int maxRows = activity.getResources().getInteger(R.integer.maximum_rows);
+        maxRows = activity.getResources().getInteger(R.integer.maximum_rows);
         int initialY = floorY - ((maxRows + numberOfGems) * gemWidth);
         this.titleView = titleView;
 
@@ -78,14 +81,12 @@ public class Game {
                 .withFloorAt(floorY)
                 .withBorderWidth(borderWidth)
                 .build();
-
-        initGameStates();
     }
 
 
     private void initGameStates(){
         titleState = new TitleState(activity,this, titleView, height);
-        inGameState = new InGameState(this);
+        inGameState = new InGameState(this, actionMediator, clickHandler);
         gameOverState = new GameOverState(this);
         currentGameState = titleState;
         currentGameState.start();
@@ -114,16 +115,14 @@ public class Game {
 
 
     void click(int x, int y){
-        clickHandler.click(x,y);
         currentGameState.click(x,y);
-        actionMediator.createAndDropGems();
     }
 
 
     void initGemGridView(TransparentView v){
         GemGrid gemGrid = new GemGrid(7, 12);
         gemGrid.setDropIncrement(gemWidth / getInt(R.integer.gem_grid_gravity_drop_distance_factor));
-        gemGridLayer = new GemGridLayer(v, gemGrid, gemWidth, width, floorY, borderWidth);
+        gemGridLayer = new GemGridLayer(v, bitmapLoader, gemGrid, gemWidth, width, floorY, borderWidth);
         evaluator = new Evaluator(gemGrid, 3);
         gemControls = new GemControls(gemGrid);
         clickHandler = new ClickHandler(gemControls, width, height);
@@ -153,6 +152,7 @@ public class Game {
     void init(){
         SoundPlayer soundPlayer = new SoundPlayer();
         actionMediator = new ActionMediator.Builder()
+                .game(this)
                 .evaluator(evaluator)
                 .gemControls(gemControls)
                 .gemGroupView(gemGroupView)
@@ -164,8 +164,10 @@ public class Game {
                 .speedController(new SpeedController(activity))
                 .gravityInterval(getInt(R.integer.gravity_interval))
                 .flickerMarkedGemsTime(getInt(R.integer.disappearing_gems_flicker_time))
+                .maxColumnHeight(maxRows)
                 .gridGravityDistanceFactor(getInt(R.integer.gem_grid_gravity_drop_distance_factor))
                 .build();
+        initGameStates();
     }
 
 

@@ -172,6 +172,15 @@ public class GemGrid {
     }
 
 
+    public void turnAllGemsGrey(){
+        for(List<Gem> column : gemColumns){
+            for(Gem gem : column){
+                gem.setGrey();
+            }
+        }
+    }
+
+
     public void add(GemGroup gemGroup) {
         List<Gem> gems = gemGroup.getCopyOfGemsToAddToGrid();
         int position = gemGroup.getXPosition();

@@ -37,24 +37,8 @@ public class TitleState implements GameState {
         TextView titleTextView = activity.findViewById(R.id.titleTextView);
         Typeface customTypeface = ResourcesCompat.getFont(activity, R.font.pcalc_font);
         tapToPlayText.setTypeface(customTypeface);
-      //  titleTextView.setTypeface(customTypeface);
         int topColor = activity.getColor(R.color.score_text_top);
-        int bottomColor = activity.getColor(R.color.score_text_bottom);
-       /* tapToPlayText.setShader(new LinearGradient( 0,
-                0,
-                0,
-                100,
-                topColor,
-                bottomColor,
-                Shader.TileMode.CLAMP));
-        */
         titleTextView.setTextColor(topColor);
-        Shader textShader = new LinearGradient(0, 0, titleTextView.getPaint().measureText(titleTextView.getText().toString()), titleTextView.getTextSize(),
-                new int[]{topColor, bottomColor},
-                new float[]{0, 1}, Shader.TileMode.CLAMP);
-
-
-      //  titleTextView.setShadowLayer(70, 10,10, Color.DKGRAY);
     }
 
 

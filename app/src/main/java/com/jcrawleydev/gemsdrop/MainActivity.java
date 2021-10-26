@@ -45,8 +45,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         gemGridTransparentView.setOnTouchListener(this);
         View titleView = findViewById(R.id.titleViewInclude);
 
-        game = new Game(this, width, height, gemWidth, gemGridBorder, numberOColumns, scoreBarHeight, floorY, titleView);
         BitmapLoader bitmapLoader = new BitmapLoader(this, gemWidth);
+        game = new Game(this, bitmapLoader, width, height, gemWidth, gemGridBorder, numberOColumns, scoreBarHeight, floorY, titleView);
         game.initGemGridView(gemGridTransparentView);
         game.initGemGroupLayer(gemGroupTransparentView, bitmapLoader);
         game.initScoreView(scoreTransparentView);

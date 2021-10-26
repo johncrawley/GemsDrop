@@ -21,28 +21,29 @@ public class GemDropAction {
     private GemGroup gemGroup;
     private final GemControls controls;
     private final GemGroupLayer gemGroupLayer;
-    private final GemGridLayer gemGridView;
     private ScheduledFuture<?> gemDropFuture, animateFuture;
-    private final ActionMediator actionMediator;
     private final GemGroupFactory gemGroupFactory;
     private final Score score;
     private final SpeedController speedController;
-
+    private GemDropTask gemDropTask;
+    private final GemGridLayer gemGridLayer;
+    private final ActionMediator actionMediator;
 
     public GemDropAction(SpeedController speedController,
                          ActionMediator actionMediator,
                          GemControls controls,
                          GemGroupLayer gemGroupLayer,
-                         GemGridLayer gemGridView,
+                         GemGridLayer gemGridLayer,
                          GemGroupFactory gemGroupFactory,
                          Score score){
         this.speedController = speedController;
         this.controls = controls;
         this.gemGroupLayer = gemGroupLayer;
-        this.gemGridView = gemGridView;
-        this.actionMediator = actionMediator;
         this.gemGroupFactory = gemGroupFactory;
         this.score = score;
+
+        this.gemGridLayer = gemGridLayer;
+        this.actionMediator = actionMediator;
     }
 
 
@@ -58,21 +59,24 @@ public class GemDropAction {
             if(animateFuture != null){
                 animateFuture.cancel(false);
             }
-            final int GEM_DROP_TASK_INTERVAL = 70 - speedController.getCurrentSpeed();
-            final int REDRAW_INTERVAL = 20;
+            int dropInterval = 70 - speedController.getCurrentSpeed();
+            int redrawInterval = 20;
             speedController.update();
-
             hasGemDropStarted = true;
             score.resetMultiplier();
             gemGroup = gemGroupFactory.createGemGroup();
             controls.activateAndSet(gemGroup);
             gemGroupLayer.setGemGroup(gemGroup);
-            GemDropTask gemDropTask = new GemDropTask(gemGroup, gemGridView, actionMediator);
-            AnimateTask animateTask = new AnimateTask(gemGroupLayer);
+            executeDropAndAnimateTasks(dropInterval, redrawInterval);
+    }
 
-            ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
-            gemDropFuture = executor.scheduleWithFixedDelay(gemDropTask, 0, GEM_DROP_TASK_INTERVAL, TimeUnit.MILLISECONDS);
-            animateFuture = executor.scheduleWithFixedDelay(animateTask, 0, REDRAW_INTERVAL, TimeUnit.MILLISECONDS);
+
+    private void executeDropAndAnimateTasks(int dropInterval, int redrawInterval){
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
+        gemDropTask = new GemDropTask(gemGroup, gemGridLayer, actionMediator);
+        AnimateTask animateTask = new AnimateTask(gemGroupLayer);
+        gemDropFuture = executor.scheduleWithFixedDelay(gemDropTask, 0, dropInterval, TimeUnit.MILLISECONDS);
+        animateFuture = executor.scheduleWithFixedDelay(animateTask, 0, redrawInterval, TimeUnit.MILLISECONDS);
     }
 
 

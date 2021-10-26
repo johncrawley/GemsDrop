@@ -17,7 +17,8 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
         RED("R", R.drawable.jewel_red),
         GREEN("G", R.drawable.jewel_green),
         YELLOW("Y", R.drawable.jewel_yellow),
-        PURPLE("P", R.drawable.jewel_purple);
+        PURPLE("P", R.drawable.jewel_purple),
+        GREY("x", R.drawable.jewel_grey);
 
         Color(String str, int resourceId){
             this.str = str;
@@ -53,6 +54,11 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
         this.color = color;
         this.visible = true;
         this.paint = paint;
+    }
+
+
+    public void setGrey(){
+        this.color = Color.GREY;
     }
 
 

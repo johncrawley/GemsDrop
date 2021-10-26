@@ -1,5 +1,6 @@
 package com.jcrawleydev.gemsdrop.action;
 
+import com.jcrawleydev.gemsdrop.Game;
 import com.jcrawleydev.gemsdrop.SoundPlayer;
 import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
@@ -20,10 +21,13 @@ public class ActionMediator {
     private final DeleteMarkedGemsAction deleteMarkedGemsAction;
     private final GemGridGravityDropAction gemGridGravityDropAction;
     private final Score score;
+    private final GemGridLayer gemGridLayer;
+    private final LoadGameOverAction loadGameOverAction;
 
-    private ActionMediator(SpeedController speedController,
-                           GemGroupLayer gemGroupView,
-                           GemGridLayer gemGridView,
+    private ActionMediator(Game game,
+                           SpeedController speedController,
+                           GemGroupLayer gemGroupLayer,
+                           GemGridLayer gemGridLayer,
                            GemControls gemControls,
                            Evaluator evaluator,
                            GemGroupFactory gemGroupFactory,
@@ -32,15 +36,18 @@ public class ActionMediator {
                            SoundPlayer soundPlayer,
                            int gravityInterval,
                            int gridGravityDistanceFactor,
-                           int flickerMarkedGemsTime){
+                           int flickerMarkedGemsTime,
+                           int maxColumnHeight){
 
         this.score = scoreView.getScore();
-        gemDropAction = new GemDropAction(speedController, this, gemControls, gemGroupView, gemGridView, gemGroupFactory, score);
-        quickDropGemsAction = new QuickDropGemsAction(this, gemGroupView, gemControls, gemGridView, gravityInterval);
-        evaluateAction = new EvaluateAction(evaluator, this);
-        flickerMarkedGemsAction = new FlickerMarkedGemsAction(gemGridView, this, flickerMarkedGemsTime );
-        deleteMarkedGemsAction = new DeleteMarkedGemsAction(this, evaluator, gemGridView, scoreView, gemCountTracker, soundPlayer);
-        gemGridGravityDropAction = new GemGridGravityDropAction(this, gemGridView, gravityInterval, gridGravityDistanceFactor);
+        this.gemGridLayer = gemGridLayer;
+        gemDropAction = new GemDropAction(speedController, this, gemControls, gemGroupLayer, gemGridLayer, gemGroupFactory, score);
+        quickDropGemsAction = new QuickDropGemsAction(this, gemGroupLayer, gemControls, gemGridLayer, gravityInterval);
+        evaluateAction = new EvaluateAction(evaluator, this, gemGridLayer.getGemGrid(), maxColumnHeight);
+        flickerMarkedGemsAction = new FlickerMarkedGemsAction(gemGridLayer, this, flickerMarkedGemsTime );
+        deleteMarkedGemsAction = new DeleteMarkedGemsAction(this, evaluator, gemGridLayer, scoreView, gemCountTracker, soundPlayer);
+        gemGridGravityDropAction = new GemGridGravityDropAction(this, gemGridLayer, gravityInterval, gridGravityDistanceFactor);
+        loadGameOverAction = new LoadGameOverAction(game);
     }
 
 
@@ -65,6 +72,7 @@ public class ActionMediator {
         gemDropAction.cancelFutures();
     }
 
+
     public void finishQuickDrop(){
         quickDropGemsAction.stop();
     }
@@ -72,6 +80,13 @@ public class ActionMediator {
 
     public void startMarkedGemsFlicker(){
         flickerMarkedGemsAction.start();
+    }
+
+
+    public void endGame(){
+        gemDropAction.cancelFutures();
+        gemGridLayer.turnAllGemsGrey();
+        loadGameOverAction.loadGameOver();
     }
 
 
@@ -99,6 +114,7 @@ public class ActionMediator {
 
     public static class Builder{
 
+        private Game game;
         private Score score;
         private ScoreBoardLayer scoreView;
         private GemGroupLayer gemGroupView;
@@ -113,6 +129,13 @@ public class ActionMediator {
         private int gravityInterval;
         private int gridGravityDistanceFactor;
         private int flickerMarkedGemsTime;
+        private int maxColumnHeight;
+
+
+        public Builder game(Game game){
+            this.game = game;
+            return this;
+        }
 
 
         public Builder gemGroupView(GemGroupLayer gemGroupView){
@@ -120,10 +143,12 @@ public class ActionMediator {
             return this;
         }
 
+
         public Builder gemControls(GemControls gemControls){
             this.gemControls = gemControls;
             return this;
         }
+
 
         public Builder evaluator(Evaluator evaluator){
             this.evaluator = evaluator;
@@ -182,9 +207,17 @@ public class ActionMediator {
             return this;
         }
 
+
+        public Builder maxColumnHeight(int maxColumnHeight){
+            this.maxColumnHeight = maxColumnHeight;
+            return this;
+        }
+
+
         public ActionMediator build() {
             verify();
-            return new ActionMediator(speedController,
+            return new ActionMediator(game,
+                    speedController,
                     gemGroupView,
                     gemGridView,
                     gemControls,
@@ -195,12 +228,14 @@ public class ActionMediator {
                     soundPlayer,
                     gravityInterval,
                     gridGravityDistanceFactor,
-                    flickerMarkedGemsTime);
+                    flickerMarkedGemsTime,
+                    maxColumnHeight);
         }
 
 
         private void verify () {
             str = new StringBuilder();
+            appendErrorIfNull(game, "game");
             appendErrorIfNull(gemGroupView, "gemGroupView");
             appendErrorIfNull(gemGridView, "gemGridView");
             appendErrorIfNull(gemControls, "gemControls");
@@ -209,6 +244,7 @@ public class ActionMediator {
             appendErrorIfNull(gravityInterval, "gravityInterval");
             appendErrorIfNull(gridGravityDistanceFactor, "gridGravityDistanceFactor");
             appendErrorIfNull(flickerMarkedGemsTime, "flickerMarkedGemsTime");
+            appendErrorIfNull(maxColumnHeight, "maxColumnHeight");
             appendErrorIfNull(score, "score");
             String errorStr = str.toString();
 
