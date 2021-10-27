@@ -22,7 +22,8 @@ public class ActionMediator {
     private final GemGridGravityDropAction gemGridGravityDropAction;
     private final Score score;
     private final GemGridLayer gemGridLayer;
-    private final LoadGameOverAction loadGameOverAction;
+    private final Game game;
+    private final ScoreBoardLayer scoreBoardLayer;
 
     private ActionMediator(Game game,
                            SpeedController speedController,
@@ -31,7 +32,7 @@ public class ActionMediator {
                            GemControls gemControls,
                            Evaluator evaluator,
                            GemGroupFactory gemGroupFactory,
-                           ScoreBoardLayer scoreView,
+                           ScoreBoardLayer scoreboardLayer,
                            GemCountTracker gemCountTracker,
                            SoundPlayer soundPlayer,
                            int gravityInterval,
@@ -39,20 +40,33 @@ public class ActionMediator {
                            int flickerMarkedGemsTime,
                            int maxColumnHeight){
 
-        this.score = scoreView.getScore();
+        this.game = game;
+        this.score = scoreboardLayer.getScore();
+        this.scoreBoardLayer = scoreboardLayer;
         this.gemGridLayer = gemGridLayer;
         gemDropAction = new GemDropAction(speedController, this, gemControls, gemGroupLayer, gemGridLayer, gemGroupFactory, score);
         quickDropGemsAction = new QuickDropGemsAction(this, gemGroupLayer, gemControls, gemGridLayer, gravityInterval);
         evaluateAction = new EvaluateAction(evaluator, this, gemGridLayer.getGemGrid(), maxColumnHeight);
         flickerMarkedGemsAction = new FlickerMarkedGemsAction(gemGridLayer, this, flickerMarkedGemsTime );
-        deleteMarkedGemsAction = new DeleteMarkedGemsAction(this, evaluator, gemGridLayer, scoreView, gemCountTracker, soundPlayer);
+        deleteMarkedGemsAction = new DeleteMarkedGemsAction(this, evaluator, gemGridLayer, scoreboardLayer, gemCountTracker, soundPlayer);
         gemGridGravityDropAction = new GemGridGravityDropAction(this, gemGridLayer, gravityInterval, gridGravityDistanceFactor);
-        loadGameOverAction = new LoadGameOverAction(game);
     }
 
 
     public void createAndDropGems(){
+        gemDropAction.reset();
         gemDropAction.start();
+    }
+
+
+    public void resetScore(){
+        score.clear();
+        scoreBoardLayer.draw();
+    }
+
+
+    public void clearGemGrid(){
+        gemGridLayer.clearGemGrid();
     }
 
 
@@ -86,7 +100,8 @@ public class ActionMediator {
     public void endGame(){
         gemDropAction.cancelFutures();
         gemGridLayer.turnAllGemsGrey();
-        loadGameOverAction.loadGameOver();
+        game.loadGameOverState();
+        //loadGameOverAction.loadGameOver();
     }
 
 
@@ -113,7 +128,6 @@ public class ActionMediator {
 
 
     public static class Builder{
-
         private Game game;
         private Score score;
         private ScoreBoardLayer scoreView;

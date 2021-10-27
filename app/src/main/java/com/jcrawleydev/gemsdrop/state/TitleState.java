@@ -1,10 +1,8 @@
 package com.jcrawleydev.gemsdrop.state;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.LinearGradient;
-import android.graphics.Shader;
 import android.graphics.Typeface;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -24,7 +22,8 @@ public class TitleState implements GameState {
     private final int screenHeight;
     private final Animation textAnimation;
     private final TextView tapToPlayText;
-
+    private TranslateAnimation titleViewDisappearAnimation;
+    private boolean hasClicked = false;
 
     public TitleState(MainActivity activity, Game game, View titleView, int screenHeight){
         this.game = game;
@@ -39,11 +38,30 @@ public class TitleState implements GameState {
         tapToPlayText.setTypeface(customTypeface);
         int topColor = activity.getColor(R.color.score_text_top);
         titleTextView.setTextColor(topColor);
+        setupTitleViewAnimation();
+    }
+
+
+    private void setupTitleViewAnimation(){
+        titleViewDisappearAnimation = new TranslateAnimation(
+                0,
+                0,
+                0,
+                screenHeight);
+        titleViewDisappearAnimation.setDuration(500);
+        titleViewDisappearAnimation.setFillAfter(true);
     }
 
 
     public void start(){
-        tapToPlayText.startAnimation(textAnimation);
+        System.out.println("TitleState start()");
+        hasClicked = false;
+        titleView.clearAnimation();
+        final Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(()->{
+            tapToPlayText.startAnimation(textAnimation);
+        }, 1);
+
     }
 
 
@@ -51,19 +69,20 @@ public class TitleState implements GameState {
 
     }
 
+
     @Override
     public void click(int x, int y) {
+        if(hasClicked){
+            return;
+        }
+        hasClicked = true;
+        final Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(()->{
+            titleView.startAnimation(titleViewDisappearAnimation);
+            textAnimation.cancel();
+            tapToPlayText.clearAnimation();
+            game.loadInGameState();
+        }, 1000);
 
-        TranslateAnimation animate = new TranslateAnimation(
-                0,
-                0,
-                0,
-                screenHeight);
-        animate.setDuration(500);
-        animate.setFillAfter(true);
-        titleView.startAnimation(animate);
-        textAnimation.cancel();
-        tapToPlayText.clearAnimation();
-        game.loadInGameState();
     }
 }

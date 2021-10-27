@@ -20,7 +20,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     private int numberOColumns;
     private int scoreBarHeight;
     private int floorY;
-
+    private View gameOverView;
+    private View titleView;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -33,6 +34,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         TransparentView scoreTransparentView = findViewById(R.id.scoreView);
         TransparentView borderView = findViewById(R.id.borderView);
         TransparentView titleBackgroundView = findViewById(R.id.titleBackgroundView);
+        TransparentView gameOverBackgroundView = findViewById(R.id.gameOverBackgroundView);
 
         gemGroupTransparentView.setDimensions(width, height);
         gemGroupTransparentView.translateXToMiddle();
@@ -40,18 +42,21 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         scoreTransparentView.setDimensions(width, height);
         borderView.setDimensions(width, height);
         titleBackgroundView.setDimensions(width, height);
+        gameOverBackgroundView.setDimensions(width, height);
 
         gemGroupTransparentView.setOnTouchListener(this);
         gemGridTransparentView.setOnTouchListener(this);
-        View titleView = findViewById(R.id.titleViewInclude);
+        titleView = findViewById(R.id.titleViewInclude);
+        gameOverView = findViewById(R.id.gameOverViewInclude);
 
         BitmapLoader bitmapLoader = new BitmapLoader(this, gemWidth);
-        game = new Game(this, bitmapLoader, width, height, gemWidth, gemGridBorder, numberOColumns, scoreBarHeight, floorY, titleView);
+        game = new Game(this, bitmapLoader, width, height, gemWidth, gemGridBorder, numberOColumns, scoreBarHeight, floorY, titleView, gameOverView);
         game.initGemGridView(gemGridTransparentView);
         game.initGemGroupLayer(gemGroupTransparentView, bitmapLoader);
-        game.initScoreView(scoreTransparentView);
+        game.initScoreboardLayer(scoreTransparentView);
         game.initBorder(borderView, bitmapLoader);
         game.initBorder(titleBackgroundView, bitmapLoader);
+        game.initBorder(gameOverBackgroundView, bitmapLoader);
         game.init();
     }
 
@@ -89,5 +94,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         int numberOfColumns = getResources().getInteger(R.integer.number_of_columns);
         this.gemWidth = shortestDimension / (numberOfColumns + 1);
     }
+
+
 
 }

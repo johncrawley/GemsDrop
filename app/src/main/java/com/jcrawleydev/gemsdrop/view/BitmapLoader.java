@@ -3,14 +3,12 @@ package com.jcrawleydev.gemsdrop.view;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.drawable.VectorDrawable;
-
 import com.jcrawleydev.gemsdrop.R;
 import com.jcrawleydev.gemsdrop.gem.Gem;
 
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class BitmapLoader {
 
@@ -18,6 +16,7 @@ public class BitmapLoader {
     private final int width;
     private final Map<Gem.Color, Bitmap> bitmaps;
     private Bitmap defaultGem;
+
 
     public BitmapLoader(Context context, int width){
         this.context = context;

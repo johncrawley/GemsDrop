@@ -37,7 +37,7 @@ public class Game {
     private Evaluator evaluator;
     private ActionMediator actionMediator;
     private GemCountTracker gemCountTracker;
-    private ScoreBoardLayer scoreView;
+    private ScoreBoardLayer scoreboardLayer;
     private final int borderWidth;
     private final int scoreBarHeight;
     private GameState currentGameState;
@@ -45,6 +45,7 @@ public class Game {
     private GameState gameOverState;
     private GameState inGameState;
     private final View titleView;
+    private final View gameOverView;
     private final MainActivity activity;
     private final int maxRows;
 
@@ -58,7 +59,8 @@ public class Game {
                 int numberOfColumns,
                 int scoreBarHeight,
                 int floorY,
-                View titleView){
+                View titleView,
+                View gameOverView){
         this.width = screenWidth;
         this.height = screenHeight;
         this.gemWidth = gemWidth;
@@ -71,6 +73,7 @@ public class Game {
         maxRows = activity.getResources().getInteger(R.integer.maximum_rows);
         int initialY = floorY - ((maxRows + numberOfGems) * gemWidth);
         this.titleView = titleView;
+        this.gameOverView = gameOverView;
 
 
         gemGroupFactory = new GemGroupFactory.Builder()
@@ -87,9 +90,14 @@ public class Game {
     private void initGameStates(){
         titleState = new TitleState(activity,this, titleView, height);
         inGameState = new InGameState(this, actionMediator, clickHandler);
-        gameOverState = new GameOverState(this);
+        gameOverState = new GameOverState(this, gameOverView, titleView, height);
         currentGameState = titleState;
         currentGameState.start();
+    }
+
+
+    public Score getScore(){
+        return scoreboardLayer.getScore();
     }
 
 
@@ -135,10 +143,10 @@ public class Game {
     }
 
 
-    void initScoreView(TransparentView transparentView){
+    void initScoreboardLayer(TransparentView transparentView){
         Score score = new Score(100);
-        scoreView = new ScoreBoardLayer(activity, transparentView, score, width, height, scoreBarHeight);
-        scoreView.draw();
+        scoreboardLayer = new ScoreBoardLayer(activity, transparentView, score, width, height, scoreBarHeight);
+        scoreboardLayer.draw();
     }
 
 
@@ -158,7 +166,7 @@ public class Game {
                 .gemGroupView(gemGroupView)
                 .gridView(gemGridLayer)
                 .gemGroupFactory(gemGroupFactory)
-                .scoreView(scoreView)
+                .scoreView(scoreboardLayer)
                 .gemCountTracker(gemCountTracker)
                 .soundPlayer(soundPlayer)
                 .speedController(new SpeedController(activity))

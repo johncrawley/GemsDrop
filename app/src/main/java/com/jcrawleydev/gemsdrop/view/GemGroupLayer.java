@@ -61,7 +61,9 @@ public class GemGroupLayer implements UpdatableView{
 
 
     public void wipe(){
-        gemGroup.setGemsInvisible();
+        if(gemGroup != null) {
+            gemGroup.setGemsInvisible();
+        }
         transparentView.clearDrawableItems();
         transparentView.invalidate();
     }

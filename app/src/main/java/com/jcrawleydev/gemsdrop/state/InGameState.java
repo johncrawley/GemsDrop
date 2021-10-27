@@ -19,6 +19,8 @@ public class InGameState implements GameState {
 
     @Override
     public void start(){
+        actionMediator.resetScore();
+        actionMediator.clearGemGrid();
         actionMediator.createAndDropGems();
     }
 
@@ -27,7 +29,6 @@ public class InGameState implements GameState {
     public void stop(){
 
     }
-
 
 
     @Override

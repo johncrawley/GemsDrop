@@ -13,6 +13,7 @@ public class LoadGameOverAction {
     }
 
     public void loadGameOver(){
-        Executors.newSingleThreadExecutor().submit(game::loadGameOverState, 1000);
+        game.loadGameOverState();
+        //Executors.newSingleThreadExecutor().execute(game::loadGameOverState);
     }
 }

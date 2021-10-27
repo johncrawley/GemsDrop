@@ -9,7 +9,7 @@
 
 
     <com.jcrawleydev.gemsdrop.view.TransparentView
-        android:id="@+id/titleBackgroundView"
+        android:id="@+id/gameOverBackgroundView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -65,6 +65,12 @@ public class GemGridLayer implements UpdatableView, DrawableItem {
     }
 
 
+    public void clearGemGrid(){
+        gemGrid.clear();
+        draw();
+    }
+
+
     public void draw(){
         transparentView.clearDrawableItems();
         transparentView.addDrawableItem(backgroundItem);
