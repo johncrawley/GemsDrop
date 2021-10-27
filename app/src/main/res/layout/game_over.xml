@@ -26,7 +26,7 @@
         android:text="@string/game_over_text"
         android:textSize="@dimen/game_over_text_size"
         android:textStyle="bold"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/game_over_text"
         android:background="@android:color/transparent"
         android:shadowColor="@color/colorPrimaryDark"
         android:shadowDx="1"
@@ -39,7 +39,7 @@
         app:layout_constraintVertical_bias="0.30" />
 
     <TextView
-        android:id="@+id/scoreText"
+        android:id="@+id/yourScoreText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -54,8 +54,28 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+        app:layout_constraintTop_toBottomOf="@+id/gameOverTextView"
         app:layout_constraintVertical_bias="0.32" />
+
+    <TextView
+        android:id="@+id/scoreText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:shadowColor="@color/colorPrimaryDark"
+        android:shadowDx="1"
+        android:shadowDy="15"
+        android:shadowRadius="2"
+        android:text="@string/score_placeholder_text"
+        android:textAlignment="center"
+        android:textColor="@color/score_text_top"
+        android:textSize="@dimen/game_over_score_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/yourScoreText"
+        app:layout_constraintVertical_bias="0.108" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

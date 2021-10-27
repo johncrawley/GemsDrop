@@ -17,6 +17,7 @@ public class InGameState implements GameState {
         this.clickHandler = clickHandler;
     }
 
+
     @Override
     public void start(){
         actionMediator.resetScore();

@@ -104,7 +104,7 @@ public class GemGridLayer implements UpdatableView, DrawableItem {
     public void draw(Canvas canvas, Paint paint) {
         for(DrawableItem item : gemGrid.getAllGems()) {
             Gem gem = (Gem) item;
-            if (gem.isVisible()) {
+            if (gem != null && gem.isVisible()) {
                 canvas.drawBitmap(bitmapLoader.get(gem.getColor()), gem.getX(), gem.getY(), paint);
             }
         }

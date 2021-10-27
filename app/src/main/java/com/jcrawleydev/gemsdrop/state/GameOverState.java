@@ -53,7 +53,7 @@ public class GameOverState implements GameState {
         handler.postDelayed(()->{
             gameOverView.setVisibility(View.VISIBLE);
             gameOverView.findViewById(R.id.scoreText);
-            String scoreStr = "Your Score: " + score.get();
+            String scoreStr = String.valueOf(score.get());
             scoreTextView.setText(scoreStr);
             score.clear();
             gameOverView.startAnimation(dropInAnimation);

@@ -6,4 +6,5 @@
     <string name="score">Score:</string>
     <string name="game_over_text">GAME OVER</string>
     <string name="game_over_score_text">Your Score:</string>
+    <string name="score_placeholder_text">0</string>
 </resources>

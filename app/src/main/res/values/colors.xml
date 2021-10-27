@@ -7,4 +7,5 @@
     <color name="scoreboard_bottom">#2E2E1C</color>
     <color name="score_text_top">#E1E143</color>
     <color name="score_text_bottom">#E68E1E</color>
+    <color name="game_over_text">#BF360C</color>
 </resources>
