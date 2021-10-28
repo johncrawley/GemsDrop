@@ -50,18 +50,6 @@ public class GemGridLayer implements UpdatableView, DrawableItem {
        System.out.println("GemGridLayer.turnAllGemsGrey()");
        gemGrid.turnAllGemsGrey();
        draw();
-       printGemColors();
-    }
-
-    private void printGemColors(){
-        StringBuilder str = new StringBuilder("GemColors: " );
-        List<DrawableItem> allGems = gemGrid.getAllGems();
-        for(DrawableItem item : allGems){
-            Gem gem = (Gem)item;
-            str.append(gem.getColor().str);
-            str.append(" ");
-        }
-        System.out.println(str.toString());
     }
 
 
@@ -102,8 +90,7 @@ public class GemGridLayer implements UpdatableView, DrawableItem {
 
     @Override
     public void draw(Canvas canvas, Paint paint) {
-        for(DrawableItem item : gemGrid.getAllGems()) {
-            Gem gem = (Gem) item;
+        for(Gem gem : gemGrid.getAllGemsInGrid()) {
             if (gem != null && gem.isVisible()) {
                 canvas.drawBitmap(bitmapLoader.get(gem.getColor()), gem.getX(), gem.getY(), paint);
             }

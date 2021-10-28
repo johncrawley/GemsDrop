@@ -147,6 +147,17 @@ public class GemGrid {
     }
 
 
+    public List<Gem> getAllGemsInGrid(){
+        List<Gem> allGems = new ArrayList<>(NUMBER_OF_COLUMNS * NUMBER_OF_ROWS);
+        for(List<Gem> column : gemColumns){
+            allGems.addAll(column);
+        }
+        return allGems;
+    }
+
+
+
+
     public int getNumberOfColumns(){
         return NUMBER_OF_COLUMNS;
     }
@@ -310,7 +321,6 @@ public class GemGrid {
     private int getYForRowTop(int rowIndex){
         return this.floorY - ((1 + rowIndex) * gemSize);
     }
-
 
 
     public boolean isStable(){

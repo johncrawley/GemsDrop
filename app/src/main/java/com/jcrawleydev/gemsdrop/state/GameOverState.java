@@ -4,6 +4,7 @@ package com.jcrawleydev.gemsdrop.state;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
@@ -21,6 +22,7 @@ public class GameOverState implements GameState {
     private final Score score;
     private final TextView scoreTextView;
     private boolean hasClicked;
+    boolean areClicksAllowed;
 
 
     public GameOverState(Game game, View gameOverView, View titleView, int screenHeight){
@@ -43,14 +45,28 @@ public class GameOverState implements GameState {
         dropInAnimation.setDuration(500);
         dropInAnimation.setFillAfter(true);
 
+        dropInAnimation.setAnimationListener(new Animation.AnimationListener(){
+            @Override
+            public void onAnimationStart(Animation arg0) {
+            }
+            @Override
+            public void onAnimationRepeat(Animation arg0) {
+            }
+            @Override
+            public void onAnimationEnd(Animation arg0) {
+                areClicksAllowed = true;
+            }
+        });
+
     }
 
 
     @Override
     public void start(){
         hasClicked = false;
-        final Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(()->{
+        areClicksAllowed = false;
+        final Handler startAnimationHandler = new Handler(Looper.getMainLooper());
+        startAnimationHandler.postDelayed(()->{
             gameOverView.setVisibility(View.VISIBLE);
             gameOverView.findViewById(R.id.scoreText);
             String scoreStr = String.valueOf(score.get());
@@ -69,7 +85,7 @@ public class GameOverState implements GameState {
 
     @Override
     public void click(int x, int y) {
-        if(hasClicked){
+        if(!areClicksAllowed || hasClicked){
             return;
         }
         hasClicked = true;

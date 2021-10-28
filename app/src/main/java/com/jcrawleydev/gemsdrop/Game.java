@@ -100,11 +100,25 @@ public class Game {
         return scoreboardLayer.getScore();
     }
 
+    private boolean isGameOver;
 
     public void loadGameOverState(){
+        log("Entered loadGameOverState(), isGameOver already: " + isGameOver);
+        if(currentGameState != inGameState || isGameOver){
+            log("Game over already called, exiting loadGameOverState()");
+            return;
+        }
+
+        isGameOver = true;
         currentGameState.stop();
         currentGameState = gameOverState;
+        log("About to start game over state");
         currentGameState.start();
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ Game: " + msg);
     }
 
 
@@ -116,6 +130,7 @@ public class Game {
 
 
     public void loadInGameState(){
+        isGameOver = false;
         currentGameState.stop();
         currentGameState = inGameState;
         currentGameState.start();
