@@ -24,6 +24,7 @@ public class ActionMediator {
     private final GemGridLayer gemGridLayer;
     private final Game game;
     private final ScoreBoardLayer scoreBoardLayer;
+    private final SpeedController speedController;
 
     private ActionMediator(Game game,
                            SpeedController speedController,
@@ -41,6 +42,7 @@ public class ActionMediator {
                            int maxColumnHeight){
 
         this.game = game;
+        this.speedController = speedController;
         this.score = scoreboardLayer.getScore();
         this.scoreBoardLayer = scoreboardLayer;
         this.gemGridLayer = gemGridLayer;
@@ -59,7 +61,8 @@ public class ActionMediator {
     }
 
 
-    public void resetScore(){
+    public void resetVariables(){
+        speedController.reset();
         score.clear();
         scoreBoardLayer.draw();
     }

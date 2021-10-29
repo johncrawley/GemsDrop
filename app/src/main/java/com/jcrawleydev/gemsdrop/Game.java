@@ -48,6 +48,7 @@ public class Game {
     private final View gameOverView;
     private final MainActivity activity;
     private final int maxRows;
+    private final SpeedController speedController;
 
 
     public Game(MainActivity activity,
@@ -74,6 +75,7 @@ public class Game {
         int initialY = floorY - ((maxRows + numberOfGems) * gemWidth);
         this.titleView = titleView;
         this.gameOverView = gameOverView;
+        this.speedController = new SpeedController(activity);
 
 
         gemGroupFactory = new GemGroupFactory.Builder()
@@ -184,7 +186,7 @@ public class Game {
                 .scoreView(scoreboardLayer)
                 .gemCountTracker(gemCountTracker)
                 .soundPlayer(soundPlayer)
-                .speedController(new SpeedController(activity))
+                .speedController(speedController)
                 .gravityInterval(getInt(R.integer.gravity_interval))
                 .flickerMarkedGemsTime(getInt(R.integer.disappearing_gems_flicker_time))
                 .maxColumnHeight(maxRows)

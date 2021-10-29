@@ -21,7 +21,7 @@ public class InGameState implements GameState {
 
     @Override
     public void start(){
-        actionMediator.resetScore();
+        actionMediator.resetVariables();
         actionMediator.clearGemGrid();
         actionMediator.createAndDropGems();
     }
