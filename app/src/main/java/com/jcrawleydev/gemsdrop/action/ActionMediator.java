@@ -90,11 +90,6 @@ public class ActionMediator {
     }
 
 
-    public void finishQuickDrop(){
-        quickDropGemsAction.stop();
-    }
-
-
     public void startMarkedGemsFlicker(){
         flickerMarkedGemsAction.start();
     }

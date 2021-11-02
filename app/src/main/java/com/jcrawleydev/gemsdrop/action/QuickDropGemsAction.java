@@ -1,7 +1,7 @@
 package com.jcrawleydev.gemsdrop.action;
 
 import com.jcrawleydev.gemsdrop.control.GemControls;
-import com.jcrawleydev.gemsdrop.tasks.QuickDropTask;
+import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 import com.jcrawleydev.gemsdrop.view.GemGroupLayer;
 
@@ -14,33 +14,50 @@ import java.util.concurrent.TimeUnit;
 public class QuickDropGemsAction {
 
     private ScheduledFuture<?> quickDropFuture;
-    private final ActionMediator actionManager;
-    private final GemGroupLayer gemGroupView;
+    private final ActionMediator actionMediator;
+    private final GemGroupLayer gemGroupLayer;
     private final GemControls controls;
-    private final GemGridLayer gemGridView;
+    private final GemGridLayer gemGridLayer;
     private final int gravityInterval;
 
 
-    public QuickDropGemsAction(ActionMediator actionManager, GemGroupLayer gemGroupView, GemControls controls, GemGridLayer gemGridView, int gravityInterval){
-        this.actionManager = actionManager;
-        this.gemGroupView = gemGroupView;
+    public QuickDropGemsAction(ActionMediator actionMediator,
+                               GemGroupLayer gemGroupLayer,
+                               GemControls controls,
+                               GemGridLayer gemGridLayer,
+                               int gravityInterval){
+        this.actionMediator = actionMediator;
+        this.gemGroupLayer = gemGroupLayer;
         this.controls = controls;
-        this.gemGridView = gemGridView;
+        this.gemGridLayer = gemGridLayer;
         this.gravityInterval = gravityInterval;
     }
 
 
     public void start(){
-        gemGroupView.getGemGroup().enableQuickDrop();
-        QuickDropTask quickDropTask = new QuickDropTask(actionManager, gemGroupView, gemGridView);
+        gemGroupLayer.getGemGroup().enableQuickDrop();
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
         controls.deactivate();
-        quickDropFuture = executor.scheduleWithFixedDelay(quickDropTask, 0, gravityInterval, TimeUnit.MILLISECONDS);
+        quickDropFuture = executor.scheduleWithFixedDelay(this::quickDrop, 0, gravityInterval, TimeUnit.MILLISECONDS);
     }
 
 
-    void stop(){
+    public void quickDrop(){
+        GemGroup gemGroup = gemGroupLayer.getGemGroup();
+        if(gemGroup.haveAllGemsSettled()){
             quickDropFuture.cancel(false);
-            actionManager.evaluateGemsInGrid();
+            actionMediator.evaluateGemsInGrid();
+            return;
+        }
+        dropAndUpdateLayers(gemGroup);
+    }
+
+
+    private void dropAndUpdateLayers(GemGroup gemGroup){
+        gemGroup.drop();
+        gemGroupLayer.drawIfUpdated();
+        if(gemGridLayer.getGemGrid().addAnyFrom(gemGroup)){
+            gemGridLayer.draw();
+        }
     }
 }

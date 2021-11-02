@@ -1,12 +1,11 @@
 package com.jcrawleydev.gemsdrop.action;
 
 import com.jcrawleydev.gemsdrop.control.GemControls;
+import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
 import com.jcrawleydev.gemsdrop.gemgroup.SpeedController;
 import com.jcrawleydev.gemsdrop.score.Score;
-import com.jcrawleydev.gemsdrop.tasks.AnimateTask;
-import com.jcrawleydev.gemsdrop.tasks.GemDropTask;
 import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 import com.jcrawleydev.gemsdrop.view.GemGroupLayer;
 
@@ -25,7 +24,6 @@ public class GemDropAction {
     private final GemGroupFactory gemGroupFactory;
     private final Score score;
     private final SpeedController speedController;
-    private GemDropTask gemDropTask;
     private final GemGridLayer gemGridLayer;
     private final ActionMediator actionMediator;
 
@@ -73,10 +71,8 @@ public class GemDropAction {
 
     private void executeDropAndAnimateTasks(int dropInterval, int redrawInterval){
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
-        gemDropTask = new GemDropTask(gemGroup, gemGridLayer, actionMediator);
-        AnimateTask animateTask = new AnimateTask(gemGroupLayer);
-        gemDropFuture = executor.scheduleWithFixedDelay(gemDropTask, 0, dropInterval, TimeUnit.MILLISECONDS);
-        animateFuture = executor.scheduleWithFixedDelay(animateTask, 0, redrawInterval, TimeUnit.MILLISECONDS);
+        gemDropFuture = executor.scheduleWithFixedDelay(this::drop, 0, dropInterval, TimeUnit.MILLISECONDS);
+        animateFuture = executor.scheduleWithFixedDelay(gemGroupLayer::drawIfUpdated, 0, redrawInterval, TimeUnit.MILLISECONDS);
     }
 
 
@@ -91,6 +87,24 @@ public class GemDropAction {
         hasGemDropStarted = false;
         gemGroupLayer.wipe();
         controls.reactivate();
+    }
+
+
+    public void drop(){
+        GemGrid gemGrid = gemGridLayer.getGemGrid();
+        if(gemGrid.shouldAdd(gemGroup)) {
+            gemGrid.add(gemGroup);
+            gemGridLayer.draw();
+            gemGroup.setGemsInvisible();
+            actionMediator.onAllGemsAdded();
+        }
+        else if(gemGrid.addAnyFrom(gemGroup)){
+            gemGridLayer.draw();
+            actionMediator.onAnyGemsAdded();
+        }
+        else {
+            gemGroup.drop();
+        }
     }
 
 }
