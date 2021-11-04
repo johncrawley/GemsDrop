@@ -85,6 +85,21 @@ public class TitleState implements GameState {
                 screenHeight);
         titleViewDisappearAnimation.setDuration(500);
         titleViewDisappearAnimation.setFillAfter(true);
+
+        titleViewDisappearAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation arg0) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation arg0) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation arg0) {
+                titleView.setVisibility(View.GONE);
+            }
+        });
     }
 
 

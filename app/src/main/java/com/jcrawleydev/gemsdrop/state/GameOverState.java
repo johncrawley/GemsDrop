@@ -93,6 +93,7 @@ public class GameOverState implements GameState {
         handler.postDelayed(()->{
             gameOverView.setVisibility(View.GONE);
             gameOverView.clearAnimation();
+            titleView.setVisibility(View.VISIBLE);
             titleView.clearAnimation();
             titleView.startAnimation(dropInAnimation);
            // titleView.animate().translationX(0).translationY(0).setDuration(2000);
