@@ -20,8 +20,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     private int numberOColumns;
     private int scoreBarHeight;
     private int floorY;
-    private View gameOverView;
-    private View titleView;
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -46,8 +45,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
         gemGroupTransparentView.setOnTouchListener(this);
         gemGridTransparentView.setOnTouchListener(this);
-        titleView = findViewById(R.id.titleViewInclude);
-        gameOverView = findViewById(R.id.gameOverViewInclude);
+        View titleView = findViewById(R.id.titleViewInclude);
+        View gameOverView = findViewById(R.id.gameOverViewInclude);
 
         BitmapLoader bitmapLoader = new BitmapLoader(this, gemWidth);
         game = new Game(this, bitmapLoader, width, height, gemWidth, gemGridBorder, numberOColumns, scoreBarHeight, floorY, titleView, gameOverView);
@@ -73,28 +72,20 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     }
 
 
-
     private void assignScreenDimensions(){
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         height = displayMetrics.heightPixels;
         width = displayMetrics.widthPixels;
-        assignGemWidth(width, height);
+
         numberOColumns = getResources().getInteger(R.integer.number_of_columns);
+        scoreBarHeight = height / 15;
+        int bottomBorderHeight = height / 18;
+        floorY = height - bottomBorderHeight;
         int maxRows = getResources().getInteger(R.integer.maximum_rows);
-        gemGridBorder = (width - (gemWidth * numberOColumns))/2;
-        floorY = height - (Math.min(gemWidth,gemGridBorder));
-        scoreBarHeight =  floorY - ((gemWidth * maxRows));
-        System.out.println("^^^** MainActivity.assignScreenDimensions() scoreBarHeight: " + scoreBarHeight);
+        gemWidth = (height - (scoreBarHeight + bottomBorderHeight)) / maxRows;
+        gemGridBorder = (this.width - (gemWidth * numberOColumns)) / 2;
     }
-
-
-    private void assignGemWidth(int width, int height){
-        int shortestDimension = Math.min(width, height);
-        int numberOfColumns = getResources().getInteger(R.integer.number_of_columns);
-        this.gemWidth = shortestDimension / (numberOfColumns + 1);
-    }
-
 
 
 }

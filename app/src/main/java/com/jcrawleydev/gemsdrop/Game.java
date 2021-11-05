@@ -49,6 +49,7 @@ public class Game {
     private final MainActivity activity;
     private final int maxRows;
     private final SpeedController speedController;
+    private boolean isGameOver;
 
 
     public Game(MainActivity activity,
@@ -72,7 +73,7 @@ public class Game {
         this.floorY = floorY;
         int numberOfGems = 3;
         maxRows = activity.getResources().getInteger(R.integer.maximum_rows);
-        int initialY = floorY - ((maxRows + numberOfGems) * gemWidth);
+        int initialY = floorY - ((maxRows + numberOfGems + 2) * gemWidth);
         this.titleView = titleView;
         this.gameOverView = gameOverView;
         this.speedController = new SpeedController(activity);
@@ -102,25 +103,15 @@ public class Game {
         return scoreboardLayer.getScore();
     }
 
-    private boolean isGameOver;
 
     public void loadGameOverState(){
-        log("Entered loadGameOverState(), isGameOver already: " + isGameOver);
         if(currentGameState != inGameState || isGameOver){
-            log("Game over already called, exiting loadGameOverState()");
             return;
         }
-
         isGameOver = true;
         currentGameState.stop();
         currentGameState = gameOverState;
-        log("About to start game over state");
         currentGameState.start();
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ Game: " + msg);
     }
 
 
