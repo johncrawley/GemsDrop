@@ -119,10 +119,10 @@ public class ActionMediator {
         gemGridGravityDropAction.start();
     }
 
+
     public void stopGridGravity(){
         gemGridGravityDropAction.stop();
     }
-
 
 
     public static class Builder{
@@ -167,10 +167,12 @@ public class ActionMediator {
             return this;
         }
 
+
         public Builder gemGroupFactory(GemGroupFactory gemGroupFactory){
             this.gemGroupFactory = gemGroupFactory;
             return this;
         }
+
 
         public Builder gridView(GemGridLayer gemGridView){
             this.gemGridView = gemGridView;
@@ -195,6 +197,7 @@ public class ActionMediator {
             this.gemCountTracker = gemCountTracker;
             return this;
         }
+
 
         public Builder soundPlayer(SoundPlayer soundPlayer){
             this.soundPlayer = soundPlayer;

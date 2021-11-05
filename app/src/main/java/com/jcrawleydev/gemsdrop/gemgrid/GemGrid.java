@@ -6,9 +6,7 @@ import com.jcrawleydev.gemsdrop.view.item.DrawableItem;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import androidx.annotation.NonNull;
 
@@ -102,19 +100,6 @@ public class GemGrid {
             }
         }
         return hasGemBeenAdded;
-    }
-
-
-    public List<Gem.Color> getRemainingColors(){
-        Set<Gem.Color> colors = new HashSet<>();
-
-        for(List<Gem> column : gemColumns){
-            for(Gem gem: column){
-                colors.add(gem.getColor());
-            }
-        }
-        System.out.println("Number of colors: " + colors.size());
-        return new ArrayList<>(colors);
     }
 
 
@@ -306,7 +291,13 @@ public class GemGrid {
 
 
     private void dropGemIfAboveGridPosition(Gem gem, int actualRowIndex){
-        if(gem.getY() < getYForRowTop(actualRowIndex)){
+        int gridTopY = getYForRowTop(actualRowIndex);
+        int diff = gridTopY - gem.getY();
+        if( diff < dropIncrement){
+            gem.incY(diff);
+            haveAnyGemsMovedDuringLastDrop = true;
+        }
+        if(gem.getY() < gridTopY){
             dropGem(gem);
         }
     }

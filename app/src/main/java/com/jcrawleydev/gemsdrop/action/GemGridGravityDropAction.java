@@ -28,7 +28,7 @@ public class GemGridGravityDropAction {
 
     void start(){
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
-        gemGridGravityFuture = executor.scheduleWithFixedDelay(this::gravity, 0, gravityInterval/ distanceFactor, TimeUnit.MILLISECONDS);
+        gemGridGravityFuture = executor.scheduleWithFixedDelay(this::gravity, 0, gravityInterval / distanceFactor, TimeUnit.MILLISECONDS);
     }
 
 
