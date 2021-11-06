@@ -10,16 +10,21 @@ import com.jcrawleydev.gemsdrop.view.ScoreBoardLayer;
 public class DeleteMarkedGemsAction {
 
 
-    private ActionMediator actionManager;
-    private Evaluator evaluator;
-    private GemGridLayer gemGridView;
-    private Score score;
-    private GemCountTracker gemCountTracker;
-    private ScoreBoardLayer scoreView;
-    private SoundPlayer soundPlayer;
+    private final ActionMediator actionMediator;
+    private final Evaluator evaluator;
+    private final GemGridLayer gemGridView;
+    private final Score score;
+    private final GemCountTracker gemCountTracker;
+    private final ScoreBoardLayer scoreView;
+    private final SoundPlayer soundPlayer;
 
-    public DeleteMarkedGemsAction(ActionMediator actionManager, Evaluator evaluator, GemGridLayer gemGridView, ScoreBoardLayer scoreView, GemCountTracker gemCountTracker, SoundPlayer soundPlayer){
-        this.actionManager = actionManager;
+    public DeleteMarkedGemsAction(ActionMediator actionMediator,
+                                  Evaluator evaluator,
+                                  GemGridLayer gemGridView,
+                                  ScoreBoardLayer scoreView,
+                                  GemCountTracker gemCountTracker,
+                                  SoundPlayer soundPlayer){
+        this.actionMediator = actionMediator;
         this.evaluator = evaluator;
         this.gemGridView = gemGridView;
         this.score = scoreView.getScore();
@@ -38,6 +43,8 @@ public class DeleteMarkedGemsAction {
         score.incMultiplier();
         scoreView.draw();
         gemGridView.draw();
-        actionManager.startGemGridGravityDrop();
+        actionMediator.startGemGridGravityDrop();
     }
+
+
 }

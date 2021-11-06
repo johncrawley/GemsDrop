@@ -293,11 +293,14 @@ public class GemGrid {
     private void dropGemIfAboveGridPosition(Gem gem, int actualRowIndex){
         int gridTopY = getYForRowTop(actualRowIndex);
         int diff = gridTopY - gem.getY();
-        if( diff < dropIncrement){
-            gem.incY(diff);
-            haveAnyGemsMovedDuringLastDrop = true;
-        }
+
         if(gem.getY() < gridTopY){
+            if( diff < dropIncrement){
+                gem.incY(diff);
+                haveAnyGemsMovedDuringLastDrop = true;
+                return;
+            }
+
             dropGem(gem);
         }
     }

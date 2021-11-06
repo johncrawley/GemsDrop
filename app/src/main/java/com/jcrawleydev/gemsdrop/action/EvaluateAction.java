@@ -21,6 +21,7 @@ public class EvaluateAction {
 
 
     public void start(){
+        log("Entered start()");
         evaluator.evaluate();
         if(evaluator.hasMarkedGems()){
             actionManager.startMarkedGemsFlicker();
@@ -29,11 +30,15 @@ public class EvaluateAction {
             actionManager.endGame();
         }
         else{
+            log("start() resetting drop");
             actionManager.resetDrop();
         }
     }
 
 
 
+    private void log(String msg){
+        System.out.println("EvaluateAction: " + msg);
+    }
 
 }

@@ -198,7 +198,7 @@ public class Evaluator {
             Gem comparisonGem = gems.get(comparisonIndex);
             if(comparisonGem.isNotSameColorAs(currentGem)){
                 if(sameColorCount >= MATCH_NUMBER){
-                    markAllCandidatesForDeletionInRange(currentIndex,comparisonIndex, gems);
+                    markAllCandidatesForDeletionInRange(currentIndex, comparisonIndex, gems);
                     return comparisonIndex;
                 }
                 resetFlagForAllGemsInRange(currentIndex,comparisonIndex,gems);
@@ -226,7 +226,6 @@ public class Evaluator {
         }
         hasMarkedGems = true;
     }
-
 
 
     public void deleteMarkedGems(){

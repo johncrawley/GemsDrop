@@ -11,16 +11,16 @@ import java.util.concurrent.TimeUnit;
 public class GemGridGravityDropAction {
 
     private ScheduledFuture<?> gemGridGravityFuture;
-    private final GemGridLayer gemGridView;
+    private final GemGridLayer gemGridLayer;
     private final ActionMediator actionMediator;
     private final int gravityInterval;
     private final int distanceFactor;
     private final GemGrid gemGrid;
 
-    public GemGridGravityDropAction(ActionMediator actionMediator, GemGridLayer gemGridView, int gravityInterval, int distanceFactor){
+    public GemGridGravityDropAction(ActionMediator actionMediator, GemGridLayer gemGridLayer, int gravityInterval, int distanceFactor){
         this.actionMediator = actionMediator;
-        this.gemGridView = gemGridView;
-        this.gemGrid = gemGridView.getGemGrid();
+        this.gemGridLayer = gemGridLayer;
+        this.gemGrid = gemGridLayer.getGemGrid();
         this.gravityInterval = gravityInterval;
         this.distanceFactor = distanceFactor;
     }
@@ -33,18 +33,25 @@ public class GemGridGravityDropAction {
 
 
     void stop(){
+        log("entered stop()");
         gemGridGravityFuture.cancel(false);
         actionMediator.evaluateGemsInGrid();
     }
 
 
     private void gravity(){
+        log("Entered gravity()");
         gemGrid.dropGems();
         if(!gemGrid.isStable()) {
-            gemGridView.draw();
+            log("gemGrid is not stable, drawing gemGridLayer");
+            gemGridLayer.draw();
         }
         else{
             actionMediator.stopGridGravity();
         }
+    }
+
+    private void log(String msg){
+        System.out.println("GemGridGravityDropAction: " + msg);
     }
 }

@@ -116,6 +116,7 @@ public class ActionMediator {
 
 
     public void startGemGridGravityDrop(){
+        log("Entered startGemGridGravityDrop()");
         gemGridGravityDropAction.start();
     }
 
@@ -124,6 +125,10 @@ public class ActionMediator {
         gemGridGravityDropAction.stop();
     }
 
+
+    private void log(String msg){
+        System.out.println("ActionMediator: " + msg);
+    }
 
     public static class Builder{
         private Game game;
