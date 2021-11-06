@@ -99,7 +99,6 @@ public class ActionMediator {
         gemDropAction.cancelFutures();
         gemGridLayer.turnAllGemsGrey();
         game.loadGameOverState();
-        //loadGameOverAction.loadGameOver();
     }
 
 
@@ -111,12 +110,10 @@ public class ActionMediator {
 
     public void deleteMarkedGems(){
         deleteMarkedGemsAction.start();
-        System.out.println("SCORE: "  + score.get());
     }
 
 
     public void startGemGridGravityDrop(){
-        log("Entered startGemGridGravityDrop()");
         gemGridGravityDropAction.start();
     }
 
@@ -125,10 +122,6 @@ public class ActionMediator {
         gemGridGravityDropAction.stop();
     }
 
-
-    private void log(String msg){
-        System.out.println("ActionMediator: " + msg);
-    }
 
     public static class Builder{
         private Game game;

@@ -33,17 +33,14 @@ public class GemGridGravityDropAction {
 
 
     void stop(){
-        log("entered stop()");
         gemGridGravityFuture.cancel(false);
         actionMediator.evaluateGemsInGrid();
     }
 
 
     private void gravity(){
-        log("Entered gravity()");
         gemGrid.dropGems();
         if(!gemGrid.isStable()) {
-            log("gemGrid is not stable, drawing gemGridLayer");
             gemGridLayer.draw();
         }
         else{
@@ -51,7 +48,4 @@ public class GemGridGravityDropAction {
         }
     }
 
-    private void log(String msg){
-        System.out.println("GemGridGravityDropAction: " + msg);
-    }
 }

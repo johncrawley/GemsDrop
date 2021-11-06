@@ -12,7 +12,8 @@ public class GemGroup {
     private final List<Gem> reversedOrderGems;
     private Orientation orientation;
     private DetailedOrientation detailedOrientation = DetailedOrientation.FIRST_TO_LAST;
-    private int x,y, xPosition, gemWidth, middleYPosition;
+    private int x,y, xPosition, middleYPosition;
+    private final int gemWidth;
     private final int floorY;
     public enum DetailedOrientation { FIRST_TO_LAST, TOP_TO_BOTTOM, LAST_TO_FIRST, BOTTOM_TO_TOP }
     public enum Orientation { HORIZONTAL, VERTICAL }
@@ -46,11 +47,6 @@ public class GemGroup {
         this.y = initialY;
         y+= getYRemainderFromFloor();
         y+=3;
-    }
-
-
-    public void setGemWidth(int width){
-        this.gemWidth = width;
     }
 
 

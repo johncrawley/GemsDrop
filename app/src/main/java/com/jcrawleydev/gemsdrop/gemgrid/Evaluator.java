@@ -4,7 +4,6 @@ import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gem.NullGem;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class Evaluator {
@@ -230,15 +229,7 @@ public class Evaluator {
 
     public void deleteMarkedGems(){
         for(List<Gem> column : gemGrid.getGemColumns()){
-            //column.removeIf( g -> g.isMarkedForDeletion());
-
-            Iterator<Gem> iterator = column.iterator();
-            while(iterator.hasNext()){
-                Gem gem = iterator.next();
-                if(gem.isMarkedForDeletion()){
-                    iterator.remove();
-                }
-            }
+            column.removeIf(Gem::isMarkedForDeletion);
         }
         this.hasMarkedGems = false;
     }
