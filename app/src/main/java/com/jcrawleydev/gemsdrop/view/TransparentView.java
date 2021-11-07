@@ -24,6 +24,7 @@ public class TransparentView extends View {
     private Canvas canvasBitmap;
     private boolean isViewDrawn = false;
     private List<DrawableItem> drawableItems;
+    private List<DrawableItem> backgroundItems;
 
 
     public TransparentView(Context context) {
@@ -46,6 +47,7 @@ public class TransparentView extends View {
 
     public void initItems(){
         drawableItems = new ArrayList<>();
+        backgroundItems = new ArrayList<>();
     }
 
 
@@ -61,6 +63,12 @@ public class TransparentView extends View {
     public void addDrawableItem(DrawableItem drawableItem){
         drawableItems.add(drawableItem);
     }
+
+
+    public void addBackgroundDrawableItem(DrawableItem drawableItem){
+        backgroundItems.add(drawableItem);
+    }
+
 
     public void addDrawableItems(List<DrawableItem> items){
         this.drawableItems.addAll(items);
@@ -132,6 +140,12 @@ public class TransparentView extends View {
 
 
     private void drawDrawableItems(){
+        for(DrawableItem drawableItem : backgroundItems){
+            if(drawableItem != null) {
+                drawableItem.draw(canvasBitmap, paint);
+            }
+        }
+
         List<DrawableItem> items = new ArrayList<>(drawableItems);
         for(DrawableItem drawableItem : items){
             if(drawableItem != null) {
