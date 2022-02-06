@@ -1,7 +1,6 @@
 package com.jcrawleydev.gemsdrop;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -10,8 +9,11 @@ import android.view.View;
 import com.jcrawleydev.gemsdrop.view.BitmapLoader;
 import com.jcrawleydev.gemsdrop.view.TransparentView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
-public class MainActivity extends Activity implements View.OnTouchListener {
+
+public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
 
     private int height, width;
     private Game game;
@@ -20,35 +22,79 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     private int numberOColumns;
     private int scoreBarHeight;
     private int floorY;
+    private MainViewModel viewModel;
+    private TransparentView gemGroupTransparentView, gemGridTransparentView, scoreTransparentView, borderView, titleBackgroundView, gameOverBackgroundView;
 
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         assignScreenDimensions();
-        TransparentView gemGroupTransparentView = findViewById(R.id.gemGroupView);
-        TransparentView gemGridTransparentView = findViewById(R.id.gemGridView);
-        TransparentView scoreTransparentView = findViewById(R.id.scoreView);
-        TransparentView borderView = findViewById(R.id.borderView);
-        TransparentView titleBackgroundView = findViewById(R.id.titleBackgroundView);
-        TransparentView gameOverBackgroundView = findViewById(R.id.gameOverBackgroundView);
+        viewModel =  new ViewModelProvider(this).get(MainViewModel.class);
+        setupTransparentViews();
+        initGame();
+    }
 
+
+    private void setupTransparentViews(){
+        setupGemGroupView();
+        setupGemGridView();
+        setupScoreView();
+        setupBorderView();
+        setupTitleBackgroundView();
+        setupGameOverBackgroundView();
+    }
+
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void setupGemGroupView(){
+        gemGroupTransparentView = findViewById(R.id.gemGroupView);
         gemGroupTransparentView.setDimensions(width, height);
         gemGroupTransparentView.translateXToMiddle();
-        gemGridTransparentView.setDimensions(width - gemGridBorder, height);
-        scoreTransparentView.setDimensions(width, height);
-        borderView.setDimensions(width, height);
-        titleBackgroundView.setDimensions(width, height);
-        gameOverBackgroundView.setDimensions(width, height);
-
         gemGroupTransparentView.setOnTouchListener(this);
+
+    }
+
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void setupGemGridView(){
+        gemGridTransparentView = findViewById(R.id.gemGridView);
+        gemGridTransparentView.setDimensions(width - gemGridBorder, height);
         gemGridTransparentView.setOnTouchListener(this);
+    }
+
+
+    private void setupScoreView(){
+        scoreTransparentView = findViewById(R.id.scoreView);
+        scoreTransparentView.setDimensions(width, height);
+    }
+
+
+    private void setupTitleBackgroundView(){
+        titleBackgroundView = findViewById(R.id.titleBackgroundView);
+        titleBackgroundView.setDimensions(width, height);
+    }
+
+
+    private void setupBorderView(){
+        borderView = findViewById(R.id.borderView);
+        borderView.setDimensions(width, height);
+    }
+
+
+    private void setupGameOverBackgroundView(){
+        gameOverBackgroundView = findViewById(R.id.gameOverBackgroundView);
+        gameOverBackgroundView.setDimensions(width, height);
+    }
+
+
+
+    private void initGame(){
         View titleView = findViewById(R.id.titleViewInclude);
         View gameOverView = findViewById(R.id.gameOverViewInclude);
-
         BitmapLoader bitmapLoader = new BitmapLoader(this, gemWidth);
+
         game = new Game(this, bitmapLoader, width, height, gemWidth, gemGridBorder, numberOColumns, scoreBarHeight, floorY, titleView, gameOverView);
         game.initGemGridView(gemGridTransparentView);
         game.initGemGroupLayer(gemGroupTransparentView, bitmapLoader);

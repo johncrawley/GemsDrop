@@ -57,7 +57,6 @@ public class GameOverState implements GameState {
                 areClicksAllowed = true;
             }
         });
-
     }
 
 
