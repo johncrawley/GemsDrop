@@ -1,10 +1,13 @@
 package com.jcrawleydev.gemsdrop.score;
 
+import androidx.lifecycle.ViewModel;
+
 public class Score {
 
     private int currentScore = 0;
     private final int basePoints;
     private int multiplier;
+
 
     public Score(int basePoints){
         this.basePoints = basePoints;

@@ -51,6 +51,7 @@ public class Game {
     private final SpeedController speedController;
     private boolean isGameOver;
     private final int numberOfColumns;
+    private final MainViewModel viewModel;
 
 
     public Game(MainActivity activity,
@@ -64,10 +65,12 @@ public class Game {
                 int floorY,
                 View titleView,
                 View gameOverView){
+
         this.width = screenWidth;
         this.height = screenHeight;
         this.gemWidth = gemWidth;
         this.activity = activity;
+        this.viewModel = activity.getViewModel();
         this.bitmapLoader = bitmapLoader;
         this.borderWidth = gemGridBorder;
         this.scoreBarHeight = scoreBarHeight;
@@ -89,15 +92,6 @@ public class Game {
                 .withFloorAt(floorY)
                 .withBorderWidth(borderWidth)
                 .build();
-    }
-
-
-    private void initGameStates(){
-        titleState = new TitleState(activity,this, titleView, height);
-        inGameState = new InGameState(this, actionMediator, clickHandler);
-        gameOverState = new GameOverState(this, gameOverView, titleView, height);
-        currentGameState = titleState;
-        currentGameState.start();
     }
 
 
@@ -154,8 +148,10 @@ public class Game {
 
 
     void initScoreboardLayer(TransparentView transparentView){
-        Score score = new Score(100);
-        scoreboardLayer = new ScoreBoardLayer(activity, transparentView, score, width, height, scoreBarHeight);
+        if(viewModel.score == null) {
+            viewModel.score = new Score(100);
+        }
+        scoreboardLayer = new ScoreBoardLayer(activity, transparentView, viewModel.score, width, height, scoreBarHeight);
         scoreboardLayer.draw();
     }
 
@@ -186,6 +182,15 @@ public class Game {
                 .gridGravityDistanceFactor(getInt(R.integer.gem_grid_gravity_drop_distance_factor))
                 .build();
         initGameStates();
+    }
+
+
+    private void initGameStates(){
+        titleState = new TitleState(activity,this, titleView, height);
+        inGameState = new InGameState(this, actionMediator, clickHandler);
+        gameOverState = new GameOverState(this, gameOverView, titleView, height);
+        currentGameState = titleState;
+        currentGameState.start();
     }
 
 

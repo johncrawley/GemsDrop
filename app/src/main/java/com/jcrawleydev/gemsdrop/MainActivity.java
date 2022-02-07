@@ -106,6 +106,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
 
+    public MainViewModel getViewModel(){
+        return this.viewModel;
+    }
+
+
     @SuppressLint("ClickableViewAccessibility")
     public boolean onTouch(View v, MotionEvent e){
         if(e.getAction() != MotionEvent.ACTION_DOWN){
