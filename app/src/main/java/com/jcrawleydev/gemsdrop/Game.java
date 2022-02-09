@@ -164,7 +164,7 @@ public class Game {
 
 
     void init(){
-        SoundPlayer soundPlayer = new SoundPlayer();
+        SoundPlayer soundPlayer = new SoundPlayer(activity, viewModel);
         actionMediator = new ActionMediator.Builder()
                 .game(this)
                 .evaluator(evaluator)
