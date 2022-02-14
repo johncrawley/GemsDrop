@@ -9,9 +9,10 @@ import android.view.View;
 import com.jcrawleydev.gemsdrop.view.BitmapLoader;
 import com.jcrawleydev.gemsdrop.view.TransparentView;
 
+
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
 
@@ -30,12 +31,20 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        hideActionBar();
         assignScreenDimensions();
-        viewModel =  new ViewModelProvider(this).get(MainViewModel.class);
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+
         setupTransparentViews();
         initGame();
     }
 
+    private void hideActionBar(){
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.hide();
+        }
+    }
 
     private void setupTransparentViews(){
         setupGemGroupView();
@@ -137,6 +146,5 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         gemWidth = (height - (scoreBarHeight + bottomBorderHeight)) / maxRows;
         gemGridBorder = (this.width - (gemWidth * numberOColumns)) / 2;
     }
-
 
 }

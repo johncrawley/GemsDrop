@@ -19,10 +19,10 @@ public class SoundPlayer {
 
     private void setupMediaPlayer(){
         mediaPlayer = MediaPlayer.create(context, R.raw.disappear);
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            public void onCompletion(MediaPlayer mp) {
-                mp.release();
-            }
+        mediaPlayer.setOnCompletionListener(mp -> {
+            mp.reset();
+            mp.release();
+            mediaPlayer = MediaPlayer.create(context, R.raw.disappear);
         });
     }
 
