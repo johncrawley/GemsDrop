@@ -92,14 +92,24 @@ public class GemGrid {
         boolean hasGemBeenAdded = false;
         List<Gem> gems = gemGroup.getGridGems();
 
-        for(int i = 0, position = gemGroup.getBaseXPosition(); i< gems.size(); i++, position ++){
+        for(int i = 0, position = gemGroup.getBaseXPosition(); i< gems.size(); i++, position++){
             Gem gem = gems.get(i);
-            if(gemColumns.get(position).size() >= gemGroup.getBottomPosition()){
+            if(isGemWithinCapturePosition(gem, gemGroup, position)){
                 add(gem, position);
                 hasGemBeenAdded = true;
             }
         }
         return hasGemBeenAdded;
+    }
+
+    private boolean isGemWithinCapturePosition(Gem gem, GemGroup gemGroup, int position){
+       return  gemColumns.get(position).size() >= gemGroup.getBottomPosition()
+               || getTopYForColumn(position) <= gem.getY() + gemSize / 2;
+    }
+
+    private int getTopYForColumn(int position){
+        int columnHeight = gemColumns.get(position).size();
+        return floorY + (columnHeight * gemSize);
     }
 
 
@@ -190,6 +200,7 @@ public class GemGrid {
 
 
     public void add(Gem gem, int position){
+        log("Entered add()");
         addHorizontal(Collections.singletonList(gem.clone()), position);
         gem.setInvisible();
     }
@@ -204,6 +215,9 @@ public class GemGrid {
         return true;
     }
 
+    private void log(String msg){
+        System.out.println("^^^ GemGrid: "+  msg);
+    }
 
     public int gemCount(){
         int amount = 0;
@@ -228,6 +242,7 @@ public class GemGrid {
 
 
     private void addHorizontal(List<Gem> gems, int gemGroupPosition){
+        log("Entered addHorizontal()");
         int initialOffset = gemGroupPosition - gems.size()/ 2;
         for (int i = 0; i < gems.size(); i++) {
             addGemToColumn(gems.get(i), initialOffset + i);
@@ -236,7 +251,9 @@ public class GemGrid {
 
 
     private void addGemToColumn(Gem gem, int columnIndex){
+        log("Entered addGemToColumn()");
         if(!gem.isVisible()){
+            log("gem is not visible, returning");
             return;
         }
         List<Gem> column = gemColumns.get(columnIndex);
@@ -258,6 +275,7 @@ public class GemGrid {
 
 
     private void setGemCoordinatesToGridPosition(Gem gem, int rowIndex, int columnIndex){
+        log("Entered setGemCoordinatesToGridPosition()");
         int gemX = startingX + (gemSize * columnIndex);
         int gemY = floorY - ((rowIndex + 1) * gemSize);
         gem.setXY(gemX, gemY);

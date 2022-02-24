@@ -94,10 +94,14 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
 
 
     public void setXY(int x, int y){
+        log("Entered setXY()");
         setX(x);
         setY(y);
     }
 
+    private void log(String msg){
+        System.out.println("^^^ Gem: "+  msg);
+    }
 
     public void setY(int y){
         this.y = y;

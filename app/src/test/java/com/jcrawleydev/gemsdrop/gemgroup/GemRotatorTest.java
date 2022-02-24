@@ -22,7 +22,7 @@ public class GemRotatorTest {
     @Before
     public void init(){
         gemGroup = new GemGroupFactory.Builder()
-                .withNumerOfGems(NUMBER_OF_GEMS)
+                .withNumberOfGems(NUMBER_OF_GEMS)
                 .withInitialPosition(8)
                 .withInitialY(50)
                 .withFloorAt(1000)

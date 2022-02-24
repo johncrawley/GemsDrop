@@ -31,7 +31,7 @@ public class GemControlsTest {
         gemGroupFactory = new GemGroupFactory.Builder()
                 .withInitialY(16)
                 .withGemWidth(gemWidth)
-                .withNumerOfGems(numberOfGemsPerGroup)
+                .withNumberOfGems(numberOfGemsPerGroup)
                 .withInitialPosition(0)
                 .withFloorAt(1300)
                 .withBorderWidth(borderWidth)

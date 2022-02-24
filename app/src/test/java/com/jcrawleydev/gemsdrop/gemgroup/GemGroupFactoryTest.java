@@ -23,7 +23,7 @@ public class GemGroupFactoryTest {
         gemGroupFactory = new GemGroupFactory.Builder()
                 .withInitialY(initialY)
                 .withGemWidth(gemWidth)
-                .withNumerOfGems(numberOfGems)
+                .withNumberOfGems(numberOfGems)
                 .withInitialPosition(0)
                 .withFloorAt(300)
                 .build();
@@ -38,7 +38,7 @@ public class GemGroupFactoryTest {
         gemGroupFactory = new GemGroupFactory.Builder()
                 .withInitialY(50)
                 .withGemWidth(150)
-                .withNumerOfGems(numberOfGems)
+                .withNumberOfGems(numberOfGems)
                 .withInitialPosition(0)
                 .withFloorAt(300)
                 .build();

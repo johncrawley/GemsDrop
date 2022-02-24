@@ -12,7 +12,7 @@ public class GemGroupTest {
     @Before
     public void init(){
         GemGroupFactory gemGroupFactory = new GemGroupFactory.Builder()
-                .withNumerOfGems(3)
+                .withNumberOfGems(3)
                 .withInitialPosition(5)
                 .withInitialY(150)
                 .withFloorAt(1000)

@@ -3,6 +3,7 @@ package com.jcrawleydev.gemsdrop.gemgroup;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gem.GemPaintOptions;
+import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,9 +21,10 @@ public class GemGroupFactory {
     private final int borderWidth;
     private final GemPaintOptions gemPaintOptions;
     private Random random;
+    private GemGrid gemGrid;
 
 
-    private GemGroupFactory(int numberOfGems, int initialPosition, int gemsInitialY, int gemWidth, int floorY, int borderWidth){
+    private GemGroupFactory(GemGrid gemGrid, int numberOfGems, int initialPosition, int gemsInitialY, int gemWidth, int floorY, int borderWidth){
         this.NUMBER_OF_GEMS = numberOfGems;
         this.initialColumnPosition = initialPosition;
         this.gemsInitialY = gemsInitialY;
@@ -42,7 +44,7 @@ public class GemGroupFactory {
             gem.setInvisible();
             gems.add(gem);
         }
-        return new GemGroup(initialColumnPosition, gemsInitialY, GemGroup.Orientation.VERTICAL, gems, GEM_WIDTH, floorY, borderWidth);
+        return new GemGroup(gemGrid, initialColumnPosition, gemsInitialY, GemGroup.Orientation.VERTICAL, gems, GEM_WIDTH, floorY, borderWidth);
     }
 
 
@@ -57,13 +59,14 @@ public class GemGroupFactory {
         public Builder(){}
 
         private int numberOfGems, initialPosition, gemsInitialY, gemWidth, floorY, borderWidth;
+        private GemGrid gemGrid;
 
         public Builder withInitialY(int initialY){
             this.gemsInitialY = initialY;
             return this;
         }
 
-        public Builder withNumerOfGems(int numberOfGems){
+        public Builder withNumberOfGems(int numberOfGems){
             this.numberOfGems = numberOfGems;
             return this;
         }
@@ -89,9 +92,14 @@ public class GemGroupFactory {
             return this;
         }
 
+        public Builder withGemGrid(GemGrid gemGrid){
+            this.gemGrid = gemGrid;
+            return this;
+        }
+
 
         public GemGroupFactory build(){
-            return new GemGroupFactory(numberOfGems, initialPosition, gemsInitialY, gemWidth, floorY, borderWidth);
+            return new GemGroupFactory(gemGrid, numberOfGems, initialPosition, gemsInitialY, gemWidth, floorY, borderWidth);
         }
 
     }

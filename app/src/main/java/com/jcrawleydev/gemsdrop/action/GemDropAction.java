@@ -91,20 +91,28 @@ public class GemDropAction {
 
 
     public void drop(){
+        log("Entered drop()");
         GemGrid gemGrid = gemGridLayer.getGemGrid();
         if(gemGrid.shouldAdd(gemGroup)) {
+            log("should add gemGroup branch");
             gemGrid.add(gemGroup);
             gemGridLayer.draw();
             gemGroup.setGemsInvisible();
             actionMediator.onAllGemsAdded();
         }
         else if(gemGrid.addAnyFrom(gemGroup)){
+            log("should add any from gemGroup branch");
             gemGridLayer.draw();
             actionMediator.onAnyGemsAdded();
         }
         else {
+            log("drop gemGroup");
             gemGroup.drop();
         }
+    }
+
+    private void log(String msg){
+        System.out.println("^^^GemDropAction: " + msg);
     }
 
 }

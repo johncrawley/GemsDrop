@@ -52,6 +52,7 @@ public class Game {
     private boolean isGameOver;
     private final int numberOfColumns;
     private final MainViewModel viewModel;
+    private final  GemGrid gemGrid;
 
 
     public Game(MainActivity activity,
@@ -83,14 +84,16 @@ public class Game {
         this.speedController = new SpeedController(activity);
         this.numberOfColumns = numberOfColumns;
 
+        gemGrid = new GemGrid(numberOfColumns, maxRows);
 
         gemGroupFactory = new GemGroupFactory.Builder()
                 .withInitialY(initialY)
                 .withGemWidth(gemWidth)
-                .withNumerOfGems(numberOfGems)
+                .withNumberOfGems(numberOfGems)
                 .withInitialPosition(numberOfColumns /2)
                 .withFloorAt(floorY)
                 .withBorderWidth(borderWidth)
+                .withGemGrid(gemGrid)
                 .build();
     }
 
@@ -132,7 +135,6 @@ public class Game {
 
 
     void initGemGridView(TransparentView v){
-        GemGrid gemGrid = new GemGrid(numberOfColumns, maxRows);
         gemGrid.setDropIncrement(gemWidth / getInt(R.integer.gem_grid_gravity_drop_distance_factor));
         gemGridLayer = new GemGridLayer(v, bitmapLoader, gemGrid, gemWidth, width, floorY, borderWidth);
         evaluator = new Evaluator(gemGrid, 3);

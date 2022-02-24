@@ -1,6 +1,7 @@
 package com.jcrawleydev.gemsdrop.gemgroup;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
+import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,9 +22,11 @@ public class GemGroup {
     private boolean wasUpdated;
     private final GemGroupDropper gemGroupDropper;
     private boolean isFirstDrop = true;
+    private final GemGrid gemGrid;
 
 
-    public GemGroup(int initialPosition, int initialY, Orientation orientation, List<Gem> gems, int gemWidth, int floorY, int borderWidth){
+    public GemGroup(GemGrid gemGrid, int initialPosition, int initialY, Orientation orientation, List<Gem> gems, int gemWidth, int floorY, int borderWidth){
+        this.gemGrid = gemGrid;
         this.xPosition = initialPosition;
         this.gems = new ArrayList<>(gems);
         this.gemWidth = gemWidth;
@@ -98,11 +101,20 @@ public class GemGroup {
     }
 
 
+
+    public void incrementPosition(){
+        x += gemWidth;
+        xPosition++;
+        wasUpdated = true;
+    }
+
+
     public void decrementPosition(){
         x -= gemWidth;
         xPosition--;
         wasUpdated = true;
     }
+
 
     public void decrementMiddleYPosition(){
         middleYPosition--;
@@ -111,13 +123,8 @@ public class GemGroup {
 
     public void dropBy(int dropIncrement){
         y += dropIncrement;
-        wasUpdated = true;
-    }
-
-
-    public void incrementPosition(){
-        x += gemWidth;
-        xPosition++;
+        //gemGrid.addAnyFrom(this);
+        //y += getYRemainderFromFloor();
         wasUpdated = true;
     }
 
@@ -128,10 +135,14 @@ public class GemGroup {
 
 
     public void rotate(){
+        log("Entered rotate()");
         gemRotator.rotate();
         wasUpdated = true;
     }
 
+    private void log(String msg){
+        System.out.println("^^^ GemGroup : " + msg);
+    }
 
     public void setDetailedOrientation(DetailedOrientation trueOrientation){
         detailedOrientation = trueOrientation;
