@@ -26,23 +26,17 @@ public class GemGroupDropper {
 
 
     public void drop(){
-        log("Entered drop()");
         if(!shouldAnimate()){
             return;
         }
         currentDropIncrement += dropFactor;
         while(currentDropIncrement >= 1){
-            log("While loop iteration!");
             currentDropIncrement -= 1;
             gemGroup.decrementMiddleYPosition();
         }
         gemGroup.dropBy(dropIncrement);
-        log("Exiting drop()");
     }
 
-    private void log(String msg){
-        System.out.println("^^^ GemGroupDropper: " + msg);
-    }
 
 
     private boolean shouldAnimate(){

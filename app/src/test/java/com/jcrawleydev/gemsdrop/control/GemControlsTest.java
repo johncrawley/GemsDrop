@@ -241,7 +241,7 @@ public class GemControlsTest {
 
 
     private void addVerticalGemsToGridAtPosition(int position){
-        GemGroup gemGroupToAdd = Utils.createGemGroup(position, GemGroup.Orientation.VERTICAL, Gem.Color.RED, Gem.Color.BLUE, Gem.Color.GREEN, borderWidth);
+        GemGroup gemGroupToAdd = Utils.createGemGroup(gemGrid, position, GemGroup.Orientation.VERTICAL, Gem.Color.RED, Gem.Color.BLUE, Gem.Color.GREEN, borderWidth);
         gemGrid.add(gemGroupToAdd);
     }
 

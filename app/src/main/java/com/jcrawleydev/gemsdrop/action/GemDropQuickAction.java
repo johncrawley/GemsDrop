@@ -43,7 +43,7 @@ public class GemDropQuickAction {
         gemGroupLayer.getGemGroup().enableQuickDrop();
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
         controls.deactivate();
-        quickDropFuture = executor.scheduleWithFixedDelay(this::drop, 0, gravityInterval, TimeUnit.MILLISECONDS);
+        quickDropFuture = executor.scheduleWithFixedDelay(this::quickDrop, 0, gravityInterval, TimeUnit.MILLISECONDS);
     }
 
 

@@ -123,6 +123,17 @@ public class GemGroup {
 
     public void dropBy(int dropIncrement){
         y += dropIncrement;
+        int highestGridColumnHeight = Integer.MAX_VALUE;
+        log("Entered dropBy()");
+        for(int i=0; i< gems.size() ; i++){
+            int position = i + getBaseXPosition();
+            log("Position: " + position);
+            int currentGridColumnTopY = gemGrid.getTopYOfColumn(position);
+            highestGridColumnHeight = Math.min(highestGridColumnHeight, currentGridColumnTopY);
+            if(currentGridColumnTopY <= gems.get(i).getY()){
+                y = highestGridColumnHeight - gemWidth;
+            }
+        }
         //gemGrid.addAnyFrom(this);
         //y += getYRemainderFromFloor();
         wasUpdated = true;
@@ -135,7 +146,6 @@ public class GemGroup {
 
 
     public void rotate(){
-        log("Entered rotate()");
         gemRotator.rotate();
         wasUpdated = true;
     }
@@ -266,7 +276,7 @@ public class GemGroup {
 
 
     private int getYRemainderFromFloor(){
-        return floorY % y;
+        return y == 0 ? 0 : floorY % y;
     }
 
 

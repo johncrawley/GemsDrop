@@ -21,11 +21,12 @@ public class GemGroupFactory {
     private final int borderWidth;
     private final GemPaintOptions gemPaintOptions;
     private Random random;
-    private GemGrid gemGrid;
+    private final GemGrid gemGrid;
 
 
     private GemGroupFactory(GemGrid gemGrid, int numberOfGems, int initialPosition, int gemsInitialY, int gemWidth, int floorY, int borderWidth){
         this.NUMBER_OF_GEMS = numberOfGems;
+        this.gemGrid = gemGrid;
         this.initialColumnPosition = initialPosition;
         this.gemsInitialY = gemsInitialY;
         colors = Arrays.asList(Gem.Color.RED, Gem.Color.BLUE, Gem.Color.PURPLE, Gem.Color.GREEN, Gem.Color.YELLOW);

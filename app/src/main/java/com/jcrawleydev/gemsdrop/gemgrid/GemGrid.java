@@ -83,6 +83,13 @@ public class GemGrid {
         }
         return gemGroup.getBottomPosition() <= getColumnHeight(gemGroup.getXPosition());
     }
+
+
+    public int getTopYOfColumn(int position){
+        int index = Math.max(0, position);
+        index = Math.min(gemColumns.size()-1, index);
+        return floorY - (gemColumns.get(index).size() * gemSize);
+    }
     
 
     public boolean addAnyFrom(GemGroup gemGroup){
@@ -275,7 +282,6 @@ public class GemGrid {
 
 
     private void setGemCoordinatesToGridPosition(Gem gem, int rowIndex, int columnIndex){
-        log("Entered setGemCoordinatesToGridPosition()");
         int gemX = startingX + (gemSize * columnIndex);
         int gemY = floorY - ((rowIndex + 1) * gemSize);
         gem.setXY(gemX, gemY);

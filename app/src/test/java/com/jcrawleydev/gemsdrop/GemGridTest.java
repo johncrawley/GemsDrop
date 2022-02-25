@@ -333,24 +333,39 @@ public class GemGridTest {
         gemGrid.add(gem, position);
         assertEquals(1, gemGrid.gemCount());
         assertEquals(1,gemGrid.getColumnHeight(position));
-
     }
+
 
     @Test
     public void canGetAllGems(){
-
         assertEquals(0, gemGrid.getAllGems().size());
         addRandomGems();
         assertEquals(3, gemGrid.getAllGems().size());
-
         gemGrid.clear();
-
         addGems(1, VERTICAL, RED, BLUE, GREEN);
         addGems(2, VERTICAL, RED, YELLOW, GREEN);
         addGems(3, VERTICAL, RED, GREEN, BLUE);
         evaluateAndDeleteMarkedGems();
         assertEquals(6, gemGrid.gemCount());
         //assertEquals(6, gemGrid.getAllGems().size());
+    }
+
+
+    @Test
+    public void returnsCorrectYForColumnHeight(){
+        final int FLOOR_Y = 1000;
+        final int GEM_SIZE = 50;
+
+        gemGrid.setFloorY(FLOOR_Y);
+        gemGrid.setGemSize(GEM_SIZE);
+
+        addGems(1, VERTICAL, RED, BLUE, GREEN);
+        addGems(2, VERTICAL, RED, YELLOW, GREEN);
+        addGems(2, VERTICAL, RED, GREEN, BLUE);
+
+        int actualY = gemGrid.getTopYOfColumn(1);
+        int expectedY = FLOOR_Y -(3 * GEM_SIZE);
+        assertEquals(expectedY, actualY);
     }
 
 
@@ -408,7 +423,7 @@ public class GemGridTest {
 
     private void addGems(int position, GemGroup.Orientation orientation, Gem.Color color1, Gem.Color color2, Gem.Color color3){
         int borderWidth = 30;
-        GemGroup gemGroup = Utils.createGemGroup(position, orientation, color1, color2, color3, borderWidth);
+        GemGroup gemGroup = Utils.createGemGroup(gemGrid, position, orientation, color1, color2, color3, borderWidth);
         gemGrid.add(gemGroup);
     }
 
