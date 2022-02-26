@@ -109,10 +109,12 @@ public class GemGrid {
         return hasGemBeenAdded;
     }
 
+
     private boolean isGemWithinCapturePosition(Gem gem, GemGroup gemGroup, int position){
        return  gemColumns.get(position).size() >= gemGroup.getBottomPosition()
                || getTopYForColumn(position) <= gem.getY() + gemSize / 2;
     }
+
 
     private int getTopYForColumn(int position){
         int columnHeight = gemColumns.get(position).size();
@@ -140,6 +142,11 @@ public class GemGrid {
     }
 
 
+    public int getColumnTopY(int position){
+        return floorY - (gemSize * gemColumns.get(position).size());
+    }
+
+
     public List<DrawableItem> getAllGems(){
         List<DrawableItem> allGems = new ArrayList<>(NUMBER_OF_COLUMNS * NUMBER_OF_ROWS);
         for(List<Gem> column : gemColumns){
@@ -156,8 +163,6 @@ public class GemGrid {
         }
         return allGems;
     }
-
-
 
 
     public int getNumberOfColumns(){

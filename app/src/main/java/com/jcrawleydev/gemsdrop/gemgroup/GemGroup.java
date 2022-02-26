@@ -124,19 +124,34 @@ public class GemGroup {
     public void dropBy(int dropIncrement){
         y += dropIncrement;
         int highestGridColumnHeight = Integer.MAX_VALUE;
-        log("Entered dropBy()");
-        for(int i=0; i< gems.size() ; i++){
-            int position = i + getBaseXPosition();
-            log("Position: " + position);
-            int currentGridColumnTopY = gemGrid.getTopYOfColumn(position);
-            highestGridColumnHeight = Math.min(highestGridColumnHeight, currentGridColumnTopY);
-            if(currentGridColumnTopY <= gems.get(i).getY()){
-                y = highestGridColumnHeight - gemWidth;
+        if(isVertical()){
+            int topYOfCurrentGridColumn = gemGrid.getColumnTopY(xPosition);
+            if(getBottomY() >= topYOfCurrentGridColumn){
+                y = topYOfCurrentGridColumn - (getNumberOfGems() * gemWidth);
+            }
+        }
+        else {
+            for (int i = 0; i < gems.size(); i++) {
+                int position = i + getBaseXPosition();
+
+                log("dropBy() Position: " + position);
+                int currentGridColumnTopY = gemGrid.getTopYOfColumn(position);
+                highestGridColumnHeight = Math.min(highestGridColumnHeight, currentGridColumnTopY);
+                if (currentGridColumnTopY <= getBottomY()) {
+                    y = highestGridColumnHeight - gemWidth;
+                }
             }
         }
         //gemGrid.addAnyFrom(this);
         //y += getYRemainderFromFloor();
         wasUpdated = true;
+    }
+
+    public int getBottomY(){
+        if(isVertical()){
+            return y + getNumberOfGems() * gemWidth;
+        }
+        return y + gemWidth;
     }
 
 

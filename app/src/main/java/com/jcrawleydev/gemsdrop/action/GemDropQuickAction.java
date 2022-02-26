@@ -58,27 +58,6 @@ public class GemDropQuickAction {
     }
 
 
-    public void drop(){
-        if(gemGrid.shouldAdd(gemGroup)) {
-            gemGrid.add(gemGroup);
-            gemGridLayer.draw();
-            gemGroup.setGemsInvisible();
-            actionMediator.onAllGemsAdded();
-        }
-        else if(gemGrid.addAnyFrom(gemGroup)){
-            gemGridLayer.draw();
-            actionMediator.onAnyGemsAdded();
-        }
-        else {
-            gemGroup.drop();
-            gemGroupLayer.drawIfUpdated();
-            if(gemGridLayer.getGemGrid().addAnyFrom(gemGroup)){
-                gemGridLayer.draw();
-            }
-        }
-    }
-
-
     public void quickDrop(){
         if(gemGroup.haveAllGemsSettled()){
             quickDropFuture.cancel(false);
