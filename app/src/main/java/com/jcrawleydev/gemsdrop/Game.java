@@ -79,6 +79,7 @@ public class Game {
         int numberOfGems = 3;
         maxRows = activity.getResources().getInteger(R.integer.maximum_rows);
         int initialY = floorY - ((maxRows + numberOfGems + 2) * gemWidth);
+        System.out.println("Game constructor: initialY : " + initialY + " floorY: " + floorY);
         this.titleView = titleView;
         this.gameOverView = gameOverView;
         this.speedController = new SpeedController(activity);

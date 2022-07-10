@@ -15,7 +15,7 @@ public class GemGroupDropper {
     public GemGroupDropper(GemGroup gemGroup, int gemWidth){
         this.gemGroup = gemGroup;
         this.gemWidth = gemWidth;
-        setDropFactor(0.5f);
+        setDropFactor(1f);
     }
 
 

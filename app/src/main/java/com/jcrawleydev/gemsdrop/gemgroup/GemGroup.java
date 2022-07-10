@@ -26,6 +26,7 @@ public class GemGroup {
 
 
     public GemGroup(GemGrid gemGrid, int initialPosition, int initialY, Orientation orientation, List<Gem> gems, int gemWidth, int floorY, int borderWidth){
+        log("************************************** floor Entered GemGroup()");
         this.gemGrid = gemGrid;
         this.xPosition = initialPosition;
         this.gems = new ArrayList<>(gems);
@@ -122,15 +123,28 @@ public class GemGroup {
 
 
     public void dropBy(int dropIncrement){
+        float oldY = y;
+        float oldBottomY = getBottomY();
         y += dropIncrement;
-        int highestGridColumnHeight = Integer.MAX_VALUE;
+        float bottomYAfterDrop = getBottomY();
+        float yAfterDrop = y;
         if(isVertical()){
             int topYOfCurrentGridColumn = gemGrid.getColumnTopY(xPosition);
             if(getBottomY() >= topYOfCurrentGridColumn){
                 y = topYOfCurrentGridColumn - (getNumberOfGems() * gemWidth);
             }
+            log("dropBy() oldY: " + oldY
+                    + ", oldBottomY: " + oldBottomY
+                    + ", dropValue: " + dropIncrement
+                    + ", y after drop: " + yAfterDrop
+                    + ", bottomY after drop: " + bottomYAfterDrop
+                    + ", adjusted y: "+  y
+                             + ", topYOfCurrentGridColumn: " + topYOfCurrentGridColumn
+                    + " , bottomY: " + getBottomY()
+                    +  ", floorY: " + floorY);
         }
         else {
+            int highestGridColumnHeight = Integer.MAX_VALUE;
             for (int i = 0; i < gems.size(); i++) {
                 int position = i + getBaseXPosition();
 
