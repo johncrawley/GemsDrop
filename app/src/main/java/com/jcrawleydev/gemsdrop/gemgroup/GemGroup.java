@@ -23,6 +23,7 @@ public class GemGroup {
     private final GemGroupDropper gemGroupDropper;
     private boolean isFirstDrop = true;
     private final GemGrid gemGrid;
+    private int[] dropPositions;
 
 
     public GemGroup(GemGrid gemGrid, int initialPosition, int initialY, Orientation orientation, List<Gem> gems, int gemWidth, int floorY, int borderWidth){
@@ -41,8 +42,28 @@ public class GemGroup {
         if(orientation == Orientation.VERTICAL){
             detailedOrientation = DetailedOrientation.TOP_TO_BOTTOM;
         }
+        setupDropPositions();
         this.gemRotator = new GemRotator(this, gemWidth);
         gemRotator.setGemCoordinates(this);
+    }
+
+
+    private void setupDropPositions(){
+        int initialGemPosition = middleYPosition;
+        int dropValue = gemWidth;
+        this.middleYPosition = ((floorY - y) / gemWidth) -1;
+        dropPositions = new int[middleYPosition + 1];
+        log("floor Y : " + floorY);
+        int lowestGemY = floorY - gemWidth;
+        for(int i=0; i< initialGemPosition; i++){
+            int position = i+1;
+            dropPositions[i] = lowestGemY - (dropValue * i);
+            log("y for position  " + position + " : "  + dropPositions[i]);
+        }
+    }
+
+    private int getYForPosition(int position){
+        return dropPositions[position -1];
     }
 
 
@@ -119,10 +140,21 @@ public class GemGroup {
 
     public void decrementMiddleYPosition(){
         middleYPosition--;
+        log("floor, decrementMiddleYPosition(), now at: " + middleYPosition);
     }
 
 
     public void dropBy(int dropIncrement){
+        if(isVertical()){
+            y = getYForPosition(middleYPosition+1);
+        }
+        int verticalPositionAdjustment = isVertical() ? 1 : 0;
+        y = getYForPosition(middleYPosition+verticalPositionAdjustment );
+        wasUpdated = true;
+    }
+
+
+    public void dropByOLD(int dropIncrement){
         float oldY = y;
         float oldBottomY = getBottomY();
         y += dropIncrement;
@@ -130,9 +162,19 @@ public class GemGroup {
         float yAfterDrop = y;
         if(isVertical()){
             int topYOfCurrentGridColumn = gemGrid.getColumnTopY(xPosition);
+            final float dropValue = gemWidth;
+            float distanceToDrop = topYOfCurrentGridColumn - bottomYAfterDrop;
+            float dropRemainder = distanceToDrop % dropValue;
+            float diff = dropValue - dropRemainder;
+            float altDiv = distanceToDrop / dropValue;
+            float altDiff = distanceToDrop- (altDiv * dropValue);
+           // y+=diff;
+            log("distance to drop: " + distanceToDrop + " dropRemainder: "+ dropRemainder + " diff: " + diff + " altDiff: " + altDiff + " y: " + y);
+            log("middleY position: " + middleYPosition);
             if(getBottomY() >= topYOfCurrentGridColumn){
                 y = topYOfCurrentGridColumn - (getNumberOfGems() * gemWidth);
             }
+            float remainder = topYOfCurrentGridColumn % bottomYAfterDrop;
             log("dropBy() oldY: " + oldY
                     + ", oldBottomY: " + oldBottomY
                     + ", dropValue: " + dropIncrement
@@ -140,8 +182,9 @@ public class GemGroup {
                     + ", bottomY after drop: " + bottomYAfterDrop
                     + ", adjusted y: "+  y
                              + ", topYOfCurrentGridColumn: " + topYOfCurrentGridColumn
-                    + " , bottomY: " + getBottomY()
+                    + " ,adjusted bottomY: " + getBottomY()
                     +  ", floorY: " + floorY);
+
         }
         else {
             int highestGridColumnHeight = Integer.MAX_VALUE;

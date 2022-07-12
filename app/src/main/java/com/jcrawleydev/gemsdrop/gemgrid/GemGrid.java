@@ -21,6 +21,7 @@ public class GemGrid {
     private int startingX;
     private int dropIncrement;
     private boolean haveAnyGemsMovedDuringLastDrop;
+    private final int INITIAL_FLOOR_POSITION = 1;
 
     public GemGrid(int numberOfColumns, int numberOfRows){
         NUMBER_OF_ROWS = numberOfRows;
@@ -74,8 +75,8 @@ public class GemGrid {
 
 
     public boolean shouldAdd(GemGroup gemGroup) {
-        final int FLOOR_POSITION = 1;
-        if(gemGroup.getBottomPosition() <= FLOOR_POSITION){
+        log("shouldAdd() gemGroup,getBottomPosition(): " + gemGroup.getBottomPosition() + " getColumnHeight(): " + getColumnHeight(gemGroup.getXPosition()));
+        if(gemGroup.getBottomPosition() <= INITIAL_FLOOR_POSITION){
             return true;
         }
         if(gemGroup.getOrientation() == GemGroup.Orientation.HORIZONTAL){
@@ -138,7 +139,7 @@ public class GemGrid {
 
 
     public int getColumnHeight(int position){
-        return gemColumns.get(position).size();
+        return INITIAL_FLOOR_POSITION + gemColumns.get(position).size();
     }
 
 
