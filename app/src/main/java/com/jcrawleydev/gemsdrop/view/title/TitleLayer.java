@@ -34,7 +34,7 @@ public class TitleLayer implements UpdatableView {
         transparentView.clearDrawableItems();
         List<DrawableItem> gems = new ArrayList<>(gemGroup.getGems());
         transparentView.addDrawableItems(gems);
-        transparentView.setTranslateY(gemGroup.getY());
+        transparentView.setTranslateY((int)gemGroup.getY());
     }
 
 
@@ -42,8 +42,8 @@ public class TitleLayer implements UpdatableView {
     public void drawIfUpdated(){
 
         if(gemGroup.wasUpdated()) {
-            transparentView.setTranslateY(gemGroup.getY());
-            transparentView.setTranslateX(gemGroup.getX());
+            transparentView.setTranslateY((int)gemGroup.getY());
+            transparentView.setTranslateX((int)gemGroup.getX());
             transparentView.invalidate();
             gemGroup.setUpdated(false);
         }

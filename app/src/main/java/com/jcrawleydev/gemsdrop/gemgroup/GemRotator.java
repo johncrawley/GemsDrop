@@ -9,16 +9,16 @@ import java.util.Map;
 public class GemRotator  {
 
 
-    private final int GEM_WIDTH;
-    private final int HALF_WIDTH;
+    private final float gemWidth;
+    private final float HALF_WIDTH;
     private List<Gem> gems;
     private final int numberOfGems;
     private GemGroup gemGroup;
     private Map<GemGroup.DetailedOrientation, GemGroup.DetailedOrientation> nextDetailedOrientation;
 
 
-    public GemRotator(GemGroup gemGroup, int gemWidth){
-         GEM_WIDTH = gemWidth;
+    public GemRotator(GemGroup gemGroup, float gemWidth){
+         this.gemWidth = gemWidth;
          HALF_WIDTH = gemWidth /2;
          this.gemGroup = gemGroup;
          this.gems = gemGroup.getGems();
@@ -70,7 +70,7 @@ public class GemRotator  {
     }
 
     private void assignVerticalXCoordinatesToGems(){
-        int xOffset = - HALF_WIDTH;
+        float xOffset = - HALF_WIDTH;
         for(Gem gem : gems){
             gem.setX(xOffset);
         }
@@ -78,16 +78,16 @@ public class GemRotator  {
 
 
     private void assignVerticalYCoordinatesToGems(){
-        int initialY = - HALF_WIDTH - (numberOfGems / 2 * GEM_WIDTH);
+        float initialY = - HALF_WIDTH - (numberOfGems / 2f * gemWidth);
         for(int i = 0; i < numberOfGems; i++){
-            int y = initialY + (i * GEM_WIDTH);
+            float y = initialY + (i * gemWidth);
             gems.get(i).setY(y);
         }
     }
 
 
     private void assignHorizontalYCoordinatesToGems(){
-        int yOffset = - HALF_WIDTH;
+        float yOffset = - HALF_WIDTH;
         for(Gem gem: gems){
             gem.setY(yOffset);
         }
@@ -95,9 +95,9 @@ public class GemRotator  {
 
 
     private void assignHorizontalXCoordinatesToGems(){
-        int initialX = - HALF_WIDTH - (numberOfGems / 2 * GEM_WIDTH);
+        float initialX = - HALF_WIDTH - (numberOfGems / 2 * gemWidth);
         for(int i = 0; i < numberOfGems; i++){
-            int x = initialX + (i * GEM_WIDTH);
+            float x = initialX + (i * gemWidth);
             gems.get(i).setX(x);
         }
     }

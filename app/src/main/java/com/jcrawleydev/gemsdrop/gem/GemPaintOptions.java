@@ -7,9 +7,9 @@ public class GemPaintOptions {
 
     private final Paint paint;
 
-    public GemPaintOptions(int gemSize){
+    public GemPaintOptions(float gemSize){
         paint = new Paint();
-        int radius = gemSize / 8;
+        float radius = gemSize / 8f;
         paint.setMaskFilter(new BlurMaskFilter(radius, BlurMaskFilter.Blur.SOLID));
     }
 

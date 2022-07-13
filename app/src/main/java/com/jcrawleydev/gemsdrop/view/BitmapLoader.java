@@ -13,12 +13,12 @@ import java.util.Map;
 public class BitmapLoader {
 
     private final Context context;
-    private final int width;
+    private final float width;
     private final Map<Gem.Color, Bitmap> bitmaps;
     private Bitmap defaultGem;
 
 
-    public BitmapLoader(Context context, int width){
+    public BitmapLoader(Context context, float width){
         this.context = context;
         this.width = width;
         bitmaps = new HashMap<>();
@@ -50,7 +50,7 @@ public class BitmapLoader {
         opts.inSampleSize = 1;
         Bitmap bm = BitmapFactory.decodeResource(context.getResources(), resId, opts);
 
-        return Bitmap.createScaledBitmap(bm, width, width, true);
+        return Bitmap.createScaledBitmap(bm, (int)width, (int)width, true);
     }
 
 

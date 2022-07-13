@@ -1,8 +1,8 @@
 package com.jcrawleydev.gemsdrop.view;
 
 public interface TextItem {
-    int getX();
-    int getY();
+    float getX();
+    float getY();
     String getText();
     int getColor();
 }

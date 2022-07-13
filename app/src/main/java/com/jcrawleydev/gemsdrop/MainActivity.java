@@ -18,7 +18,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private int height, width;
     private Game game;
-    private int gemWidth;
+    private float gemWidth;
+    private float dropValue;
     private int gemGridBorder;
     private int numberOColumns;
     private int scoreBarHeight;
@@ -104,7 +105,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         View gameOverView = findViewById(R.id.gameOverViewInclude);
         BitmapLoader bitmapLoader = new BitmapLoader(this, gemWidth);
 
-        game = new Game(this, bitmapLoader, width, height, gemWidth, gemGridBorder, numberOColumns, scoreBarHeight, floorY, titleView, gameOverView);
+        game = new Game(this, bitmapLoader, (int)width, height, gemWidth,
+                dropValue, gemGridBorder, numberOColumns, scoreBarHeight, floorY, titleView, gameOverView);
         game.initGemGridView(gemGridTransparentView);
         game.initGemGroupLayer(gemGroupTransparentView, bitmapLoader);
         game.initScoreboardLayer(scoreTransparentView);
@@ -144,9 +146,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         floorY = height - bottomBorderHeight;
         int maxRows = getResources().getInteger(R.integer.maximum_rows);
         gemWidth = (height - (scoreBarHeight + bottomBorderHeight)) / maxRows;
-        float gemWidth2 = ((float)(height - (scoreBarHeight + bottomBorderHeight))) / maxRows;
-        System.out.println("Gem width and float gem width: " + gemWidth + " ,  " + gemWidth2);
-        gemGridBorder = (this.width - (gemWidth * numberOColumns)) / 2;
+        dropValue = ((float)(height - (scoreBarHeight + bottomBorderHeight))) / maxRows;
+        System.out.println("Gem width and float gem width: " + gemWidth + " ,  " + dropValue);
+        gemGridBorder = (int)(this.width - (gemWidth * numberOColumns)) / 2;
     }
 
 }

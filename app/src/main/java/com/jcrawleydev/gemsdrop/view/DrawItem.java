@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 public interface DrawItem {
 
     Bitmap getBitmap();
-    int getX();
-    int getY();
+    float getX();
+    float getY();
     boolean isVisible();
 }

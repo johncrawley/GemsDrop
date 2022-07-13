@@ -33,7 +33,7 @@ public class Game {
     private GemGridLayer gemGridLayer;
     private ClickHandler clickHandler;
     private GemControls gemControls;
-    private final int gemWidth;
+    private final float gemWidth;
     private Evaluator evaluator;
     private ActionMediator actionMediator;
     private GemCountTracker gemCountTracker;
@@ -53,13 +53,15 @@ public class Game {
     private final int numberOfColumns;
     private final MainViewModel viewModel;
     private final  GemGrid gemGrid;
+    private final float dropValue;
 
 
     public Game(MainActivity activity,
                 BitmapLoader bitmapLoader,
                 int screenWidth,
                 int screenHeight,
-                int gemWidth,
+                float gemWidth,
+                float dropValue,
                 int gemGridBorder,
                 int numberOfColumns,
                 int scoreBarHeight,
@@ -70,6 +72,7 @@ public class Game {
         this.width = screenWidth;
         this.height = screenHeight;
         this.gemWidth = gemWidth;
+        this.dropValue = dropValue;
         this.activity = activity;
         this.viewModel = activity.getViewModel();
         this.bitmapLoader = bitmapLoader;
@@ -78,7 +81,7 @@ public class Game {
         this.floorY = floorY;
         int numberOfGems = 3;
         maxRows = activity.getResources().getInteger(R.integer.maximum_rows);
-        int initialY = floorY - ((maxRows + numberOfGems + 2) * gemWidth);
+        float initialY = floorY - ((maxRows + numberOfGems + 2) * gemWidth);
         System.out.println("Game constructor: initialY : " + initialY + " floorY: " + floorY);
         this.titleView = titleView;
         this.gameOverView = gameOverView;
@@ -90,6 +93,7 @@ public class Game {
         gemGroupFactory = new GemGroupFactory.Builder()
                 .withInitialY(initialY)
                 .withGemWidth(gemWidth)
+                .dropValue(dropValue)
                 .withNumberOfGems(numberOfGems)
                 .withInitialPosition(numberOfColumns /2)
                 .withFloorAt(floorY)
@@ -136,7 +140,7 @@ public class Game {
 
 
     void initGemGridView(TransparentView v){
-        gemGrid.setDropIncrement(gemWidth / getInt(R.integer.gem_grid_gravity_drop_distance_factor));
+        gemGrid.setDropIncrement((int)(gemWidth / getInt(R.integer.gem_grid_gravity_drop_distance_factor)));
         gemGridLayer = new GemGridLayer(v, bitmapLoader, gemGrid, gemWidth, width, floorY, borderWidth);
         evaluator = new Evaluator(gemGrid, 3);
         gemControls = new GemControls(gemGrid);

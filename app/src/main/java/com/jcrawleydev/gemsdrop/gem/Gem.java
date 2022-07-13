@@ -37,7 +37,7 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
     protected Color color;
     private boolean deletionCandidateFlag = false;
     private boolean markedForDeletion = false;
-    private int x,y;
+    private float x,y;
     private Bitmap bitmap;
     private boolean visible;
     private final Paint paint;
@@ -67,7 +67,7 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
     }
 
     @Override
-    public int getX(){
+    public float getX(){
         return x;
     }
 
@@ -83,17 +83,23 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
 
 
     @Override
-    public int getY(){
+    public float getY(){
         return y;
     }
 
 
-    public void setX(int x){
+    public void setX(float x){
         this.x = x;
     }
 
 
-    public void setXY(int x, int y){
+    public void setY(float y){
+        this.y = y;
+    }
+
+
+
+    public void setXY(float x, float y){
         log("Entered setXY()");
         setX(x);
         setY(y);
@@ -103,12 +109,8 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
         System.out.println("^^^ Gem: "+  msg);
     }
 
-    public void setY(int y){
-        this.y = y;
-    }
 
-
-    public void incY(int value){this.y += value;}
+    public void incY(float value){this.y += value;}
 
 
     public void setMarkedForDeletion(){
@@ -163,6 +165,7 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
     public void setVisible(){
         this.visible = true;
     }
+
 
 
     @Override

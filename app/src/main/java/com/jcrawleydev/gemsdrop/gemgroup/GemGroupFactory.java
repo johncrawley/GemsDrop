@@ -13,25 +13,27 @@ import java.util.Random;
 public class GemGroupFactory {
 
     private final int NUMBER_OF_GEMS;
-    private final int gemsInitialY;
+    private final float gemsInitialY;
     private final int initialColumnPosition;
     private final List<Gem.Color> colors;
     private final int floorY;
-    private final int GEM_WIDTH;
+    private final float gemWidth;
     private final int borderWidth;
     private final GemPaintOptions gemPaintOptions;
     private Random random;
     private final GemGrid gemGrid;
+    private final float dropValue;
 
 
-    private GemGroupFactory(GemGrid gemGrid, int numberOfGems, int initialPosition, int gemsInitialY, int gemWidth, int floorY, int borderWidth){
+    private GemGroupFactory(GemGrid gemGrid, int numberOfGems, int initialPosition, float gemsInitialY, float gemWidth, float dropValue, int floorY, int borderWidth){
         this.NUMBER_OF_GEMS = numberOfGems;
         this.gemGrid = gemGrid;
         this.initialColumnPosition = initialPosition;
         this.gemsInitialY = gemsInitialY;
         colors = Arrays.asList(Gem.Color.RED, Gem.Color.BLUE, Gem.Color.PURPLE, Gem.Color.GREEN, Gem.Color.YELLOW);
         this.floorY = floorY;
-        this.GEM_WIDTH = gemWidth;
+        this.gemWidth = gemWidth;
+        this.dropValue = dropValue;
         this.borderWidth = borderWidth;
         gemPaintOptions = new GemPaintOptions(gemWidth);
     }
@@ -45,7 +47,7 @@ public class GemGroupFactory {
             gem.setInvisible();
             gems.add(gem);
         }
-        return new GemGroup(gemGrid, initialColumnPosition, gemsInitialY, GemGroup.Orientation.VERTICAL, gems, GEM_WIDTH, floorY, borderWidth);
+        return new GemGroup(gemGrid, initialColumnPosition, gemsInitialY, GemGroup.Orientation.VERTICAL, gems, gemWidth, dropValue, floorY, borderWidth);
     }
 
 
@@ -59,10 +61,11 @@ public class GemGroupFactory {
 
         public Builder(){}
 
-        private int numberOfGems, initialPosition, gemsInitialY, gemWidth, floorY, borderWidth;
+        private int numberOfGems, initialPosition, floorY, borderWidth;
+        private float dropValue, gemsInitialY, gemWidth;
         private GemGrid gemGrid;
 
-        public Builder withInitialY(int initialY){
+        public Builder withInitialY(float initialY){
             this.gemsInitialY = initialY;
             return this;
         }
@@ -77,8 +80,14 @@ public class GemGroupFactory {
             return this;
         }
 
-        public Builder withGemWidth(int gemWidth){
+        public Builder withGemWidth(float gemWidth){
             this.gemWidth = gemWidth;
+            return this;
+        }
+
+
+        public Builder dropValue(float dropValue){
+            this.dropValue = dropValue;
             return this;
         }
 
@@ -100,7 +109,7 @@ public class GemGroupFactory {
 
 
         public GemGroupFactory build(){
-            return new GemGroupFactory(gemGrid, numberOfGems, initialPosition, gemsInitialY, gemWidth, floorY, borderWidth);
+            return new GemGroupFactory(gemGrid, numberOfGems, initialPosition, gemsInitialY, gemWidth, dropValue, floorY, borderWidth);
         }
 
     }

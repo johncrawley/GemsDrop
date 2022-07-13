@@ -3,7 +3,6 @@ package com.jcrawleydev.gemsdrop.view;
 import android.graphics.Bitmap;
 import android.view.View;
 
-import com.jcrawleydev.gemsdrop.R;
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.view.item.DrawableItem;
@@ -44,7 +43,7 @@ public class GemGroupLayer implements UpdatableView{
         transparentView.clearDrawableItems();
         List<DrawableItem> gems = new ArrayList<>(gemGroup.getGems());
         transparentView.addDrawableItems(gems);
-        transparentView.setTranslateY(gemGroup.getY());
+        transparentView.setTranslateY((int)gemGroup.getY());
     }
 
 
@@ -52,8 +51,8 @@ public class GemGroupLayer implements UpdatableView{
     public void drawIfUpdated(){
 
         if(gemGroup.wasUpdated()) {
-            transparentView.setTranslateY(gemGroup.getY());
-            transparentView.setTranslateX(gemGroup.getX());
+            transparentView.setTranslateY((int)gemGroup.getY());
+            transparentView.setTranslateX((int)gemGroup.getX());
             transparentView.invalidate();
             gemGroup.setUpdated(false);
         }

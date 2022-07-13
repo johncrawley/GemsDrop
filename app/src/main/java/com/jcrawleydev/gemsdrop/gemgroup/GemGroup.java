@@ -13,8 +13,9 @@ public class GemGroup {
     private final List<Gem> reversedOrderGems;
     private Orientation orientation;
     private DetailedOrientation detailedOrientation = DetailedOrientation.FIRST_TO_LAST;
-    private int x,y, xPosition, middleYPosition;
-    private final int gemWidth;
+    private float x,y;
+    private int xPosition, middleYPosition;
+    private final float gemWidth;
     private final int floorY;
     public enum DetailedOrientation { FIRST_TO_LAST, TOP_TO_BOTTOM, LAST_TO_FIRST, BOTTOM_TO_TOP }
     public enum Orientation { HORIZONTAL, VERTICAL }
@@ -24,14 +25,16 @@ public class GemGroup {
     private boolean isFirstDrop = true;
     private final GemGrid gemGrid;
     private int[] dropPositions;
+    private final float dropValue;
 
 
-    public GemGroup(GemGrid gemGrid, int initialPosition, int initialY, Orientation orientation, List<Gem> gems, int gemWidth, int floorY, int borderWidth){
+    public GemGroup(GemGrid gemGrid, int initialPosition, float initialY, Orientation orientation, List<Gem> gems, float gemWidth, float dropValue, int floorY, int borderWidth){
         log("************************************** floor Entered GemGroup()");
         this.gemGrid = gemGrid;
         this.xPosition = initialPosition;
         this.gems = new ArrayList<>(gems);
         this.gemWidth = gemWidth;
+        this.dropValue = dropValue;
         this.floorY = floorY;
         assignXYFrom(borderWidth, initialPosition, initialY);
         setupMiddleYPosition();
@@ -50,14 +53,15 @@ public class GemGroup {
 
     private void setupDropPositions(){
         int initialGemPosition = middleYPosition;
-        int dropValue = gemWidth;
-        this.middleYPosition = ((floorY - y) / gemWidth) -1;
+        setupMiddleYPosition();
         dropPositions = new int[middleYPosition + 1];
         log("floor Y : " + floorY);
-        int lowestGemY = floorY - gemWidth;
+        float lowestGemY = floorY - gemWidth;
+        float currentY = -dropValue;
         for(int i=0; i< initialGemPosition; i++){
+            currentY += dropValue;
             int position = i+1;
-            dropPositions[i] = lowestGemY - (dropValue * i);
+            dropPositions[i] = (int)(lowestGemY - currentY);
             log("y for position  " + position + " : "  + dropPositions[i]);
         }
     }
@@ -67,8 +71,8 @@ public class GemGroup {
     }
 
 
-    private void assignXYFrom(int borderWidth, int initialPosition, int initialY){
-        this.x = borderWidth + (initialPosition * gemWidth) + gemWidth /2;
+    private void assignXYFrom(int borderWidth, int initialPosition, float initialY){
+        this.x = borderWidth + (initialPosition * gemWidth) + gemWidth /2f;
         this.y = initialY;
         y+= getYRemainderFromFloor();
         y+=3;
@@ -161,7 +165,7 @@ public class GemGroup {
         float bottomYAfterDrop = getBottomY();
         float yAfterDrop = y;
         if(isVertical()){
-            int topYOfCurrentGridColumn = gemGrid.getColumnTopY(xPosition);
+            float topYOfCurrentGridColumn = gemGrid.getColumnTopY(xPosition);
             final float dropValue = gemWidth;
             float distanceToDrop = topYOfCurrentGridColumn - bottomYAfterDrop;
             float dropRemainder = distanceToDrop % dropValue;
@@ -192,7 +196,7 @@ public class GemGroup {
                 int position = i + getBaseXPosition();
 
                 log("dropBy() Position: " + position);
-                int currentGridColumnTopY = gemGrid.getTopYOfColumn(position);
+                int currentGridColumnTopY = (int)gemGrid.getTopYOfColumn(position);
                 highestGridColumnHeight = Math.min(highestGridColumnHeight, currentGridColumnTopY);
                 if (currentGridColumnTopY <= getBottomY()) {
                     y = highestGridColumnHeight - gemWidth;
@@ -204,7 +208,7 @@ public class GemGroup {
         wasUpdated = true;
     }
 
-    public int getBottomY(){
+    public float getBottomY(){
         if(isVertical()){
             return y + getNumberOfGems() * gemWidth;
         }
@@ -290,12 +294,12 @@ public class GemGroup {
     }
 
 
-    public int getX(){
+    public float getX(){
         return x;
     }
 
 
-    public int getY(){
+    public float getY(){
         return y;
     }
 
@@ -324,17 +328,17 @@ public class GemGroup {
     }
 
 
-    public int getBottomPosition(){
+    public float getBottomPosition(){
         if( orientation == Orientation.HORIZONTAL){
             return middleYPosition + 1;
         }
-        return (middleYPosition + getNumberOfGems() /2) -1;
+        return (middleYPosition + (getNumberOfGems()) /2f) -1;
     }
 
 
     public List<Integer> getGemPositions(){
         List<Integer> positions = new ArrayList<>();
-        int leftMostPosition = xPosition - getNumberOfGems() / 2;
+        int leftMostPosition = (int)xPosition - getNumberOfGems() / 2;
         for(int i=0; i< gems.size(); i++){
             positions.add(leftMostPosition + i);
         }
@@ -343,11 +347,11 @@ public class GemGroup {
 
 
     private void setupMiddleYPosition(){
-        this.middleYPosition = ((floorY - y) / gemWidth) -1;
+        this.middleYPosition = (int)((floorY - y) / gemWidth) -1;
     }
 
 
-    private int getYRemainderFromFloor(){
+    private float getYRemainderFromFloor(){
         return y == 0 ? 0 : floorY % y;
     }
 

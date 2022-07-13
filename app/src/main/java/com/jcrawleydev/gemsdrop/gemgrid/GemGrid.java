@@ -16,7 +16,7 @@ public class GemGrid {
     private List<List<Gem>> gemColumns;
     private final int NUMBER_OF_ROWS;
     private final int NUMBER_OF_COLUMNS;
-    private int gemSize;
+    private float gemSize;
     private int floorY;
     private int startingX;
     private int dropIncrement;
@@ -33,7 +33,7 @@ public class GemGrid {
         return this.gemColumns;
     }
 
-    public void setGemSize(int gemSize){
+    public void setGemSize(float gemSize){
         this.gemSize = gemSize;
     }
 
@@ -86,7 +86,7 @@ public class GemGrid {
     }
 
 
-    public int getTopYOfColumn(int position){
+    public float getTopYOfColumn(int position){
         int index = Math.max(0, position);
         index = Math.min(gemColumns.size()-1, index);
         return floorY - (gemColumns.get(index).size() * gemSize);
@@ -117,7 +117,7 @@ public class GemGrid {
     }
 
 
-    private int getTopYForColumn(int position){
+    private float getTopYForColumn(int position){
         int columnHeight = gemColumns.get(position).size();
         return floorY + (columnHeight * gemSize);
     }
@@ -143,7 +143,7 @@ public class GemGrid {
     }
 
 
-    public int getColumnTopY(int position){
+    public float getColumnTopY(int position){
         return floorY - (gemSize * gemColumns.get(position).size());
     }
 
@@ -273,6 +273,8 @@ public class GemGrid {
         int rowIndex = column.size();
         setGemCoordinatesToGridPosition(gem, rowIndex, columnIndex);
         column.add(gem);
+        float gemBottomY = gem.getY() + gemSize;
+        log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% gem bottom y: " + gemBottomY);
     }
 
 
@@ -282,14 +284,16 @@ public class GemGrid {
         for(Gem gem : gems){
             int rowIndex = column.size();
             setGemCoordinatesToGridPosition(gem, rowIndex, columnIndex);
+            float gemBottomY = gem.getY() + gemSize;
+            log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% gem bottom y: " + gemBottomY);
             column.add(gem);
         }
     }
 
 
     private void setGemCoordinatesToGridPosition(Gem gem, int rowIndex, int columnIndex){
-        int gemX = startingX + (gemSize * columnIndex);
-        int gemY = floorY - ((rowIndex + 1) * gemSize);
+        float gemX = startingX + (gemSize * columnIndex);
+        float gemY = floorY - ((rowIndex + 1) * gemSize);
         gem.setXY(gemX, gemY);
     }
 
@@ -321,8 +325,8 @@ public class GemGrid {
 
 
     private void dropGemIfAboveGridPosition(Gem gem, int actualRowIndex){
-        int gridTopY = getYForRowTop(actualRowIndex);
-        int diff = gridTopY - gem.getY();
+        float gridTopY = getYForRowTop(actualRowIndex);
+        float diff = gridTopY - gem.getY();
 
         if(gem.getY() < gridTopY){
             if( diff < dropIncrement){
@@ -342,7 +346,7 @@ public class GemGrid {
     }
 
 
-    private int getYForRowTop(int rowIndex){
+    private float getYForRowTop(int rowIndex){
         return this.floorY - ((1 + rowIndex) * gemSize);
     }
 

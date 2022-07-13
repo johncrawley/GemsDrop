@@ -8,8 +8,8 @@ public interface DrawableItem {
 
 
     Bitmap getBitmap();
-    int getX();
-    int getY();
+    float getX();
+    float getY();
     boolean isVisible();
     void draw(Canvas canvas, Paint paint);
 

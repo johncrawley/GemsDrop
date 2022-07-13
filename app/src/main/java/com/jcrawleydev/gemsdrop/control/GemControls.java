@@ -142,7 +142,7 @@ public class GemControls {
 
 
     private boolean doesColumnHeightMeetMiddleGem(int colIndex){
-        int gemGroupMidY = gemGroup.getBottomPosition() + 1;
+        float gemGroupMidY = gemGroup.getBottomPosition() + 1;
         return getColumnTopPosition(colIndex) >= gemGroupMidY;
     }
 

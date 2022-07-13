@@ -152,6 +152,7 @@ public class TransparentView extends View {
                 drawableItem.draw(canvasBitmap, paint);
             }
         }
+
     }
 
 }

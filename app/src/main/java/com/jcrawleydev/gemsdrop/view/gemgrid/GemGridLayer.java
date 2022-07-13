@@ -17,7 +17,7 @@ public class GemGridLayer implements UpdatableView, DrawableItem {
     private final TransparentView transparentView;
     private final BitmapLoader bitmapLoader;
 
-    public GemGridLayer(TransparentView transparentView, BitmapLoader bitmapLoader, GemGrid gemGrid, int gemSize, int viewWidth, int floorY, int borderWidth){
+    public GemGridLayer(TransparentView transparentView, BitmapLoader bitmapLoader, GemGrid gemGrid, float gemSize, int viewWidth, int floorY, int borderWidth){
         this.gemGrid = gemGrid;
         int topBorderWidth = 0;
         this.transparentView = transparentView;
@@ -70,12 +70,12 @@ public class GemGridLayer implements UpdatableView, DrawableItem {
     }
 
     @Override
-    public int getX() {
+    public float getX() {
         return 0;
     }
 
     @Override
-    public int getY() {
+    public float getY() {
         return 0;
     }
 

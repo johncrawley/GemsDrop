@@ -7,12 +7,12 @@ public class GemGroupDropper {
     private int dropIncrement;
     private float dropFactor = 0f;
     private float currentDropIncrement = 0f;
-    private final int gemWidth;
+    private final float gemWidth;
     private int currentCount;
     private boolean isQuickDropEnabled = false;
 
 
-    public GemGroupDropper(GemGroup gemGroup, int gemWidth){
+    public GemGroupDropper(GemGroup gemGroup, float gemWidth){
         this.gemGroup = gemGroup;
         this.gemWidth = gemWidth;
         setDropFactor(1f);

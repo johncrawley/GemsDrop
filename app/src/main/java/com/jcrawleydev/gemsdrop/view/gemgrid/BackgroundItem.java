@@ -27,12 +27,12 @@ public class BackgroundItem implements DrawableItem {
     }
 
     @Override
-    public int getX() {
-        return 0;
+    public float getX() {
+        return 0f;
     }
 
     @Override
-    public int getY() {
+    public float getY() {
         return 0;
     }
 

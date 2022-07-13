@@ -119,13 +119,14 @@ public class ScoreBoardLayer implements TextItem, DrawableItem {
     }
 
     @Override
-    public int getX(){
-        return 100;
+    public float getX(){
+        return 100f;
     }
 
+
     @Override
-    public int getY(){
-        return 100;
+    public float getY(){
+        return 100f;
     }
 
     @Override
