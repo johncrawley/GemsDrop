@@ -26,6 +26,7 @@ public class GemGroup {
     private final GemGrid gemGrid;
     private int[] dropPositions;
     private final float dropValue;
+    private final int FLOOR_POSITION = 1;
 
 
     public GemGroup(GemGrid gemGrid, int initialPosition, float initialY, Orientation orientation, List<Gem> gems, float gemWidth, float dropValue, int floorY, int borderWidth){
@@ -144,75 +145,18 @@ public class GemGroup {
 
     public void decrementMiddleYPosition(){
         middleYPosition--;
+        if(isVertical()){
+            return;
+        }
+        middleYPosition = Math.max(middleYPosition, FLOOR_POSITION);
         log("floor, decrementMiddleYPosition(), now at: " + middleYPosition);
     }
 
 
     public void dropBy(int dropIncrement){
-        if(isVertical()){
-            y = getYForPosition(middleYPosition+1);
-        }
         int verticalPositionAdjustment = isVertical() ? 1 : 0;
-        y = getYForPosition(middleYPosition+verticalPositionAdjustment );
+        y = getYForPosition(middleYPosition + verticalPositionAdjustment );
         wasUpdated = true;
-    }
-
-
-    public void dropByOLD(int dropIncrement){
-        float oldY = y;
-        float oldBottomY = getBottomY();
-        y += dropIncrement;
-        float bottomYAfterDrop = getBottomY();
-        float yAfterDrop = y;
-        if(isVertical()){
-            float topYOfCurrentGridColumn = gemGrid.getColumnTopY(xPosition);
-            final float dropValue = gemWidth;
-            float distanceToDrop = topYOfCurrentGridColumn - bottomYAfterDrop;
-            float dropRemainder = distanceToDrop % dropValue;
-            float diff = dropValue - dropRemainder;
-            float altDiv = distanceToDrop / dropValue;
-            float altDiff = distanceToDrop- (altDiv * dropValue);
-           // y+=diff;
-            log("distance to drop: " + distanceToDrop + " dropRemainder: "+ dropRemainder + " diff: " + diff + " altDiff: " + altDiff + " y: " + y);
-            log("middleY position: " + middleYPosition);
-            if(getBottomY() >= topYOfCurrentGridColumn){
-                y = topYOfCurrentGridColumn - (getNumberOfGems() * gemWidth);
-            }
-            float remainder = topYOfCurrentGridColumn % bottomYAfterDrop;
-            log("dropBy() oldY: " + oldY
-                    + ", oldBottomY: " + oldBottomY
-                    + ", dropValue: " + dropIncrement
-                    + ", y after drop: " + yAfterDrop
-                    + ", bottomY after drop: " + bottomYAfterDrop
-                    + ", adjusted y: "+  y
-                             + ", topYOfCurrentGridColumn: " + topYOfCurrentGridColumn
-                    + " ,adjusted bottomY: " + getBottomY()
-                    +  ", floorY: " + floorY);
-
-        }
-        else {
-            int highestGridColumnHeight = Integer.MAX_VALUE;
-            for (int i = 0; i < gems.size(); i++) {
-                int position = i + getBaseXPosition();
-
-                log("dropBy() Position: " + position);
-                int currentGridColumnTopY = (int)gemGrid.getTopYOfColumn(position);
-                highestGridColumnHeight = Math.min(highestGridColumnHeight, currentGridColumnTopY);
-                if (currentGridColumnTopY <= getBottomY()) {
-                    y = highestGridColumnHeight - gemWidth;
-                }
-            }
-        }
-        //gemGrid.addAnyFrom(this);
-        //y += getYRemainderFromFloor();
-        wasUpdated = true;
-    }
-
-    public float getBottomY(){
-        if(isVertical()){
-            return y + getNumberOfGems() * gemWidth;
-        }
-        return y + gemWidth;
     }
 
 
@@ -330,7 +274,7 @@ public class GemGroup {
 
     public float getBottomPosition(){
         if( orientation == Orientation.HORIZONTAL){
-            return middleYPosition + 1;
+            return middleYPosition;
         }
         return (middleYPosition + (getNumberOfGems()) /2f) -1;
     }
@@ -338,7 +282,7 @@ public class GemGroup {
 
     public List<Integer> getGemPositions(){
         List<Integer> positions = new ArrayList<>();
-        int leftMostPosition = (int)xPosition - getNumberOfGems() / 2;
+        int leftMostPosition = xPosition - getNumberOfGems() / 2;
         for(int i=0; i< gems.size(); i++){
             positions.add(leftMostPosition + i);
         }

@@ -77,10 +77,15 @@ public class GemGrid {
     public boolean shouldAdd(GemGroup gemGroup) {
         log("shouldAdd() gemGroup,getBottomPosition(): " + gemGroup.getBottomPosition() + " getColumnHeight(): " + getColumnHeight(gemGroup.getXPosition()));
         if(gemGroup.getBottomPosition() <= INITIAL_FLOOR_POSITION){
+            log("shouldAdd() gemGroup bottomPosition: " + gemGroup.getBottomPosition() + " is less or equal to floor position: " + INITIAL_FLOOR_POSITION);
             return true;
         }
         if(gemGroup.getOrientation() == GemGroup.Orientation.HORIZONTAL){
-            return areAllGemsConnectingToColumns(gemGroup);
+            boolean areAllGemsConnecting = areAllGemsConnectingToColumns(gemGroup);
+            log("shouldAdd() - areAllgemsConnecting to columns: " + areAllGemsConnecting);
+            List<Gem> gems = gemGroup.getGems();
+            log("shouldAdd() - visible gems : " + gems.get(0).isVisible() + ", " + gems.get(1).isVisible() + "," + gems.get(2).isVisible());
+            return areAllGemsConnecting;
         }
         return gemGroup.getBottomPosition() <= getColumnHeight(gemGroup.getXPosition());
     }
@@ -131,9 +136,13 @@ public class GemGrid {
     private boolean areAllGemsConnectingToColumns(GemGroup gemGroup){
         for(int position : gemGroup.getGemPositions()){
             if(gemGroup.getBottomPosition() > getColumnHeight(position)){
+                log("areAllGemsConnectingToColumns: gemGroupBottomPosition: "
+                        + gemGroup.getBottomPosition()
+                        + " getColumnHeight(" + position + ") : " + getColumnHeight(position));
                 return false;
             }
         }
+        log("areAllGemsConnectingToColumns() yes!!");
         return true;
     }
 

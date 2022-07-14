@@ -363,7 +363,7 @@ public class GemGridTest {
         addGems(2, VERTICAL, RED, YELLOW, GREEN);
         addGems(2, VERTICAL, RED, GREEN, BLUE);
 
-        int actualY = gemGrid.getTopYOfColumn(1);
+        float actualY = gemGrid.getTopYOfColumn(1);
         int expectedY = FLOOR_Y -(3 * GEM_SIZE);
         assertEquals(expectedY, actualY);
     }

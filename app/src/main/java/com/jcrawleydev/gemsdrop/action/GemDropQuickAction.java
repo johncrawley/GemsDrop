@@ -22,7 +22,7 @@ public class GemDropQuickAction {
     private final int gravityInterval;
     private GemGroup gemGroup;
     private GemGrid gemGrid;
-
+    private final ScheduledExecutorService executor;
 
     public GemDropQuickAction(ActionMediator actionMediator,
                               GemGroupLayer gemGroupLayer,
@@ -34,6 +34,7 @@ public class GemDropQuickAction {
         this.controls = controls;
         this.gemGridLayer = gemGridLayer;
         this.gravityInterval = gravityInterval;
+        executor = Executors.newScheduledThreadPool(3);
     }
 
 
@@ -41,7 +42,6 @@ public class GemDropQuickAction {
         gemGrid = gemGridLayer.getGemGrid();
         gemGroup = gemGroupLayer.getGemGroup();
         gemGroupLayer.getGemGroup().enableQuickDrop();
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
         controls.deactivate();
         quickDropFuture = executor.scheduleWithFixedDelay(this::quickDrop, 0, gravityInterval, TimeUnit.MILLISECONDS);
     }

@@ -5,7 +5,7 @@ public class GemGroupDropper {
 
     private final GemGroup gemGroup;
     private int dropIncrement;
-    private float dropFactor = 0f;
+    private float dropFactor = 0.5f;
     private float currentDropIncrement = 0f;
     private final float gemWidth;
     private int currentCount;
@@ -31,7 +31,7 @@ public class GemGroupDropper {
         }
         currentDropIncrement += dropFactor;
         while(currentDropIncrement >= 1){
-            currentDropIncrement -= 1;
+            currentDropIncrement--;
             gemGroup.decrementMiddleYPosition();
         }
         gemGroup.dropBy(dropIncrement);
