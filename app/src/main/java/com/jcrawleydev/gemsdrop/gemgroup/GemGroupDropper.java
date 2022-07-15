@@ -4,7 +4,7 @@ package com.jcrawleydev.gemsdrop.gemgroup;
 public class GemGroupDropper {
 
     private final GemGroup gemGroup;
-    private int dropIncrement;
+    private float dropIncrement;
     private float dropFactor = 0.5f;
     private float currentDropIncrement = 0f;
     private final float gemWidth;
@@ -15,7 +15,7 @@ public class GemGroupDropper {
     public GemGroupDropper(GemGroup gemGroup, float gemWidth){
         this.gemGroup = gemGroup;
         this.gemWidth = gemWidth;
-        setDropFactor(1f);
+        setDropFactor(0.5f);
     }
 
 
@@ -30,13 +30,12 @@ public class GemGroupDropper {
             return;
         }
         currentDropIncrement += dropFactor;
-        while(currentDropIncrement >= 1){
-            currentDropIncrement--;
+        if(currentDropIncrement >= 1){
+            currentDropIncrement = 0;
             gemGroup.decrementMiddleYPosition();
         }
         gemGroup.dropBy(dropIncrement);
     }
-
 
 
     private boolean shouldAnimate(){
@@ -45,9 +44,9 @@ public class GemGroupDropper {
 
 
     private boolean isUpdateScheduled(){
-        final int UPDATE_FACTOR = 5;
+        int updateFactor = 5;
         currentCount++;
-        if(currentCount < UPDATE_FACTOR){
+        if(currentCount < updateFactor){
             return false;
         }
         currentCount = 0;

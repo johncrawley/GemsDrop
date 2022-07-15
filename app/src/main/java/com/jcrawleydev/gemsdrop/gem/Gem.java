@@ -100,13 +100,8 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
 
 
     public void setXY(float x, float y){
-        log("Entered setXY()");
         setX(x);
         setY(y);
-    }
-
-    private void log(String msg){
-        System.out.println("^^^ Gem: "+  msg);
     }
 
 
@@ -119,9 +114,6 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
         }
     }
 
-    public boolean isDeletionCandidateFlagSet(){
-        return deletionCandidateFlag;
-    }
 
     public boolean isMarkedForDeletion(){
         return this.markedForDeletion;

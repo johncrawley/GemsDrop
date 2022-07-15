@@ -50,10 +50,8 @@ public class Game {
     private final int maxRows;
     private final SpeedController speedController;
     private boolean isGameOver;
-    private final int numberOfColumns;
     private final MainViewModel viewModel;
     private final  GemGrid gemGrid;
-    private final float dropValue;
 
 
     public Game(MainActivity activity,
@@ -72,7 +70,6 @@ public class Game {
         this.width = screenWidth;
         this.height = screenHeight;
         this.gemWidth = gemWidth;
-        this.dropValue = dropValue;
         this.activity = activity;
         this.viewModel = activity.getViewModel();
         this.bitmapLoader = bitmapLoader;
@@ -82,12 +79,9 @@ public class Game {
         int numberOfGems = 3;
         maxRows = activity.getResources().getInteger(R.integer.maximum_rows);
         float initialY = floorY - ((maxRows + numberOfGems + 2) * gemWidth);
-        System.out.println("Game constructor: initialY : " + initialY + " floorY: " + floorY);
         this.titleView = titleView;
         this.gameOverView = gameOverView;
         this.speedController = new SpeedController(activity);
-        this.numberOfColumns = numberOfColumns;
-
         gemGrid = new GemGrid(numberOfColumns, maxRows);
 
         gemGroupFactory = new GemGroupFactory.Builder()

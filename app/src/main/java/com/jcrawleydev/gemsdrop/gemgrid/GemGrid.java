@@ -5,7 +5,6 @@ import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.view.item.DrawableItem;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -75,17 +74,11 @@ public class GemGrid {
 
 
     public boolean shouldAdd(GemGroup gemGroup) {
-        log("shouldAdd() gemGroup,getBottomPosition(): " + gemGroup.getBottomPosition() + " getColumnHeight(): " + getColumnHeight(gemGroup.getXPosition()));
         if(gemGroup.getBottomPosition() <= INITIAL_FLOOR_POSITION){
-            log("shouldAdd() gemGroup bottomPosition: " + gemGroup.getBottomPosition() + " is less or equal to floor position: " + INITIAL_FLOOR_POSITION);
             return true;
         }
         if(gemGroup.getOrientation() == GemGroup.Orientation.HORIZONTAL){
-            boolean areAllGemsConnecting = areAllGemsConnectingToColumns(gemGroup);
-            log("shouldAdd() - areAllgemsConnecting to columns: " + areAllGemsConnecting);
-            List<Gem> gems = gemGroup.getGems();
-            log("shouldAdd() - visible gems : " + gems.get(0).isVisible() + ", " + gems.get(1).isVisible() + "," + gems.get(2).isVisible());
-            return areAllGemsConnecting;
+            return areAllGemsConnectingToColumns(gemGroup);
         }
         return gemGroup.getBottomPosition() <= getColumnHeight(gemGroup.getXPosition());
     }
@@ -108,7 +101,6 @@ public class GemGrid {
         for(int i = 0, position = gemGroup.getBaseXPosition(); i< gems.size(); i++, position++){
             Gem gem = gems.get(i);
             if(isGemWithinCapturePosition(gem, gemGroup, position)){
-                log("addAnyFrom() gem is within capture position, about to add(), is visible? : " + gem.isVisible());
                 add(gem, position);
                 hasGemBeenAdded = true;
             }
@@ -141,24 +133,15 @@ public class GemGrid {
     private boolean areAllGemsConnectingToColumns(GemGroup gemGroup){
         for(int position : gemGroup.getGemPositions()){
             if(gemGroup.getBottomPosition() > getColumnHeight(position)){
-                log("areAllGemsConnectingToColumns: gemGroupBottomPosition: "
-                        + gemGroup.getBottomPosition()
-                        + " getColumnHeight(" + position + ") : " + getColumnHeight(position));
                 return false;
             }
         }
-        log("areAllGemsConnectingToColumns() yes!!");
         return true;
     }
 
 
     public int getColumnHeight(int position){
         return INITIAL_FLOOR_POSITION + gemColumns.get(position).size();
-    }
-
-
-    public float getColumnTopY(int position){
-        return floorY - (gemSize * gemColumns.get(position).size());
     }
 
 
@@ -227,9 +210,7 @@ public class GemGrid {
 
 
     public void add(Gem gem, int position){
-        log("Entered add()");
         addGemToColumn(gem.clone(), position);
-        log("Setting gem invisible!");
         gem.setInvisible();
     }
 
@@ -243,9 +224,6 @@ public class GemGrid {
         return true;
     }
 
-    private void log(String msg){
-        System.out.println("^^^ GemGrid: "+  msg);
-    }
 
     public int gemCount(){
         int amount = 0;
@@ -270,7 +248,6 @@ public class GemGrid {
 
 
     private void addHorizontal(List<Gem> gems, int gemGroupPosition){
-        log("Entered addHorizontal()");
         int initialOffset = gemGroupPosition - gems.size()/ 2;
         for (int i = 0; i < gems.size(); i++) {
             addGemToColumn(gems.get(i), initialOffset + i);
@@ -279,17 +256,13 @@ public class GemGrid {
 
 
     private void addGemToColumn(Gem gem, int columnIndex){
-        log("Entered addGemToColumn()");
         if(!gem.isVisible()){
-            log("gem is not visible, returning");
             return;
         }
         List<Gem> column = gemColumns.get(columnIndex);
         int rowIndex = column.size();
         setGemCoordinatesToGridPosition(gem, rowIndex, columnIndex);
         column.add(gem);
-        float gemBottomY = gem.getY() + gemSize;
-        log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% gem bottom y: " + gemBottomY);
     }
 
 
@@ -299,8 +272,6 @@ public class GemGrid {
         for(Gem gem : gems){
             int rowIndex = column.size();
             setGemCoordinatesToGridPosition(gem, rowIndex, columnIndex);
-            float gemBottomY = gem.getY() + gemSize;
-            log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% gem bottom y: " + gemBottomY);
             column.add(gem);
         }
     }

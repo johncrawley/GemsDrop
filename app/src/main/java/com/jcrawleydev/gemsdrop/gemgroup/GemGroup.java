@@ -23,19 +23,14 @@ public class GemGroup {
     private boolean wasUpdated;
     private final GemGroupDropper gemGroupDropper;
     private boolean isFirstDrop = true;
-    private final GemGrid gemGrid;
-    private int[] dropPositions;
-    private final float dropValue;
-    private final int FLOOR_POSITION = 1;
 
 
-    public GemGroup(GemGrid gemGrid, int initialPosition, float initialY, Orientation orientation, List<Gem> gems, float gemWidth, float dropValue, int floorY, int borderWidth){
-        log("************************************** floor Entered GemGroup()");
-        this.gemGrid = gemGrid;
+    public GemGroup(GemGrid gemGrid, int initialPosition, float initialY,
+                    Orientation orientation, List<Gem> gems,
+                    float gemWidth, float dropValue, int floorY, int borderWidth){
         this.xPosition = initialPosition;
         this.gems = new ArrayList<>(gems);
         this.gemWidth = gemWidth;
-        this.dropValue = dropValue;
         this.floorY = floorY;
         assignXYFrom(borderWidth, initialPosition, initialY);
         setupMiddleYPosition();
@@ -46,29 +41,8 @@ public class GemGroup {
         if(orientation == Orientation.VERTICAL){
             detailedOrientation = DetailedOrientation.TOP_TO_BOTTOM;
         }
-        setupDropPositions();
         this.gemRotator = new GemRotator(this, gemWidth);
         gemRotator.setGemCoordinates(this);
-    }
-
-
-    private void setupDropPositions(){
-        int initialGemPosition = middleYPosition;
-        setupMiddleYPosition();
-        dropPositions = new int[middleYPosition + 1];
-        log("floor Y : " + floorY);
-        float lowestGemY = floorY - gemWidth;
-        float currentY = -dropValue;
-        for(int i=0; i< initialGemPosition; i++){
-            currentY += dropValue;
-            int position = i+1;
-            dropPositions[i] = (int)(lowestGemY - currentY);
-            log("y for position  " + position + " : "  + dropPositions[i]);
-        }
-    }
-
-    private int getYForPosition(int position){
-        return dropPositions[position -1];
     }
 
 
@@ -148,14 +122,14 @@ public class GemGroup {
         if(isVertical()){
             return;
         }
-        middleYPosition = Math.max(middleYPosition, FLOOR_POSITION);
-        log("floor, decrementMiddleYPosition(), now at: " + middleYPosition);
+        int floorPosition = 1;
+        middleYPosition = Math.max(middleYPosition, floorPosition);
     }
 
 
-    public void dropBy(int dropIncrement){
-        int verticalPositionAdjustment = isVertical() ? 1 : 0;
-        y = getYForPosition(middleYPosition + verticalPositionAdjustment );
+    public void dropBy(float dropIncrement){
+        System.out.println("y: " + y);
+        y += dropIncrement;
         wasUpdated = true;
     }
 
@@ -170,9 +144,6 @@ public class GemGroup {
         wasUpdated = true;
     }
 
-    private void log(String msg){
-        System.out.println("^^^ GemGroup : " + msg);
-    }
 
     public void setDetailedOrientation(DetailedOrientation trueOrientation){
         detailedOrientation = trueOrientation;
@@ -226,7 +197,6 @@ public class GemGroup {
 
 
     public void setGemsInvisible(){
-        log("£££££££££ Entered setGemsInvisible()");
         for(Gem gem: gems){
             gem.setInvisible();
         }
@@ -264,13 +234,10 @@ public class GemGroup {
 
 
     public boolean haveAllGemsSettled(){
-        int i=0;
         for(Gem gem: gems){
             if(gem.isVisible()){
-                log("haveAllGemsSettled() gem at index : " + i + " is visible");
                 return false;
             }
-            i++;
         }
         return true;
     }
