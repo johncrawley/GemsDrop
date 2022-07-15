@@ -226,6 +226,7 @@ public class GemGroup {
 
 
     public void setGemsInvisible(){
+        log("£££££££££ Entered setGemsInvisible()");
         for(Gem gem: gems){
             gem.setInvisible();
         }
@@ -263,10 +264,13 @@ public class GemGroup {
 
 
     public boolean haveAllGemsSettled(){
+        int i=0;
         for(Gem gem: gems){
             if(gem.isVisible()){
+                log("haveAllGemsSettled() gem at index : " + i + " is visible");
                 return false;
             }
+            i++;
         }
         return true;
     }

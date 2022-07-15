@@ -64,9 +64,13 @@ public class GemDropQuickAction {
             actionMediator.evaluateGemsInGrid();
             return;
         }
+        log("$$$$$$$$$ gemGroup.haveAllGemsSettled() is false, invoking dropAndUpdateLayers()");
         dropAndUpdateLayers(gemGroup);
     }
 
+    private void log(String msg){
+        System.out.println("^^^ GemDropQuickAction: " + msg);
+    }
 
     private void dropAndUpdateLayers(GemGroup gemGroup){
         gemGroup.drop();

@@ -108,6 +108,7 @@ public class GemGrid {
         for(int i = 0, position = gemGroup.getBaseXPosition(); i< gems.size(); i++, position++){
             Gem gem = gems.get(i);
             if(isGemWithinCapturePosition(gem, gemGroup, position)){
+                log("addAnyFrom() gem is within capture position, about to add(), is visible? : " + gem.isVisible());
                 add(gem, position);
                 hasGemBeenAdded = true;
             }
@@ -117,8 +118,12 @@ public class GemGrid {
 
 
     private boolean isGemWithinCapturePosition(Gem gem, GemGroup gemGroup, int position){
-       return  gemColumns.get(position).size() >= gemGroup.getBottomPosition()
+       return  isColumnSizeGreaterThanGemGroupBottomPosition(gemGroup, position)
                || getTopYForColumn(position) <= gem.getY() + gemSize / 2;
+    }
+
+    private boolean isColumnSizeGreaterThanGemGroupBottomPosition(GemGroup gemGroup, int position){
+        return  gemColumns.get(position).size()+1 >= gemGroup.getBottomPosition();
     }
 
 
@@ -223,7 +228,8 @@ public class GemGrid {
 
     public void add(Gem gem, int position){
         log("Entered add()");
-        addHorizontal(Collections.singletonList(gem.clone()), position);
+        addGemToColumn(gem.clone(), position);
+        log("Setting gem invisible!");
         gem.setInvisible();
     }
 
