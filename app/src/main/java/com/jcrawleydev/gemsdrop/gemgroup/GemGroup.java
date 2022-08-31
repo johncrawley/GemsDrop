@@ -25,18 +25,16 @@ public class GemGroup {
     private boolean isFirstDrop = true;
 
 
-    public GemGroup(GemGrid gemGrid, int initialPosition, float initialY,
-                    Orientation orientation, List<Gem> gems,
-                    float gemWidth, float dropValue, int floorY, int borderWidth){
-        this.xPosition = initialPosition;
-        this.gems = new ArrayList<>(gems);
-        this.gemWidth = gemWidth;
-        this.floorY = floorY;
-        assignXYFrom(borderWidth, initialPosition, initialY);
+    public GemGroup(GemGroup.Builder builder){
+        this.xPosition = builder.initialPosition;
+        this.gems = new ArrayList<>(builder.gems);
+        this.gemWidth = builder.gemWidth;
+        this.floorY = builder.floorY;
+        assignXYFrom(builder.borderWidth, builder.initialPosition, builder.initialY);
         setupMiddleYPosition();
         this.reversedOrderGems = new ArrayList<>(gems);
         Collections.reverse(reversedOrderGems);
-        this.orientation = orientation;
+        this.orientation = builder.orientation;
         this.gemGroupDropper = new GemGroupDropper(this, gemWidth);//gemGroupDropper;
         if(orientation == Orientation.VERTICAL){
             detailedOrientation = DetailedOrientation.TOP_TO_BOTTOM;
@@ -278,6 +276,85 @@ public class GemGroup {
         }
         return copiedList;
     }
+
+
+    public static class Builder{
+        GemGrid gemGrid;
+        int initialPosition;
+        float initialY;
+        Orientation orientation = Orientation.VERTICAL;
+        List<Gem> gems;
+        float gemWidth;
+        float dropValue;
+        int floorY;
+        int borderWidth;
+
+        public static Builder newInstance(){
+            return new Builder();
+        }
+
+
+        public GemGroup.Builder gemGrid(GemGrid gemGrid){
+            this.gemGrid = gemGrid;
+            return this;
+        }
+
+
+        public GemGroup.Builder initialPosition(int initialPosition){
+            this.initialPosition = initialPosition;
+            return this;
+        }
+
+
+        public GemGroup.Builder orientation(Orientation orientation){
+            this.orientation = orientation;
+            return this;
+        }
+
+
+        public GemGroup.Builder gems(List<Gem> gems){
+            this.gems = gems;
+            return this;
+        }
+
+
+
+        public GemGroup.Builder gemWidth(float gemWidth){
+            this.gemWidth = gemWidth;
+            return this;
+        }
+
+
+        public GemGroup.Builder floorY(int floorY){
+            this.floorY = floorY;
+            return this;
+        }
+
+
+        public GemGroup.Builder initialY(float initialY){
+            this.initialY = initialY;
+            return this;
+        }
+
+
+        public GemGroup.Builder borderWidth(int borderWidth){
+            this.borderWidth = borderWidth;
+            return this;
+        }
+
+
+        public GemGroup build(){
+            return new GemGroup(this);
+        }
+
+
+
+
+
+
+    }
+
+
 
 
 }

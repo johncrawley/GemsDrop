@@ -47,7 +47,16 @@ public class GemGroupFactory {
             gem.setInvisible();
             gems.add(gem);
         }
-        return new GemGroup(gemGrid, initialColumnPosition, gemsInitialY, GemGroup.Orientation.VERTICAL, gems, gemWidth, dropValue, floorY, borderWidth);
+
+        return GemGroup.Builder.newInstance()
+                .gems(gems)
+                .initialPosition(initialColumnPosition)
+                .initialY(gemsInitialY)
+                .orientation(GemGroup.Orientation.VERTICAL)
+                .gemWidth(gemWidth)
+                .floorY(floorY)
+                .borderWidth(borderWidth)
+                .build();
     }
 
 

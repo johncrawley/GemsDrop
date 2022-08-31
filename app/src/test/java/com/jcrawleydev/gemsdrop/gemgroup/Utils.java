@@ -15,7 +15,14 @@ public class Utils {
         Gem gem3 = new Gem(c3);
         List<Gem> gems = Arrays.asList(gem1,gem2, gem3);
         int gemWidth = 150;
-        return new GemGroup(gemGrid, initialPosition,0, orientation, gems, gemWidth,1000, borderWidth );
-
+        return GemGroup.Builder.newInstance()
+                .gems(gems)
+                .initialPosition(initialPosition)
+                .initialY(5)
+                .orientation(GemGroup.Orientation.VERTICAL)
+                .gemWidth(gemWidth)
+                .floorY(2000)
+                .borderWidth(borderWidth)
+                .build();
     }
 }
