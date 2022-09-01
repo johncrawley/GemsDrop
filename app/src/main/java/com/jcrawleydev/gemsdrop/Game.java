@@ -144,7 +144,7 @@ public class Game {
 
 
     void initGemGroupLayer(TransparentView v, BitmapLoader bitmapLoader){
-        gemGroupView = new GemGroupLayer(v, bitmapLoader);
+        gemGroupView = new GemGroupLayer(v, bitmapLoader, gemWidth);
     }
 
 

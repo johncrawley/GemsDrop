@@ -47,8 +47,8 @@ public class GemGroup {
     private void assignXYFrom(int borderWidth, int initialPosition, float initialY){
         this.x = borderWidth + (initialPosition * gemWidth) + gemWidth /2f;
         this.y = initialY;
-        y+= getYRemainderFromFloor();
-        y+=3;
+       // y+= getYRemainderFromFloor();
+       // y+=3;
     }
 
 

@@ -40,20 +40,11 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
     private float x,y;
     private Bitmap bitmap;
     private boolean visible;
-    private final Paint paint;
 
 
     public Gem(Color color){
         this.color = color;
         this.visible = true;
-        paint = new Paint();
-    }
-
-
-    public Gem(Color color, Paint paint){
-        this.color = color;
-        this.visible = true;
-        this.paint = paint;
     }
 
 
@@ -146,7 +137,7 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
         if(!isVisible()){
             return;
         }
-        canvas.drawBitmap(bitmap, x, y, this.paint);
+        canvas.drawBitmap(bitmap, x, y, paint);
     }
 
 

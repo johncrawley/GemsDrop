@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.view.View;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
+import com.jcrawleydev.gemsdrop.gem.GemPaintOptions;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.view.item.DrawableItem;
 
@@ -20,8 +21,9 @@ public class GemGroupLayer implements UpdatableView{
     private GemGroup gemGroup;
 
 
-    public GemGroupLayer(View view, BitmapLoader bitmapLoader){
+    public GemGroupLayer(View view, BitmapLoader bitmapLoader, float gemWidth){
         transparentView = (TransparentView)view;
+        transparentView.setPaint(new GemPaintOptions(gemWidth).getGemPaint());
         this.bitmapLoader = bitmapLoader;
         linkBitmapsToColorsAndAssignWidths();
     }

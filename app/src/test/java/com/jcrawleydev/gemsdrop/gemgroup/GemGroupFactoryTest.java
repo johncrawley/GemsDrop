@@ -17,7 +17,7 @@ public class GemGroupFactoryTest {
     @Test
     public void correctStartingCoordinatesAreGivenToGems(){
         int numberOfGems = 4;
-        int initialY = -100;
+        float initialY = -100f;
         int gemWidth = 50;
 
         gemGroupFactory = new GemGroupFactory.Builder()
@@ -28,7 +28,7 @@ public class GemGroupFactoryTest {
                 .withFloorAt(300)
                 .build();
         GemGroup gemGroup= gemGroupFactory.createGemGroup();
-        assertEquals(initialY, gemGroup.getY() );
+        assertEquals(initialY, gemGroup.getY(), 0.01);
 
     }
 

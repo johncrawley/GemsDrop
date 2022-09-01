@@ -51,6 +51,11 @@ public class TransparentView extends View {
     }
 
 
+    public void setPaint(Paint paint){
+        this.paint = paint;
+    }
+
+
     public void setTranslateY(int y){
         this.canvasTranslateY = y;
     }

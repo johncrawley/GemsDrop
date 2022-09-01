@@ -19,7 +19,6 @@ public class GemGroupFactory {
     private final int floorY;
     private final float gemWidth;
     private final int borderWidth;
-    private final GemPaintOptions gemPaintOptions;
     private Random random;
     private final GemGrid gemGrid;
     private final float dropValue;
@@ -35,7 +34,6 @@ public class GemGroupFactory {
         this.gemWidth = gemWidth;
         this.dropValue = dropValue;
         this.borderWidth = borderWidth;
-        gemPaintOptions = new GemPaintOptions(gemWidth);
     }
 
 
@@ -43,7 +41,7 @@ public class GemGroupFactory {
         List<Gem> gems = new ArrayList<>();
          random = new Random(System.currentTimeMillis());
         for(int i=0; i< NUMBER_OF_GEMS; i++){
-            Gem gem = new Gem(getRandomColor(), gemPaintOptions.getGemPaint());
+            Gem gem = new Gem(getRandomColor());
             gem.setInvisible();
             gems.add(gem);
         }
