@@ -45,11 +45,6 @@ public class GemDropAction {
     }
 
 
-    public void setGemGroup(GemGroup gemGroup) {
-        this.gemGroup = gemGroup;
-    }
-
-
     public void start(){
             if(hasGemDropStarted){
                 return;

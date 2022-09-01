@@ -47,6 +47,8 @@ public class GemGroup {
     private void assignXYFrom(int borderWidth, int initialPosition, float initialY){
         this.x = borderWidth + (initialPosition * gemWidth) + gemWidth /2f;
         this.y = initialY;
+        System.out.println("GemGroup.assignXYFrom() initialY : " + initialY + " getRemainderFromFloor(): " + getYRemainderFromFloor());
+
        // y+= getYRemainderFromFloor();
        // y+=3;
     }
@@ -126,7 +128,8 @@ public class GemGroup {
 
 
     public void dropBy(float dropIncrement){
-        System.out.println("y: " + y);
+        float yAfterDrop = y + dropIncrement;
+        System.out.println("GemGroup.dropBy() y: " + y + " floorY: "+ floorY + " dropIncrement: " + dropIncrement + " y after drop: " + yAfterDrop +  " gemDropper is quickDrop: " + gemGroupDropper.isQuickDropEnabled() + " ");
         y += dropIncrement;
         wasUpdated = true;
     }

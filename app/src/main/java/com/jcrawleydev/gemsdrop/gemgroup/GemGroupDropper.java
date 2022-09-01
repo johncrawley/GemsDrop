@@ -24,6 +24,10 @@ public class GemGroupDropper {
         setDropFactor(1f);
     }
 
+    public boolean isQuickDropEnabled(){
+        return isQuickDropEnabled;
+    }
+
 
     public void drop(){
         if(!shouldAnimate()){
