@@ -47,7 +47,7 @@ public class ActionMediator {
         this.scoreBoardLayer = scoreboardLayer;
         this.gemGridLayer = gemGridLayer;
         gemDropAction = new GemDropAction(speedController, this, gemControls, gemGroupLayer, gemGridLayer, gemGroupFactory, score);
-        quickDropGemsAction = new GemDropQuickAction(this, gemGroupLayer, gemControls, gemGridLayer, gravityInterval);
+        quickDropGemsAction = new GemDropQuickAction(this, gemGroupLayer, gemControls, gemGridLayer, gravityInterval * 12);
         evaluateAction = new EvaluateAction(evaluator, this, gemGridLayer.getGemGrid(), maxColumnHeight);
         flickerMarkedGemsAction = new FlickerMarkedGemsAction(gemGridLayer, this, flickerMarkedGemsTime );
         deleteMarkedGemsAction = new DeleteMarkedGemsAction(this, evaluator, gemGridLayer, scoreboardLayer, gemCountTracker, soundPlayer);

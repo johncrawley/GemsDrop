@@ -11,6 +11,6 @@
     <integer name="speed_increase">5</integer>
     <integer name="number_of_drops_to_increase_speed">10</integer>
     <integer name="gravity_interval">70</integer>
-    <integer name="gem_grid_gravity_drop_distance_factor">5</integer>
+    <integer name="gem_grid_gravity_drop_distance_factor">4</integer>
     <integer name="disappearing_gems_flicker_time">600</integer>
 </resources>

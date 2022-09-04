@@ -48,6 +48,7 @@ public class GemGrid {
         this.dropIncrement = dropIncrement;
     }
 
+
     public List<Integer> getColumnHeights(){
         List<Integer> heights = new ArrayList<>(NUMBER_OF_COLUMNS);
         for(List<?> column : gemColumns){
@@ -110,12 +111,18 @@ public class GemGrid {
 
 
     private boolean isGemWithinCapturePosition(Gem gem, GemGroup gemGroup, int position){
-       return  isColumnSizeGreaterThanGemGroupBottomPosition(gemGroup, position)
-               || getTopYForColumn(position) <= gem.getY() + gemSize / 2;
+       return  isColumnSizeGreaterThanGemGroupBottomPosition(gemGroup, position);
+             //  || getTopYForColumn(position) <= gem.getY() + gemSize / 2;
     }
 
     private boolean isColumnSizeGreaterThanGemGroupBottomPosition(GemGroup gemGroup, int position){
-        return  gemColumns.get(position).size()+1 >= gemGroup.getBottomPosition();
+      //  boolean isColSizeGreater =
+        System.out.println("GemGrid.isColumnSizeGreaterThanGemGroupBottomPosition()" +
+                " gemGroup bottomPosition: " + gemGroup.getBottomPosition() +
+                " gemColumns size at position: " + gemColumns.get(position).size());
+
+        //return  gemColumns.get(position).size() >= gemGroup.getBottomPosition();
+        return getColumnHeight(position) >= gemGroup.getBottomPosition();
     }
 
 

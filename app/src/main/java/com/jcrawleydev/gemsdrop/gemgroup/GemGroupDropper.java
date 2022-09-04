@@ -21,7 +21,7 @@ public class GemGroupDropper {
 
     public void enableQuickDrop(){
         isQuickDropEnabled = true;
-        setDropFactor(1f);
+        //setDropFactor(1f);
     }
 
     public boolean isQuickDropEnabled(){

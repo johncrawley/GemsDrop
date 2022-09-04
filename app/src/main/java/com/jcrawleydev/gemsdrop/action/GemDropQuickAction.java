@@ -47,17 +47,6 @@ public class GemDropQuickAction {
     }
 
 
-    private void gravity(){
-        gemGrid.dropGems();
-        if(!gemGrid.isStable()) {
-            gemGridLayer.draw();
-        }
-        else{
-            actionMediator.stopGridGravity();
-        }
-    }
-
-
     public void quickDrop(){
         if(gemGroup.haveAllGemsSettled()){
             quickDropFuture.cancel(false);
@@ -71,6 +60,7 @@ public class GemDropQuickAction {
     private void log(String msg){
         System.out.println("^^^ GemDropQuickAction: " + msg);
     }
+
 
     private void dropAndUpdateLayers(GemGroup gemGroup){
         gemGroup.drop();
