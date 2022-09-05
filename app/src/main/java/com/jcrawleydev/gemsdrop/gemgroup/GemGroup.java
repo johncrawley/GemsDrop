@@ -129,9 +129,26 @@ public class GemGroup {
 
     public void dropBy(float dropIncrement){
         float yAfterDrop = y + dropIncrement;
-        System.out.println("GemGroup.dropBy() y: " + y + " floorY: "+ floorY + " dropIncrement: " + dropIncrement + " y after drop: " + yAfterDrop +  " gemDropper is quickDrop: " + gemGroupDropper.isQuickDropEnabled() + " ");
+        System.out.println("GemGroup.dropBy() bottomPosition: " + getBottomPosition() +  " y: " + y + " floorY: "+ floorY + " dropIncrement: " + dropIncrement + " y after drop: " + yAfterDrop +  " gemDropper is quickDrop: " + gemGroupDropper.isQuickDropEnabled() + " ");
         y += dropIncrement;
         wasUpdated = true;
+    }
+
+    private final float dropFactor = 0.5f;
+
+
+    public void dropBy(){
+        if(isFirstDrop){
+            setGemsVisible();
+            isFirstDrop = false;
+        }
+        y+= (gemWidth * dropFactor);
+        wasUpdated = true;
+    }
+
+
+    public void dropNoUpdate(){
+        y+=(gemWidth * dropFactor);
     }
 
 
@@ -231,6 +248,16 @@ public class GemGroup {
 
     public void enableQuickDrop(){
         gemGroupDropper.enableQuickDrop();
+        isQuickDropEnabled = true;
+       // dropFactor = 1f;
+    }
+
+
+    private boolean isQuickDropEnabled;
+
+
+    public  boolean isQuickDropEnabled(){
+        return isQuickDropEnabled;
     }
 
 
@@ -245,10 +272,9 @@ public class GemGroup {
 
 
     public float getBottomPosition(){
-        if( orientation == Orientation.HORIZONTAL){
-            return middleYPosition;
-        }
-        return (middleYPosition + (getNumberOfGems()) /2f) -1;
+        return middleYPosition;
+
+        //return orientation == Orientation.HORIZONTAL ? middleYPosition : middleYPosition -1;
     }
 
 
@@ -263,7 +289,7 @@ public class GemGroup {
 
 
     private void setupMiddleYPosition(){
-        this.middleYPosition = (int)((floorY - y) / gemWidth) -1;
+        this.middleYPosition = (int)((floorY - y) / gemWidth) + 1;
     }
 
 

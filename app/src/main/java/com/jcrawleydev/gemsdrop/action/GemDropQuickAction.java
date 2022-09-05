@@ -43,6 +43,7 @@ public class GemDropQuickAction {
         gemGroup = gemGroupLayer.getGemGroup();
         gemGroupLayer.getGemGroup().enableQuickDrop();
         controls.deactivate();
+        dropCount = 0;
         quickDropFuture = executor.scheduleWithFixedDelay(this::quickDrop, 0, gravityInterval, TimeUnit.MILLISECONDS);
     }
 
@@ -63,14 +64,26 @@ public class GemDropQuickAction {
 
 
     private void dropAndUpdateLayers(GemGroup gemGroup){
-        gemGroup.drop();
+        //gemGroup.drop();
+        drop();
         gemGroupLayer.drawIfUpdated();
-        if(gemGridLayer.getGemGrid().addAnyFrom(gemGroup)){
-            gemGridLayer.draw();
-        }
+
     }
 
 
+    public void drop(){
+        System.out.println("Entered GemDropAction.drop() gemGroup bottomPosition: " + gemGroup.getBottomPosition());
+        dropCount++;
+        gemGroup.dropBy();
+        if(dropCount %2 == 1){
+            if(gemGridLayer.getGemGrid().addAnyFrom(gemGroup)){
+             gemGridLayer.draw();
+            }
+            gemGroup.decrementMiddleYPosition();
+        }
+    }
+
+    private int dropCount;
 
 
 

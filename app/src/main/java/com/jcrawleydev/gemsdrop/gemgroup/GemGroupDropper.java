@@ -30,6 +30,7 @@ public class GemGroupDropper {
 
 
     public void drop(){
+        /*
         if(!shouldAnimate()){
             return;
         }
@@ -38,6 +39,9 @@ public class GemGroupDropper {
             currentDropIncrement = 0;
             gemGroup.decrementMiddleYPosition();
         }
+
+         */
+        gemGroup.decrementMiddleYPosition();
         gemGroup.dropBy(dropIncrement);
     }
 

@@ -39,6 +39,7 @@ public class GemGridGravityDropAction {
 
 
     private void gravity(){
+        System.out.println("GemGridGravityDropAction.gravity()");
         gemGrid.dropGems();
         if(!gemGrid.isStable()) {
             gemGridLayer.draw();

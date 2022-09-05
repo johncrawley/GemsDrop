@@ -110,6 +110,8 @@ public class GemGrid {
     }
 
 
+
+
     private boolean isGemWithinCapturePosition(Gem gem, GemGroup gemGroup, int position){
        return  isColumnSizeGreaterThanGemGroupBottomPosition(gemGroup, position);
              //  || getTopYForColumn(position) <= gem.getY() + gemSize / 2;
@@ -119,16 +121,9 @@ public class GemGrid {
       //  boolean isColSizeGreater =
         System.out.println("GemGrid.isColumnSizeGreaterThanGemGroupBottomPosition()" +
                 " gemGroup bottomPosition: " + gemGroup.getBottomPosition() +
-                " gemColumns size at position: " + gemColumns.get(position).size());
+                " gemColumns size at position: " + getColumnHeight(position));
 
-        //return  gemColumns.get(position).size() >= gemGroup.getBottomPosition();
         return getColumnHeight(position) >= gemGroup.getBottomPosition();
-    }
-
-
-    private float getTopYForColumn(int position){
-        int columnHeight = gemColumns.get(position).size();
-        return floorY + (columnHeight * gemSize);
     }
 
 
@@ -143,6 +138,7 @@ public class GemGrid {
                 return false;
             }
         }
+
         return true;
     }
 

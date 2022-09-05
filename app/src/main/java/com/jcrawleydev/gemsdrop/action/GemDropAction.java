@@ -26,6 +26,8 @@ public class GemDropAction {
     private final SpeedController speedController;
     private final GemGridLayer gemGridLayer;
     private final ActionMediator actionMediator;
+    private int evalCount;
+    private int dropCount;
 
     public GemDropAction(SpeedController speedController,
                          ActionMediator actionMediator,
@@ -56,6 +58,9 @@ public class GemDropAction {
             int redrawInterval = 20;
             speedController.update();
             hasGemDropStarted = true;
+            isQuickDropCancelled = false;
+            evalCount = 0;
+            dropCount = 0;
             score.resetMultiplier();
             gemGroup = gemGroupFactory.createGemGroup();
             controls.activateAndSet(gemGroup);
@@ -66,7 +71,7 @@ public class GemDropAction {
 
     private void executeDropAndAnimateTasks(int dropInterval, int redrawInterval){
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
-        gemDropFuture = executor.scheduleWithFixedDelay(this::drop, 0, dropInterval, TimeUnit.MILLISECONDS);
+        gemDropFuture = executor.scheduleWithFixedDelay(this::dropOnInterval, 0, dropInterval, TimeUnit.MILLISECONDS);
         animateFuture = executor.scheduleWithFixedDelay(gemGroupLayer::drawIfUpdated, 0, redrawInterval, TimeUnit.MILLISECONDS);
     }
 
@@ -85,21 +90,55 @@ public class GemDropAction {
     }
 
 
+    public void dropOnInterval(){
+        if(gemGroup.isQuickDropEnabled()){
+            dropQuick();
+        }
+        dropCount++;
+        if(dropCount % 5 == 0){
+            drop();
+        }
+    }
+
+
+    public void dropQuick(){
+        gemGroup.dropBy();
+        gemGroup.decrementMiddleYPosition();
+        removeAtLeastSomeGems();
+        if(isQuickDropCancelled){
+            return;
+        }
+        gemGroup.dropNoUpdate();
+        removeAtLeastSomeGems();
+    }
+
+
     public void drop(){
+        evalCount++;
+        gemGroup.dropBy();
+        if(evalCount %2 == 1){
+            gemGroup.decrementMiddleYPosition();
+            removeAtLeastSomeGems();
+        }
+    }
+
+
+    private void removeAtLeastSomeGems(){
         GemGrid gemGrid = gemGridLayer.getGemGrid();
         if(gemGrid.shouldAdd(gemGroup)) {
             gemGrid.add(gemGroup);
             gemGridLayer.draw();
             gemGroup.setGemsInvisible();
+            isQuickDropCancelled = true;
             actionMediator.onAllGemsAdded();
         }
         else if(gemGrid.addAnyFrom(gemGroup)){
             gemGridLayer.draw();
+            isQuickDropCancelled = true;
             actionMediator.onAnyGemsAdded();
         }
-        else {
-            gemGroup.drop();
-        }
     }
+
+    boolean isQuickDropCancelled = false;
 
 }
