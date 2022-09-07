@@ -8,4 +8,5 @@
     <string name="title_gem_image_content_description">A rotating gem</string>
     <string name="game_over_score_text">Your Score:</string>
     <string name="score_placeholder_text">0</string>
+    <string name="settings_switch_enable_sound">Enable Sound FX</string>
 </resources>

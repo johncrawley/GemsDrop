@@ -9,7 +9,6 @@ public class SoundPlayer {
     private MediaPlayer mediaPlayer;
     private final Context context;
 
-    public enum Sound {}
 
     public SoundPlayer(Context context, MainViewModel viewModel){
         this.context = context;
