@@ -33,18 +33,26 @@ public class GemGridGravityDropAction {
 
 
     void stop(){
+        log("Entered stop()");
         gemGridGravityFuture.cancel(false);
+        log("stop() - about to invoke actionMediator.evaluateGemsInGrid(); ");
         actionMediator.evaluateGemsInGrid();
     }
 
 
+    private void log(String msg){
+        System.out.println("^^^ GemGridGravityDropAction: " + msg);
+    }
+
+
     private void gravity(){
-        System.out.println("GemGridGravityDropAction.gravity()");
+        log("Entered gravity()");
         gemGrid.dropGems();
         if(!gemGrid.isStable()) {
             gemGridLayer.draw();
         }
         else{
+            log(" gravity() gemGrid is Stable, invoking actionMediator.stopGridGravity()");
             actionMediator.stopGridGravity();
         }
     }

@@ -90,7 +90,7 @@ public class GemGrid {
         index = Math.min(gemColumns.size()-1, index);
         return floorY - (gemColumns.get(index).size() * gemSize);
     }
-    
+
 
     public boolean addAnyFrom(GemGroup gemGroup){
         if(isVertical(gemGroup)) {
@@ -109,10 +109,37 @@ public class GemGrid {
         return hasGemBeenAdded;
     }
 
-
-
-
     private boolean isGemWithinCapturePosition(Gem gem, GemGroup gemGroup, int position){
+        return  isColumnSizeGreaterThanGemGroupBottomPosition(gemGroup, position);
+        //  || getTopYForColumn(position) <= gem.getY() + gemSize / 2;
+    }
+
+
+    public boolean addAnyFrom2(GemGroup gemGroup){
+        if(isVertical(gemGroup)) {
+            return false;
+        }
+        boolean hasGemBeenAdded = false;
+        for(int i = 0; i< gemGroup.getGridGems().size(); i++){
+            hasGemBeenAdded = hasGemBeenAdded ||  addGemIfWithinCapturePosition2(gemGroup, i);
+        }
+        return hasGemBeenAdded;
+    }
+
+
+    private boolean addGemIfWithinCapturePosition2(GemGroup gemGroup, int offset){
+        Gem gem = gemGroup.getGridGems().get(offset);
+        int position = gemGroup.getBaseXPosition() + offset;
+        if(isGemWithinCapturePosition(gemGroup, position)){
+            add(gem, position);
+            return true;
+        }
+        log("addGemIfWithinCapturePosition() gem is not within capture position");
+        return false;
+    }
+
+
+    private boolean isGemWithinCapturePosition(GemGroup gemGroup, int position){
        return  isColumnSizeGreaterThanGemGroupBottomPosition(gemGroup, position);
              //  || getTopYForColumn(position) <= gem.getY() + gemSize / 2;
     }
@@ -138,7 +165,6 @@ public class GemGrid {
                 return false;
             }
         }
-
         return true;
     }
 
@@ -213,6 +239,7 @@ public class GemGrid {
 
 
     public void add(Gem gem, int position){
+        log("Entered add() position: " + position);
         addGemToColumn(gem.clone(), position);
         gem.setInvisible();
     }
@@ -259,7 +286,9 @@ public class GemGrid {
 
 
     private void addGemToColumn(Gem gem, int columnIndex){
+        log("entered addGemToColumn()");
         if(!gem.isVisible()){
+            log("addGemToColumn(), gem is not visible, returning!");
             return;
         }
         List<Gem> column = gemColumns.get(columnIndex);
@@ -315,22 +344,16 @@ public class GemGrid {
 
     private void dropGemIfAboveGridPosition(Gem gem, int actualRowIndex){
         float gridTopY = getYForRowTop(actualRowIndex);
-        float diff = gridTopY - gem.getY();
-
         if(gem.getY() < gridTopY){
-            if( diff < dropIncrement){
-                gem.incY(diff);
-                haveAnyGemsMovedDuringLastDrop = true;
-                return;
-            }
-
-            dropGem(gem);
+            float distance = Math.min(gridTopY - gem.getY(), dropIncrement);
+            dropGem(gem, distance);
         }
     }
 
 
-    private void dropGem(Gem gem){
-        gem.incY(dropIncrement);
+    private void dropGem(Gem gem, float distance){
+        log("Entered dropGem, gemY: " + gem.getY());
+        gem.incY(distance);
         haveAnyGemsMovedDuringLastDrop = true;
     }
 
@@ -344,6 +367,10 @@ public class GemGrid {
         boolean isStable = !haveAnyGemsMovedDuringLastDrop;
         haveAnyGemsMovedDuringLastDrop = false;
         return isStable;
+    }
+
+    private void log(String msg){
+        System.out.println("GemGrid: " + msg);
     }
 
 }

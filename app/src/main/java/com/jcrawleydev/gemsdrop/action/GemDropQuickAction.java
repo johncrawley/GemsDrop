@@ -51,6 +51,7 @@ public class GemDropQuickAction {
     public void quickDrop(){
         if(gemGroup.haveAllGemsSettled()){
             quickDropFuture.cancel(false);
+            log("quickDrop() - about to invoke actionMediator.evaluateGemsInGrid();");
             actionMediator.evaluateGemsInGrid();
             return;
         }

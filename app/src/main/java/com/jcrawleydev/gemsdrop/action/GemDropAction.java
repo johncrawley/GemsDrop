@@ -48,12 +48,11 @@ public class GemDropAction {
 
 
     public void start(){
+        log("Entered start()");
             if(hasGemDropStarted){
                 return;
             }
-            if(animateFuture != null){
-                animateFuture.cancel(false);
-            }
+            cancelFutures();
             int dropInterval = 70 - speedController.getCurrentSpeed();
             int redrawInterval = 20;
             speedController.update();
@@ -62,9 +61,11 @@ public class GemDropAction {
             evalCount = 0;
             dropCount = 0;
             score.resetMultiplier();
+            log("About to createGemGroup");
             gemGroup = gemGroupFactory.createGemGroup();
             controls.activateAndSet(gemGroup);
             gemGroupLayer.setGemGroup(gemGroup);
+            log("About to executeDropAndAnimateTasks");
             executeDropAndAnimateTasks(dropInterval, redrawInterval);
     }
 
@@ -77,21 +78,29 @@ public class GemDropAction {
 
 
     public void cancelFutures(){
-        gemDropFuture.cancel(false);
-        animateFuture.cancel(false);
+        cancelFuture(gemDropFuture);
+        cancelFuture(animateFuture);
         gemGroupLayer.drawIfUpdated();
+    }
+
+    public void cancelFuture(ScheduledFuture<?> future){
+        if(future !=null){
+            future.cancel(false);
+        }
     }
 
 
     public void reset(){
         hasGemDropStarted = false;
         gemGroupLayer.wipe();
-        controls.reactivate();
+        //controls.reactivate();
     }
 
 
     public void dropOnInterval(){
+        log("entered dropOnInterval()");
         if(gemGroup.isQuickDropEnabled()){
+            log("dropOnInterval() - quickDrop is enabled, invoking dropQuick()");
             dropQuick();
         }
         dropCount++;
@@ -104,11 +113,13 @@ public class GemDropAction {
     public void dropQuick(){
         gemGroup.dropBy();
         gemGroup.decrementMiddleYPosition();
-        removeAtLeastSomeGems();
+        log("entered dropQuick, calling removeAtLeastSomeGems()");
+        //removeAtLeastSomeGems();
         if(isQuickDropCancelled){
             return;
         }
         gemGroup.dropNoUpdate();
+        log("entered dropQuick, calling removeAtLeastSomeGems() again");
         removeAtLeastSomeGems();
     }
 
@@ -133,10 +144,16 @@ public class GemDropAction {
             actionMediator.onAllGemsAdded();
         }
         else if(gemGrid.addAnyFrom(gemGroup)){
+            log("removeAtLeastSomeGems() addAnyFrom() was true");
             gemGridLayer.draw();
             isQuickDropCancelled = true;
+            log("removeAtLeastSomeGems() about to invoke actionMediator.onAnyGemsAdded()");
             actionMediator.onAnyGemsAdded();
         }
+    }
+
+    private void log(String msg){
+        System.out.println("GemDropAction: " + msg);
     }
 
     boolean isQuickDropCancelled = false;

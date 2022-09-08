@@ -74,17 +74,21 @@ public class ActionMediator {
 
 
     public void onAllGemsAdded(){
+        log("Entered onAllGemsAdded() about to gemDropAction.cancelFutures()");
         gemDropAction.cancelFutures();
+        log("onAllGemsAdded() about to evaluateGemsInGrid()");
         evaluateGemsInGrid();
     }
 
 
     public void evaluateGemsInGrid(){
+        log("Entered evaluateGemsInGrid(), about to evaluateAction.start()");
         evaluateAction.start();
     }
 
 
     public void onAnyGemsAdded(){
+        log("Entered onAnyGemsAdded");
         quickDropGemsAction.start();
         gemDropAction.cancelFutures();
     }
@@ -96,17 +100,27 @@ public class ActionMediator {
 
 
     public void endGame(){
+        System.out.println("Actionmediator: entered endGame()");
         gemDropAction.cancelFutures();
+        System.out.println("Actionmediator: cancelled futures()");
         gemGridLayer.turnAllGemsGrey();
+        System.out.println("Actionmediator: allgems turned grey");
         game.loadGameOverState();
+        System.out.println("ActionMediator: game over state loaded, exiting endGame()");
     }
 
 
     public void resetDrop(){
+        log("Entered resetDrop()");
         gemDropAction.reset();
+        log("resetDrop() after GemDropAction.reset()");
         gemDropAction.start();
+        log("resetDrop(), after gemDropAction.start()");
     }
 
+    private void log(String msg){
+        System.out.println("ActionMediator: " + msg);
+    }
 
     public void deleteMarkedGems(){
         deleteMarkedGemsAction.start();

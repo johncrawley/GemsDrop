@@ -51,6 +51,9 @@ public class GemGroupLayer implements UpdatableView{
 
     @Override
     public void drawIfUpdated(){
+        if(gemGroup == null){
+            return;
+        }
 
         if(gemGroup.wasUpdated()) {
             transparentView.setTranslateY((int)gemGroup.getY());
