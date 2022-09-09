@@ -30,6 +30,7 @@ public class GemControls {
         isActivated = false;
     }
 
+
     public void reactivate(){
         isActivated = true;
     }

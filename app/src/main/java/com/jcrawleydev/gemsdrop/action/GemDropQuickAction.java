@@ -1,7 +1,6 @@
 package com.jcrawleydev.gemsdrop.action;
 
 import com.jcrawleydev.gemsdrop.control.GemControls;
-import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 import com.jcrawleydev.gemsdrop.view.GemGroupLayer;
@@ -21,8 +20,8 @@ public class GemDropQuickAction {
     private final GemGridLayer gemGridLayer;
     private final int gravityInterval;
     private GemGroup gemGroup;
-    private GemGrid gemGrid;
     private final ScheduledExecutorService executor;
+    private int dropCount;
 
     public GemDropQuickAction(ActionMediator actionMediator,
                               GemGroupLayer gemGroupLayer,
@@ -39,41 +38,31 @@ public class GemDropQuickAction {
 
 
     public void start(){
-        gemGrid = gemGridLayer.getGemGrid();
         gemGroup = gemGroupLayer.getGemGroup();
         gemGroupLayer.getGemGroup().enableQuickDrop();
         controls.deactivate();
         dropCount = 0;
-        quickDropFuture = executor.scheduleWithFixedDelay(this::quickDrop, 0, gravityInterval, TimeUnit.MILLISECONDS);
+        quickDropFuture = executor.scheduleWithFixedDelay(this::quickDrop, 0, (long)(gravityInterval / 1.4f), TimeUnit.MILLISECONDS);
     }
 
 
     public void quickDrop(){
         if(gemGroup.haveAllGemsSettled()){
             quickDropFuture.cancel(false);
-            log("quickDrop() - about to invoke actionMediator.evaluateGemsInGrid();");
             actionMediator.evaluateGemsInGrid();
             return;
         }
-        log("$$$$$$$$$ gemGroup.haveAllGemsSettled() is false, invoking dropAndUpdateLayers()");
-        dropAndUpdateLayers(gemGroup);
-    }
-
-    private void log(String msg){
-        System.out.println("^^^ GemDropQuickAction: " + msg);
+        dropAndUpdateLayers();
     }
 
 
-    private void dropAndUpdateLayers(GemGroup gemGroup){
-        //gemGroup.drop();
+    private void dropAndUpdateLayers(){
         drop();
         gemGroupLayer.drawIfUpdated();
-
     }
 
 
     public void drop(){
-        System.out.println("Entered GemDropAction.drop() gemGroup bottomPosition: " + gemGroup.getBottomPosition());
         dropCount++;
         gemGroup.dropBy();
         if(dropCount %2 == 1){
@@ -83,9 +72,6 @@ public class GemDropQuickAction {
             gemGroup.decrementMiddleYPosition();
         }
     }
-
-    private int dropCount;
-
 
 
 }

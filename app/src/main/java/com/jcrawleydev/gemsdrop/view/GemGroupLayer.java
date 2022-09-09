@@ -79,16 +79,6 @@ public class GemGroupLayer implements UpdatableView{
         }
     }
 
-/*
-    private void linkBitmapsToColorsAndAssignWidths(){
-        gemColorMap = new HashMap<>();
-        link(Gem.Color.BLUE,   R.drawable.jewel_blue);
-        link(Gem.Color.YELLOW, R.drawable.jewel_yellow);
-        link(Gem.Color.GREEN,  R.drawable.jewel_green);
-        link(Gem.Color.RED,    R.drawable.jewel_red);
-        link(Gem.Color.PURPLE, R.drawable.jewel_purple);
-    }
-*/
 
     private void linkBitmapsToColorsAndAssignWidths(){
         gemColorMap = new HashMap<>();
@@ -101,16 +91,7 @@ public class GemGroupLayer implements UpdatableView{
 
 
     private void link(Gem.Color color){
-
-        // gemColorMap.put(color, bitmapLoader.get(drawableId));
         gemColorMap.put(color, bitmapLoader.get(color.resourceId));
     }
-
-    private void link(Gem.Color color, int drawableId){
-
-        // gemColorMap.put(color, bitmapLoader.get(drawableId));
-        gemColorMap.put(color, bitmapLoader.get(color.resourceId));
-    }
-
 
 }
