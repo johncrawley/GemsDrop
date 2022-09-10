@@ -107,23 +107,24 @@ public class Game {
             return;
         }
         isGameOver = true;
-        currentGameState.stop();
-        currentGameState = gameOverState;
-        currentGameState.start();
+        switchToState(gameOverState);
     }
 
 
     public void loadTitleState(){
-        currentGameState.stop();
-        currentGameState = titleState;
-        currentGameState.start();
+        switchToState(titleState);
     }
 
 
     public void loadInGameState(){
         isGameOver = false;
+        switchToState(inGameState);
+    }
+
+
+    private void switchToState(GameState gameState){
         currentGameState.stop();
-        currentGameState = inGameState;
+        currentGameState = gameState;
         currentGameState.start();
     }
 

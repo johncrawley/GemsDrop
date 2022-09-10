@@ -11,7 +11,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 
-public class GemDropQuickAction {
+public class GemsFreeFallAction {
 
     private ScheduledFuture<?> quickDropFuture;
     private final ActionMediator actionMediator;
@@ -23,7 +23,7 @@ public class GemDropQuickAction {
     private final ScheduledExecutorService executor;
     private int dropCount;
 
-    public GemDropQuickAction(ActionMediator actionMediator,
+    public GemsFreeFallAction(ActionMediator actionMediator,
                               GemGroupLayer gemGroupLayer,
                               GemControls controls,
                               GemGridLayer gemGridLayer,
@@ -38,11 +38,17 @@ public class GemDropQuickAction {
 
 
     public void start(){
-        gemGroup = gemGroupLayer.getGemGroup();
-        gemGroupLayer.getGemGroup().enableQuickDrop();
         controls.deactivate();
+        gemGroup = gemGroupLayer.getGemGroup();
         dropCount = 0;
         quickDropFuture = executor.scheduleWithFixedDelay(this::quickDrop, 0, (long)(gravityInterval / 1.4f), TimeUnit.MILLISECONDS);
+    }
+
+
+    public void cancelFutures(){
+        if(quickDropFuture != null){
+            quickDropFuture.cancel(false);
+        }
     }
 
 

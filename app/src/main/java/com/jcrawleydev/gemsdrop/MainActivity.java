@@ -147,7 +147,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         int maxRows = getResources().getInteger(R.integer.maximum_rows);
         gemWidth = (float)(height - (scoreBarHeight + bottomBorderHeight)) / maxRows;
         dropValue = gemWidth /2;
-        System.out.println("Gem width and float gem width: " + gemWidth + " ,  " + dropValue);
         gemGridBorder = (int)(this.width - (gemWidth * numberOColumns)) / 2;
     }
 

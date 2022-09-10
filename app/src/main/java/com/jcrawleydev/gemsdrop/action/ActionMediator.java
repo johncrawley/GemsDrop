@@ -15,7 +15,7 @@ import com.jcrawleydev.gemsdrop.view.ScoreBoardLayer;
 public class ActionMediator {
 
     private final GemDropAction gemDropAction;
-    private final GemDropQuickAction quickDropGemsAction;
+    private final GemsFreeFallAction gemsFreeFallAction;
     private final EvaluateAction evaluateAction;
     private final FlickerMarkedGemsAction flickerMarkedGemsAction;
     private final DeleteMarkedGemsAction deleteMarkedGemsAction;
@@ -47,7 +47,7 @@ public class ActionMediator {
         this.scoreBoardLayer = scoreboardLayer;
         this.gemGridLayer = gemGridLayer;
         gemDropAction = new GemDropAction(speedController, this, gemControls, gemGroupLayer, gemGridLayer, gemGroupFactory, score);
-        quickDropGemsAction = new GemDropQuickAction(this, gemGroupLayer, gemControls, gemGridLayer, gravityInterval);
+        gemsFreeFallAction = new GemsFreeFallAction(this, gemGroupLayer, gemControls, gemGridLayer, gravityInterval);
         evaluateAction = new EvaluateAction(evaluator, this, gemGridLayer.getGemGrid(), maxColumnHeight);
         flickerMarkedGemsAction = new FlickerMarkedGemsAction(gemGridLayer, this, flickerMarkedGemsTime );
         deleteMarkedGemsAction = new DeleteMarkedGemsAction(this, evaluator, gemGridLayer, scoreboardLayer, gemCountTracker, soundPlayer);
@@ -65,6 +65,9 @@ public class ActionMediator {
         speedController.reset();
         score.clear();
         scoreBoardLayer.draw();
+        flickerMarkedGemsAction.cancelFutures();
+        gemGridGravityDropAction.cancelFutures();
+        gemsFreeFallAction.cancelFutures();
     }
 
 
@@ -89,8 +92,8 @@ public class ActionMediator {
 
     public void onAnyGemsAdded(){
         log("Entered onAnyGemsAdded");
-        quickDropGemsAction.start();
         gemDropAction.cancelFutures();
+        gemsFreeFallAction.start();
     }
 
 

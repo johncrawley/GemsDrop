@@ -31,6 +31,12 @@ public class GemGridGravityDropAction {
         gemGridGravityFuture = executor.scheduleWithFixedDelay(this::gravity, 0, gravityInterval / distanceFactor, TimeUnit.MILLISECONDS);
     }
 
+    public void cancelFutures(){
+        if(gemGridGravityFuture != null){
+            gemGridGravityFuture.cancel(false);
+        }
+    }
+
 
     void stop(){
         gemGridGravityFuture.cancel(false);

@@ -22,6 +22,13 @@ public class FlickerMarkedGemsAction {
     }
 
 
+    public void cancelFutures(){
+        if(gemsFlickerFuture != null){
+            gemsFlickerFuture.cancel(false);
+        }
+    }
+
+
     void start(){
         final int FLICKER_SPEED = 80;
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
@@ -34,5 +41,7 @@ public class FlickerMarkedGemsAction {
         gemsFlickerFuture.cancel(false);
         actionManager.deleteMarkedGems();
     }
+
+
 
 }
