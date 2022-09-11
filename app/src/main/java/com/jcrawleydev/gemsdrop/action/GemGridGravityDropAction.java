@@ -40,6 +40,7 @@ public class GemGridGravityDropAction {
 
     void stop(){
         gemGridGravityFuture.cancel(false);
+        System.out.println("GemGridGravityDropAction: entered stop(), about to call actionMediator.evaluateGemsInGrid()");
         actionMediator.evaluateGemsInGrid();
     }
 

@@ -80,7 +80,8 @@ public class ActionMediator {
         log("Entered onAllGemsAdded() about to gemDropAction.cancelFutures()");
         gemDropAction.cancelFutures();
         log("onAllGemsAdded() about to evaluateGemsInGrid()");
-        evaluateGemsInGrid();
+        //evaluateGemsInGrid();
+        evaluateGemsInGridAllAdded();
     }
 
 
@@ -90,9 +91,16 @@ public class ActionMediator {
     }
 
 
+    public void evaluateGemsInGridAllAdded(){
+        log("Entered evaluateGemsInGridAllAdded(), about to evaluateAction.start()");
+        evaluateAction.start();
+    }
+
+
     public void onAnyGemsAdded(){
         log("Entered onAnyGemsAdded");
         gemDropAction.cancelFutures();
+        log("onAnyGemsAdded() starting freeFall action");
         gemsFreeFallAction.start();
     }
 

@@ -104,6 +104,7 @@ public class Game {
 
     public void loadGameOverState(){
         if(currentGameState != inGameState || isGameOver){
+            log("loadGameOverState(), current game state is not inGameState, or isGameOVer is true");
             return;
         }
         isGameOver = true;
@@ -116,6 +117,10 @@ public class Game {
     }
 
 
+    private void log(String msg){
+        System.out.println("Game: " + msg);
+    }
+
     public void loadInGameState(){
         isGameOver = false;
         switchToState(inGameState);
@@ -123,6 +128,7 @@ public class Game {
 
 
     private void switchToState(GameState gameState){
+        System.out.println("entered switchToGameState() - switching to  :: " +gameState.toString());
         currentGameState.stop();
         currentGameState = gameState;
         currentGameState.start();

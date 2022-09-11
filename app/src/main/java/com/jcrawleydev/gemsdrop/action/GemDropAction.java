@@ -29,6 +29,7 @@ public class GemDropAction {
     private int evalCount;
     private int dropCount;
     boolean isQuickDropCancelled = false;
+    private boolean isFirstDrop = true;
 
 
     public GemDropAction(SpeedController speedController,
@@ -56,6 +57,7 @@ public class GemDropAction {
             cancelFutures();
             int dropInterval = 70 - speedController.getCurrentSpeed();
             int redrawInterval = 20;
+            isFirstDrop = true;
             speedController.update();
             hasGemDropStarted = true;
             isQuickDropCancelled = false;
@@ -82,6 +84,7 @@ public class GemDropAction {
         gemGroupLayer.drawIfUpdated();
     }
 
+
     public void cancelFuture(ScheduledFuture<?> future){
         if(future !=null){
             future.cancel(false);
@@ -96,13 +99,14 @@ public class GemDropAction {
 
 
     public void dropOnInterval(){
-        if(gemGroup.isQuickDropEnabled()){
+        if(gemGroup.isQuickDropEnabled() && !isFirstDrop){
             dropQuick();
         }
         dropCount++;
         if(dropCount % 5 == 0){
             drop();
         }
+        isFirstDrop = false;
     }
 
 

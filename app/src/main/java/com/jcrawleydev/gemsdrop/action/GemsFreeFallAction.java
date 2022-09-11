@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 public class GemsFreeFallAction {
 
-    private ScheduledFuture<?> quickDropFuture;
+    private ScheduledFuture<?> freeFallFuture;
     private final ActionMediator actionMediator;
     private final GemGroupLayer gemGroupLayer;
     private final GemControls controls;
@@ -38,27 +38,35 @@ public class GemsFreeFallAction {
 
 
     public void start(){
+        log("entered start()");
         controls.deactivate();
         gemGroup = gemGroupLayer.getGemGroup();
         dropCount = 0;
-        quickDropFuture = executor.scheduleWithFixedDelay(this::quickDrop, 0, (long)(gravityInterval / 1.4f), TimeUnit.MILLISECONDS);
+        log("about to schedule freeFallAction");
+        freeFallFuture = executor.scheduleWithFixedDelay(this::freeFall, 0, (long)(gravityInterval / 1.4f), TimeUnit.MILLISECONDS);
     }
 
 
     public void cancelFutures(){
-        if(quickDropFuture != null){
-            quickDropFuture.cancel(false);
+        if(freeFallFuture != null){
+            freeFallFuture.cancel(false);
         }
     }
 
 
-    public void quickDrop(){
+    public void freeFall(){
+        log("Entered freeFall()");
         if(gemGroup.haveAllGemsSettled()){
-            quickDropFuture.cancel(false);
+            log("All gems have settled, calling actionMediator.evaluateGemsInGrid()");
+            freeFallFuture.cancel(false);
             actionMediator.evaluateGemsInGrid();
             return;
         }
         dropAndUpdateLayers();
+    }
+
+    private void log(String msg){
+        System.out.println("GemsFreeFallAction: " + msg);
     }
 
 

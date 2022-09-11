@@ -31,6 +31,7 @@ public class GemGroup {
         this.gemWidth = builder.gemWidth;
         this.floorY = builder.floorY;
         assignXYFrom(builder.borderWidth, builder.initialPosition, builder.initialY);
+
         setupMiddleYPosition();
         this.reversedOrderGems = new ArrayList<>(gems);
         Collections.reverse(reversedOrderGems);
@@ -41,13 +42,18 @@ public class GemGroup {
         }
         this.gemRotator = new GemRotator(this, gemWidth);
         gemRotator.setGemCoordinates(this);
+        log("Exiting GemGroup Constructor");
+    }
+
+    private void log(String msg){
+        System.out.println("GemGroup: " + msg);
     }
 
 
     private void assignXYFrom(int borderWidth, int initialPosition, float initialY){
         this.x = borderWidth + (initialPosition * gemWidth) + gemWidth /2f;
         this.y = initialY;
-        System.out.println("GemGroup.assignXYFrom() initialY : " + initialY + " getRemainderFromFloor(): " + getYRemainderFromFloor());
+        log("assignXYFrom() initialY : " + initialY + " getRemainderFromFloor(): " + getYRemainderFromFloor());
 
        // y+= getYRemainderFromFloor();
        // y+=3;
