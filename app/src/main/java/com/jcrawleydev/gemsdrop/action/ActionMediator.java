@@ -54,6 +54,36 @@ public class ActionMediator {
         gemGridGravityDropAction = new GemGridGravityDropAction(this, gemGridLayer, gravityInterval, gridGravityDistanceFactor);
     }
 
+    /*
+
+        In-game sub states:
+            - falling state
+                - create gem group
+                - drop gemGroup
+                - check for gemGroup connects
+                - if connects:
+                    - if vertical, enter evaluate state
+                    - if horizontal,
+                        if all gems connected, enter evaluate state
+                        else enter free-fall state
+
+            - evaluate state
+                - if gems match up, enter flicker state
+                 else enter falling state
+
+
+            - flicker state
+                - list of gems to be deleted
+                - flicker animation for 1 second (for example)
+                - delete gems, add to score
+                - enter gemGrid gravity state
+
+            - gemGridGravity state
+                - drop gems in grid
+                - if gems are settled, enter evaluate state
+
+
+     */
 
     public void createAndDropGems(){
         gemDropAction.reset();
@@ -126,7 +156,7 @@ public class ActionMediator {
         gemDropAction.reset();
         log("resetDrop() after GemDropAction.reset()");
         gemDropAction.start();
-        log("resetDrop(), after gemDropAction.start()");
+        log("exiting resetDrop(), after invoking gemDropAction.start()");
     }
 
     private void log(String msg){

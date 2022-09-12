@@ -16,6 +16,7 @@ public class GemGridGravityDropAction {
     private final int gravityInterval;
     private final int distanceFactor;
     private final GemGrid gemGrid;
+    private final ScheduledExecutorService executor;
 
     public GemGridGravityDropAction(ActionMediator actionMediator, GemGridLayer gemGridLayer, int gravityInterval, int distanceFactor){
         this.actionMediator = actionMediator;
@@ -23,13 +24,20 @@ public class GemGridGravityDropAction {
         this.gemGrid = gemGridLayer.getGemGrid();
         this.gravityInterval = gravityInterval;
         this.distanceFactor = distanceFactor;
+
+        executor = Executors.newScheduledThreadPool(2);
     }
 
+    void log(String msg){
+        System.out.println("GemGridGravityDropAction: " + msg);
+    }
 
     void start(){
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+        log("Entered start()");
+        cancelFutures();
         gemGridGravityFuture = executor.scheduleWithFixedDelay(this::gravity, 0, gravityInterval / distanceFactor, TimeUnit.MILLISECONDS);
     }
+
 
     public void cancelFutures(){
         if(gemGridGravityFuture != null){
@@ -40,7 +48,7 @@ public class GemGridGravityDropAction {
 
     void stop(){
         gemGridGravityFuture.cancel(false);
-        System.out.println("GemGridGravityDropAction: entered stop(), about to call actionMediator.evaluateGemsInGrid()");
+        log("entered stop(), about to call actionMediator.evaluateGemsInGrid()");
         actionMediator.evaluateGemsInGrid();
     }
 

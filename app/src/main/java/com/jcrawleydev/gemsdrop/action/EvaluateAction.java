@@ -21,6 +21,7 @@ public class EvaluateAction {
 
 
     public void start(){
+        log("Entered start()");
         evaluator.evaluate();
         if(evaluator.hasMarkedGems()){
             actionMediator.startMarkedGemsFlicker();
@@ -33,5 +34,9 @@ public class EvaluateAction {
         }
     }
 
+
+    private void log(String msg){
+        System.out.println("EvaluateAction: "+  msg);
+    }
 
 }
