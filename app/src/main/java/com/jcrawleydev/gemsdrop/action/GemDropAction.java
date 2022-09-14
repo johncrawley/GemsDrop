@@ -134,7 +134,7 @@ public class GemDropAction {
 
     private void removeAtLeastSomeGems(){
         GemGrid gemGrid = gemGridLayer.getGemGrid();
-        if(gemGrid.shouldAdd(gemGroup)) {
+        if(gemGrid.shouldAddAll(gemGroup)) {
             gemGrid.add(gemGroup);
             gemGridLayer.draw();
             gemGroup.setGemsInvisible();

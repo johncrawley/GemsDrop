@@ -74,7 +74,7 @@ public class GemGrid {
     }
 
 
-    public boolean shouldAdd(GemGroup gemGroup) {
+    public boolean shouldAddAll(GemGroup gemGroup) {
         if(gemGroup.getBottomPosition() <= INITIAL_FLOOR_POSITION){
             return true;
         }
