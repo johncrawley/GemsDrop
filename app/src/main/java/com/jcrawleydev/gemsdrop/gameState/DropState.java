@@ -31,8 +31,6 @@ public class DropState  implements GameState{
             this.gemGrid = gemGridLayer.getGemGrid();
             gemDropService = Executors.newSingleThreadScheduledExecutor();
             gemDrawService = Executors.newSingleThreadScheduledExecutor();
-
-
     }
 
 

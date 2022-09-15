@@ -51,7 +51,7 @@ public class GemGridLayer implements UpdatableView, DrawableItem {
         draw();
     }
 
-    public void flickedGemsMarkedForDeletion(){
+    public void flickerGemsMarkedForDeletion(){
         gemGrid.flickerGemsMarkedForDeletion();
         draw();
     }

@@ -32,7 +32,7 @@ public class FlickerMarkedGemsAction {
     void start(){
         final int FLICKER_SPEED = 80;
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
-        gemsFlickerFuture = executor.scheduleWithFixedDelay(gemGridLayer::flickedGemsMarkedForDeletion, 0, FLICKER_SPEED, TimeUnit.MILLISECONDS);
+        gemsFlickerFuture = executor.scheduleWithFixedDelay(gemGridLayer::flickerGemsMarkedForDeletion, 0, FLICKER_SPEED, TimeUnit.MILLISECONDS);
         executor.schedule(this::cancelFlickerAndDeleteMarkedGems, flickerMarkedGemsTime, TimeUnit.MILLISECONDS);
     }
 
