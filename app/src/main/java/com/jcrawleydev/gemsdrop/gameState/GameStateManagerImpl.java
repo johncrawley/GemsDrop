@@ -112,6 +112,11 @@ public class GameStateManagerImpl implements GameStateManager {
         return null;
     }
 
+    @Override
+    public int getMaxColumnHeight(){
+        return maxColumnHeight;
+    }
+
 
     public static class Builder {
         private Game game;

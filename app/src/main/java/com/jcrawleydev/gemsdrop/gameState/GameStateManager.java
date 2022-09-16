@@ -12,4 +12,5 @@ public interface  GameStateManager {
     GemGroup getGemGroup();
     GemGridLayer getGemGridLayer();
     GemGroupLayer getGemGroupLayer();
+    int getMaxColumnHeight();
 }
