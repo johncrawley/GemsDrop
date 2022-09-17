@@ -1,5 +1,6 @@
 package com.jcrawleydev.gemsdrop.gameState;
 
+import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.SpeedController;
 import com.jcrawleydev.gemsdrop.view.GemGroupLayer;
@@ -13,4 +14,5 @@ public interface  GameStateManager {
     GemGridLayer getGemGridLayer();
     GemGroupLayer getGemGroupLayer();
     int getMaxColumnHeight();
+    GemControls getControls();
 }

@@ -118,6 +118,12 @@ public class GameStateManagerImpl implements GameStateManager {
     }
 
 
+    @Override
+    public GemControls getControls(){
+        return gemControls;
+    }
+
+
     public static class Builder {
         private Game game;
         private Score score;
