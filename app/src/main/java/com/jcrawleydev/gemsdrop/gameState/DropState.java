@@ -2,7 +2,7 @@ package com.jcrawleydev.gemsdrop.gameState;
 
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
-import com.jcrawleydev.gemsdrop.gemgroup.SpeedController;
+import com.jcrawleydev.gemsdrop.speed.SpeedController;
 import com.jcrawleydev.gemsdrop.view.GemGroupLayer;
 import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 
@@ -22,10 +22,11 @@ public class DropState  implements GameState{
     private final SpeedController speedController;
     private ScheduledFuture <?> dropFuture, drawFuture;
     private int evalCount;
+    private int dropCount;
 
-    public DropState(GameStateManager gameStateManager){
+    public DropState(GameStateManager gameStateManager, SpeedController speedController){
             this.gameStateManager = gameStateManager;
-            this.speedController = gameStateManager.getSpeedController();
+            this.speedController = speedController;
             this.gemGridLayer = gameStateManager.getGemGridLayer();
             this.gemGroupLayer = gameStateManager.getGemGroupLayer();
             this.gemGrid = gemGridLayer.getGemGrid();
@@ -41,15 +42,25 @@ public class DropState  implements GameState{
         gemGroup = gameStateManager.getGemGroup();
         dropFuture = gemDropService.scheduleWithFixedDelay(this::drop, 0, 70, TimeUnit.MILLISECONDS);
         drawFuture = gemDrawService.scheduleWithFixedDelay(gemGroupLayer::drawIfUpdated, 0, redrawInterval, TimeUnit.MILLISECONDS);
+
+
     }
 
 
     private void drop(){
-        evalCount++;
+        enableControlsAfterFirstDrop();
         gemGroup.dropBy();
-        if(evalCount %2 == 1){
+        if(gemGroup.getBottomPosition() %2 == 1){
             gemGroup.decrementMiddleYPosition();
             addConnectedGemsToGrid();
+        }
+    }
+
+
+    void enableControlsAfterFirstDrop(){
+        evalCount++;
+        if(evalCount > 0){
+            gameStateManager.getControls().reactivate();
         }
     }
 

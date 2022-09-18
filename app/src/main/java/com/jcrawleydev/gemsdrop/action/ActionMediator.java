@@ -5,7 +5,7 @@ import com.jcrawleydev.gemsdrop.SoundPlayer;
 import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
-import com.jcrawleydev.gemsdrop.gemgroup.SpeedController;
+import com.jcrawleydev.gemsdrop.speed.SpeedControllerImpl;
 import com.jcrawleydev.gemsdrop.score.GemCountTracker;
 import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
@@ -24,10 +24,10 @@ public class ActionMediator {
     private final GemGridLayer gemGridLayer;
     private final Game game;
     private final ScoreBoardLayer scoreBoardLayer;
-    private final SpeedController speedController;
+    private final SpeedControllerImpl speedController;
 
     private ActionMediator(Game game,
-                           SpeedController speedController,
+                           SpeedControllerImpl speedController,
                            GemGroupLayer gemGroupLayer,
                            GemGridLayer gemGridLayer,
                            GemControls gemControls,
@@ -190,7 +190,7 @@ public class ActionMediator {
         private GemGroupFactory gemGroupFactory;
         private GemCountTracker gemCountTracker;
         private SoundPlayer soundPlayer;
-        private SpeedController speedController;
+        private SpeedControllerImpl speedController;
         private int gravityInterval;
         private int gridGravityDistanceFactor;
         private int flickerMarkedGemsTime;
@@ -258,7 +258,7 @@ public class ActionMediator {
         }
 
 
-        public Builder speedController(SpeedController speedController){
+        public Builder speedController(SpeedControllerImpl speedController){
             this.speedController = speedController;
             return this;
         }

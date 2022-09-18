@@ -1,17 +1,17 @@
 package com.jcrawleydev.gemsdrop.gameState;
 
-import android.os.Build;
-
 import com.jcrawleydev.gemsdrop.Game;
 import com.jcrawleydev.gemsdrop.SoundPlayer;
-import com.jcrawleydev.gemsdrop.action.ActionMediator;
 import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
-import com.jcrawleydev.gemsdrop.gemgroup.SpeedController;
+import com.jcrawleydev.gemsdrop.speed.FixedSpeedController;
+import com.jcrawleydev.gemsdrop.speed.SpeedController;
+import com.jcrawleydev.gemsdrop.speed.SpeedControllerImpl;
 import com.jcrawleydev.gemsdrop.score.GemCountTracker;
 import com.jcrawleydev.gemsdrop.score.Score;
+import com.jcrawleydev.gemsdrop.speed.VariableSpeedController;
 import com.jcrawleydev.gemsdrop.view.GemGroupLayer;
 import com.jcrawleydev.gemsdrop.view.ScoreBoardLayer;
 import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
@@ -70,15 +70,31 @@ public class GameStateManagerImpl implements GameStateManager {
 
     private void initGameStateMap() {
         map = new HashMap<>();
-        map.put(DROP, new DropState(this));
+        map.put(DROP, createDropState());
         map.put(EVAL, new EvalState(this));
         map.put(FLICKER, new FlickerState(this));
         map.put(FREE_FALL, new FreeFallState(this));
-        map.put(QUICK_DROP, new QuickDropState(this));
+        map.put(QUICK_DROP, createQuickDropState());
         map.put(HEIGHT_EXCEEDED, new HeightExceededState(this));
         map.put(GRID_GRAVITY, new GridGravityState(this));
 
     }
+
+    private DropState createDropState(){
+        SpeedController variableSpeedController = VariableSpeedController.Builder.newInstance()
+                .startingSpeed(10)
+                .speedIncrease(10)
+                .maxSpeed(20)
+                .numberOfDropsToIncreaseSpeed(12).build();
+
+        return new DropState(this, variableSpeedController);
+    }
+
+
+    private QuickDropState createQuickDropState(){
+        return new QuickDropState(this, new FixedSpeedController(10));
+    }
+
 
     @Override
     public void loadState(GameState.Type type) {

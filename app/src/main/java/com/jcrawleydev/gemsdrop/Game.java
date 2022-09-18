@@ -8,7 +8,7 @@ import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
-import com.jcrawleydev.gemsdrop.gemgroup.SpeedController;
+import com.jcrawleydev.gemsdrop.speed.SpeedControllerImpl;
 import com.jcrawleydev.gemsdrop.score.GemCountTracker;
 import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.state.GameOverState;
@@ -48,7 +48,7 @@ public class Game {
     private final View gameOverView;
     private final MainActivity activity;
     private final int maxRows;
-    private final SpeedController speedController;
+    private final SpeedControllerImpl speedController;
     private boolean isGameOver;
     private final MainViewModel viewModel;
     private final  GemGrid gemGrid;
@@ -81,7 +81,7 @@ public class Game {
         float initialY = floorY - ((maxRows + numberOfGems + 2) * gemWidth);
         this.titleView = titleView;
         this.gameOverView = gameOverView;
-        this.speedController = new SpeedController(activity);
+        this.speedController = new SpeedControllerImpl(activity);
         gemGrid = new GemGrid(numberOfColumns, maxRows);
 
         gemGroupFactory = new GemGroupFactory.Builder()

@@ -1,10 +1,10 @@
-package com.jcrawleydev.gemsdrop.gemgroup;
+package com.jcrawleydev.gemsdrop.speed;
 
 import android.content.Context;
 
 import com.jcrawleydev.gemsdrop.R;
 
-public class SpeedController {
+public class SpeedControllerImpl implements SpeedController {
 
     private final Context context;
     private final int startingSpeed;
@@ -14,7 +14,7 @@ public class SpeedController {
     private int currentSpeed;
     private int currentNumberOfDropsToNextIncrease;
 
-    public SpeedController(Context context){
+    public SpeedControllerImpl(Context context){
         this.context = context;
         startingSpeed = getInt(R.integer.starting_speed);
         maxSpeed = getInt(R.integer.max_speed);
@@ -24,17 +24,20 @@ public class SpeedController {
     }
 
 
+    @Override
     public void reset(){
         currentSpeed = startingSpeed;
         currentNumberOfDropsToNextIncrease = numberOfDropsToIncreaseSpeed;
     }
 
 
+    @Override
     public int getCurrentSpeed(){
         return currentSpeed;
     }
 
 
+    @Override
     public void update(){
         if(currentSpeed >= maxSpeed){
             currentSpeed = maxSpeed;

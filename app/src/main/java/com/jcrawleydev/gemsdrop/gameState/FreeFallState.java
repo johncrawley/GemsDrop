@@ -1,6 +1,5 @@
 package com.jcrawleydev.gemsdrop.gameState;
 
-import com.jcrawleydev.gemsdrop.action.ActionMediator;
 import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.view.GemGroupLayer;
@@ -35,15 +34,13 @@ public class FreeFallState implements GameState{
     }
 
 
-
-
-
     public void start(){
         controls.deactivate();
         gemGroup = gemGroupLayer.getGemGroup();
         dropCount = 0;
-        freeFallFuture = executor.scheduleWithFixedDelay(this::freeFall, 0, (long)(gravityInterval / 1.4f), TimeUnit.MILLISECONDS);
+        freeFallFuture = executor.scheduleWithFixedDelay(this::freeFall, 0, gravityInterval, TimeUnit.MILLISECONDS);
     }
+
 
     public void stop(){
         if(freeFallFuture != null){

@@ -1,23 +1,17 @@
 package com.jcrawleydev.gemsdrop.gameState;
 
-public class QuickDropState implements GameState{
+import com.jcrawleydev.gemsdrop.speed.SpeedController;
 
-    private GameStateManager gameStateManager;
+public class QuickDropState extends DropState{
 
-    public QuickDropState(GameStateManager gameStateManager){
-        this.gameStateManager = gameStateManager;
+    public QuickDropState(GameStateManager gameStateManager, SpeedController speedController){
+        super(gameStateManager, speedController);
+        gameStateManager.getControls().deactivate();
     }
 
-
     @Override
-    public void start() {
-
-    }
-
-
-    @Override
-    public void stop() {
-
+    void enableControlsAfterFirstDrop(){
+        // do nothing
     }
 
 }

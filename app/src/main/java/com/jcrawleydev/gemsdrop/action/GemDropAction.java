@@ -4,7 +4,7 @@ import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
-import com.jcrawleydev.gemsdrop.gemgroup.SpeedController;
+import com.jcrawleydev.gemsdrop.speed.SpeedControllerImpl;
 import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 import com.jcrawleydev.gemsdrop.view.GemGroupLayer;
@@ -23,7 +23,7 @@ public class GemDropAction {
     private ScheduledFuture<?> gemDropFuture, animateFuture;
     private final GemGroupFactory gemGroupFactory;
     private final Score score;
-    private final SpeedController speedController;
+    private final SpeedControllerImpl speedController;
     private final GemGridLayer gemGridLayer;
     private final ActionMediator actionMediator;
     private int evalCount;
@@ -32,7 +32,7 @@ public class GemDropAction {
     private boolean isFirstDrop = true;
 
 
-    public GemDropAction(SpeedController speedController,
+    public GemDropAction(SpeedControllerImpl speedController,
                          ActionMediator actionMediator,
                          GemControls controls,
                          GemGroupLayer gemGroupLayer,
