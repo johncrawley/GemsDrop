@@ -15,14 +15,13 @@ public class DropState  implements GameState{
 
     private final GameStateManager gameStateManager;
     private final ScheduledExecutorService gemDropService, gemDrawService;
+    private ScheduledFuture <?> dropFuture, drawFuture;
     private GemGroup gemGroup;
     private final GemGroupLayer gemGroupLayer;
     private final GemGridLayer gemGridLayer;
     private final GemGrid gemGrid;
     private final SpeedController speedController;
-    private ScheduledFuture <?> dropFuture, drawFuture;
     private int evalCount;
-    private int dropCount;
 
     public DropState(GameStateManager gameStateManager, SpeedController speedController){
             this.gameStateManager = gameStateManager;
