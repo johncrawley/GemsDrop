@@ -13,7 +13,18 @@ public class HeightExceededAnimator {
         this.gemGrid = gemGrid;
     }
 
-    public void turnLevelGrey(){
+    public void resetLevel(){
+        currentLevel = 0;
+    }
+
+
+    public boolean haveAllLevelsBeenChanged(){
+        return currentLevel > gemGrid.getHighestColumnIndex();
+    }
+
+
+    public void turnNextGridLevelGrey(){
+
         for(List<Gem> gemColumn : gemGrid.getGemColumns()){
             gemColumn.get(currentLevel).setGrey();
         }

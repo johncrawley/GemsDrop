@@ -77,6 +77,13 @@ public class GameStateManagerImpl implements GameStateManager {
         map.put(QUICK_DROP, createQuickDropState());
         map.put(HEIGHT_EXCEEDED, new HeightExceededState(this));
         map.put(GRID_GRAVITY, new GridGravityState(this));
+        map.put(GAME_OVER, new GameState() {
+            @Override
+            public void start() {
+                game.loadGameOverState();
+            }
+            public void stop() {}
+        });
 
     }
 

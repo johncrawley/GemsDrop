@@ -32,6 +32,12 @@ public class GemGrid {
         return this.gemColumns;
     }
 
+
+    public int getHighestColumnIndex(){
+        return gemColumns.stream().map(List::size).max(Integer::compare).orElse(1) - 1;
+    }
+
+
     public void setGemSize(float gemSize){
         this.gemSize = gemSize;
     }
