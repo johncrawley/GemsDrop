@@ -8,7 +8,6 @@ import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
 import com.jcrawleydev.gemsdrop.speed.FixedSpeedController;
 import com.jcrawleydev.gemsdrop.speed.SpeedController;
-import com.jcrawleydev.gemsdrop.speed.SpeedControllerImpl;
 import com.jcrawleydev.gemsdrop.score.GemCountTracker;
 import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.speed.VariableSpeedController;
@@ -28,7 +27,7 @@ public class GameStateManagerImpl implements GameStateManager {
 
     private Game game;
     private Score score;
-    private ScoreBoardLayer scoreView;
+    private ScoreBoardLayer scoreBoardLayer;
     private GemGroupLayer gemGroupView;
     private GemGridLayer gemGridView;
     private GemControls gemControls;
@@ -58,7 +57,7 @@ public class GameStateManagerImpl implements GameStateManager {
         gemControls = builder.gemControls;
         evaluator = builder.evaluator;
         gemGroupFactory = builder.gemGroupFactory;
-        scoreView = builder.scoreView;
+        scoreBoardLayer = builder.scoreView;
         gemCountTracker = builder.gemCountTracker;
         soundPlayer = builder.soundPlayer;
         gravityInterval = builder.gravityInterval;
@@ -144,6 +143,12 @@ public class GameStateManagerImpl implements GameStateManager {
     @Override
     public GemControls getControls(){
         return gemControls;
+    }
+
+
+    @Override
+    public ScoreBoardLayer getScoreBoardLayer(){
+        return scoreBoardLayer;
     }
 
 

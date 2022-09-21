@@ -2,8 +2,10 @@ package com.jcrawleydev.gemsdrop.gameState;
 
 import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
+import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.speed.SpeedController;
 import com.jcrawleydev.gemsdrop.view.GemGroupLayer;
+import com.jcrawleydev.gemsdrop.view.ScoreBoardLayer;
 import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 
 public interface  GameStateManager {
@@ -15,4 +17,5 @@ public interface  GameStateManager {
     GemGroupLayer getGemGroupLayer();
     int getMaxColumnHeight();
     GemControls getControls();
+    ScoreBoardLayer getScoreBoardLayer();
 }
