@@ -16,6 +16,7 @@ public class BeginNewGameState implements GameState{
     private final Score score;
     private final ScoreBoardLayer scoreBoardLayer;
 
+
     public BeginNewGameState(GameStateManager gameStateManager){
         this.gameStateManager = gameStateManager;
         gemGridLayer = gameStateManager.getGemGridLayer();

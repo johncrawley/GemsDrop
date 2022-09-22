@@ -69,6 +69,7 @@ public class GameStateManagerImpl implements GameStateManager {
 
     private void initGameStateMap() {
         map = new HashMap<>();
+        map.put(BEGIN_NEW_GAME, new BeginNewGameState(this));
         map.put(DROP, createDropState());
         map.put(EVAL, new EvalState(this));
         map.put(FLICKER, new FlickerState(this));
