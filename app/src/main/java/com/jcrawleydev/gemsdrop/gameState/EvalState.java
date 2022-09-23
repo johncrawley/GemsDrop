@@ -24,7 +24,7 @@ public class EvalState implements GameState{
         evaluator.evaluate();
         GameState.Type gameStateType =
                 evaluator.hasMarkedGems() ? Type.FLICKER :
-                hasGemGridExceedHeight()  ? Type.HEIGHT_EXCEEDED : Type.DROP;
+                hasGemGridExceedHeight()  ? Type.HEIGHT_EXCEEDED : Type.CREATE_NEW_GEMS;
         gameStateManager.loadState(gameStateType);
     }
 

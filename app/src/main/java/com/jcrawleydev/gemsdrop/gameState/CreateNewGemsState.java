@@ -11,25 +11,14 @@ public class CreateNewGemsState implements GameState {
 
     public CreateNewGemsState(GameStateManager gameStateManager) {
         this.gameStateManager = gameStateManager;
-        float gemWidth = 50;
-        float dropValue = 10;
-        float initialY = -100;
-
-        gemGroupFactory = new GemGroupFactory.Builder()
-                .withInitialY(initialY)
-                .withGemWidth(gemWidth)
-                .dropValue(dropValue)
-                .withNumberOfGems(3)
-                .withInitialPosition(5)
-                .withFloorAt(1800)
-                .withBorderWidth(30)
-                .withGemGrid(gameStateManager.getGemGridLayer().getGemGrid())
-                .build();
+        gemGroupFactory = gameStateManager.getGemGroupFactory();
     }
 
 
     @Override
     public void start() {
+
+        gameStateManager.setGemGroup(gemGroupFactory.createGemGroup());
 
     }
 

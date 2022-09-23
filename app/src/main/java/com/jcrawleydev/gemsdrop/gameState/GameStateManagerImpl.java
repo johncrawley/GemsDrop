@@ -41,6 +41,7 @@ public class GameStateManagerImpl implements GameStateManager {
     private int gridGravityDistanceFactor;
     private int flickerMarkedGemsTime;
     private int maxColumnHeight;
+    private GemGroup gemGroup;
 
 
     public GameStateManagerImpl(Builder builder) {
@@ -84,7 +85,14 @@ public class GameStateManagerImpl implements GameStateManager {
             }
             public void stop() {}
         });
-
+        map.put(CREATE_NEW_GEMS, new GameState() {
+            @Override
+            public void start() {
+                gemGroup = gemGroupFactory.createGemGroup();
+                loadState(DROP);
+            }
+            public void stop() {}
+        });
     }
 
     private DropState createDropState(){
@@ -125,6 +133,17 @@ public class GameStateManagerImpl implements GameStateManager {
         return getGemGroup();
     }
 
+
+    @Override
+    public void setGemGroup(GemGroup gemGroup){
+        this.gemGroup = gemGroup;
+    }
+
+    @Override
+    public GemGroupFactory getGemGroupFactory(){
+        return this.gemGroupFactory;
+    }
+
     @Override
     public GemGridLayer getGemGridLayer() {
         return null;
@@ -145,6 +164,8 @@ public class GameStateManagerImpl implements GameStateManager {
     public GemControls getControls(){
         return gemControls;
     }
+
+
 
 
     @Override
