@@ -28,8 +28,8 @@ public class GameStateManagerImpl implements GameStateManager {
     private Game game;
     private Score score;
     private ScoreBoardLayer scoreBoardLayer;
-    private GemGroupLayer gemGroupView;
-    private GemGridLayer gemGridView;
+    private GemGroupLayer gemGroupLayer;
+    private GemGridLayer gemGridLayer;
     private GemControls gemControls;
     private Evaluator evaluator;
     private StringBuilder str;
@@ -46,16 +46,15 @@ public class GameStateManagerImpl implements GameStateManager {
 
     public GameStateManagerImpl(Builder builder) {
         assignFieldsFrom(builder);
-        initGameStateMap();
-
     }
 
     private void assignFieldsFrom(Builder builder){
         game = builder.game;
         speedController = builder.speedController;
-        gemGroupView = builder.gemGroupView;
-        gemGridView = builder.gemGridView;
+        gemGroupLayer = builder.gemGroupLayer;
+        gemGridLayer = builder.gemGridView;
         gemControls = builder.gemControls;
+        score = builder.score;
         evaluator = builder.evaluator;
         gemGroupFactory = builder.gemGroupFactory;
         scoreBoardLayer = builder.scoreView;
@@ -67,8 +66,8 @@ public class GameStateManagerImpl implements GameStateManager {
         maxColumnHeight = builder.maxColumnHeight;
     }
 
-
-    private void initGameStateMap() {
+    @Override
+    public void init() {
         map = new HashMap<>();
         map.put(BEGIN_NEW_GAME, new BeginNewGameState(this));
         map.put(DROP, createDropState());
@@ -94,6 +93,7 @@ public class GameStateManagerImpl implements GameStateManager {
             public void stop() {}
         });
     }
+
 
     private DropState createDropState(){
         SpeedController variableSpeedController = VariableSpeedController.Builder.newInstance()
@@ -130,7 +130,7 @@ public class GameStateManagerImpl implements GameStateManager {
 
     @Override
     public GemGroup getGemGroup() {
-        return getGemGroup();
+        return gemGroup;
     }
 
 
@@ -146,12 +146,12 @@ public class GameStateManagerImpl implements GameStateManager {
 
     @Override
     public GemGridLayer getGemGridLayer() {
-        return null;
+        return gemGridLayer;
     }
 
     @Override
     public GemGroupLayer getGemGroupLayer() {
-        return null;
+        return gemGroupLayer;
     }
 
     @Override
@@ -159,14 +159,10 @@ public class GameStateManagerImpl implements GameStateManager {
         return maxColumnHeight;
     }
 
-
     @Override
     public GemControls getControls(){
         return gemControls;
     }
-
-
-
 
     @Override
     public ScoreBoardLayer getScoreBoardLayer(){
@@ -178,7 +174,7 @@ public class GameStateManagerImpl implements GameStateManager {
         private Game game;
         private Score score;
         private ScoreBoardLayer scoreView;
-        private GemGroupLayer gemGroupView;
+        private GemGroupLayer gemGroupLayer;
         private GemGridLayer gemGridView;
         private GemControls gemControls;
         private Evaluator evaluator;
@@ -193,6 +189,14 @@ public class GameStateManagerImpl implements GameStateManager {
         private int maxColumnHeight;
 
 
+        private Builder(){}
+
+
+        public static Builder newInstance(){
+            return new Builder();
+        }
+
+
         public GameStateManagerImpl.Builder game(Game game) {
             this.game = game;
             return this;
@@ -200,7 +204,7 @@ public class GameStateManagerImpl implements GameStateManager {
 
 
         public GameStateManagerImpl.Builder gemGroupView(GemGroupLayer gemGroupView) {
-            this.gemGroupView = gemGroupView;
+            this.gemGroupLayer = gemGroupView;
             return this;
         }
 

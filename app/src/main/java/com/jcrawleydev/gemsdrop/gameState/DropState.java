@@ -39,10 +39,8 @@ public class DropState  implements GameState{
         evalCount = 0;
         int redrawInterval = 20;
         gemGroup = gameStateManager.getGemGroup();
-        dropFuture = gemDropService.scheduleWithFixedDelay(this::drop, 0, 70, TimeUnit.MILLISECONDS);
+        dropFuture = gemDropService.scheduleWithFixedDelay(this::drop, 0, 700, TimeUnit.MILLISECONDS);
         drawFuture = gemDrawService.scheduleWithFixedDelay(gemGroupLayer::drawIfUpdated, 0, redrawInterval, TimeUnit.MILLISECONDS);
-
-
     }
 
 

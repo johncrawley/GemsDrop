@@ -5,6 +5,8 @@ import android.view.View;
 import com.jcrawleydev.gemsdrop.action.ActionMediator;
 import com.jcrawleydev.gemsdrop.control.ClickHandler;
 import com.jcrawleydev.gemsdrop.control.GemControls;
+import com.jcrawleydev.gemsdrop.gameState.GameStateManager;
+import com.jcrawleydev.gemsdrop.gameState.GameStateManagerImpl;
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
@@ -22,10 +24,13 @@ import com.jcrawleydev.gemsdrop.view.GemGroupLayer;
 import com.jcrawleydev.gemsdrop.view.ScoreBoardLayer;
 import com.jcrawleydev.gemsdrop.view.TransparentView;
 
+import static com.jcrawleydev.gemsdrop.gameState.GameState.Type.BEGIN_NEW_GAME;
+
 
 public class Game {
     private final GemGroupFactory gemGroupFactory;
     private GemGroupLayer gemGroupView;
+    private GameStateManager gameStateManager;
     private final BitmapLoader bitmapLoader;
     private final int height;
     private final int width;
@@ -189,13 +194,32 @@ public class Game {
                 .maxColumnHeight(maxRows)
                 .gridGravityDistanceFactor(getInt(R.integer.gem_grid_gravity_drop_distance_factor))
                 .build();
-        initGameStates();
+
+        gameStateManager = GameStateManagerImpl.Builder.newInstance()
+                .game(this)
+                .evaluator(evaluator)
+                .gemControls(gemControls)
+                .gemGroupView(gemGroupView)
+                .gridView(gemGridLayer)
+                .gemGroupFactory(gemGroupFactory)
+                .scoreView(scoreboardLayer)
+                .gemCountTracker(gemCountTracker)
+                .soundPlayer(soundPlayer)
+                .speedController(speedController)
+                .gravityInterval(getInt(R.integer.gravity_interval))
+                .flickerMarkedGemsTime(getInt(R.integer.disappearing_gems_flicker_time))
+                .maxColumnHeight(maxRows)
+                .gridGravityDistanceFactor(getInt(R.integer.gem_grid_gravity_drop_distance_factor))
+                .build();
+                gameStateManager.init();
+
+       initGameStates();
     }
 
 
     private void initGameStates(){
         titleState = new TitleState(activity,this, titleView, height);
-        inGameState = new InGameState(this, actionMediator, clickHandler);
+        inGameState = new InGameState(this, gameStateManager, clickHandler);
         gameOverState = new GameOverState(this, gameOverView, titleView, height);
         currentGameState = titleState;
         currentGameState.start();
