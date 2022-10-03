@@ -7,7 +7,7 @@ import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
 public class CreateNewGemsState implements GameState {
 
     private final GameStateManager gameStateManager;
-    private GemGroupFactory gemGroupFactory;
+    private final GemGroupFactory gemGroupFactory;
 
     public CreateNewGemsState(GameStateManager gameStateManager) {
         this.gameStateManager = gameStateManager;
@@ -17,9 +17,8 @@ public class CreateNewGemsState implements GameState {
 
     @Override
     public void start() {
-
         gameStateManager.setGemGroup(gemGroupFactory.createGemGroup());
-
+        gameStateManager.loadState(Type.DROP);
     }
 
 

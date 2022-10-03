@@ -1,5 +1,6 @@
 package com.jcrawleydev.gemsdrop.gameState;
 
+import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.speed.SpeedController;
@@ -39,12 +40,27 @@ public class DropState  implements GameState{
         evalCount = 0;
         int redrawInterval = 20;
         gemGroup = gameStateManager.getGemGroup();
+        printGems();
         dropFuture = gemDropService.scheduleWithFixedDelay(this::drop, 0, 700, TimeUnit.MILLISECONDS);
         drawFuture = gemDrawService.scheduleWithFixedDelay(gemGroupLayer::drawIfUpdated, 0, redrawInterval, TimeUnit.MILLISECONDS);
     }
 
+    private void log(String msg){
+        System.out.println("DropState: " + msg);
+    }
+
+    private void printGems(){
+        if(gemGroup == null){
+            log("printGems() gem Group is Null");
+        }
+        for(Gem gem : gemGroup.getGems()){
+            log("Gem color: " + gem.getColor());
+        }
+    }
+
 
     private void drop(){
+        log("Entered drop()");
         enableControlsAfterFirstDrop();
         gemGroup.dropBy();
         if(gemGroup.getBottomPosition() %2 == 1){
@@ -71,11 +87,12 @@ public class DropState  implements GameState{
 
 
     private void addConnectedGemsToGrid(){
+        log("entered addConnectedGemsToGrid()");
         if(gemGrid.shouldAddAll(gemGroup)) {
             gemGrid.add(gemGroup);
             gemGridLayer.draw();
             gemGroup.setGemsInvisible();
-            gameStateManager.loadState(Type.EVAL);
+            gameStateManager.loadState(Type.EVALUATE_GRID);
         }
         else if(gemGrid.addAnyFrom(gemGroup)){
             gemGridLayer.draw();

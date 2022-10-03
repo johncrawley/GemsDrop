@@ -31,7 +31,7 @@ public class BeginNewGameState implements GameState{
     public void start() {
         resetVariables();
         clearGemGrid();
-        gameStateManager.loadState(Type.DROP);
+        gameStateManager.loadState(Type.CREATE_NEW_GEMS);
     }
 
 

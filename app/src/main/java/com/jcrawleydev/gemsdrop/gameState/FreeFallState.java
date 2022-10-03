@@ -52,7 +52,7 @@ public class FreeFallState implements GameState{
     public void freeFall(){
         if(gemGroup.haveAllGemsSettled()){
             freeFallFuture.cancel(false);
-            gameStateManager.loadState(Type.EVAL);
+            gameStateManager.loadState(Type.EVALUATE_GRID);
             return;
         }
         dropAndUpdateLayers();

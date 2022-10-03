@@ -51,7 +51,7 @@ public class GridGravityState implements GameState{
         gemGrid.dropGems();
         gemGridLayer.draw();
         if(gemGrid.isStable()) {
-            gameStateManager.loadState(Type.EVAL);
+            gameStateManager.loadState(Type.EVALUATE_GRID);
         }
     }
 
