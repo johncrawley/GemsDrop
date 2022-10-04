@@ -144,14 +144,19 @@ public class GemGroup {
 
 
     public void dropBy(){
+        setGemsVisibleOnFirstDrop();
+        y+= (gemWidth * dropFactor);
+        decrementMiddleYPosition();
+        wasUpdated = true;
+    }
+
+
+    private void setGemsVisibleOnFirstDrop(){
         if(isFirstDrop){
             setGemsVisible();
             isFirstDrop = false;
         }
-        y+= (gemWidth * dropFactor);
-        wasUpdated = true;
     }
-
 
     public void dropNoUpdate(){
         y+=(gemWidth * dropFactor);

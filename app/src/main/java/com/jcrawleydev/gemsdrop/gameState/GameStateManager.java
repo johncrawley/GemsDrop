@@ -12,6 +12,7 @@ import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 public interface  GameStateManager {
     void init();
     void loadState(GameState.Type type);
+    void loadState(GameState.Type type, GameState.Type source);
     SpeedController getSpeedController();
     GemGroupFactory getGemGroupFactory();
     GemGroup getGemGroup();

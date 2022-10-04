@@ -4,14 +4,14 @@ package com.jcrawleydev.gemsdrop.gameState;
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 
-public class EvalState implements GameState{
+public class EvaluateGridState implements GameState{
 
     private final GameStateManager gameStateManager;
     private final Evaluator evaluator;
     private final GemGrid gemGrid;
     private final int maxColumnHeight;
 
-    public EvalState(GameStateManager gameStateManager){
+    public EvaluateGridState(GameStateManager gameStateManager){
         this.gameStateManager = gameStateManager;
         gemGrid = gameStateManager.getGemGridLayer().getGemGrid();
         evaluator = new Evaluator(gemGrid, 3);

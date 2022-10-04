@@ -40,22 +40,13 @@ public class DropState  implements GameState{
         evalCount = 0;
         int redrawInterval = 20;
         gemGroup = gameStateManager.getGemGroup();
-        printGems();
         dropFuture = gemDropService.scheduleWithFixedDelay(this::drop, 0, 700, TimeUnit.MILLISECONDS);
         drawFuture = gemDrawService.scheduleWithFixedDelay(gemGroupLayer::drawIfUpdated, 0, redrawInterval, TimeUnit.MILLISECONDS);
     }
 
+
     private void log(String msg){
         System.out.println("DropState: " + msg);
-    }
-
-    private void printGems(){
-        if(gemGroup == null){
-            log("printGems() gem Group is Null");
-        }
-        for(Gem gem : gemGroup.getGems()){
-            log("Gem color: " + gem.getColor());
-        }
     }
 
 
@@ -66,6 +57,9 @@ public class DropState  implements GameState{
         if(gemGroup.getBottomPosition() %2 == 1){
             gemGroup.decrementMiddleYPosition();
             addConnectedGemsToGrid();
+        }
+        else{
+            log("not checking for connecting gems, gemGroup bottom position: " + gemGroup.getBottomPosition());
         }
     }
 

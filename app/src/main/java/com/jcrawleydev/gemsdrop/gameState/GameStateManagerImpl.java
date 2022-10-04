@@ -71,7 +71,7 @@ public class GameStateManagerImpl implements GameStateManager {
         map = new HashMap<>();
         map.put(BEGIN_NEW_GAME, new BeginNewGameState(this));
         map.put(DROP, createDropState());
-        map.put(EVALUATE_GRID, new EvalState(this));
+        map.put(EVALUATE_GRID, new EvaluateGridState(this));
         map.put(FLICKER, new FlickerState(this));
         map.put(FREE_FALL, new FreeFallState(this));
         map.put(QUICK_DROP, createQuickDropState());
@@ -120,6 +120,18 @@ public class GameStateManagerImpl implements GameStateManager {
     @Override
     public void loadState(GameState.Type type) {
         log("entered loadState( " + type + ")");
+        if (currentGameState != null) {
+            currentGameState.stop();
+        }
+        currentGameState = map.get(type);
+        assert currentGameState != null;
+        currentGameState.start();
+    }
+
+
+    @Override
+    public void loadState(GameState.Type type,GameState.Type source) {
+        log("entered loadState( " + type + ") from : " + source);
         if (currentGameState != null) {
             currentGameState.stop();
         }
