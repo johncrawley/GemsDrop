@@ -1,5 +1,6 @@
 package com.jcrawleydev.gemsdrop.gameState;
 
+import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 
@@ -14,12 +15,14 @@ public class FlickerState implements GameState{
     private final GemGridLayer gemGridLayer;
     private final int flickerMarkedGemsTime;
     private ScheduledFuture<?> gemsFlickerFuture;
-    ScheduledExecutorService executor;
+    private final ScheduledExecutorService executor;
+    private Evaluator evaluator;
 
 
     public FlickerState(GameStateManager gameStateManager){
         this.gameStateManager = gameStateManager;
         this.gemGridLayer = gameStateManager.getGemGridLayer();
+        this.evaluator = new Evaluator(gemGridLayer.getGemGrid(), 3);
         this.flickerMarkedGemsTime = 200;
         executor = Executors.newScheduledThreadPool(2);
     }
@@ -35,7 +38,7 @@ public class FlickerState implements GameState{
 
     private void cancelFlickerAndDeleteMarkedGems(){
         gemsFlickerFuture.cancel(false);
-        GemGrid gemGrid = gemGridLayer.getGemGrid();
+        evaluator.deleteMarkedGems();
         gameStateManager.loadState(Type.GRID_GRAVITY);
     }
 

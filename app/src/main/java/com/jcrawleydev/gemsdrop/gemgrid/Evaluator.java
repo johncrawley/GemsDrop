@@ -37,6 +37,14 @@ public class Evaluator {
     }
 
 
+    public void deleteMarkedGems(){
+        for(List<Gem> column : gemGrid.getGemColumns()){
+            column.removeIf(Gem::isMarkedForDeletion);
+        }
+        this.hasMarkedGems = false;
+    }
+
+
     private void markGem(Gem gem){
         gem.setDeleteCandidateFlag();
     }
@@ -76,6 +84,24 @@ public class Evaluator {
             for (int currentRowIndex = 0 ; currentRowIndex < (NUMBER_OF_COLUMNS - i); currentRowIndex++) {
                 int colIndex = i + currentRowIndex;
                addGemToDiagonal(diagonal, colIndex, currentRowIndex);
+            }
+            diagonals.add(diagonal);
+        }
+    }
+
+
+    private void addUpperHalfDiagonalsTo(List<List<Gem>> diagonals){
+
+        for(int startingRow = 1; startingRow < NUMBER_OF_ROWS - MATCH_NUMBER; startingRow++) {
+            List<Gem> diagonal = new ArrayList<>();
+            for (int columnIndex = 0; columnIndex < NUMBER_OF_COLUMNS; columnIndex++) {
+                List<Gem> column = gemColumns.get(columnIndex);
+                int rowToRetrieve = columnIndex + startingRow;
+                if(rowToRetrieve < column.size()){
+                    diagonal.add(column.get(rowToRetrieve));
+                    continue;
+                }
+                diagonal.add(new NullGem());
             }
             diagonals.add(diagonal);
         }
@@ -129,24 +155,6 @@ public class Evaluator {
     private void evaluateRow(int i){
         List<Gem> filledOutRow = constructRow(i);
         evaluateGems(filledOutRow);
-    }
-
-
-    public void addUpperHalfDiagonalsTo(List<List<Gem>> diagonals){
-
-        for(int startingRow = 1; startingRow < NUMBER_OF_ROWS - MATCH_NUMBER; startingRow++) {
-            List<Gem> diagonal = new ArrayList<>();
-            for (int columnIndex = 0; columnIndex < NUMBER_OF_COLUMNS; columnIndex++) {
-                List<Gem> column = gemColumns.get(columnIndex);
-                int rowToRetrieve = columnIndex + startingRow;
-                if(rowToRetrieve < column.size()){
-                    diagonal.add(column.get(rowToRetrieve));
-                    continue;
-                }
-                diagonal.add(new NullGem());
-            }
-            diagonals.add(diagonal);
-        }
     }
 
 
@@ -227,11 +235,5 @@ public class Evaluator {
     }
 
 
-    public void deleteMarkedGems(){
-        for(List<Gem> column : gemGrid.getGemColumns()){
-            column.removeIf(Gem::isMarkedForDeletion);
-        }
-        this.hasMarkedGems = false;
-    }
 
 }
