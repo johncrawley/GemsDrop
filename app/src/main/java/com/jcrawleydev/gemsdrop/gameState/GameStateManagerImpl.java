@@ -71,8 +71,8 @@ public class GameStateManagerImpl implements GameStateManager {
         map = new HashMap<>();
         map.put(BEGIN_NEW_GAME, new BeginNewGameState(this));
         map.put(DROP, createDropState());
-        map.put(EVALUATE_GRID, new EvaluateGridState(this));
-        map.put(FLICKER, new FlickerState(this));
+        map.put(EVALUATE_GRID, new EvaluateGridState(this, evaluator));
+        map.put(FLICKER, new FlickerState(this, evaluator));
         map.put(FREE_FALL, new FreeFallState(this));
         map.put(QUICK_DROP, createQuickDropState());
         map.put(HEIGHT_EXCEEDED, new HeightExceededState(this));

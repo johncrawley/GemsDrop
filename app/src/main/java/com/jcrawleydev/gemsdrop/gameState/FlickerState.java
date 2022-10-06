@@ -16,13 +16,13 @@ public class FlickerState implements GameState{
     private final int flickerMarkedGemsTime;
     private ScheduledFuture<?> gemsFlickerFuture;
     private final ScheduledExecutorService executor;
-    private Evaluator evaluator;
+    private final Evaluator evaluator;
 
 
-    public FlickerState(GameStateManager gameStateManager){
+    public FlickerState(GameStateManager gameStateManager, Evaluator evaluator){
         this.gameStateManager = gameStateManager;
         this.gemGridLayer = gameStateManager.getGemGridLayer();
-        this.evaluator = new Evaluator(gemGridLayer.getGemGrid(), 3);
+        this.evaluator = evaluator;
         this.flickerMarkedGemsTime = 200;
         executor = Executors.newScheduledThreadPool(2);
     }

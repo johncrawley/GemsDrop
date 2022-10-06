@@ -11,10 +11,10 @@ public class EvaluateGridState implements GameState{
     private final GemGrid gemGrid;
     private final int maxColumnHeight;
 
-    public EvaluateGridState(GameStateManager gameStateManager){
+    public EvaluateGridState(GameStateManager gameStateManager, Evaluator evaluator){
         this.gameStateManager = gameStateManager;
         gemGrid = gameStateManager.getGemGridLayer().getGemGrid();
-        evaluator = new Evaluator(gemGrid, 3);
+        this.evaluator = evaluator;
         maxColumnHeight = gameStateManager.getMaxColumnHeight();
     }
 

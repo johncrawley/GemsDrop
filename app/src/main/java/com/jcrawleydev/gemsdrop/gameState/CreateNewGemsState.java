@@ -2,6 +2,7 @@ package com.jcrawleydev.gemsdrop.gameState;
 
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
+import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
 
 public class CreateNewGemsState implements GameState {
@@ -17,7 +18,9 @@ public class CreateNewGemsState implements GameState {
 
     @Override
     public void start() {
-        gameStateManager.setGemGroup(gemGroupFactory.createGemGroup());
+        GemGroup gemGroup = gemGroupFactory.createGemGroup();
+        gameStateManager.setGemGroup(gemGroup);
+        gameStateManager.getGemGroupLayer().setGemGroup(gemGroup);
         gameStateManager.loadState(Type.DROP);
     }
 
