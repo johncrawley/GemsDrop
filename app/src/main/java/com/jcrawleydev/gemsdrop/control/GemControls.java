@@ -26,6 +26,11 @@ public class GemControls {
     }
 
 
+    public void set(GemGroup gemGroup){
+        this.gemGroup = gemGroup;
+    }
+
+
     public void deactivate(){
         isActivated = false;
     }
