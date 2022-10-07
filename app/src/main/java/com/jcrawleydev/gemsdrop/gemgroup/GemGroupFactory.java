@@ -22,6 +22,7 @@ public class GemGroupFactory {
     private Random random;
     private final GemGrid gemGrid;
     private final float dropValue;
+    private int initialMiddleYPosition;
 
 
     private GemGroupFactory(GemGrid gemGrid, int numberOfGems, int initialPosition, float gemsInitialY, float gemWidth, float dropValue, int floorY, int borderWidth){
@@ -34,7 +35,15 @@ public class GemGroupFactory {
         this.gemWidth = gemWidth;
         this.dropValue = dropValue;
         this.borderWidth = borderWidth;
+        setupMiddleYPosition();
     }
+
+
+    private void setupMiddleYPosition(){
+        this.initialMiddleYPosition = (int)((floorY - gemsInitialY) / gemWidth);
+        System.out.println("GemGroupFactory.setupMiddleYPosition() : Initial Y position: " + initialMiddleYPosition);
+    }
+
 
 
     public GemGroup createGemGroup(){
@@ -52,7 +61,7 @@ public class GemGroupFactory {
                 .initialY(gemsInitialY)
                 .orientation(GemGroup.Orientation.VERTICAL)
                 .gemWidth(gemWidth)
-                .floorY(floorY)
+                .initialMiddleYPosition(initialMiddleYPosition)
                 .borderWidth(borderWidth)
                 .build();
     }

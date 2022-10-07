@@ -16,7 +16,6 @@ public class GemGroup {
     private float x,y;
     private int xPosition, middleYPosition;
     private final float gemWidth;
-    private final int floorY;
     public enum DetailedOrientation { FIRST_TO_LAST, TOP_TO_BOTTOM, LAST_TO_FIRST, BOTTOM_TO_TOP }
     public enum Orientation { HORIZONTAL, VERTICAL }
     private final GemRotator gemRotator;
@@ -29,10 +28,8 @@ public class GemGroup {
         this.xPosition = builder.initialPosition;
         this.gems = new ArrayList<>(builder.gems);
         this.gemWidth = builder.gemWidth;
-        this.floorY = builder.floorY;
+        this.middleYPosition = builder.initialMiddleYPosition;
         assignXYFrom(builder.borderWidth, builder.initialPosition, builder.initialY);
-
-        setupMiddleYPosition();
         this.reversedOrderGems = new ArrayList<>(gems);
         Collections.reverse(reversedOrderGems);
         this.orientation = builder.orientation;
@@ -45,6 +42,7 @@ public class GemGroup {
         log("Exiting GemGroup Constructor");
     }
 
+
     private void log(String msg){
         System.out.println("GemGroup: " + msg);
     }
@@ -53,10 +51,6 @@ public class GemGroup {
     private void assignXYFrom(int borderWidth, int initialPosition, float initialY){
         this.x = borderWidth + (initialPosition * gemWidth) + gemWidth /2f;
         this.y = initialY;
-        log("assignXYFrom() initialY : " + initialY + " getRemainderFromFloor(): " + getYRemainderFromFloor());
-
-       // y+= getYRemainderFromFloor();
-       // y+=3;
     }
 
 
@@ -124,18 +118,20 @@ public class GemGroup {
 
 
     public void decrementMiddleYPosition(){
+        log("Entered decrementMiddleYPosition(), before: " + middleYPosition);
         middleYPosition--;
         if(isVertical()){
             return;
         }
         int floorPosition = 1;
         middleYPosition = Math.max(middleYPosition, floorPosition);
+        log("Exiting decrementMiddleYPosition() after: " + middleYPosition);
     }
 
 
     public void dropBy(float dropIncrement){
         float yAfterDrop = y + dropIncrement;
-        System.out.println("GemGroup.dropBy() bottomPosition: " + getBottomPosition() +  " y: " + y + " floorY: "+ floorY + " dropIncrement: " + dropIncrement + " y after drop: " + yAfterDrop +  " gemDropper is quickDrop: " + gemGroupDropper.isQuickDropEnabled() + " ");
+        System.out.println("GemGroup.dropBy() bottomPosition: " + getBottomPosition() +  " y: " + y +  " dropIncrement: " + dropIncrement + " y after drop: " + yAfterDrop +  " gemDropper is quickDrop: " + gemGroupDropper.isQuickDropEnabled() + " ");
         y += dropIncrement;
         wasUpdated = true;
     }
@@ -146,7 +142,7 @@ public class GemGroup {
     public void dropBy(){
         setGemsVisibleOnFirstDrop();
         y+= (gemWidth * dropFactor);
-        decrementMiddleYPosition();
+       // decrementMiddleYPosition();
         wasUpdated = true;
     }
 
@@ -299,16 +295,6 @@ public class GemGroup {
     }
 
 
-    private void setupMiddleYPosition(){
-        this.middleYPosition = (int)((floorY - y) / gemWidth) + 1;
-    }
-
-
-    private float getYRemainderFromFloor(){
-        return y == 0 ? 0 : floorY % y;
-    }
-
-
     private List<Gem> copyOf(List<Gem> gems){
         List<Gem> copiedList = new ArrayList<>(gems.size());
         for(Gem gem: gems){
@@ -328,6 +314,7 @@ public class GemGroup {
         float dropValue;
         int floorY;
         int borderWidth;
+        int initialMiddleYPosition;
 
         public static Builder newInstance(){
             return new Builder();
@@ -365,6 +352,12 @@ public class GemGroup {
         }
 
 
+        public GemGroup.Builder initialMiddleYPosition(int initialMiddleYPosition){
+            this.initialMiddleYPosition = initialMiddleYPosition;
+            return this;
+        }
+
+
         public GemGroup.Builder floorY(int floorY){
             this.floorY = floorY;
             return this;
@@ -387,14 +380,6 @@ public class GemGroup {
             return new GemGroup(this);
         }
 
-
-
-
-
-
     }
-
-
-
 
 }

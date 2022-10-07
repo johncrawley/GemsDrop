@@ -1,5 +1,6 @@
 package com.jcrawleydev.gemsdrop.gameState;
 
+import com.jcrawleydev.gemsdrop.gameState.dropcounter.DropCounter;
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
@@ -23,6 +24,7 @@ public class DropState  implements GameState{
     private final GemGrid gemGrid;
     private final SpeedController speedController;
     private int evalCount;
+    private DropCounter dropCounter;
 
     public DropState(GameStateManager gameStateManager, SpeedController speedController){
             this.gameStateManager = gameStateManager;
@@ -30,6 +32,7 @@ public class DropState  implements GameState{
             this.gemGridLayer = gameStateManager.getGemGridLayer();
             this.gemGroupLayer = gameStateManager.getGemGroupLayer();
             this.gemGrid = gemGridLayer.getGemGrid();
+            this.dropCounter = gameStateManager.getDropCounter();
             gemDropService = Executors.newSingleThreadScheduledExecutor();
             gemDrawService = Executors.newSingleThreadScheduledExecutor();
     }
@@ -52,15 +55,16 @@ public class DropState  implements GameState{
 
     private void drop(){
         log("Entered drop()");
-        enableControlsAfterFirstDrop();
-        gemGroup.dropBy();
-        if(gemGroup.getBottomPosition() %2 == 1){
-            gemGroup.decrementMiddleYPosition();
+        if(dropCounter.get() % 2 == 0){
             addConnectedGemsToGrid();
+            gemGroup.decrementMiddleYPosition();
         }
         else{
             log("not checking for connecting gems, gemGroup bottom position: " + gemGroup.getBottomPosition());
         }
+        enableControlsAfterFirstDrop();
+        gemGroup.dropBy();
+        dropCounter.increment();
     }
 
 

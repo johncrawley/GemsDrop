@@ -3,6 +3,7 @@ package com.jcrawleydev.gemsdrop.gameState;
 import com.jcrawleydev.gemsdrop.Game;
 import com.jcrawleydev.gemsdrop.SoundPlayer;
 import com.jcrawleydev.gemsdrop.control.GemControls;
+import com.jcrawleydev.gemsdrop.gameState.dropcounter.DropCounter;
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
@@ -42,10 +43,13 @@ public class GameStateManagerImpl implements GameStateManager {
     private int flickerMarkedGemsTime;
     private int maxColumnHeight;
     private GemGroup gemGroup;
+    private final DropCounter dropCounter;
 
 
     public GameStateManagerImpl(Builder builder) {
         assignFieldsFrom(builder);
+        dropCounter = new DropCounter();
+
     }
 
     private void assignFieldsFrom(Builder builder){
@@ -84,15 +88,7 @@ public class GameStateManagerImpl implements GameStateManager {
             }
             public void stop() {}
         });
-        map.put(CREATE_NEW_GEMS, new GameState() {
-            @Override
-            public void start() {
-                gemGroup = gemGroupFactory.createGemGroup();
-                gemGroupLayer.setGemGroup(gemGroup);
-                loadState(DROP);
-            }
-            public void stop() {}
-        });
+        map.put(CREATE_NEW_GEMS, new CreateNewGemsState(this));
     }
 
 
@@ -119,13 +115,19 @@ public class GameStateManagerImpl implements GameStateManager {
 
     @Override
     public void loadState(GameState.Type type) {
-        log("entered loadState( " + type + ")");
+        log("entered loadState(" + type + ")");
         if (currentGameState != null) {
             currentGameState.stop();
         }
         currentGameState = map.get(type);
         assert currentGameState != null;
         currentGameState.start();
+    }
+
+
+    @Override
+    public DropCounter getDropCounter(){
+        return dropCounter;
     }
 
 
