@@ -44,6 +44,7 @@ public class GameStateManagerImpl implements GameStateManager {
     private int maxColumnHeight;
     private GemGroup gemGroup;
     private final DropCounter dropCounter;
+    private SpeedController variableSpeedController;
 
 
     public GameStateManagerImpl(Builder builder) {
@@ -72,39 +73,41 @@ public class GameStateManagerImpl implements GameStateManager {
 
     @Override
     public void init() {
+        initSpeedController();
+        initStates();
+    }
+
+
+    private void initStates(){
         map = new HashMap<>();
-        map.put(BEGIN_NEW_GAME, new BeginNewGameState(this));
-        map.put(DROP, createDropState());
-        map.put(EVALUATE_GRID, new EvaluateGridState(this, evaluator));
-        map.put(FLICKER, new FlickerState(this, evaluator));
-        map.put(FREE_FALL, new FreeFallState(this));
-        map.put(QUICK_DROP, createQuickDropState());
-        map.put(HEIGHT_EXCEEDED, new HeightExceededState(this));
-        map.put(GRID_GRAVITY, new GridGravityState(this));
-        map.put(GAME_OVER, new GameState() {
+        map.put(BEGIN_NEW_GAME,     new BeginNewGameState(this));
+        map.put(CREATE_NEW_GEMS,    new CreateNewGemsState(this));
+        map.put(DROP,               new DropState(this));
+        map.put(EVALUATE_GRID,      new EvaluateGridState(this, evaluator));
+        map.put(FLICKER,            new FlickerState(this, evaluator));
+        map.put(FREE_FALL,          new FreeFallState(this));
+        map.put(QUICK_DROP,         new QuickDropState(this));
+        map.put(HEIGHT_EXCEEDED,    new HeightExceededState(this));
+        map.put(GRID_GRAVITY,       new GridGravityState(this));
+
+        map.put(GAME_OVER,          new GameState() {
             @Override
             public void start() {
                 game.loadGameOverState();
             }
             public void stop() {}
         });
-        map.put(CREATE_NEW_GEMS, new CreateNewGemsState(this));
     }
 
 
-    private DropState createDropState(){
-        SpeedController variableSpeedController = VariableSpeedController.Builder.newInstance()
-                .startingSpeed(10)
-                .speedIncrease(10)
+    private void initSpeedController(){
+        variableSpeedController = VariableSpeedController.Builder.newInstance()
+                .baseInterval(700)
+                .intervalMultiplier(40)
+                .startingSpeed(1)
+                .speedIncrease(1)
                 .maxSpeed(20)
                 .numberOfDropsToIncreaseSpeed(12).build();
-
-        return new DropState(this, variableSpeedController);
-    }
-
-
-    private QuickDropState createQuickDropState(){
-        return new QuickDropState(this, new FixedSpeedController(10));
     }
 
 
@@ -145,7 +148,7 @@ public class GameStateManagerImpl implements GameStateManager {
 
     @Override
     public SpeedController getSpeedController() {
-        return speedController;
+        return variableSpeedController;
     }
 
 

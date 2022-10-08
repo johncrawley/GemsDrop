@@ -2,10 +2,9 @@ package com.jcrawleydev.gemsdrop.gameState;
 
 import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gameState.dropcounter.DropCounter;
-import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
-import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
+import com.jcrawleydev.gemsdrop.speed.SpeedController;
 
 public class CreateNewGemsState implements GameState {
 
@@ -13,12 +12,15 @@ public class CreateNewGemsState implements GameState {
     private final GemGroupFactory gemGroupFactory;
     private final DropCounter dropCounter;
     private final GemControls gemControls;
+    private final SpeedController speedController;
+
 
     public CreateNewGemsState(GameStateManager gameStateManager) {
         this.gameStateManager = gameStateManager;
         gemGroupFactory = gameStateManager.getGemGroupFactory();
         dropCounter = gameStateManager.getDropCounter();
         gemControls = gameStateManager.getControls();
+        speedController = gameStateManager.getSpeedController();
     }
 
 
@@ -30,6 +32,7 @@ public class CreateNewGemsState implements GameState {
         gameStateManager.getGemGroupLayer().setGemGroup(gemGroup);
         gameStateManager.loadState(Type.DROP);
         gemControls.set(gemGroup);
+        speedController.update();
     }
 
 

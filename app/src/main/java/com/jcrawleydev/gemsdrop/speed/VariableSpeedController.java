@@ -1,25 +1,32 @@
 package com.jcrawleydev.gemsdrop.speed;
 
-import android.content.Context;
-
-import com.jcrawleydev.gemsdrop.R;
 
 public class VariableSpeedController implements SpeedController {
 
-        private int startingSpeed;
+        private final int startingSpeed;
         private final int maxSpeed;
         private final int speedIncrease;
         private final int numberOfDropsToIncreaseSpeed;
         private int currentSpeed;
         private int currentNumberOfDropsToNextIncrease;
+        private final int baseInterval;
+        private final int intervalMultiplier;
 
 
     private VariableSpeedController(Builder builder){
         this.startingSpeed = builder.startingSpeed;
         maxSpeed = builder.maxSpeed;
         speedIncrease = builder.speedIncrease;
+        baseInterval = builder.baseInterval;
+        intervalMultiplier = builder.intervalMultiplier;
         numberOfDropsToIncreaseSpeed =builder.numberOfDropsToIncreaseSpeed;
         reset();
+    }
+
+
+    @Override
+    public int getInterval(){
+        return baseInterval - (currentSpeed * intervalMultiplier);
     }
 
 
@@ -55,6 +62,8 @@ public class VariableSpeedController implements SpeedController {
         private int maxSpeed;
         private int speedIncrease;
         private int numberOfDropsToIncreaseSpeed;
+        private int baseInterval;
+        private int intervalMultiplier;
 
         private Builder(){}
 
@@ -75,6 +84,17 @@ public class VariableSpeedController implements SpeedController {
 
         public Builder maxSpeed(int maxSpeed){
             this.maxSpeed = maxSpeed;
+            return this;
+        }
+
+        public Builder baseInterval(int baseInterval){
+            this.baseInterval = baseInterval;
+            return this;
+        }
+
+
+        public Builder intervalMultiplier(int intervalMultiplier){
+            this.intervalMultiplier = intervalMultiplier;
             return this;
         }
 

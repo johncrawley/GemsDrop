@@ -13,6 +13,7 @@ public class SpeedControllerImpl implements SpeedController {
     private final int numberOfDropsToIncreaseSpeed;
     private int currentSpeed;
     private int currentNumberOfDropsToNextIncrease;
+    private int interval;
 
     public SpeedControllerImpl(Context context){
         this.context = context;
@@ -34,6 +35,12 @@ public class SpeedControllerImpl implements SpeedController {
     @Override
     public int getCurrentSpeed(){
         return currentSpeed;
+    }
+
+
+    @Override
+    public int getInterval(){
+        return interval;
     }
 
 

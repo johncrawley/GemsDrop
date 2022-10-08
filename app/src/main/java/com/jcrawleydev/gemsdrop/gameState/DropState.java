@@ -1,7 +1,6 @@
 package com.jcrawleydev.gemsdrop.gameState;
 
 import com.jcrawleydev.gemsdrop.gameState.dropcounter.DropCounter;
-import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.speed.SpeedController;
@@ -18,17 +17,17 @@ public class DropState  implements GameState{
     private final GameStateManager gameStateManager;
     private final ScheduledExecutorService gemDropService, gemDrawService;
     private ScheduledFuture <?> dropFuture, drawFuture;
-    private GemGroup gemGroup;
+    GemGroup gemGroup;
     private final GemGroupLayer gemGroupLayer;
     private final GemGridLayer gemGridLayer;
     private final GemGrid gemGrid;
-    private final SpeedController speedController;
+    SpeedController speedController; //used in subclass
     private int evalCount;
-    private DropCounter dropCounter;
+    DropCounter dropCounter;
 
-    public DropState(GameStateManager gameStateManager, SpeedController speedController){
+    public DropState(GameStateManager gameStateManager){
             this.gameStateManager = gameStateManager;
-            this.speedController = speedController;
+            this.speedController = gameStateManager.getSpeedController();
             this.gemGridLayer = gameStateManager.getGemGridLayer();
             this.gemGroupLayer = gameStateManager.getGemGroupLayer();
             this.gemGrid = gemGridLayer.getGemGrid();
@@ -43,7 +42,7 @@ public class DropState  implements GameState{
         evalCount = 0;
         int redrawInterval = 20;
         gemGroup = gameStateManager.getGemGroup();
-        dropFuture = gemDropService.scheduleWithFixedDelay(this::drop, 0, 700, TimeUnit.MILLISECONDS);
+        dropFuture = gemDropService.scheduleWithFixedDelay(this::drop, 0, speedController.getInterval(), TimeUnit.MILLISECONDS);
         drawFuture = gemDrawService.scheduleWithFixedDelay(gemGroupLayer::drawIfUpdated, 0, redrawInterval, TimeUnit.MILLISECONDS);
     }
 
@@ -53,18 +52,19 @@ public class DropState  implements GameState{
     }
 
 
-    private void drop(){
+    void drop() {
         log("Entered drop()");
-        if(dropCounter.get() % 2 == 0){
+        if (dropCounter.get() % 2 == 0) {
             addConnectedGemsToGrid();
             gemGroup.decrementMiddleYPosition();
         }
-        else{
-            log("not checking for connecting gems, gemGroup bottom position: " + gemGroup.getBottomPosition());
+        if (gemGroup.isQuickDropEnabled()) {
+            gameStateManager.loadState(Type.QUICK_DROP);
+        } else {
+            enableControlsAfterFirstDrop();
+            gemGroup.dropBy();
+            dropCounter.increment();
         }
-        enableControlsAfterFirstDrop();
-        gemGroup.dropBy();
-        dropCounter.increment();
     }
 
 
@@ -84,7 +84,7 @@ public class DropState  implements GameState{
     }
 
 
-    private void addConnectedGemsToGrid(){
+    void addConnectedGemsToGrid(){
         log("entered addConnectedGemsToGrid()");
         if(gemGrid.shouldAddAll(gemGroup)) {
             gemGrid.add(gemGroup);

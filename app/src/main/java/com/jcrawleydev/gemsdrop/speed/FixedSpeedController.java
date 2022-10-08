@@ -1,10 +1,10 @@
 package com.jcrawleydev.gemsdrop.speed;
 
 public class FixedSpeedController implements SpeedController{
-    private final int fixedSpeed;
+    private final int interval;
 
-    public FixedSpeedController(int speed){
-        fixedSpeed = speed;
+    public FixedSpeedController(int interval){
+        this.interval = interval;
     }
 
 
@@ -15,11 +15,16 @@ public class FixedSpeedController implements SpeedController{
 
     @Override
     public int getCurrentSpeed() {
-        return fixedSpeed;
+        throw new RuntimeException("Use Interval, not speed!");
     }
 
     @Override
     public void update() {
         //do nothing
+    }
+
+    @Override
+    public int getInterval() {
+        return interval;
     }
 }
