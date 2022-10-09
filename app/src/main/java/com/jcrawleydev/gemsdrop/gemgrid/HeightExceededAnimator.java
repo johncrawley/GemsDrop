@@ -24,10 +24,25 @@ public class HeightExceededAnimator {
 
 
     public void turnNextGridLevelGrey(){
-
+        log("Entered turnNextGridLevelGrey() current level: " + currentLevel + " number of columns: " + gemGrid.getGemColumns().size());
         for(List<Gem> gemColumn : gemGrid.getGemColumns()){
-            gemColumn.get(currentLevel).setGrey();
+            setCurrentLevelGrey(gemColumn);
         }
         currentLevel++;
+    }
+
+
+    private void setCurrentLevelGrey(List<Gem> gemColumn){
+        if(gemColumn == null){
+            return;
+        }
+        if(gemColumn.size() > currentLevel) {
+            gemColumn.get(currentLevel).setGrey();
+        }
+    }
+
+
+    private void log(String msg){
+        System.out.println("HeightExceededAnimator: " + msg);
     }
 }

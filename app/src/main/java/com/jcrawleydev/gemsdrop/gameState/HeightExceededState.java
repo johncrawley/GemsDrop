@@ -33,18 +33,30 @@ public class HeightExceededState implements GameState{
 
     @Override
     public void stop() {
+        log("Entered stop()");
         future.cancel(false);
     }
 
 
     private void updateGrid(){
-        if(heightExceededAnimator.haveAllLevelsBeenChanged()){
-            gameStateManager.loadState(Type.GAME_OVER);
-            return;
+        log("Entered updateGrid()");
+        try {
+            if (heightExceededAnimator.haveAllLevelsBeenChanged()) {
+                log("HeightExceededAnimator: all levels have been changed, loading game over state");
+                gameStateManager.loadState(Type.GAME_OVER);
+                return;
+            }
+            heightExceededAnimator.turnNextGridLevelGrey();
+            log("updateGrid() heightExceededAnimator turned next grid level grey");
+            gameStateManager.getGemGridLayer().drawIfUpdated();
+        }catch (RuntimeException e){
+            e.printStackTrace();
         }
-        heightExceededAnimator.turnNextGridLevelGrey();
-        gameStateManager.getGemGridLayer().drawIfUpdated();
     }
 
+
+    private void log(String msg){
+        System.out.println("HeightExceededState: " +  msg);
+    }
 
 }

@@ -30,6 +30,7 @@ public class EvaluateGridState implements GameState{
 
 
     private boolean hasGemGridExceedHeight(){
+        System.out.println("EvaluateGridState.hasGemGridExceededHeight(), max column height: " + maxColumnHeight);
         return gemGrid.getColumnHeights()
                 .stream()
                 .peek(x -> System.out.println("col height: " + x))
