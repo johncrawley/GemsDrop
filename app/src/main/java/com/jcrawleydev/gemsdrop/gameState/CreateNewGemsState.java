@@ -4,6 +4,7 @@ import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gameState.dropcounter.DropCounter;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
+import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.speed.SpeedController;
 
 public class CreateNewGemsState implements GameState {
@@ -13,6 +14,7 @@ public class CreateNewGemsState implements GameState {
     private final DropCounter dropCounter;
     private final GemControls gemControls;
     private final SpeedController speedController;
+    private final Score score;
 
 
     public CreateNewGemsState(GameStateManager gameStateManager) {
@@ -21,6 +23,7 @@ public class CreateNewGemsState implements GameState {
         dropCounter = gameStateManager.getDropCounter();
         gemControls = gameStateManager.getControls();
         speedController = gameStateManager.getSpeedController();
+        score = gameStateManager.getScoreBoardLayer().getScore();
     }
 
 
@@ -28,6 +31,7 @@ public class CreateNewGemsState implements GameState {
     public void start() {
         GemGroup gemGroup = gemGroupFactory.createGemGroup();
         dropCounter.reset();
+        score.resetMultiplier();
         gameStateManager.setGemGroup(gemGroup);
         gameStateManager.getGemGroupLayer().setGemGroup(gemGroup);
         gameStateManager.loadState(Type.DROP);

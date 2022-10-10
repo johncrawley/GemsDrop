@@ -4,7 +4,7 @@ import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 
 public class GemCountTracker {
 
-    private GemGrid gemGrid;
+    private final GemGrid gemGrid;
     private int startCount = 0;
 
 

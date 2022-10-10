@@ -7,7 +7,7 @@ public class QuickDropState extends DropState{
     public QuickDropState(GameStateManager gameStateManager){
         super(gameStateManager);
         gameStateManager.getControls().deactivate();
-        this.speedController = new FixedSpeedController(140);
+        this.speedController = new FixedSpeedController(100);
     }
 
     @Override
@@ -20,6 +20,8 @@ public class QuickDropState extends DropState{
         if (dropCounter.get() % 2 == 0) {
             addConnectedGemsToGrid();
             gemGroup.decrementMiddleYPosition();
+            gemGroup.dropBy();
+            dropCounter.increment();
         }
         gemGroup.dropBy();
         dropCounter.increment();
