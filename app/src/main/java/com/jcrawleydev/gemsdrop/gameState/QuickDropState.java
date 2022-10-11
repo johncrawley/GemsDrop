@@ -15,6 +15,7 @@ public class QuickDropState extends DropState{
         // do nothing
     }
 
+
     @Override
     void drop() {
         if (dropCounter.get() % 2 == 0) {

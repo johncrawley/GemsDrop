@@ -1,25 +1,9 @@
 package com.jcrawleydev.gemsdrop.gameState;
 
-import com.jcrawleydev.gemsdrop.score.Score;
-import com.jcrawleydev.gemsdrop.speed.SpeedController;
-import com.jcrawleydev.gemsdrop.view.ScoreBoardLayer;
-import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
-
-public class BeginNewGameState implements GameState{
-
-    private final GameStateManager gameStateManager;
-    private final GemGridLayer gemGridLayer;
-    private final SpeedController speedController;
-    private final Score score;
-    private final ScoreBoardLayer scoreBoardLayer;
-
+public class BeginNewGameState extends AbstractGameState{
 
     public BeginNewGameState(GameStateManager gameStateManager){
-        this.gameStateManager = gameStateManager;
-        gemGridLayer = gameStateManager.getGemGridLayer();
-        speedController = gameStateManager.getSpeedController();
-        scoreBoardLayer = gameStateManager.getScoreBoardLayer();
-        score = scoreBoardLayer.getScore();
+        super(gameStateManager);
     }
 
 
@@ -28,6 +12,12 @@ public class BeginNewGameState implements GameState{
         resetVariables();
         clearGemGrid();
         gameStateManager.loadState(Type.CREATE_NEW_GEMS);
+    }
+
+
+    @Override
+    public void stop() {
+        //do nothing
     }
 
 
@@ -40,11 +30,6 @@ public class BeginNewGameState implements GameState{
 
     private void clearGemGrid(){
         gemGridLayer.clearGemGrid();
-    }
-
-    @Override
-    public void stop() {
-        //do nothing
     }
 
 }

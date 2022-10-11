@@ -1,39 +1,20 @@
 package com.jcrawleydev.gemsdrop.gameState;
 
-import com.jcrawleydev.gemsdrop.gameState.dropcounter.DropCounter;
-import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
-import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
-import com.jcrawleydev.gemsdrop.speed.SpeedController;
-import com.jcrawleydev.gemsdrop.view.GemGroupLayer;
-import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
-
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-public class DropState  implements GameState{
+public class DropState extends AbstractGameState{
 
-    private final GameStateManager gameStateManager;
     private final ScheduledExecutorService gemDropService, gemDrawService;
-    private ScheduledFuture <?> dropFuture, drawFuture;
-    GemGroup gemGroup;
-    private final GemGroupLayer gemGroupLayer;
-    private final GemGridLayer gemGridLayer;
-    private final GemGrid gemGrid;
-    SpeedController speedController; //used in subclass
     private int evalCount;
-    DropCounter dropCounter;
+    private ScheduledFuture<?> dropFuture, drawFuture;
 
     public DropState(GameStateManager gameStateManager){
-            this.gameStateManager = gameStateManager;
-            this.speedController = gameStateManager.getSpeedController();
-            this.gemGridLayer = gameStateManager.getGemGridLayer();
-            this.gemGroupLayer = gameStateManager.getGemGroupLayer();
-            this.gemGrid = gemGridLayer.getGemGrid();
-            this.dropCounter = gameStateManager.getDropCounter();
-            gemDropService = Executors.newSingleThreadScheduledExecutor();
-            gemDrawService = Executors.newSingleThreadScheduledExecutor();
+        super(gameStateManager);
+        gemDropService = Executors.newSingleThreadScheduledExecutor();
+        gemDrawService = Executors.newSingleThreadScheduledExecutor();
     }
 
 
@@ -47,13 +28,7 @@ public class DropState  implements GameState{
     }
 
 
-    private void log(String msg){
-        System.out.println("DropState: " + msg);
-    }
-
-
     void drop() {
-        log("Entered drop()");
         if (dropCounter.get() % 2 == 0) {
             addConnectedGemsToGrid();
             gemGroup.decrementMiddleYPosition();
@@ -85,7 +60,6 @@ public class DropState  implements GameState{
 
 
     void addConnectedGemsToGrid(){
-        log("entered addConnectedGemsToGrid()");
         if(gemGrid.shouldAddAll(gemGroup)) {
             gemGrid.add(gemGroup);
             gemGridLayer.draw();

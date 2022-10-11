@@ -7,7 +7,6 @@ import com.jcrawleydev.gemsdrop.gameState.dropcounter.DropCounter;
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
-import com.jcrawleydev.gemsdrop.speed.FixedSpeedController;
 import com.jcrawleydev.gemsdrop.speed.SpeedController;
 import com.jcrawleydev.gemsdrop.score.GemCountTracker;
 import com.jcrawleydev.gemsdrop.score.Score;
@@ -27,20 +26,13 @@ public class GameStateManagerImpl implements GameStateManager {
     private Map<GameState.Type, GameState> map;
 
     private Game game;
-    private Score score;
     private ScoreBoardLayer scoreBoardLayer;
     private GemGroupLayer gemGroupLayer;
     private GemGridLayer gemGridLayer;
     private GemControls gemControls;
     private Evaluator evaluator;
-    private StringBuilder str;
     private GemGroupFactory gemGroupFactory;
-    private GemCountTracker gemCountTracker;
     private SoundPlayer soundPlayer;
-    private SpeedController speedController;
-    private int gravityInterval;
-    private int gridGravityDistanceFactor;
-    private int flickerMarkedGemsTime;
     private int maxColumnHeight;
     private GemGroup gemGroup;
     private final DropCounter dropCounter;
@@ -55,19 +47,13 @@ public class GameStateManagerImpl implements GameStateManager {
 
     private void assignFieldsFrom(Builder builder){
         game = builder.game;
-        speedController = builder.speedController;
         gemGroupLayer = builder.gemGroupLayer;
         gemGridLayer = builder.gemGridView;
         gemControls = builder.gemControls;
-        score = builder.score;
         evaluator = builder.evaluator;
         gemGroupFactory = builder.gemGroupFactory;
         scoreBoardLayer = builder.scoreView;
-        gemCountTracker = builder.gemCountTracker;
         soundPlayer = builder.soundPlayer;
-        gravityInterval = builder.gravityInterval;
-        gridGravityDistanceFactor = builder.gridGravityDistanceFactor;
-        flickerMarkedGemsTime = builder.flickerMarkedGemsTime;
         maxColumnHeight = builder.maxColumnHeight;
     }
 
@@ -83,8 +69,8 @@ public class GameStateManagerImpl implements GameStateManager {
         map.put(BEGIN_NEW_GAME,     new BeginNewGameState(this));
         map.put(CREATE_NEW_GEMS,    new CreateNewGemsState(this));
         map.put(DROP,               new DropState(this));
-        map.put(EVALUATE_GRID,      new EvaluateGridState(this, evaluator));
-        map.put(FLICKER,            new FlickerState(this, evaluator));
+        map.put(EVALUATE_GRID,      new EvaluateGridState(this));
+        map.put(FLICKER,            new FlickerState(this));
         map.put(FREE_FALL,          new FreeFallState(this));
         map.put(QUICK_DROP,         new QuickDropState(this));
         map.put(HEIGHT_EXCEEDED,    new HeightExceededState(this));
@@ -111,14 +97,8 @@ public class GameStateManagerImpl implements GameStateManager {
     }
 
 
-    private void log(String msg){
-        System.out.println("GameStateManagerImpl: " + msg);
-    }
-
-
     @Override
     public void loadState(GameState.Type type) {
-        log("entered loadState(" + type + ")");
         if (currentGameState != null) {
             currentGameState.stop();
         }
@@ -135,8 +115,13 @@ public class GameStateManagerImpl implements GameStateManager {
 
 
     @Override
+    public Evaluator getEvaluator(){
+        return evaluator;
+    }
+
+
+    @Override
     public void loadState(GameState.Type type,GameState.Type source) {
-        log("entered loadState( " + type + ") from : " + source);
         if (currentGameState != null) {
             currentGameState.stop();
         }
@@ -202,7 +187,6 @@ public class GameStateManagerImpl implements GameStateManager {
         private GemGridLayer gemGridView;
         private GemControls gemControls;
         private Evaluator evaluator;
-        private StringBuilder str;
         private GemGroupFactory gemGroupFactory;
         private GemCountTracker gemCountTracker;
         private SoundPlayer soundPlayer;

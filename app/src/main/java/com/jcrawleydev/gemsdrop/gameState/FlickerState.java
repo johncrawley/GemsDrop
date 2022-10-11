@@ -11,26 +11,17 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-public class FlickerState implements GameState{
+public class FlickerState extends AbstractGameState{
 
-    private final GameStateManager gameStateManager;
-    private final GemGridLayer gemGridLayer;
     private final int flickerMarkedGemsTime;
     private ScheduledFuture<?> gemsFlickerFuture;
     private final ScheduledExecutorService cancelFlickerExecutor;
-    private final Evaluator evaluator;
-    private final ScoreBoardLayer scoreBoardLayer;
-    private final Score score;
     private final GemCountTracker gemCountTracker;
 
 
-    public FlickerState(GameStateManager gameStateManager, Evaluator evaluator){
-        this.gameStateManager = gameStateManager;
-        this.gemGridLayer = gameStateManager.getGemGridLayer();
+    public FlickerState(GameStateManager gameStateManager){
+        super(gameStateManager);
         this.gemCountTracker = new GemCountTracker(gemGridLayer.getGemGrid());
-        this.scoreBoardLayer = gameStateManager.getScoreBoardLayer();
-        this.score = scoreBoardLayer.getScore();
-        this.evaluator = evaluator;
         this.flickerMarkedGemsTime = 550;
         cancelFlickerExecutor = Executors.newScheduledThreadPool(2);
     }

@@ -22,6 +22,8 @@ public class GemGroup {
     private boolean wasUpdated;
     private final GemGroupDropper gemGroupDropper;
     private boolean isFirstDrop = true;
+    private boolean isQuickDropEnabled;
+    private final float dropFactor = 0.5f;
 
 
     public GemGroup(GemGroup.Builder builder){
@@ -39,13 +41,8 @@ public class GemGroup {
         }
         this.gemRotator = new GemRotator(this, gemWidth);
         gemRotator.setGemCoordinates(this);
-        log("Exiting GemGroup Constructor");
     }
 
-
-    private void log(String msg){
-        System.out.println("GemGroup: " + msg);
-    }
 
 
     private void assignXYFrom(int borderWidth, int initialPosition, float initialY){
@@ -118,25 +115,19 @@ public class GemGroup {
 
 
     public void decrementMiddleYPosition(){
-        log("Entered decrementMiddleYPosition(), before: " + middleYPosition);
         middleYPosition--;
         if(isVertical()){
             return;
         }
         int floorPosition = 1;
         middleYPosition = Math.max(middleYPosition, floorPosition);
-        log("Exiting decrementMiddleYPosition() after: " + middleYPosition);
     }
 
 
     public void dropBy(float dropIncrement){
-        float yAfterDrop = y + dropIncrement;
-        System.out.println("GemGroup.dropBy() bottomPosition: " + getBottomPosition() +  " y: " + y +  " dropIncrement: " + dropIncrement + " y after drop: " + yAfterDrop +  " gemDropper is quickDrop: " + gemGroupDropper.isQuickDropEnabled() + " ");
         y += dropIncrement;
         wasUpdated = true;
     }
-
-    private final float dropFactor = 0.5f;
 
 
     public void dropBy(){
@@ -256,11 +247,7 @@ public class GemGroup {
     public void enableQuickDrop(){
         gemGroupDropper.enableQuickDrop();
         isQuickDropEnabled = true;
-       // dropFactor = 1f;
     }
-
-
-    private boolean isQuickDropEnabled;
 
 
     public  boolean isQuickDropEnabled(){
@@ -280,8 +267,6 @@ public class GemGroup {
 
     public float getBottomPosition(){
         return middleYPosition;
-
-        //return orientation == Orientation.HORIZONTAL ? middleYPosition : middleYPosition -1;
     }
 
 
@@ -311,7 +296,6 @@ public class GemGroup {
         Orientation orientation = Orientation.VERTICAL;
         List<Gem> gems;
         float gemWidth;
-        float dropValue;
         int floorY;
         int borderWidth;
         int initialMiddleYPosition;

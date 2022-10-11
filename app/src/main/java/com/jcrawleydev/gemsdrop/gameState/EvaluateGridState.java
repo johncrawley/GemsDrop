@@ -1,20 +1,13 @@
 package com.jcrawleydev.gemsdrop.gameState;
 
 
-import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
-import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
+public class EvaluateGridState extends AbstractGameState{
 
-public class EvaluateGridState implements GameState{
 
-    private final GameStateManager gameStateManager;
-    private final Evaluator evaluator;
-    private final GemGrid gemGrid;
     private final int maxColumnHeight;
 
-    public EvaluateGridState(GameStateManager gameStateManager, Evaluator evaluator){
-        this.gameStateManager = gameStateManager;
-        gemGrid = gameStateManager.getGemGridLayer().getGemGrid();
-        this.evaluator = evaluator;
+    public EvaluateGridState(GameStateManager gameStateManager){
+        super(gameStateManager);
         maxColumnHeight = gameStateManager.getMaxColumnHeight();
     }
 
@@ -22,19 +15,23 @@ public class EvaluateGridState implements GameState{
     @Override
     public void start() {
         evaluator.evaluate();
-        GameState.Type gameStateType =
-                evaluator.hasMarkedGems() ? Type.FLICKER :
-                hasGemGridExceedHeight()  ? Type.HEIGHT_EXCEEDED : Type.CREATE_NEW_GEMS;
-        gameStateManager.loadState(gameStateType);
+        loadNextState();
     }
 
 
     private boolean hasGemGridExceedHeight(){
-        System.out.println("EvaluateGridState.hasGemGridExceededHeight(), max column height: " + maxColumnHeight);
         return gemGrid.getColumnHeights()
                 .stream()
                 .peek(x -> System.out.println("col height: " + x))
                 .anyMatch(x -> x > maxColumnHeight);
+    }
+
+
+    private void loadNextState(){
+        GameState.Type gameStateType = evaluator.hasMarkedGems() ? Type.FLICKER :
+                hasGemGridExceedHeight() ? Type.HEIGHT_EXCEEDED : Type.CREATE_NEW_GEMS;
+
+        gameStateManager.loadState(gameStateType);
     }
 
 

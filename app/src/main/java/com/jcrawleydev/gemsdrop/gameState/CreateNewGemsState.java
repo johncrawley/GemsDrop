@@ -1,29 +1,18 @@
 package com.jcrawleydev.gemsdrop.gameState;
 
 import com.jcrawleydev.gemsdrop.control.GemControls;
-import com.jcrawleydev.gemsdrop.gameState.dropcounter.DropCounter;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
-import com.jcrawleydev.gemsdrop.score.Score;
-import com.jcrawleydev.gemsdrop.speed.SpeedController;
 
-public class CreateNewGemsState implements GameState {
+public class CreateNewGemsState extends AbstractGameState {
 
-    private final GameStateManager gameStateManager;
-    private final GemGroupFactory gemGroupFactory;
-    private final DropCounter dropCounter;
-    private final GemControls gemControls;
-    private final SpeedController speedController;
-    private final Score score;
-
+    GemGroupFactory gemGroupFactory;
+    GemControls gemControls;
 
     public CreateNewGemsState(GameStateManager gameStateManager) {
-        this.gameStateManager = gameStateManager;
+        super(gameStateManager);
         gemGroupFactory = gameStateManager.getGemGroupFactory();
-        dropCounter = gameStateManager.getDropCounter();
         gemControls = gameStateManager.getControls();
-        speedController = gameStateManager.getSpeedController();
-        score = gameStateManager.getScoreBoardLayer().getScore();
     }
 
 

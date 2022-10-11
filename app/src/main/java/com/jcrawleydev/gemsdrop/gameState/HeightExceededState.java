@@ -7,20 +7,17 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-public class HeightExceededState implements GameState{
+public class HeightExceededState extends AbstractGameState{
 
-
-    private final GameStateManager gameStateManager;
     private final ScheduledExecutorService animateEndingServiceExecutor;
     private ScheduledFuture<?> future;
     private final HeightExceededAnimator heightExceededAnimator;
 
 
     public HeightExceededState(GameStateManager gameStateManager){
-        this.gameStateManager = gameStateManager;
+        super(gameStateManager);
         animateEndingServiceExecutor = Executors.newSingleThreadScheduledExecutor();
         heightExceededAnimator = new HeightExceededAnimator(gameStateManager.getGemGridLayer().getGemGrid());
-
     }
 
 

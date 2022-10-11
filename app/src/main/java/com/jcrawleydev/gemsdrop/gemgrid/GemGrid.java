@@ -80,16 +80,8 @@ public class GemGrid {
     }
 
 
-    private void log(String msg){
-        System.out.println("GemGrid: " + msg);
-        System.out.flush();
-    }
-
-
     public boolean shouldAddAll(GemGroup gemGroup) {
-        log("Entered shouldAddAll() gemGroup bottomPosition: " + gemGroup.getBottomPosition() + ("initial floor position is 1"));
         if(gemGroup.getBottomPosition() <= INITIAL_FLOOR_POSITION){
-            log("shouldAddAll() returning true");
             return true;
         }
         if(gemGroup.getOrientation() == GemGroup.Orientation.HORIZONTAL){

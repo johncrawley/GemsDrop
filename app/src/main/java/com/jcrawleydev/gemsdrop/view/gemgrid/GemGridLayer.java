@@ -32,20 +32,14 @@ public class GemGridLayer implements UpdatableView, DrawableItem {
 
     @Override
     public void drawIfUpdated(){
-        log("Entered drawIfUpdated, about to draw()");
         draw();
-        log("drawIfUpdated() Finished drawing");
-    }
-
-
-    private void log(String msg){
-        System.out.println("GemGridLayer: " + msg);
     }
 
 
     public GemGrid getGemGrid(){
         return gemGrid;
     }
+
 
     public void turnAllGemsGrey(){
        gemGrid.turnAllGemsGrey();
