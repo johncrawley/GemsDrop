@@ -2,7 +2,6 @@ package com.jcrawleydev.gemsdrop;
 
 import android.view.View;
 
-import com.jcrawleydev.gemsdrop.action.ActionMediator;
 import com.jcrawleydev.gemsdrop.control.ClickHandler;
 import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gameState.GameStateManager;
@@ -24,8 +23,6 @@ import com.jcrawleydev.gemsdrop.view.GemGroupLayer;
 import com.jcrawleydev.gemsdrop.view.ScoreBoardLayer;
 import com.jcrawleydev.gemsdrop.view.TransparentView;
 
-import static com.jcrawleydev.gemsdrop.gameState.GameState.Type.BEGIN_NEW_GAME;
-
 
 public class Game {
     private final GemGroupFactory gemGroupFactory;
@@ -40,7 +37,6 @@ public class Game {
     private GemControls gemControls;
     private final float gemWidth;
     private Evaluator evaluator;
-    private ActionMediator actionMediator;
     private GemCountTracker gemCountTracker;
     private ScoreBoardLayer scoreboardLayer;
     private final int borderWidth;
@@ -109,7 +105,6 @@ public class Game {
 
     public void loadGameOverState(){
         if(currentGameState != inGameState || isGameOver){
-            log("loadGameOverState(), current game state is not inGameState, or isGameOVer is true");
             return;
         }
         isGameOver = true;
@@ -122,10 +117,6 @@ public class Game {
     }
 
 
-    private void log(String msg){
-        System.out.println("Game: " + msg);
-    }
-
     public void loadInGameState(){
         isGameOver = false;
         switchToState(inGameState);
@@ -133,7 +124,6 @@ public class Game {
 
 
     private void switchToState(GameState gameState){
-        System.out.println("entered switchToGameState() - switching to  :: " +gameState.toString());
         currentGameState.stop();
         currentGameState = gameState;
         currentGameState.start();
@@ -178,23 +168,12 @@ public class Game {
 
     void init(){
         SoundPlayer soundPlayer = new SoundPlayer(activity, viewModel);
-        actionMediator = new ActionMediator.Builder()
-                .game(this)
-                .evaluator(evaluator)
-                .gemControls(gemControls)
-                .gemGroupView(gemGroupView)
-                .gridView(gemGridLayer)
-                .gemGroupFactory(gemGroupFactory)
-                .scoreView(scoreboardLayer)
-                .gemCountTracker(gemCountTracker)
-                .soundPlayer(soundPlayer)
-                .speedController(speedController)
-                .gravityInterval(getInt(R.integer.gravity_interval))
-                .flickerMarkedGemsTime(getInt(R.integer.disappearing_gems_flicker_time))
-                .maxColumnHeight(maxRows)
-                .gridGravityDistanceFactor(getInt(R.integer.gem_grid_gravity_drop_distance_factor))
-                .build();
+        createGameStateManager(soundPlayer);
+        initGameStates();
+    }
 
+
+    private void createGameStateManager(SoundPlayer soundPlayer){
         gameStateManager = GameStateManagerImpl.Builder.newInstance()
                 .game(this)
                 .evaluator(evaluator)
@@ -211,9 +190,7 @@ public class Game {
                 .maxColumnHeight(maxRows)
                 .gridGravityDistanceFactor(getInt(R.integer.gem_grid_gravity_drop_distance_factor))
                 .build();
-                gameStateManager.init();
-
-       initGameStates();
+        gameStateManager.init();
     }
 
 

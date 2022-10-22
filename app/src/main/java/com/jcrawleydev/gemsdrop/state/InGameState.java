@@ -1,7 +1,6 @@
 package com.jcrawleydev.gemsdrop.state;
 
 import com.jcrawleydev.gemsdrop.Game;
-import com.jcrawleydev.gemsdrop.action.ActionMediator;
 import com.jcrawleydev.gemsdrop.control.ClickHandler;
 import com.jcrawleydev.gemsdrop.gameState.GameStateManager;
 

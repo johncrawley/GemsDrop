@@ -9,7 +9,6 @@ import android.view.View;
 import com.jcrawleydev.gemsdrop.view.BitmapLoader;
 import com.jcrawleydev.gemsdrop.view.TransparentView;
 
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -34,11 +33,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         setContentView(R.layout.activity_main);
         hideActionBar();
         assignScreenDimensions();
-        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-
+        initViewModel();
         setupTransparentViews();
         initGame();
     }
+
 
     private void hideActionBar(){
         ActionBar actionBar = getSupportActionBar();
@@ -46,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             actionBar.hide();
         }
     }
+
 
     private void setupTransparentViews(){
         setupGemGroupView();
@@ -57,13 +57,17 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
 
+    private void initViewModel(){
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+    }
+
+
     @SuppressLint("ClickableViewAccessibility")
     private void setupGemGroupView(){
         gemGroupTransparentView = findViewById(R.id.gemGroupView);
         gemGroupTransparentView.setDimensions(width, height);
         gemGroupTransparentView.translateXToMiddle();
         gemGroupTransparentView.setOnTouchListener(this);
-
     }
 
 
@@ -99,12 +103,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
 
-
     private void initGame(){
         View titleView = findViewById(R.id.titleViewInclude);
         View gameOverView = findViewById(R.id.gameOverViewInclude);
         BitmapLoader bitmapLoader = new BitmapLoader(this, gemWidth);
-
         game = new Game(this, bitmapLoader, (int)width, height, gemWidth,
                 dropValue, gemGridBorder, numberOColumns, scoreBarHeight, floorY, titleView, gameOverView);
         game.initGemGridView(gemGridTransparentView);
