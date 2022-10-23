@@ -28,10 +28,15 @@ public class EvaluateGridState extends AbstractGameState{
 
 
     private void loadNextState(){
-        GameState.Type gameStateType = evaluator.hasMarkedGems() ? Type.FLICKER :
-                hasGemGridExceedHeight() ? Type.HEIGHT_EXCEEDED : Type.CREATE_NEW_GEMS;
-
-        gameStateManager.loadState(gameStateType);
+        if(evaluator.hasMarkedGems()){
+            loadState(Type.FLICKER);
+        }
+        else if(hasGemGridExceedHeight()){
+            loadState(Type.HEIGHT_EXCEEDED);
+        }
+        else{
+            loadState(Type.CREATE_NEW_GEMS);
+        }
     }
 
 

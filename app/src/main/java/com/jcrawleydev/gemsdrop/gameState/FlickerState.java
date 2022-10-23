@@ -44,7 +44,7 @@ public class FlickerState extends AbstractGameState{
        // soundPlayer.playGemDisappearSound(score.getMultiplier());
         score.incMultiplier();
         scoreBoardLayer.draw();
-        gameStateManager.loadState(Type.GRID_GRAVITY);
+        loadState(Type.GRID_GRAVITY);
     }
 
 

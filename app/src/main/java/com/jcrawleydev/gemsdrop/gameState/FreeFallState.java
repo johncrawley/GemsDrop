@@ -43,7 +43,7 @@ public class FreeFallState extends AbstractGameState{
     public void freeFall(){
         if(gemGroup.haveAllGemsSettled()){
             freeFallFuture.cancel(false);
-            gameStateManager.loadState(Type.EVALUATE_GRID);
+            loadState(Type.EVALUATE_GRID);
             return;
         }
         dropAndUpdateLayers();

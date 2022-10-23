@@ -34,7 +34,7 @@ public class DropState extends AbstractGameState{
             gemGroup.decrementMiddleYPosition();
         }
         if (gemGroup.isQuickDropEnabled()) {
-            gameStateManager.loadState(Type.QUICK_DROP);
+            loadState(Type.QUICK_DROP);
         } else {
             enableControlsAfterFirstDrop();
             gemGroup.dropBy();
@@ -64,11 +64,11 @@ public class DropState extends AbstractGameState{
             gemGrid.add(gemGroup);
             gemGridLayer.draw();
             gemGroup.setGemsInvisible();
-            gameStateManager.loadState(Type.EVALUATE_GRID);
+            loadState(Type.EVALUATE_GRID);
         }
         else if(gemGrid.addAnyFrom(gemGroup)){
             gemGridLayer.draw();
-            gameStateManager.loadState(Type.FREE_FALL);
+            loadState(Type.FREE_FALL);
         }
     }
 }

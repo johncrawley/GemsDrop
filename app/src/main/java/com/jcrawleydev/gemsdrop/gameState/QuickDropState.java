@@ -11,6 +11,7 @@ public class QuickDropState extends DropState{
         this.speedController = new FixedSpeedController(100);
     }
 
+
     @Override
     void enableControlsAfterFirstDrop(){
         // do nothing

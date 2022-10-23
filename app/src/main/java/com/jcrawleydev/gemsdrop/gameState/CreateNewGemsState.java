@@ -23,9 +23,9 @@ public class CreateNewGemsState extends AbstractGameState {
         score.resetMultiplier();
         gameStateManager.setGemGroup(gemGroup);
         gameStateManager.getGemGroupLayer().setGemGroup(gemGroup);
-        gameStateManager.loadState(Type.DROP);
         gemControls.set(gemGroup);
         speedController.update();
+        loadState(Type.DROP);
     }
 
 

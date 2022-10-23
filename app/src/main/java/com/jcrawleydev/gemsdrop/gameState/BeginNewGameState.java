@@ -11,7 +11,7 @@ public class BeginNewGameState extends AbstractGameState{
     public void start() {
         resetVariables();
         clearGemGrid();
-        gameStateManager.loadState(Type.CREATE_NEW_GEMS);
+        loadState(Type.CREATE_NEW_GEMS);
     }
 
 
