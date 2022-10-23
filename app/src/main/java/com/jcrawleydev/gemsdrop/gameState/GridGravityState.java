@@ -12,7 +12,7 @@ public class GridGravityState extends AbstractGameState{
     private final ScheduledExecutorService executor;
 
     public GridGravityState(GameStateManager gameStateManager){
-        super(gameStateManager);
+        super(gameStateManager, Type.GRID_GRAVITY);
         this.gravityInterval = 50;
         executor = Executors.newScheduledThreadPool(2);
     }

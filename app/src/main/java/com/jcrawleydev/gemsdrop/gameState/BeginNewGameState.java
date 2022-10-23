@@ -3,7 +3,7 @@ package com.jcrawleydev.gemsdrop.gameState;
 public class BeginNewGameState extends AbstractGameState{
 
     public BeginNewGameState(GameStateManager gameStateManager){
-        super(gameStateManager);
+        super(gameStateManager, Type.BEGIN_NEW_GAME);
     }
 
 

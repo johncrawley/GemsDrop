@@ -14,8 +14,8 @@ import com.jcrawleydev.gemsdrop.speed.VariableSpeedController;
 import com.jcrawleydev.gemsdrop.view.GemGroupLayer;
 import com.jcrawleydev.gemsdrop.view.ScoreBoardLayer;
 import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
-import static com.jcrawleydev.gemsdrop.gameState.GameState.Type.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,32 +57,38 @@ public class GameStateManagerImpl implements GameStateManager {
         maxColumnHeight = builder.maxColumnHeight;
     }
 
+
     @Override
     public void init() {
         initSpeedController();
-        initStates();
+        addStates();
     }
 
 
-    private void initStates(){
+    private void addStates(){
         map = new HashMap<>();
-        map.put(BEGIN_NEW_GAME,     new BeginNewGameState(this));
-        map.put(CREATE_NEW_GEMS,    new CreateNewGemsState(this));
-        map.put(DROP,               new DropState(this));
-        map.put(EVALUATE_GRID,      new EvaluateGridState(this));
-        map.put(FLICKER,            new FlickerState(this));
-        map.put(FREE_FALL,          new FreeFallState(this));
-        map.put(QUICK_DROP,         new QuickDropState(this));
-        map.put(HEIGHT_EXCEEDED,    new HeightExceededState(this));
-        map.put(GRID_GRAVITY,       new GridGravityState(this));
+        addState(BeginNewGameState.class);
+        addState(CreateNewGemsState.class);
+        addState(DropState.class);
+        addState(FreeFallState.class);
+        addState(EvaluateGridState.class);
+        addState(FlickerState.class);
+        addState(GridGravityState.class);
+        addState(QuickDropState.class);
+        addState(HeightExceededState.class);
+        addState(GameOverState.class);
+    }
 
-        map.put(GAME_OVER,          new GameState() {
-            @Override
-            public void start() {
-                game.loadGameOverState();
-            }
-            public void stop() {}
-        });
+
+    private void addState(Class <? extends GameState> gameStateClass){
+        try {
+            GameState gameState = gameStateClass
+                    .getDeclaredConstructor(new Class[]{GameStateManager.class})
+                    .newInstance(this);
+            map.put(gameState.getStateType(), gameState);
+        }catch(IllegalAccessException | NoSuchMethodException | InvocationTargetException | InstantiationException e){
+            e.printStackTrace();
+        }
     }
 
 
@@ -120,8 +126,13 @@ public class GameStateManagerImpl implements GameStateManager {
     }
 
 
+    private void log(String msg){
+        System.out.println("GameStateManagerImpl: " + msg);
+    }
+
     @Override
-    public void loadState(GameState.Type type,GameState.Type source) {
+    public void loadState(GameState.Type type, GameState.Type source) {
+        log("Entered loadState() " + source.toString() + " -> " + type.toString());
         if (currentGameState != null) {
             currentGameState.stop();
         }
@@ -136,12 +147,13 @@ public class GameStateManagerImpl implements GameStateManager {
         return variableSpeedController;
     }
 
+    @Override
+    public Game getGame(){ return game;}
 
     @Override
     public GemGroup getGemGroup() {
         return gemGroup;
     }
-
 
     @Override
     public void setGemGroup(GemGroup gemGroup){

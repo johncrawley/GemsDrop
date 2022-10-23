@@ -18,7 +18,7 @@ public class FreeFallState extends AbstractGameState{
     private int dropCount;
 
     public FreeFallState(GameStateManager gameStateManager){
-        super(gameStateManager);
+        super(gameStateManager, Type.FREE_FALL);
         this.controls = gameStateManager.getControls();
         this.gravityInterval = 50;
         executor = Executors.newScheduledThreadPool(3);

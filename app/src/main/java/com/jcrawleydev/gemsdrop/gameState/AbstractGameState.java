@@ -26,9 +26,11 @@ public abstract class AbstractGameState implements GameState{
     final Evaluator evaluator;
     final ScoreBoardLayer scoreBoardLayer;
     final Score score;
+    GameState.Type stateType;
 
-    public AbstractGameState(GameStateManager gameStateManager){
+    public AbstractGameState(GameStateManager gameStateManager, GameState.Type stateType){
         this.gameStateManager = gameStateManager;
+        this.stateType = stateType;
         this.speedController = gameStateManager.getSpeedController();
         this.gemGridLayer = gameStateManager.getGemGridLayer();
         this.gemGroupLayer = gameStateManager.getGemGroupLayer();
@@ -37,5 +39,14 @@ public abstract class AbstractGameState implements GameState{
         this.dropCounter = gameStateManager.getDropCounter();
         this.scoreBoardLayer = gameStateManager.getScoreBoardLayer();
         this.score = scoreBoardLayer.getScore();
+    }
+
+    public GameState.Type getStateType(){
+        return stateType;
+    }
+
+
+    void loadState(GameState.Type gameStateType){
+        gameStateManager.loadState(gameStateType, this.stateType);
     }
 }

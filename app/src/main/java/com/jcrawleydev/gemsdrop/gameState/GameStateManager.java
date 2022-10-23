@@ -1,5 +1,6 @@
 package com.jcrawleydev.gemsdrop.gameState;
 
+import com.jcrawleydev.gemsdrop.Game;
 import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gameState.dropcounter.DropCounter;
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
@@ -24,6 +25,7 @@ public interface  GameStateManager {
     int getMaxColumnHeight();
     GemControls getControls();
     Evaluator getEvaluator();
+    Game getGame();
     ScoreBoardLayer getScoreBoardLayer();
     DropCounter getDropCounter();
 

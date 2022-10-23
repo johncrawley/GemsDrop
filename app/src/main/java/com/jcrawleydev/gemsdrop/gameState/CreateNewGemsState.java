@@ -10,7 +10,7 @@ public class CreateNewGemsState extends AbstractGameState {
     GemControls gemControls;
 
     public CreateNewGemsState(GameStateManager gameStateManager) {
-        super(gameStateManager);
+        super(gameStateManager, Type.CREATE_NEW_GEMS);
         gemGroupFactory = gameStateManager.getGemGroupFactory();
         gemControls = gameStateManager.getControls();
     }

@@ -20,7 +20,7 @@ public class FlickerState extends AbstractGameState{
 
 
     public FlickerState(GameStateManager gameStateManager){
-        super(gameStateManager);
+        super(gameStateManager, Type.FLICKER);
         this.gemCountTracker = new GemCountTracker(gemGridLayer.getGemGrid());
         this.flickerMarkedGemsTime = 550;
         cancelFlickerExecutor = Executors.newScheduledThreadPool(2);

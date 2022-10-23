@@ -15,7 +15,7 @@ public class HeightExceededState extends AbstractGameState{
 
 
     public HeightExceededState(GameStateManager gameStateManager){
-        super(gameStateManager);
+        super(gameStateManager, Type.HEIGHT_EXCEEDED);
         animateEndingServiceExecutor = Executors.newSingleThreadScheduledExecutor();
         heightExceededAnimator = new HeightExceededAnimator(gameStateManager.getGemGridLayer().getGemGrid());
     }

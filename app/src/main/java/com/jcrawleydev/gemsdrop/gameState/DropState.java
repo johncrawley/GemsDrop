@@ -12,7 +12,7 @@ public class DropState extends AbstractGameState{
     private ScheduledFuture<?> dropFuture, drawFuture;
 
     public DropState(GameStateManager gameStateManager){
-        super(gameStateManager);
+        super(gameStateManager, Type.DROP);
         gemDropService = Executors.newSingleThreadScheduledExecutor();
         gemDrawService = Executors.newSingleThreadScheduledExecutor();
     }

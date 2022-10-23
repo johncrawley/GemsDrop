@@ -7,7 +7,7 @@ public class EvaluateGridState extends AbstractGameState{
     private final int maxColumnHeight;
 
     public EvaluateGridState(GameStateManager gameStateManager){
-        super(gameStateManager);
+        super(gameStateManager, Type.EVALUATE_GRID);
         maxColumnHeight = gameStateManager.getMaxColumnHeight();
     }
 
