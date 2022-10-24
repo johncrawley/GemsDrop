@@ -235,7 +235,7 @@ public class GemControlsTest {
 
     private void dropGemGroupTo(int yBottomPosition){
         while(gemGroup.getBottomPosition() > yBottomPosition){
-            gemGroup.drop();
+            gemGroup.dropBy();
         }
     }
 
@@ -247,7 +247,6 @@ public class GemControlsTest {
 
 
     private void moveRightTillAtPosition(int position){
-
         while(gemGroup.getXPosition() < position){
             gemControls.moveRight();
         }

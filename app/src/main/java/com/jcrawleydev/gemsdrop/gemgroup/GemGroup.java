@@ -20,10 +20,8 @@ public class GemGroup {
     public enum Orientation { HORIZONTAL, VERTICAL }
     private final GemRotator gemRotator;
     private boolean wasUpdated;
-    private final GemGroupDropper gemGroupDropper;
     private boolean isFirstDrop = true;
     private boolean isQuickDropEnabled;
-    private final float dropFactor = 0.5f;
 
 
     public GemGroup(GemGroup.Builder builder){
@@ -35,7 +33,6 @@ public class GemGroup {
         this.reversedOrderGems = new ArrayList<>(gems);
         Collections.reverse(reversedOrderGems);
         this.orientation = builder.orientation;
-        this.gemGroupDropper = new GemGroupDropper(this, gemWidth);//gemGroupDropper;
         if(orientation == Orientation.VERTICAL){
             detailedOrientation = DetailedOrientation.TOP_TO_BOTTOM;
         }
@@ -132,6 +129,7 @@ public class GemGroup {
 
     public void dropBy(){
         setGemsVisibleOnFirstDrop();
+        float dropFactor = 0.5f;
         y+= (gemWidth * dropFactor);
        // decrementMiddleYPosition();
         wasUpdated = true;
@@ -143,10 +141,6 @@ public class GemGroup {
             setGemsVisible();
             isFirstDrop = false;
         }
-    }
-
-    public void dropNoUpdate(){
-        y+=(gemWidth * dropFactor);
     }
 
 
@@ -235,17 +229,7 @@ public class GemGroup {
     }
 
 
-    public void drop(){
-        if(isFirstDrop){
-            setGemsVisible();
-            isFirstDrop = false;
-        }
-        gemGroupDropper.drop();
-    }
-
-
     public void enableQuickDrop(){
-        gemGroupDropper.enableQuickDrop();
         isQuickDropEnabled = true;
     }
 
@@ -329,7 +313,6 @@ public class GemGroup {
         }
 
 
-
         public GemGroup.Builder gemWidth(float gemWidth){
             this.gemWidth = gemWidth;
             return this;
@@ -363,7 +346,6 @@ public class GemGroup {
         public GemGroup build(){
             return new GemGroup(this);
         }
-
     }
 
 }
