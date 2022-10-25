@@ -17,20 +17,21 @@ public class FlickerState extends AbstractGameState{
     private ScheduledFuture<?> gemsFlickerFuture;
     private final ScheduledExecutorService cancelFlickerExecutor;
     private final GemCountTracker gemCountTracker;
+    private final int INITIAL_DELAY = 130;
 
 
     public FlickerState(GameStateManager gameStateManager){
         super(gameStateManager, Type.FLICKER);
         this.gemCountTracker = new GemCountTracker(gemGridLayer.getGemGrid());
-        this.flickerMarkedGemsTime = 550;
+        this.flickerMarkedGemsTime = 550 + INITIAL_DELAY;
         cancelFlickerExecutor = Executors.newScheduledThreadPool(2);
     }
 
 
     @Override
     public void start(){
-        final int FLICKER_SPEED = 80;
-        gemsFlickerFuture = cancelFlickerExecutor.scheduleWithFixedDelay(gemGridLayer::flickerGemsMarkedForDeletion, 0, FLICKER_SPEED, TimeUnit.MILLISECONDS);
+        final int FLICKER_SPEED = 60;
+        gemsFlickerFuture = cancelFlickerExecutor.scheduleWithFixedDelay(gemGridLayer::flickerGemsMarkedForDeletion, INITIAL_DELAY, FLICKER_SPEED, TimeUnit.MILLISECONDS);
         cancelFlickerExecutor.schedule(this::cancelFlickerAndDeleteMarkedGems, flickerMarkedGemsTime, TimeUnit.MILLISECONDS);
     }
 
