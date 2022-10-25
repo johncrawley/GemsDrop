@@ -1,10 +1,6 @@
 package com.jcrawleydev.gemsdrop.gameState;
 
-import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.score.GemCountTracker;
-import com.jcrawleydev.gemsdrop.score.Score;
-import com.jcrawleydev.gemsdrop.view.ScoreBoardLayer;
-import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

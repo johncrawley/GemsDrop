@@ -10,6 +10,7 @@ public class DropState extends AbstractGameState{
     private final ScheduledExecutorService gemDropService, gemDrawService;
     private int evalCount;
     private ScheduledFuture<?> dropFuture, drawFuture;
+    private boolean wereGemsAdded = false;
 
     public DropState(GameStateManager gameStateManager){
         super(gameStateManager, Type.DROP);
@@ -23,19 +24,34 @@ public class DropState extends AbstractGameState{
         evalCount = 0;
         int redrawInterval = 20;
         gemGroup = gameStateManager.getGemGroup();
+        wereGemsAdded = false;
         dropFuture = gemDropService.scheduleWithFixedDelay(this::drop, 0, speedController.getInterval(), TimeUnit.MILLISECONDS);
         drawFuture = gemDrawService.scheduleWithFixedDelay(gemGroupLayer::drawIfUpdated, 0, redrawInterval, TimeUnit.MILLISECONDS);
     }
 
 
+    @Override
+    public void stop() {
+        dropFuture.cancel(false);
+        drawFuture.cancel(false);
+        gemGroupLayer.drawIfUpdated();
+    }
+
+
     void drop() {
+        log("Entered drop() dropCounter: "+  dropCounter);
         if (dropCounter.get() % 2 == 0) {
             addConnectedGemsToGrid();
             gemGroup.decrementMiddleYPosition();
         }
+        if(wereGemsAdded){
+            evalCount = 0;
+            return;
+        }
         if (gemGroup.isQuickDropEnabled()) {
             loadState(Type.QUICK_DROP);
-        } else {
+        }
+        else {
             enableControlsAfterFirstDrop();
             gemGroup.dropBy();
             dropCounter.increment();
@@ -51,24 +67,22 @@ public class DropState extends AbstractGameState{
     }
 
 
-    @Override
-    public void stop() {
-        dropFuture.cancel(false);
-        drawFuture.cancel(false);
-        gemGroupLayer.drawIfUpdated();
-    }
-
-
     void addConnectedGemsToGrid(){
         if(gemGrid.shouldAddAll(gemGroup)) {
             gemGrid.add(gemGroup);
             gemGridLayer.draw();
             gemGroup.setGemsInvisible();
+            wereGemsAdded = true;
             loadState(Type.EVALUATE_GRID);
         }
         else if(gemGrid.addAnyFrom(gemGroup)){
             gemGridLayer.draw();
+            wereGemsAdded = true;
             loadState(Type.FREE_FALL);
         }
+    }
+
+    private void log(String msg){
+        System.out.println("DropState: " + msg);
     }
 }

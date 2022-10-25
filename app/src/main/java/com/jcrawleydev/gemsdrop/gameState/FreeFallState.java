@@ -20,7 +20,7 @@ public class FreeFallState extends AbstractGameState{
     public FreeFallState(GameStateManager gameStateManager){
         super(gameStateManager, Type.FREE_FALL);
         this.controls = gameStateManager.getControls();
-        this.gravityInterval = 50;
+        this.gravityInterval = 55;
         executor = Executors.newScheduledThreadPool(3);
     }
 
