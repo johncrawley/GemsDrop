@@ -80,6 +80,18 @@ public class GemGrid {
     }
 
 
+    public boolean shouldAddAllReal(GemGroup gemGroup) {
+        if(gemGroup.getRealBottomPosition() <= INITIAL_FLOOR_POSITION){
+            return true;
+        }
+        if(gemGroup.getOrientation() == GemGroup.Orientation.HORIZONTAL){
+            return areAllGemsConnectingToColumnsReal(gemGroup);
+        }
+        return gemGroup.getRealBottomPosition() <= getRealColumnHeight(gemGroup.getXPosition());
+    }
+
+
+
     public boolean shouldAddAll(GemGroup gemGroup) {
         if(gemGroup.getBottomPosition() <= INITIAL_FLOOR_POSITION){
             return true;
@@ -116,6 +128,24 @@ public class GemGrid {
     }
 
 
+    public boolean addAnyRealFrom(GemGroup gemGroup){
+        if(isVertical(gemGroup)) {
+            return false;
+        }
+        boolean hasGemBeenAdded = false;
+        List<Gem> gems = gemGroup.getGridGems();
+
+        for(int i = 0, position = gemGroup.getBaseXPosition(); i< gems.size(); i++, position++){
+            Gem gem = gems.get(i);
+            if(isColumnSizeGreaterThanGemGroupBottomPositionReal(gemGroup, position)){
+                add(gem, position);
+                hasGemBeenAdded = true;
+            }
+        }
+        return hasGemBeenAdded;
+    }
+
+
     public boolean addAnyFrom2(GemGroup gemGroup){
         if(isVertical(gemGroup)) {
             return false;
@@ -143,8 +173,28 @@ public class GemGrid {
        return  isColumnSizeGreaterThanGemGroupBottomPosition(gemGroup, position);
     }
 
+
     private boolean isColumnSizeGreaterThanGemGroupBottomPosition(GemGroup gemGroup, int position){
+        String msg = " colHeight(" + position + ") : "
+                + getColumnHeight(position)
+                + " gemGroupBottomPosition: "
+                + gemGroup.getBottomPosition();
+        log("Entered isColumnSizeGreaterThanGemGroupBottomPosition() " + msg);
         return getColumnHeight(position) >= gemGroup.getBottomPosition();
+    }
+
+
+    private boolean isColumnSizeGreaterThanGemGroupBottomPositionReal(GemGroup gemGroup, int position){
+        String msg = " colHeight(" + position + ") : "
+                + getRealColumnHeight(position)
+                + " gemGroupBottomPosition: "
+                + gemGroup.getRealBottomPosition();
+        log("Entered isColumnSizeGreaterThanGemGroupBottomPosition() " + msg);
+        return getRealColumnHeight(position) >= gemGroup.getRealBottomPosition();
+    }
+
+    private void log(String msg){
+        System.out.println("GemGrid: "+  msg);
     }
 
 
@@ -163,8 +213,23 @@ public class GemGrid {
     }
 
 
+    private boolean areAllGemsConnectingToColumnsReal(GemGroup gemGroup){
+        for(int position : gemGroup.getGemPositions()){
+            if(gemGroup.getRealBottomPosition() > getRealColumnHeight(position)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+
     public int getColumnHeight(int position){
         return INITIAL_FLOOR_POSITION + gemColumns.get(position).size();
+    }
+
+
+    public int getRealColumnHeight(int position){
+        return INITIAL_FLOOR_POSITION + (gemColumns.get(position).size() * 2);
     }
 
 

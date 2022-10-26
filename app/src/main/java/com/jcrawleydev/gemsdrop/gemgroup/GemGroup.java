@@ -22,6 +22,7 @@ public class GemGroup {
     private boolean wasUpdated;
     private boolean isFirstDrop = true;
     private boolean isQuickDropEnabled;
+    private int realBottomPosition;
 
 
     public GemGroup(GemGroup.Builder builder){
@@ -29,6 +30,7 @@ public class GemGroup {
         this.gems = new ArrayList<>(builder.gems);
         this.gemWidth = builder.gemWidth;
         this.middleYPosition = builder.initialMiddleYPosition;
+        this.realBottomPosition = middleYPosition * 2;
         assignXYFrom(builder.borderWidth, builder.initialPosition, builder.initialY);
         this.reversedOrderGems = new ArrayList<>(gems);
         Collections.reverse(reversedOrderGems);
@@ -240,17 +242,22 @@ public class GemGroup {
 
 
     public boolean haveAllGemsSettled(){
-        for(Gem gem: gems){
-            if(gem.isVisible()){
-                return false;
-            }
-        }
-        return true;
+        return gems.stream().noneMatch(Gem::isVisible);
     }
 
 
     public float getBottomPosition(){
         return middleYPosition;
+    }
+
+
+    public float getRealBottomPosition(){
+        return realBottomPosition -1;
+    }
+
+
+    public void decrementRealBottomPosition(){
+        realBottomPosition--;
     }
 
 

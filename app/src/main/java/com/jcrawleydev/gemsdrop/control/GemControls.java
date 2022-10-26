@@ -90,8 +90,6 @@ public class GemControls {
     }
 
 
-
-
     private boolean aGemColumnIsToTheLeft(){
         int colIndex = gemGroup.getBaseXPosition() -1;
         if(colIndex < 0){

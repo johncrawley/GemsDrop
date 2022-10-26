@@ -25,7 +25,7 @@ public class DropState extends AbstractGameState{
         int redrawInterval = 20;
         gemGroup = gameStateManager.getGemGroup();
         wereGemsAdded = false;
-        dropFuture = gemDropService.scheduleWithFixedDelay(this::drop, 0, speedController.getInterval(), TimeUnit.MILLISECONDS);
+        dropFuture = gemDropService.scheduleWithFixedDelay(this::dropReal, 0, speedController.getInterval(), TimeUnit.MILLISECONDS);
         drawFuture = gemDrawService.scheduleWithFixedDelay(gemGroupLayer::drawIfUpdated, 0, redrawInterval, TimeUnit.MILLISECONDS);
     }
 
@@ -39,7 +39,7 @@ public class DropState extends AbstractGameState{
 
 
     void drop() {
-        log("Entered drop() dropCounter: "+  dropCounter);
+        log("Entered drop() dropCounter: "+  dropCounter.get());
         if (dropCounter.get() % 2 == 0) {
             addConnectedGemsToGrid();
             gemGroup.decrementMiddleYPosition();
@@ -55,6 +55,45 @@ public class DropState extends AbstractGameState{
             enableControlsAfterFirstDrop();
             gemGroup.dropBy();
             dropCounter.increment();
+        }
+    }
+
+
+    void dropReal() {
+        log("Entered dropReal() dropCounter: "+  dropCounter.get());
+        if (dropCounter.get() % 2 == 0) {
+            addConnectedGemsToGridReal();
+            gemGroup.decrementMiddleYPosition();
+        }
+        if(wereGemsAdded){
+            evalCount = 0;
+            return;
+        }
+        if (gemGroup.isQuickDropEnabled()) {
+            loadState(Type.QUICK_DROP);
+        }
+        else {
+            log("dropReal() else clause, about to enableControls");
+            enableControlsAfterFirstDrop();
+            gemGroup.dropBy();
+            gemGroup.decrementRealBottomPosition();
+            dropCounter.increment();
+        }
+    }
+
+
+    void addConnectedGemsToGridReal(){
+        if(gemGrid.shouldAddAllReal(gemGroup)) {
+            gemGrid.add(gemGroup);
+            gemGridLayer.draw();
+            gemGroup.setGemsInvisible();
+            wereGemsAdded = true;
+            loadState(Type.EVALUATE_GRID);
+        }
+        else if(gemGrid.addAnyRealFrom(gemGroup)){
+            gemGridLayer.draw();
+            wereGemsAdded = true;
+            loadState(Type.FREE_FALL);
         }
     }
 
@@ -81,6 +120,7 @@ public class DropState extends AbstractGameState{
             loadState(Type.FREE_FALL);
         }
     }
+
 
     private void log(String msg){
         System.out.println("DropState: " + msg);
