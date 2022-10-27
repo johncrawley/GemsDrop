@@ -22,9 +22,6 @@ public class QuickDropState extends DropState{
     void dropReal() {
         if (dropCounter.get() % 2 == 0) {
             addConnectedGemsToGridReal();
-            gemGroup.decrementMiddleYPosition();
-           // gemGroup.dropBy();
-           // dropCounter.increment();
         }
         gemGroup.dropBy();
         gemGroup.decrementRealBottomPosition();

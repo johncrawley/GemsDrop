@@ -91,40 +91,10 @@ public class GemGrid {
     }
 
 
-
-    public boolean shouldAddAll(GemGroup gemGroup) {
-        if(gemGroup.getBottomPosition() <= INITIAL_FLOOR_POSITION){
-            return true;
-        }
-        if(gemGroup.getOrientation() == GemGroup.Orientation.HORIZONTAL){
-            return areAllGemsConnectingToColumns(gemGroup);
-        }
-        return gemGroup.getBottomPosition() <= getColumnHeight(gemGroup.getXPosition());
-    }
-
-
     public float getTopYOfColumn(int position){
         int index = Math.max(0, position);
         index = Math.min(gemColumns.size()-1, index);
         return floorY - (gemColumns.get(index).size() * gemSize);
-    }
-
-
-    public boolean addAnyFrom(GemGroup gemGroup){
-        if(isVertical(gemGroup)) {
-            return false;
-        }
-        boolean hasGemBeenAdded = false;
-        List<Gem> gems = gemGroup.getGridGems();
-
-        for(int i = 0, position = gemGroup.getBaseXPosition(); i< gems.size(); i++, position++){
-            Gem gem = gems.get(i);
-            if(isGemWithinCapturePosition(gemGroup, position)){
-                add(gem, position);
-                hasGemBeenAdded = true;
-            }
-        }
-        return hasGemBeenAdded;
     }
 
 
@@ -146,44 +116,6 @@ public class GemGrid {
     }
 
 
-    public boolean addAnyFrom2(GemGroup gemGroup){
-        if(isVertical(gemGroup)) {
-            return false;
-        }
-        boolean hasGemBeenAdded = false;
-        for(int i = 0; i< gemGroup.getGridGems().size(); i++){
-            hasGemBeenAdded = hasGemBeenAdded || addGemIfWithinCapturePosition2(gemGroup, i);
-        }
-        return hasGemBeenAdded;
-    }
-
-
-    private boolean addGemIfWithinCapturePosition2(GemGroup gemGroup, int offset){
-        Gem gem = gemGroup.getGridGems().get(offset);
-        int position = gemGroup.getBaseXPosition() + offset;
-        if(isGemWithinCapturePosition(gemGroup, position)){
-            add(gem, position);
-            return true;
-        }
-        return false;
-    }
-
-
-    private boolean isGemWithinCapturePosition(GemGroup gemGroup, int position){
-       return  isColumnSizeGreaterThanGemGroupBottomPosition(gemGroup, position);
-    }
-
-
-    private boolean isColumnSizeGreaterThanGemGroupBottomPosition(GemGroup gemGroup, int position){
-        String msg = " colHeight(" + position + ") : "
-                + getColumnHeight(position)
-                + " gemGroupBottomPosition: "
-                + gemGroup.getBottomPosition();
-        log("Entered isColumnSizeGreaterThanGemGroupBottomPosition() " + msg);
-        return getColumnHeight(position) >= gemGroup.getBottomPosition();
-    }
-
-
     private boolean isColumnSizeGreaterThanGemGroupBottomPositionReal(GemGroup gemGroup, int position){
         String msg = " colHeight(" + position + ") : "
                 + getRealColumnHeight(position)
@@ -193,6 +125,7 @@ public class GemGrid {
         return getRealColumnHeight(position) >= gemGroup.getRealBottomPosition();
     }
 
+
     private void log(String msg){
         System.out.println("GemGrid: "+  msg);
     }
@@ -200,16 +133,6 @@ public class GemGrid {
 
     boolean isVertical(GemGroup gemGroup){
         return gemGroup.getOrientation() == GemGroup.Orientation.VERTICAL;
-    }
-
-
-    private boolean areAllGemsConnectingToColumns(GemGroup gemGroup){
-        for(int position : gemGroup.getGemPositions()){
-            if(gemGroup.getBottomPosition() > getColumnHeight(position)){
-                return false;
-            }
-        }
-        return true;
     }
 
 
@@ -225,6 +148,16 @@ public class GemGrid {
 
     public int getColumnHeight(int position){
         return INITIAL_FLOOR_POSITION + gemColumns.get(position).size();
+    }
+
+
+    public boolean doesColumnHeightMeetLowestGem(int columnIndex, GemGroup gemGroup){
+        return getRealColumnHeight(columnIndex) >= gemGroup.getRealBottomPosition();
+    }
+
+
+    public boolean doesColumnHeightMeetMiddleGem(int columnIndex, GemGroup gemGroup){
+        return getRealColumnHeight(columnIndex) >= gemGroup.getRealMiddlePosition();
     }
 
 

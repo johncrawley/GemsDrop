@@ -38,32 +38,10 @@ public class DropState extends AbstractGameState{
     }
 
 
-    void drop() {
-        log("Entered drop() dropCounter: "+  dropCounter.get());
-        if (dropCounter.get() % 2 == 0) {
-            addConnectedGemsToGrid();
-            gemGroup.decrementMiddleYPosition();
-        }
-        if(wereGemsAdded){
-            evalCount = 0;
-            return;
-        }
-        if (gemGroup.isQuickDropEnabled()) {
-            loadState(Type.QUICK_DROP);
-        }
-        else {
-            enableControlsAfterFirstDrop();
-            gemGroup.dropBy();
-            dropCounter.increment();
-        }
-    }
-
-
     void dropReal() {
         log("Entered dropReal() dropCounter: "+  dropCounter.get());
         if (dropCounter.get() % 2 == 0) {
             addConnectedGemsToGridReal();
-            gemGroup.decrementMiddleYPosition();
         }
         if(wereGemsAdded){
             evalCount = 0;
@@ -102,22 +80,6 @@ public class DropState extends AbstractGameState{
         evalCount++;
         if(evalCount > 0){
             gameStateManager.getControls().reactivate();
-        }
-    }
-
-
-    void addConnectedGemsToGrid(){
-        if(gemGrid.shouldAddAll(gemGroup)) {
-            gemGrid.add(gemGroup);
-            gemGridLayer.draw();
-            gemGroup.setGemsInvisible();
-            wereGemsAdded = true;
-            loadState(Type.EVALUATE_GRID);
-        }
-        else if(gemGrid.addAnyFrom(gemGroup)){
-            gemGridLayer.draw();
-            wereGemsAdded = true;
-            loadState(Type.FREE_FALL);
         }
     }
 

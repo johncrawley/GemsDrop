@@ -20,12 +20,6 @@ public class GemControls {
     }
 
 
-    public void activateAndSet(GemGroup gemGroup){
-        reactivate();
-        this.gemGroup = gemGroup;
-    }
-
-
     public void set(GemGroup gemGroup){
         this.gemGroup = gemGroup;
     }
@@ -54,8 +48,7 @@ public class GemControls {
         if(isGemGroupNullOrDeactivated()){
             return;
         }
-        int minPosition = getMinPosition();
-        if(gemGroup.getXPosition() <= minPosition || aGemColumnIsToTheLeft()){
+        if(gemGroup.getXPosition() <= gemGroup.getMinPosition() || aGemColumnIsToTheLeft()){
             return;
         }
         gemGroup.decrementPosition();
@@ -63,19 +56,25 @@ public class GemControls {
 
 
     public void moveRight(){
-        if(isGemGroupNullOrDeactivated()){
-            return;
+        if(ifCanMoveRight()){
+            gemGroup.incrementPosition();
         }
-        int maxPosition = gemGrid.getNumberOfColumns() -1;
+    }
 
-        if(gemGroup.getOrientation() == GemGroup.Orientation.HORIZONTAL){
-            maxPosition -= gemGroup.getNumberOfGems() /2;
-        }
 
-        if(gemGroup.getXPosition() >= maxPosition || aGemColumnIsToTheRight()){
-            return;
-        }
-        gemGroup.incrementPosition();
+    private boolean ifCanMoveRight(){
+        return !(isGemGroupNullOrDeactivated() || isGemGroupAtMaxPosition() || aGemColumnIsToTheRight());
+    }
+
+
+    private boolean isGemGroupAtMaxPosition(){
+        return gemGroup.getXPosition() >= getMaxPosition();
+    }
+
+
+    private int getMaxPosition(){
+        int horizontalOffset = gemGroup.isVertical() ? 0 : gemGroup.getNumberOfGems() / 2;
+        return gemGrid.getNumberOfColumns() - (1 + horizontalOffset);
     }
 
 
@@ -109,13 +108,13 @@ public class GemControls {
 
 
     private boolean isColumnTallerThanLowestFallingGem(int colIndex){
-        return gemGrid.getColumnHeight(colIndex) >= gemGroup.getBottomPosition();
+        return gemGrid.doesColumnHeightMeetLowestGem(colIndex, gemGroup);
     }
 
 
     private boolean isVerticalAndAtAnEdge(){
-        boolean isAtAnEdge = gemGroup.getXPosition() == getMinPosition() || gemGroup.getXPosition() == gemGrid.getNumberOfColumns() -1;
-        return isAtAnEdge && gemGroup.getOrientation() == GemGroup.Orientation.VERTICAL;
+        boolean isAtAnEdge = gemGroup.getXPosition() == gemGroup.getMinPosition() || gemGroup.getXPosition() == gemGrid.getNumberOfColumns() -1;
+        return isAtAnEdge && gemGroup.isVertical();
     }
 
 
@@ -125,11 +124,10 @@ public class GemControls {
 
 
     private boolean isGemGroupToTheLeftOfColumn(){
-        int columnIndex = gemGroup.getXPosition() + 1;
-        if(columnIndex >= gemGrid.getNumberOfColumns()){
+        if(gemGroup.getEndXPosition() >= gemGrid.getNumberOfColumns()){
             return false;
         }
-        return doesColumnHeightMeetMiddleGem(columnIndex);
+        return doesColumnHeightMeetMiddleGem(gemGroup.getEndXPosition());
     }
 
 
@@ -138,32 +136,12 @@ public class GemControls {
        if(columnIndex < 0){
             return false;
         }
-        return doesColumnHeightMeetLowestGem(columnIndex);
-    }
-
-
-    private boolean doesColumnHeightMeetLowestGem(int colIndex){
-        return getColumnTopPosition(colIndex) >= gemGroup.getBottomPosition();// gemGroup.getNumberOfGems() /2;
+       return gemGrid.doesColumnHeightMeetLowestGem(columnIndex, gemGroup);
     }
 
 
     private boolean doesColumnHeightMeetMiddleGem(int colIndex){
-        float gemGroupMidY = gemGroup.getBottomPosition() + 1;
-        return getColumnTopPosition(colIndex) >= gemGroupMidY;
-    }
-
-
-    private int getColumnTopPosition(int colIndex){
-        return gemGrid.getColumnHeight(colIndex) - 1;
-    }
-
-
-    private int getMinPosition(){
-        int minPosition = 0;
-        if(gemGroup.getOrientation() == GemGroup.Orientation.HORIZONTAL){
-            minPosition = gemGroup.getNumberOfGems() / 2;
-        }
-        return minPosition;
+        return gemGrid.doesColumnHeightMeetMiddleGem(colIndex, gemGroup);
     }
 
 

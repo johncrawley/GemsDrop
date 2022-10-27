@@ -57,24 +57,11 @@ public class FreeFallState extends AbstractGameState{
     }
 
 
-    public void dropOLD(){
-        dropCount++;
-        gemGroup.dropBy();
-        if(dropCount %2 == 1){
-            if(gemGridLayer.getGemGrid().addAnyFrom(gemGroup)){
-                gemGridLayer.draw();
-            }
-            gemGroup.decrementMiddleYPosition();
-        }
-    }
-
-
     void drop() {
         if (dropCounter.get() % 2 == 0) {
             if(gemGrid.addAnyRealFrom(gemGroup)) {
                 gemGridLayer.draw();
             }
-            gemGroup.decrementMiddleYPosition();
         }
         gemGroup.dropBy();
         gemGroupLayer.drawIfUpdated();

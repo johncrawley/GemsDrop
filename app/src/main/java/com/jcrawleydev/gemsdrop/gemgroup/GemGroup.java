@@ -12,36 +12,41 @@ public class GemGroup {
     private final List<Gem> gems;
     private final List<Gem> reversedOrderGems;
     private Orientation orientation;
-    private DetailedOrientation detailedOrientation = DetailedOrientation.FIRST_TO_LAST;
     private float x,y;
-    private int xPosition, middleYPosition;
+    private int xPosition;
     private final float gemWidth;
     public enum DetailedOrientation { FIRST_TO_LAST, TOP_TO_BOTTOM, LAST_TO_FIRST, BOTTOM_TO_TOP }
+    private DetailedOrientation detailedOrientation;
     public enum Orientation { HORIZONTAL, VERTICAL }
     private final GemRotator gemRotator;
     private boolean wasUpdated;
     private boolean isFirstDrop = true;
     private boolean isQuickDropEnabled;
     private int realBottomPosition;
+    private final int horizontalMinPosition;
 
 
     public GemGroup(GemGroup.Builder builder){
         this.xPosition = builder.initialPosition;
         this.gems = new ArrayList<>(builder.gems);
         this.gemWidth = builder.gemWidth;
-        this.middleYPosition = builder.initialMiddleYPosition;
-        this.realBottomPosition = middleYPosition * 2;
+        this.realBottomPosition = builder.initialMiddleYPosition * 2;
         assignXYFrom(builder.borderWidth, builder.initialPosition, builder.initialY);
         this.reversedOrderGems = new ArrayList<>(gems);
         Collections.reverse(reversedOrderGems);
         this.orientation = builder.orientation;
-        if(orientation == Orientation.VERTICAL){
-            detailedOrientation = DetailedOrientation.TOP_TO_BOTTOM;
-        }
+        initDetailedOrientation();
         this.gemRotator = new GemRotator(this, gemWidth);
         gemRotator.setGemCoordinates(this);
+        horizontalMinPosition = gems.size() / 2;
     }
 
+
+    private void initDetailedOrientation(){
+        detailedOrientation = orientation == Orientation.VERTICAL ?
+                DetailedOrientation.TOP_TO_BOTTOM
+                : DetailedOrientation.FIRST_TO_LAST;
+    }
 
 
     private void assignXYFrom(int borderWidth, int initialPosition, float initialY){
@@ -80,6 +85,11 @@ public class GemGroup {
     }
 
 
+    public int getMinPosition(){
+        return orientation == GemGroup.Orientation.HORIZONTAL ? horizontalMinPosition : 0;
+    }
+
+
     public int getEndXPosition(){
         if(isVertical()){
             return xPosition;
@@ -98,7 +108,6 @@ public class GemGroup {
     }
 
 
-
     public void incrementPosition(){
         x += gemWidth;
         xPosition++;
@@ -113,27 +122,10 @@ public class GemGroup {
     }
 
 
-    public void decrementMiddleYPosition(){
-        middleYPosition--;
-        if(isVertical()){
-            return;
-        }
-        int floorPosition = 1;
-        middleYPosition = Math.max(middleYPosition, floorPosition);
-    }
-
-
-    public void dropBy(float dropIncrement){
-        y += dropIncrement;
-        wasUpdated = true;
-    }
-
-
     public void dropBy(){
         setGemsVisibleOnFirstDrop();
         float dropFactor = 0.5f;
         y+= (gemWidth * dropFactor);
-       // decrementMiddleYPosition();
         wasUpdated = true;
     }
 
@@ -190,7 +182,7 @@ public class GemGroup {
     }
 
 
-    // NB gems if vertical orientation, a gem group will be printed top-to-bottom
+    // if orientation is vertical, a gem group will be printed top-to-bottom
     //  but the same gem group will be added bottom-to-top to a grid column
     public List<Gem> getCopyOfGemsToAddToGrid(){
         return copyOf(getGridGems());
@@ -246,13 +238,14 @@ public class GemGroup {
     }
 
 
-    public float getBottomPosition(){
-        return middleYPosition;
+    public float getRealBottomPosition(){
+        return realBottomPosition -1;
     }
 
 
-    public float getRealBottomPosition(){
-        return realBottomPosition -1;
+    public float getRealMiddlePosition(){
+        int offset = isVertical() ? -2 : -1;
+        return realBottomPosition - offset;
     }
 
 
