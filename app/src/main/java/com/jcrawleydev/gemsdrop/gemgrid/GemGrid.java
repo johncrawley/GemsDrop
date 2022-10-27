@@ -80,7 +80,7 @@ public class GemGrid {
     }
 
 
-    public boolean shouldAddAllReal(GemGroup gemGroup) {
+    public boolean shouldAddAll(GemGroup gemGroup) {
         if(gemGroup.getRealBottomPosition() <= INITIAL_FLOOR_POSITION){
             return true;
         }
@@ -98,7 +98,7 @@ public class GemGrid {
     }
 
 
-    public boolean addAnyRealFrom(GemGroup gemGroup){
+    public boolean addAnyFrom(GemGroup gemGroup){
         if(isVertical(gemGroup)) {
             return false;
         }

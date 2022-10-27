@@ -25,7 +25,7 @@ public class DropState extends AbstractGameState{
         int redrawInterval = 20;
         gemGroup = gameStateManager.getGemGroup();
         wereGemsAdded = false;
-        dropFuture = gemDropService.scheduleWithFixedDelay(this::dropReal, 0, speedController.getInterval(), TimeUnit.MILLISECONDS);
+        dropFuture = gemDropService.scheduleWithFixedDelay(this::drop, 0, speedController.getInterval(), TimeUnit.MILLISECONDS);
         drawFuture = gemDrawService.scheduleWithFixedDelay(gemGroupLayer::drawIfUpdated, 0, redrawInterval, TimeUnit.MILLISECONDS);
     }
 
@@ -38,12 +38,8 @@ public class DropState extends AbstractGameState{
     }
 
 
-    void dropReal() {
-        log("Entered dropReal() dropCounter: "+  dropCounter.get());
-        if (dropCounter.get() % 2 == 0) {
-            addConnectedGemsToGridReal();
-        }
-        if(wereGemsAdded){
+    void drop() {
+        if(addConnectedGemsToGrid()){
             evalCount = 0;
             return;
         }
@@ -51,28 +47,30 @@ public class DropState extends AbstractGameState{
             loadState(Type.QUICK_DROP);
         }
         else {
-            log("dropReal() else clause, about to enableControls");
             enableControlsAfterFirstDrop();
-            gemGroup.dropBy();
-            gemGroup.decrementRealBottomPosition();
+            gemGroup.drop();
             dropCounter.increment();
         }
     }
 
 
-    void addConnectedGemsToGridReal(){
-        if(gemGrid.shouldAddAllReal(gemGroup)) {
+    boolean addConnectedGemsToGrid(){
+        if (dropCounter.get() % 2 != 0) {
+            return false;
+        }
+        if(gemGrid.shouldAddAll(gemGroup)) {
             gemGrid.add(gemGroup);
             gemGridLayer.draw();
             gemGroup.setGemsInvisible();
-            wereGemsAdded = true;
             loadState(Type.EVALUATE_GRID);
+            return true;
         }
-        else if(gemGrid.addAnyRealFrom(gemGroup)){
+        else if(gemGrid.addAnyFrom(gemGroup)){
             gemGridLayer.draw();
-            wereGemsAdded = true;
             loadState(Type.FREE_FALL);
+            return true;
         }
+        return false;
     }
 
 

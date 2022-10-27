@@ -19,12 +19,11 @@ public class QuickDropState extends DropState{
 
 
     @Override
-    void dropReal() {
-        if (dropCounter.get() % 2 == 0) {
-            addConnectedGemsToGridReal();
+    void drop() {
+        if(addConnectedGemsToGrid()){
+            return;
         }
-        gemGroup.dropBy();
-        gemGroup.decrementRealBottomPosition();
+        gemGroup.drop();
         dropCounter.increment();
     }
 

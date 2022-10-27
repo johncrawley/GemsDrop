@@ -122,11 +122,12 @@ public class GemGroup {
     }
 
 
-    public void dropBy(){
+    public void drop(){
         setGemsVisibleOnFirstDrop();
         float dropFactor = 0.5f;
         y+= (gemWidth * dropFactor);
         wasUpdated = true;
+        decrementRealBottomPosition();
     }
 
 

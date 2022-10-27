@@ -15,7 +15,6 @@ public class FreeFallState extends AbstractGameState{
     private final int gravityInterval;
     private GemGroup gemGroup;
     private final ScheduledExecutorService executor;
-    private int dropCount;
 
 
     public FreeFallState(GameStateManager gameStateManager){
@@ -29,7 +28,6 @@ public class FreeFallState extends AbstractGameState{
     public void start(){
         controls.deactivate();
         gemGroup = gemGroupLayer.getGemGroup();
-        dropCount = 0;
         freeFallFuture = executor.scheduleWithFixedDelay(this::freeFall, 0, gravityInterval, TimeUnit.MILLISECONDS);
     }
 
@@ -46,7 +44,6 @@ public class FreeFallState extends AbstractGameState{
         if(gemGroup.haveAllGemsSettled()){
             freeFallFuture.cancel(false);
             loadState(Type.EVALUATE_GRID);
-            return;
         }
     }
 
@@ -59,13 +56,12 @@ public class FreeFallState extends AbstractGameState{
 
     void drop() {
         if (dropCounter.get() % 2 == 0) {
-            if(gemGrid.addAnyRealFrom(gemGroup)) {
+            if(gemGrid.addAnyFrom(gemGroup)) {
                 gemGridLayer.draw();
             }
         }
-        gemGroup.dropBy();
+        gemGroup.drop();
         gemGroupLayer.drawIfUpdated();
-        gemGroup.decrementRealBottomPosition();
         dropCounter.increment();
     }
 

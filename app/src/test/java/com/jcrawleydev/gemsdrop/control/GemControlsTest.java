@@ -235,7 +235,7 @@ public class GemControlsTest {
 
     private void dropGemGroupTo(int yBottomPosition){
         while(gemGroup.getRealBottomPosition() > yBottomPosition){
-            gemGroup.dropBy();
+            gemGroup.drop();
         }
     }
 
