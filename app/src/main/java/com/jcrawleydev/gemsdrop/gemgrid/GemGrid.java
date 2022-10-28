@@ -117,11 +117,6 @@ public class GemGrid {
 
 
     private boolean isColumnSizeGreaterThanGemGroupBottomPositionReal(GemGroup gemGroup, int position){
-        String msg = " colHeight(" + position + ") : "
-                + getRealColumnHeight(position)
-                + " gemGroupBottomPosition: "
-                + gemGroup.getRealBottomPosition();
-        log("Entered isColumnSizeGreaterThanGemGroupBottomPosition() " + msg);
         return getRealColumnHeight(position) >= gemGroup.getRealBottomPosition();
     }
 
@@ -152,17 +147,19 @@ public class GemGrid {
 
 
     public boolean doesColumnHeightMeetLowestGem(int columnIndex, GemGroup gemGroup){
-        return getRealColumnHeight(columnIndex) >= gemGroup.getRealBottomPosition();
+        return getRealColumnHeight(columnIndex) > gemGroup.getRealBottomPosition();
     }
 
 
-    public boolean doesColumnHeightMeetMiddleGem(int columnIndex, GemGroup gemGroup){
-        return getRealColumnHeight(columnIndex) >= gemGroup.getRealMiddlePosition();
+    public boolean isColumnAsTallAsTopOfBottomGem(int columnIndex, GemGroup gemGroup){
+        return getRealColumnHeight(columnIndex) >= gemGroup.getTopOfBottomGem();
     }
 
 
-    public int getRealColumnHeight(int position){
-        return INITIAL_FLOOR_POSITION + (gemColumns.get(position).size() * 2);
+    public int getRealColumnHeight(int xPosition){
+        int columnIndex = Math.max(0, Math.min(gemColumns.size()-1, xPosition));
+        int numberOfGemsInColumn = gemColumns.get(columnIndex).size();
+        return INITIAL_FLOOR_POSITION + (numberOfGemsInColumn * 2);
     }
 
 

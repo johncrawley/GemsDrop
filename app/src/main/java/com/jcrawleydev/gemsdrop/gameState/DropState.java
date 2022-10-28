@@ -10,7 +10,6 @@ public class DropState extends AbstractGameState{
     private final ScheduledExecutorService gemDropService, gemDrawService;
     private int evalCount;
     private ScheduledFuture<?> dropFuture, drawFuture;
-    private boolean wereGemsAdded = false;
 
     public DropState(GameStateManager gameStateManager){
         super(gameStateManager, Type.DROP);
@@ -24,8 +23,8 @@ public class DropState extends AbstractGameState{
         evalCount = 0;
         int redrawInterval = 20;
         gemGroup = gameStateManager.getGemGroup();
-        wereGemsAdded = false;
-        dropFuture = gemDropService.scheduleWithFixedDelay(this::drop, 0, speedController.getInterval(), TimeUnit.MILLISECONDS);
+         dropFuture = gemDropService.scheduleWithFixedDelay(this::drop, 0, speedController.getInterval(), TimeUnit.MILLISECONDS);
+       // dropFuture = gemDropService.scheduleWithFixedDelay(this::drop, 0, 700, TimeUnit.MILLISECONDS);
         drawFuture = gemDrawService.scheduleWithFixedDelay(gemGroupLayer::drawIfUpdated, 0, redrawInterval, TimeUnit.MILLISECONDS);
     }
 
@@ -81,8 +80,4 @@ public class DropState extends AbstractGameState{
         }
     }
 
-
-    private void log(String msg){
-        System.out.println("DropState: " + msg);
-    }
 }

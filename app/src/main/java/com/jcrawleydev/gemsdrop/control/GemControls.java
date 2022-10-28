@@ -82,8 +82,10 @@ public class GemControls {
         if(isGemGroupNullOrDeactivated()){
             return;
         }
-        if(isVerticalAndAtAnEdge() || isGemGroupAdjacentToColumns()){
-            return;
+        if(gemGroup.isVertical()) {
+            if (isGemGroupAtGridEdge() || isGemGroupAdjacentToColumns()) {
+                return;
+            }
         }
         gemGroup.rotate();
     }
@@ -112,26 +114,26 @@ public class GemControls {
     }
 
 
-    private boolean isVerticalAndAtAnEdge(){
-        boolean isAtAnEdge = gemGroup.getXPosition() == gemGroup.getMinPosition() || gemGroup.getXPosition() == gemGrid.getNumberOfColumns() -1;
-        return isAtAnEdge && gemGroup.isVertical();
+    private boolean isGemGroupAtGridEdge(){
+        return gemGroup.getXPosition() == gemGroup.getMinPosition()
+                || gemGroup.getXPosition() == gemGrid.getNumberOfColumns() -1;
     }
 
 
     private boolean isGemGroupAdjacentToColumns(){
-        return isGemGroupToTheLeftOfColumn() || isGemGroupToTheRightOfColumn();
+        return isGemGroupBlockedByColumnOnRight() || isGemGroupBlockedByColumnOnLeft();
     }
 
 
-    private boolean isGemGroupToTheLeftOfColumn(){
+    private boolean isGemGroupBlockedByColumnOnRight(){
         if(gemGroup.getEndXPosition() >= gemGrid.getNumberOfColumns()){
             return false;
         }
-        return doesColumnHeightMeetMiddleGem(gemGroup.getEndXPosition());
+        return doesColumnHeightMeetMiddleGem(gemGroup.getEndXPosition() + 1);
     }
 
 
-    private boolean isGemGroupToTheRightOfColumn(){
+    private boolean isGemGroupBlockedByColumnOnLeft(){
        int columnIndex = gemGroup.getXPosition() - 1;
        if(columnIndex < 0){
             return false;
@@ -141,7 +143,7 @@ public class GemControls {
 
 
     private boolean doesColumnHeightMeetMiddleGem(int colIndex){
-        return gemGrid.doesColumnHeightMeetMiddleGem(colIndex, gemGroup);
+        return gemGrid.isColumnAsTallAsTopOfBottomGem(colIndex, gemGroup);
     }
 
 

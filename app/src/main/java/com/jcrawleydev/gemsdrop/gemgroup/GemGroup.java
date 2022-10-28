@@ -24,13 +24,14 @@ public class GemGroup {
     private boolean isQuickDropEnabled;
     private int realBottomPosition;
     private final int horizontalMinPosition;
+    private final int numberOfPositionsPerGemHeight = 2;
 
 
     public GemGroup(GemGroup.Builder builder){
         this.xPosition = builder.initialPosition;
         this.gems = new ArrayList<>(builder.gems);
         this.gemWidth = builder.gemWidth;
-        this.realBottomPosition = builder.initialMiddleYPosition * 2;
+        this.realBottomPosition = builder.initialMiddleYPosition * numberOfPositionsPerGemHeight;
         assignXYFrom(builder.borderWidth, builder.initialPosition, builder.initialY);
         this.reversedOrderGems = new ArrayList<>(gems);
         Collections.reverse(reversedOrderGems);
@@ -124,8 +125,7 @@ public class GemGroup {
 
     public void drop(){
         setGemsVisibleOnFirstDrop();
-        float dropFactor = 0.5f;
-        y+= (gemWidth * dropFactor);
+        y+= (gemWidth / numberOfPositionsPerGemHeight);
         wasUpdated = true;
         decrementRealBottomPosition();
     }
@@ -244,9 +244,8 @@ public class GemGroup {
     }
 
 
-    public float getRealMiddlePosition(){
-        int offset = isVertical() ? -2 : -1;
-        return realBottomPosition - offset;
+    public float getTopOfBottomGem(){
+        return getRealBottomPosition() + numberOfPositionsPerGemHeight;
     }
 
 
