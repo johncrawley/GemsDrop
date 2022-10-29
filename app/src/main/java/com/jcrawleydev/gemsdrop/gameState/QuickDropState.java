@@ -20,9 +20,6 @@ public class QuickDropState extends DropState{
 
     @Override
     void drop() {
-        if(addConnectedGemsToGrid()){
-            return;
-        }
         gemGroup.drop();
         dropCounter.increment();
     }

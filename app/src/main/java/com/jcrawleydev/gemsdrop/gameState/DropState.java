@@ -25,7 +25,7 @@ public class DropState extends AbstractGameState{
         gemGroup = gameStateManager.getGemGroup();
          dropFuture = gemDropService.scheduleWithFixedDelay(this::drop, 0, speedController.getInterval(), TimeUnit.MILLISECONDS);
        // dropFuture = gemDropService.scheduleWithFixedDelay(this::drop, 0, 700, TimeUnit.MILLISECONDS);
-        drawFuture = gemDrawService.scheduleWithFixedDelay(gemGroupLayer::drawIfUpdated, 0, redrawInterval, TimeUnit.MILLISECONDS);
+        drawFuture = gemDrawService.scheduleWithFixedDelay(this::addConnectedGemsAndUpdateAnimation, 0, redrawInterval, TimeUnit.MILLISECONDS);
     }
 
 
@@ -38,10 +38,6 @@ public class DropState extends AbstractGameState{
 
 
     void drop() {
-        if(addConnectedGemsToGrid()){
-            evalCount = 0;
-            return;
-        }
         if (gemGroup.isQuickDropEnabled()) {
             loadState(Type.QUICK_DROP);
         }
@@ -50,6 +46,17 @@ public class DropState extends AbstractGameState{
             gemGroup.drop();
             dropCounter.increment();
         }
+    }
+
+
+    void addConnectedGemsAndUpdateAnimation(){
+        if(gemGroup.wasUpdated()) {
+            if (addConnectedGemsToGrid()) {
+                evalCount = 0;
+                return;
+            }
+        }
+        gemGroupLayer.drawIfUpdated();
     }
 
 
@@ -75,7 +82,7 @@ public class DropState extends AbstractGameState{
 
     void enableControlsAfterFirstDrop(){
         evalCount++;
-        if(evalCount > 0){
+        if(evalCount ==2){
             gameStateManager.getControls().reactivate();
         }
     }
