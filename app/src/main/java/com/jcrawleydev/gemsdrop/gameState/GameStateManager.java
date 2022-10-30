@@ -28,5 +28,6 @@ public interface  GameStateManager {
     Game getGame();
     ScoreBoardLayer getScoreBoardLayer();
     DropCounter getDropCounter();
+    void stopAllThreads();
 
 }

@@ -103,6 +103,13 @@ public class Game {
     }
 
 
+    public void onStop(){
+        if(gameStateManager != null){
+            gameStateManager.stopAllThreads();
+        }
+    }
+
+
     public void loadGameOverState(){
         if(currentGameState != inGameState || isGameOver){
             return;
@@ -201,6 +208,7 @@ public class Game {
         currentGameState = titleState;
         currentGameState.start();
     }
+
 
 
     private int getInt(int resId){

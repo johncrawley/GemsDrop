@@ -5,4 +5,5 @@ public interface GameState {
     void start();
     void stop();
     GameState.Type getStateType();
+    void terminateAllThreads();
 }

@@ -27,6 +27,7 @@ public class HeightExceededState extends AbstractGameState{
         final int updateInterval = 100;
         final int initialDelay = 0;
         future = animateEndingServiceExecutor.scheduleAtFixedRate(this::updateGrid, initialDelay, updateInterval, TimeUnit.MILLISECONDS);
+        registerFuture(future);
     }
 
 

@@ -103,6 +103,15 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
 
+    @Override
+    public void onStop(){
+        if(game != null){
+            game.onStop();
+        }
+        super.onStop();
+    }
+
+
     private void initGame(){
         View titleView = findViewById(R.id.titleViewInclude);
         View gameOverView = findViewById(R.id.gameOverViewInclude);

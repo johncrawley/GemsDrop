@@ -10,6 +10,10 @@ import com.jcrawleydev.gemsdrop.view.GemGroupLayer;
 import com.jcrawleydev.gemsdrop.view.ScoreBoardLayer;
 import com.jcrawleydev.gemsdrop.view.gemgrid.GemGridLayer;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 
@@ -27,6 +31,7 @@ public abstract class AbstractGameState implements GameState{
     final ScoreBoardLayer scoreBoardLayer;
     final Score score;
     GameState.Type stateType;
+    final List<Future<?>> futures;
 
     public AbstractGameState(GameStateManager gameStateManager, GameState.Type stateType){
         this.gameStateManager = gameStateManager;
@@ -39,7 +44,9 @@ public abstract class AbstractGameState implements GameState{
         this.dropCounter = gameStateManager.getDropCounter();
         this.scoreBoardLayer = gameStateManager.getScoreBoardLayer();
         this.score = scoreBoardLayer.getScore();
+        futures = new ArrayList<>();
     }
+
 
     public GameState.Type getStateType(){
         return stateType;
@@ -48,5 +55,17 @@ public abstract class AbstractGameState implements GameState{
 
     void loadState(GameState.Type gameStateType){
         gameStateManager.loadState(gameStateType, this.stateType);
+    }
+
+
+    void registerFuture(Future<?> future){
+        futures.add(future);
+    }
+
+
+    public void terminateAllThreads(){
+        for(Future<?> future : futures){
+            future.cancel(false);
+        }
     }
 }

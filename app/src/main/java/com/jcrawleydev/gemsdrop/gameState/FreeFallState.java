@@ -29,6 +29,7 @@ public class FreeFallState extends AbstractGameState{
         controls.deactivate();
         gemGroup = gemGroupLayer.getGemGroup();
         freeFallFuture = executor.scheduleWithFixedDelay(this::freeFall, 0, gravityInterval, TimeUnit.MILLISECONDS);
+        registerFuture(freeFallFuture);
     }
 
 

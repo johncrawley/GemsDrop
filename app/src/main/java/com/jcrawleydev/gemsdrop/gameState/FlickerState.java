@@ -29,6 +29,7 @@ public class FlickerState extends AbstractGameState{
         final int FLICKER_SPEED = 60;
         gemsFlickerFuture = cancelFlickerExecutor.scheduleWithFixedDelay(gemGridLayer::flickerGemsMarkedForDeletion, INITIAL_DELAY, FLICKER_SPEED, TimeUnit.MILLISECONDS);
         cancelFlickerExecutor.schedule(this::cancelFlickerAndDeleteMarkedGems, flickerMarkedGemsTime, TimeUnit.MILLISECONDS);
+        registerFuture(gemsFlickerFuture);
     }
 
 

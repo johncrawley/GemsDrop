@@ -65,6 +65,15 @@ public class GameStateManagerImpl implements GameStateManager {
     }
 
 
+    @Override
+    public void stopAllThreads(){
+        for(GameState gameState : map.values()){
+            gameState.terminateAllThreads();
+        }
+    }
+
+
+
     private void addStates(){
         map = new HashMap<>();
         addState(BeginNewGameState.class);
