@@ -9,7 +9,6 @@ import com.jcrawleydev.gemsdrop.gameState.GameStateManagerImpl;
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
-import com.jcrawleydev.gemsdrop.speed.SpeedControllerImpl;
 import com.jcrawleydev.gemsdrop.score.GemCountTracker;
 import com.jcrawleydev.gemsdrop.score.Score;
 import com.jcrawleydev.gemsdrop.state.GameOverState;
@@ -49,7 +48,6 @@ public class Game {
     private final View gameOverView;
     private final MainActivity activity;
     private final int maxRows;
-    private final SpeedControllerImpl speedController;
     private boolean isGameOver;
     private final MainViewModel viewModel;
     private final  GemGrid gemGrid;
@@ -82,7 +80,6 @@ public class Game {
         float initialY = floorY - ((maxRows + numberOfGems) * gemWidth);
         this.titleView = titleView;
         this.gameOverView = gameOverView;
-        this.speedController = new SpeedControllerImpl(activity);
         gemGrid = new GemGrid(numberOfColumns, maxRows);
 
         gemGroupFactory = new GemGroupFactory.Builder()
@@ -191,11 +188,7 @@ public class Game {
                 .scoreView(scoreboardLayer)
                 .gemCountTracker(gemCountTracker)
                 .soundPlayer(soundPlayer)
-                .speedController(speedController)
-                .gravityInterval(getInt(R.integer.gravity_interval))
-                .flickerMarkedGemsTime(getInt(R.integer.disappearing_gems_flicker_time))
                 .maxColumnHeight(maxRows)
-                .gridGravityDistanceFactor(getInt(R.integer.gem_grid_gravity_drop_distance_factor))
                 .build();
         gameStateManager.init();
     }
@@ -208,7 +201,6 @@ public class Game {
         currentGameState = titleState;
         currentGameState.start();
     }
-
 
 
     private int getInt(int resId){

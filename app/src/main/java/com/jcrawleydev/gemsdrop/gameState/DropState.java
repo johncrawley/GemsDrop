@@ -23,8 +23,7 @@ public class DropState extends AbstractGameState{
         evalCount = 0;
         int redrawInterval = 20;
         gemGroup = gameStateManager.getGemGroup();
-         dropFuture = gemDropService.scheduleWithFixedDelay(this::drop, 0, speedController.getInterval(), TimeUnit.MILLISECONDS);
-       // dropFuture = gemDropService.scheduleWithFixedDelay(this::drop, 0, 700, TimeUnit.MILLISECONDS);
+        dropFuture = gemDropService.scheduleWithFixedDelay(this::drop, 0, speedController.getInterval(), TimeUnit.MILLISECONDS);
         drawFuture = gemDrawService.scheduleWithFixedDelay(this::addConnectedGemsAndUpdateAnimation, 0, redrawInterval, TimeUnit.MILLISECONDS);
         registerFuture(dropFuture);
         registerFuture(drawFuture);

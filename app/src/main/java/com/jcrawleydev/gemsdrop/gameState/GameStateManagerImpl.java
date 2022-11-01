@@ -103,12 +103,12 @@ public class GameStateManagerImpl implements GameStateManager {
 
     private void initSpeedController(){
         variableSpeedController = VariableSpeedController.Builder.newInstance()
-                .baseInterval(700)
-                .intervalMultiplier(40)
+                .baseInterval(630)
+                .intervalMultiplier(20)
                 .startingSpeed(1)
                 .speedIncrease(1)
-                .maxSpeed(20)
-                .numberOfDropsToIncreaseSpeed(12).build();
+                .maxSpeed(12)
+                .numberOfDropsToIncreaseSpeed(10).build();
     }
 
 
@@ -211,10 +211,6 @@ public class GameStateManagerImpl implements GameStateManager {
         private GemGroupFactory gemGroupFactory;
         private GemCountTracker gemCountTracker;
         private SoundPlayer soundPlayer;
-        private SpeedController speedController;
-        private int gravityInterval;
-        private int gridGravityDistanceFactor;
-        private int flickerMarkedGemsTime;
         private int maxColumnHeight;
 
 
@@ -269,12 +265,6 @@ public class GameStateManagerImpl implements GameStateManager {
         }
 
 
-        public GameStateManagerImpl.Builder gridGravityDistanceFactor(int gridGravityDistanceFactor) {
-            this.gridGravityDistanceFactor = gridGravityDistanceFactor;
-            return this;
-        }
-
-
         public GameStateManagerImpl.Builder gemCountTracker(GemCountTracker gemCountTracker) {
             this.gemCountTracker = gemCountTracker;
             return this;
@@ -283,24 +273,6 @@ public class GameStateManagerImpl implements GameStateManager {
 
         public GameStateManagerImpl.Builder soundPlayer(SoundPlayer soundPlayer) {
             this.soundPlayer = soundPlayer;
-            return this;
-        }
-
-
-        public GameStateManagerImpl.Builder speedController(SpeedController speedController) {
-            this.speedController = speedController;
-            return this;
-        }
-
-
-        public GameStateManagerImpl.Builder gravityInterval(int gravityInterval) {
-            this.gravityInterval = gravityInterval;
-            return this;
-        }
-
-
-        public GameStateManagerImpl.Builder flickerMarkedGemsTime(int flickerMarkedGemsTime) {
-            this.flickerMarkedGemsTime = flickerMarkedGemsTime;
             return this;
         }
 

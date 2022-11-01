@@ -56,6 +56,9 @@ public class GemControls {
 
 
     public void moveRight(){
+        if(isGemGroupNullOrDeactivated()){
+            return;
+        }
         if(ifCanMoveRight()){
             gemGroup.incrementPosition();
         }

@@ -18,17 +18,16 @@ public class ClickHandler {
     public void click(int x, int y){
         if(x < leftLimit){
             moveLeft();
-            return;
         }
-        if(x < rotateLimit && y < dropYThreshold){
+        else if(x < rotateLimit && y < dropYThreshold){
             rotate();
-            return;
         }
-        if(x > rotateLimit){
+        else if(x > rotateLimit){
             moveRight();
-            return;
         }
-        quickDrop();
+        else {
+            quickDrop();
+        }
     }
 
 
@@ -38,7 +37,7 @@ public class ClickHandler {
 
 
     private void moveRight(){
-     gemControls.moveRight();
+        gemControls.moveRight();
     }
 
 
