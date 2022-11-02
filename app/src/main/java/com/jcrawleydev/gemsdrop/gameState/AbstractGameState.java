@@ -1,5 +1,6 @@
 package com.jcrawleydev.gemsdrop.gameState;
 
+import com.jcrawleydev.gemsdrop.MainViewModel;
 import com.jcrawleydev.gemsdrop.gameState.dropcounter.DropCounter;
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
@@ -32,6 +33,7 @@ public abstract class AbstractGameState implements GameState{
     final Score score;
     GameState.Type stateType;
     final List<Future<?>> futures;
+    final MainViewModel viewModel;
 
     public AbstractGameState(GameStateManager gameStateManager, GameState.Type stateType){
         this.gameStateManager = gameStateManager;

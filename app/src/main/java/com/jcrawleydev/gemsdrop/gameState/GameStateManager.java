@@ -1,6 +1,7 @@
 package com.jcrawleydev.gemsdrop.gameState;
 
 import com.jcrawleydev.gemsdrop.Game;
+import com.jcrawleydev.gemsdrop.MainViewModel;
 import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gameState.dropcounter.DropCounter;
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
@@ -29,5 +30,6 @@ public interface  GameStateManager {
     ScoreBoardLayer getScoreBoardLayer();
     DropCounter getDropCounter();
     void stopAllThreads();
+    MainViewModel getViewModel();
 
 }

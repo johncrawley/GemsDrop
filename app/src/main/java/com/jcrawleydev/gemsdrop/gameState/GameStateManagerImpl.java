@@ -1,6 +1,7 @@
 package com.jcrawleydev.gemsdrop.gameState;
 
 import com.jcrawleydev.gemsdrop.Game;
+import com.jcrawleydev.gemsdrop.MainViewModel;
 import com.jcrawleydev.gemsdrop.SoundPlayer;
 import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gameState.dropcounter.DropCounter;
@@ -37,6 +38,7 @@ public class GameStateManagerImpl implements GameStateManager {
     private GemGroup gemGroup;
     private final DropCounter dropCounter;
     private SpeedController variableSpeedController;
+    private ViewModel viewModel;
 
 
     public GameStateManagerImpl(Builder builder) {
@@ -120,6 +122,10 @@ public class GameStateManagerImpl implements GameStateManager {
         currentGameState = map.get(type);
         assert currentGameState != null;
         currentGameState.start();
+    }
+
+    public MainViewModel getViewModel(){
+        return viewModel;
     }
 
 
