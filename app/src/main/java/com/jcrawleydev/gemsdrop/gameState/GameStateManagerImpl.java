@@ -20,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class GameStateManagerImpl implements GameStateManager {
 
     private GameState currentGameState;
@@ -38,7 +39,7 @@ public class GameStateManagerImpl implements GameStateManager {
     private GemGroup gemGroup;
     private final DropCounter dropCounter;
     private SpeedController variableSpeedController;
-    private ViewModel viewModel;
+    private MainViewModel viewModel;
 
 
     public GameStateManagerImpl(Builder builder) {
@@ -57,6 +58,7 @@ public class GameStateManagerImpl implements GameStateManager {
         scoreBoardLayer = builder.scoreView;
         soundPlayer = builder.soundPlayer;
         maxColumnHeight = builder.maxColumnHeight;
+        viewModel = builder.viewModel;
     }
 
 
@@ -124,6 +126,14 @@ public class GameStateManagerImpl implements GameStateManager {
         currentGameState.start();
     }
 
+
+    @Override
+    public void resumeCurrentState() {
+
+    }
+
+
+    @Override
     public MainViewModel getViewModel(){
         return viewModel;
     }
@@ -218,6 +228,7 @@ public class GameStateManagerImpl implements GameStateManager {
         private GemCountTracker gemCountTracker;
         private SoundPlayer soundPlayer;
         private int maxColumnHeight;
+        private MainViewModel viewModel;
 
 
         private Builder(){}
@@ -248,6 +259,12 @@ public class GameStateManagerImpl implements GameStateManager {
 
         public GameStateManagerImpl.Builder evaluator(Evaluator evaluator) {
             this.evaluator = evaluator;
+            return this;
+        }
+
+
+        public GameStateManagerImpl.Builder viewModel(MainViewModel viewModel) {
+            this.viewModel = viewModel;
             return this;
         }
 

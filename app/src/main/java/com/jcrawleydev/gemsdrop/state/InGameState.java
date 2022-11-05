@@ -1,6 +1,7 @@
 package com.jcrawleydev.gemsdrop.state;
 
 import com.jcrawleydev.gemsdrop.Game;
+import com.jcrawleydev.gemsdrop.MainViewModel;
 import com.jcrawleydev.gemsdrop.control.ClickHandler;
 import com.jcrawleydev.gemsdrop.gameState.GameStateManager;
 
@@ -13,21 +14,20 @@ public class InGameState implements GameState {
     //private final ActionMediator actionMediator;
     private final ClickHandler clickHandler;
     private boolean hasClicked;
-    private GameStateManager gameStateManager;
+    private final GameStateManager gameStateManager;
+    private final MainViewModel viewModel;
 
     public InGameState(Game game, GameStateManager gameStateManager, ClickHandler clickHandler){
         this.game = game;
         this.gameStateManager = gameStateManager;
+        this.viewModel = gameStateManager.getViewModel();
         this.clickHandler = clickHandler;
     }
 
 
     @Override
     public void start(){
-       // actionMediator.resetVariables();
-       // actionMediator.clearGemGrid();
-     //   actionMediator.createAndDropGems();
-        gameStateManager.loadState(BEGIN_NEW_GAME);
+        gameStateManager.loadState(viewModel.currentGameState);
     }
 
 

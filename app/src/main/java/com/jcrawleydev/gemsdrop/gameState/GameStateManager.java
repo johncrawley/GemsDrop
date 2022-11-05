@@ -30,6 +30,7 @@ public interface  GameStateManager {
     ScoreBoardLayer getScoreBoardLayer();
     DropCounter getDropCounter();
     void stopAllThreads();
+    void resumeCurrentState();
     MainViewModel getViewModel();
 
 }

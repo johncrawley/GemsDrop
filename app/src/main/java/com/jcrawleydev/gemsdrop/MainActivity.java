@@ -104,11 +104,19 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
 
     @Override
-    public void onStop(){
+    public void onPause(){
         if(game != null){
-            game.onStop();
+            game.onPause();
         }
-        super.onStop();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume(){
+        if(game != null){
+            // game.onResume();
+        }
+        super.onResume();
     }
 
 
