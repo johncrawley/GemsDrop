@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         super.onPause();
     }
 
+
     @Override
     public void onResume(){
         if(game != null){
@@ -124,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         View titleView = findViewById(R.id.titleViewInclude);
         View gameOverView = findViewById(R.id.gameOverViewInclude);
         BitmapLoader bitmapLoader = new BitmapLoader(this, gemWidth);
-        game = new Game(this, bitmapLoader, (int)width, height, gemWidth,
+        game = new Game(this, bitmapLoader, width, height, gemWidth,
                 dropValue, gemGridBorder, numberOColumns, scoreBarHeight, floorY, titleView, gameOverView);
         game.initGemGridView(gemGridTransparentView);
         game.initGemGroupLayer(gemGroupTransparentView, bitmapLoader);
@@ -161,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         numberOColumns = getResources().getInteger(R.integer.number_of_columns);
         scoreBarHeight = height / 15;
-        int bottomBorderHeight = height / 18;
+        int bottomBorderHeight = 50 + (height / 18);
         floorY = height - bottomBorderHeight;
         int maxRows = getResources().getInteger(R.integer.maximum_rows);
         gemWidth = (float)(height - (scoreBarHeight + bottomBorderHeight)) / maxRows;
