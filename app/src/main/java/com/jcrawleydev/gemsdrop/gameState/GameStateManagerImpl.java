@@ -38,7 +38,7 @@ public class GameStateManagerImpl implements GameStateManager {
     private GemGroup gemGroup;
     private final DropCounter dropCounter;
     private SpeedController variableSpeedController;
-    private ViewModel viewModel;
+    private MainViewModel viewModel;
 
 
     public GameStateManagerImpl(Builder builder) {
