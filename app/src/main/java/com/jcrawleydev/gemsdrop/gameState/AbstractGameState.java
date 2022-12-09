@@ -46,6 +46,7 @@ public abstract class AbstractGameState implements GameState{
         this.dropCounter = gameStateManager.getDropCounter();
         this.scoreBoardLayer = gameStateManager.getScoreBoardLayer();
         this.score = scoreBoardLayer.getScore();
+        this.viewModel = gameStateManager.getViewModel();
         futures = new ArrayList<>();
     }
 
@@ -57,6 +58,7 @@ public abstract class AbstractGameState implements GameState{
 
     void loadState(GameState.Type gameStateType){
         gameStateManager.loadState(gameStateType, this.stateType);
+        viewModel.currentGameState = this.stateType;
     }
 
 

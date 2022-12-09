@@ -100,9 +100,16 @@ public class Game {
     }
 
 
-    public void onStop(){
+    public void onPause(){
         if(gameStateManager != null){
             gameStateManager.stopAllThreads();
+        }
+    }
+
+
+    public void onResume(){
+        if(gameStateManager != null){
+            gameStateManager.resumeCurrentState();
         }
     }
 
@@ -180,6 +187,7 @@ public class Game {
     private void createGameStateManager(SoundPlayer soundPlayer){
         gameStateManager = GameStateManagerImpl.Builder.newInstance()
                 .game(this)
+                .viewModel(viewModel)
                 .evaluator(evaluator)
                 .gemControls(gemControls)
                 .gemGroupView(gemGroupView)
