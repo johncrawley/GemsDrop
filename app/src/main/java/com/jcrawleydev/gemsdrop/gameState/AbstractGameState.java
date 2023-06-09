@@ -33,7 +33,7 @@ public abstract class AbstractGameState implements GameState{
     final Score score;
     GameState.Type stateType;
     final List<Future<?>> futures;
-    //final MainViewModel viewModel;
+    final MainViewModel viewModel;
 
     public AbstractGameState(GameStateManager gameStateManager, GameState.Type stateType){
         this.gameStateManager = gameStateManager;
