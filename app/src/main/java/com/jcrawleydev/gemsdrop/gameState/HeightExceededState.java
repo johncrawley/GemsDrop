@@ -40,7 +40,7 @@ public class HeightExceededState extends AbstractGameState{
     private void updateGrid(){
         try {
             if (heightExceededAnimator.haveAllLevelsBeenChanged()) {
-                loadState(Type.GAME_OVER);
+                loadState(Type.GAME_END);
                 return;
             }
             heightExceededAnimator.turnNextGridLevelGrey();

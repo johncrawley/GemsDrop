@@ -115,11 +115,21 @@ public class Game {
 
 
     public void loadGameOverState(){
+        log("Entered loadGameOverState()");
         if(currentGameState != inGameState || isGameOver){
+            boolean isCurrentStateNotInGame = currentGameState != inGameState;
+            log("currentState != inGameState ? : " + isCurrentStateNotInGame );
+            log("isGameOver : " + isGameOver);
             return;
         }
+        log("setting isGameOVer to true");
         isGameOver = true;
+        log("current state is: " + currentGameState.toString() + " ... switching to gameOverState...");
         switchToState(gameOverState);
+    }
+
+    private void log(String msg){
+        System.out.println("^^^ Game : " + msg);
     }
 
 

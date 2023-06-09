@@ -89,7 +89,7 @@ public class GameStateManagerImpl implements GameStateManager {
         addState(GridGravityState.class);
         addState(QuickDropState.class);
         addState(HeightExceededState.class);
-        addState(GameOverState.class);
+        addState(GameEndState.class);
     }
 
 

@@ -27,6 +27,7 @@ public class InGameState implements GameState {
 
     @Override
     public void start(){
+        viewModel.currentGameState = BEGIN_NEW_GAME;
         gameStateManager.loadState(viewModel.currentGameState);
     }
 
@@ -39,7 +40,6 @@ public class InGameState implements GameState {
 
     @Override
     public void click(int x, int y) {
-
         if(hasClicked){
             return;
         }

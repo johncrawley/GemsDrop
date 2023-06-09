@@ -50,6 +50,7 @@ public class TitleState implements GameState {
         setupTitleGems();
     }
 
+
     private void setupTitleGems(){
         titleGems = new ArrayList<>();
         addGemView(R.id.titleJewel4);
@@ -87,14 +88,8 @@ public class TitleState implements GameState {
         titleViewDisappearAnimation.setFillAfter(true);
 
         titleViewDisappearAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation arg0) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation arg0) {
-            }
-
+            @Override public void onAnimationStart(Animation arg0) {}
+            @Override public void onAnimationRepeat(Animation arg0) {}
             @Override
             public void onAnimationEnd(Animation arg0) {
                 titleView.setVisibility(View.GONE);
@@ -106,8 +101,7 @@ public class TitleState implements GameState {
     public void start(){
         hasClicked = false;
         titleView.clearAnimation();
-        final Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(()-> tapToPlayText.startAnimation(textAnimation), 1);
+        startTextAnimation();
         startGemAnimation();
     }
 
@@ -123,13 +117,19 @@ public class TitleState implements GameState {
             return;
         }
         hasClicked = true;
-        final Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(()->{
-            titleView.startAnimation(titleViewDisappearAnimation);
-            textAnimation.cancel();
-            tapToPlayText.clearAnimation();
-            game.loadInGameState();
-        }, 200);
+        new Handler(Looper.getMainLooper()).postDelayed(this::cancelAnimationsAndLoadInGameState, 200);
+    }
 
+
+    private void cancelAnimationsAndLoadInGameState(){
+        titleView.startAnimation(titleViewDisappearAnimation);
+        textAnimation.cancel();
+        tapToPlayText.clearAnimation();
+        game.loadInGameState();
+    }
+
+
+    private void startTextAnimation(){
+        new Handler(Looper.getMainLooper()).postDelayed(()-> tapToPlayText.startAnimation(textAnimation), 1);
     }
 }

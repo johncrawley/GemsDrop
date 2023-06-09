@@ -64,8 +64,7 @@ public class GameOverState implements GameState {
     public void start(){
         hasClicked = false;
         areClicksAllowed = false;
-        final Handler startAnimationHandler = new Handler(Looper.getMainLooper());
-        startAnimationHandler.postDelayed(()->{
+        new Handler(Looper.getMainLooper()).postDelayed(()->{
             gameOverView.setVisibility(View.VISIBLE);
             gameOverView.findViewById(R.id.scoreText);
             String scoreStr = String.valueOf(score.get());
