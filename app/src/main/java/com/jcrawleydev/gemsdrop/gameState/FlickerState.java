@@ -1,5 +1,6 @@
 package com.jcrawleydev.gemsdrop.gameState;
 
+import com.jcrawleydev.gemsdrop.SoundPlayer;
 import com.jcrawleydev.gemsdrop.score.GemCountTracker;
 
 import java.util.concurrent.Executors;
@@ -14,6 +15,7 @@ public class FlickerState extends AbstractGameState{
     private final ScheduledExecutorService cancelFlickerExecutor;
     private final GemCountTracker gemCountTracker;
     private final int INITIAL_DELAY = 130;
+    private final SoundPlayer soundPlayer;
 
 
     public FlickerState(GameStateManager gameStateManager){
@@ -21,6 +23,7 @@ public class FlickerState extends AbstractGameState{
         this.gemCountTracker = new GemCountTracker(gemGridLayer.getGemGrid());
         this.flickerMarkedGemsTime = 550 + INITIAL_DELAY;
         cancelFlickerExecutor = Executors.newScheduledThreadPool(2);
+        soundPlayer = gameStateManager.getSoundPlayer();
     }
 
 
@@ -39,7 +42,8 @@ public class FlickerState extends AbstractGameState{
         evaluator.deleteMarkedGems();
         int count = gemCountTracker.getDifference();
         score.addPointsFor(count);
-       // soundPlayer.playGemDisappearSound(score.getMultiplier());
+        soundPlayer.playSound(SoundPlayer.Sounds.DISAPPEAR);
+
         score.incMultiplier();
         scoreBoardLayer.draw();
         loadState(Type.GRID_GRAVITY);

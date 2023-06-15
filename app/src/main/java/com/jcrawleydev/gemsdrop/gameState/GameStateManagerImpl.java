@@ -215,6 +215,9 @@ public class GameStateManagerImpl implements GameStateManager {
         return scoreBoardLayer;
     }
 
+    @Override
+    public SoundPlayer getSoundPlayer(){ return soundPlayer; }
+
 
     public static class Builder {
         private Game game;

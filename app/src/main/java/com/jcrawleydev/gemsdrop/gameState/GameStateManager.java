@@ -2,6 +2,7 @@ package com.jcrawleydev.gemsdrop.gameState;
 
 import com.jcrawleydev.gemsdrop.Game;
 import com.jcrawleydev.gemsdrop.MainViewModel;
+import com.jcrawleydev.gemsdrop.SoundPlayer;
 import com.jcrawleydev.gemsdrop.control.GemControls;
 import com.jcrawleydev.gemsdrop.gameState.dropcounter.DropCounter;
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
@@ -32,5 +33,6 @@ public interface  GameStateManager {
     void stopAllThreads();
     void resumeCurrentState();
     MainViewModel getViewModel();
+    SoundPlayer getSoundPlayer();
 
 }
