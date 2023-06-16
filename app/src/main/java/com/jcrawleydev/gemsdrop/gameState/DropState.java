@@ -4,15 +4,19 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DropState extends AbstractGameState{
 
     private final ScheduledExecutorService gemDropService, gemDrawService;
     private int evalCount;
     private ScheduledFuture<?> dropFuture, drawFuture;
+    private final AtomicBoolean hasBeenProcessed;
+
 
     public DropState(GameStateManager gameStateManager){
         super(gameStateManager, Type.DROP);
+        hasBeenProcessed = new AtomicBoolean(false);
         gemDropService = Executors.newSingleThreadScheduledExecutor();
         gemDrawService = Executors.newSingleThreadScheduledExecutor();
     }
@@ -20,7 +24,9 @@ public class DropState extends AbstractGameState{
 
     @Override
     public void start() {
+        super.start();
         evalCount = 0;
+        hasBeenProcessed.set(false);
         int redrawInterval = 20;
         gemGroup = gameStateManager.getGemGroup();
         dropFuture = gemDropService.scheduleWithFixedDelay(this::drop, 0, speedController.getInterval(), TimeUnit.MILLISECONDS);
@@ -51,10 +57,12 @@ public class DropState extends AbstractGameState{
 
 
     void addConnectedGemsAndUpdateAnimation(){
+        if(hasBeenProcessed.get()){
+            return;
+        }
         if(gemGroup.wasUpdated()) {
             if (addConnectedGemsToGrid()) {
                 evalCount = 0;
-                return;
             }
         }
         gemGroupLayer.drawIfUpdated();
@@ -62,10 +70,11 @@ public class DropState extends AbstractGameState{
 
 
     boolean addConnectedGemsToGrid(){
-        if (dropCounter.get() % 2 != 0) {
+        if (isCurrentDropOnAHalfStep()) {
             return false;
         }
         if(gemGrid.shouldAddAll(gemGroup)) {
+            hasBeenProcessed.set(true);
             gemGrid.add(gemGroup);
             gemGridLayer.draw();
             gemGroup.setGemsInvisible();
@@ -73,6 +82,7 @@ public class DropState extends AbstractGameState{
             return true;
         }
         else if(gemGrid.addAnyFrom(gemGroup)){
+            hasBeenProcessed.set(true);
             gemGridLayer.draw();
             loadState(Type.FREE_FALL);
             return true;
@@ -86,6 +96,11 @@ public class DropState extends AbstractGameState{
         if(evalCount ==2){
             gameStateManager.getControls().reactivate();
         }
+    }
+
+
+    boolean isCurrentDropOnAHalfStep(){
+        return dropCounter.get() % 2 != 0;
     }
 
 }

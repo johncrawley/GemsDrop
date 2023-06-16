@@ -117,6 +117,13 @@ public class GameStateManagerImpl implements GameStateManager {
 
 
     @Override
+    public void loadState(GameState.Type type, GameState.Type source) {
+        log("Entered loadState() " + source.toString() + " -> " + type.toString());
+        loadState(type);
+    }
+
+
+    @Override
     public void loadState(GameState.Type type) {
         if (currentGameState != null) {
             currentGameState.stop();
@@ -153,17 +160,6 @@ public class GameStateManagerImpl implements GameStateManager {
 
     private void log(String msg){
         System.out.println("GameStateManagerImpl: " + msg);
-    }
-
-    @Override
-    public void loadState(GameState.Type type, GameState.Type source) {
-        log("Entered loadState() " + source.toString() + " -> " + type.toString());
-        if (currentGameState != null) {
-            currentGameState.stop();
-        }
-        currentGameState = map.get(type);
-        assert currentGameState != null;
-        currentGameState.start();
     }
 
 

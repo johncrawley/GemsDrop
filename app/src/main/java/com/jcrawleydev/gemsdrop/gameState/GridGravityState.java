@@ -20,6 +20,7 @@ public class GridGravityState extends AbstractGameState{
 
     @Override
     public void start(){
+        super.start();
         cancelFutures();
         gemGridGravityFuture = executor.scheduleWithFixedDelay(this::dropLooseGridGems, 0, gravityInterval, TimeUnit.MILLISECONDS);
         registerFuture(gemGridGravityFuture);

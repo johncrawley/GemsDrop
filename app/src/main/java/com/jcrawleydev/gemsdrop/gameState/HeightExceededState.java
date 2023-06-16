@@ -23,6 +23,7 @@ public class HeightExceededState extends AbstractGameState{
 
     @Override
     public void start() {
+        super.start();
         heightExceededAnimator.resetLevel();
         final int updateInterval = 100;
         final int initialDelay = 0;

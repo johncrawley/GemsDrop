@@ -18,6 +18,7 @@ public class CreateNewGemsState extends AbstractGameState {
 
     @Override
     public void start() {
+        super.start();
         GemGroup gemGroup = gemGroupFactory.createGemGroup();
         dropCounter.reset();
         score.resetMultiplier();

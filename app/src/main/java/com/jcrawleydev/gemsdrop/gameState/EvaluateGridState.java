@@ -14,16 +14,9 @@ public class EvaluateGridState extends AbstractGameState{
 
     @Override
     public void start() {
+        super.start();
         evaluator.evaluate();
         loadNextState();
-    }
-
-
-    private boolean hasGemGridExceedHeight(){
-        return gemGrid.getColumnHeights()
-                .stream()
-                .peek(x -> System.out.println("col height: " + x))
-                .anyMatch(x -> x > maxColumnHeight);
     }
 
 
@@ -38,6 +31,15 @@ public class EvaluateGridState extends AbstractGameState{
             loadState(Type.CREATE_NEW_GEMS);
         }
     }
+
+
+    private boolean hasGemGridExceedHeight(){
+        return gemGrid.getColumnHeights()
+                .stream()
+                .peek(x -> System.out.println("col height: " + x))
+                .anyMatch(x -> x > maxColumnHeight);
+    }
+
 
 
     @Override

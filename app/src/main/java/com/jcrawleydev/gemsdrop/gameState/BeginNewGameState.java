@@ -9,6 +9,7 @@ public class BeginNewGameState extends AbstractGameState{
 
     @Override
     public void start() {
+        super.start();
         resetVariables();
         clearGemGrid();
         loadState(Type.CREATE_NEW_GEMS);

@@ -8,6 +8,7 @@ public class GameEndState extends AbstractGameState{
 
     @Override
     public void start() {
+        super.start();
         log("Entered start()");
         gameStateManager.getGame().loadGameOverState();
     }

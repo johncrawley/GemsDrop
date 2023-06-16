@@ -17,6 +17,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class AbstractGameState implements GameState{
 
@@ -34,6 +35,7 @@ public abstract class AbstractGameState implements GameState{
     GameState.Type stateType;
     final List<Future<?>> futures;
     final MainViewModel viewModel;
+    private AtomicBoolean isChangingState;
 
     public AbstractGameState(GameStateManager gameStateManager, GameState.Type stateType){
         this.gameStateManager = gameStateManager;
@@ -48,6 +50,7 @@ public abstract class AbstractGameState implements GameState{
         this.score = scoreBoardLayer.getScore();
         this.viewModel = gameStateManager.getViewModel();
         futures = new ArrayList<>();
+        isChangingState = new AtomicBoolean(false);
     }
 
 
@@ -55,8 +58,16 @@ public abstract class AbstractGameState implements GameState{
         return stateType;
     }
 
+    @Override
+    public void start(){
+        isChangingState.set(false);
+    }
+
 
     void loadState(GameState.Type gameStateType){
+        if(isChangingState.compareAndSet(true, true)){
+            return;
+        }
         gameStateManager.loadState(gameStateType, this.stateType);
         viewModel.currentGameState = this.stateType;
     }
