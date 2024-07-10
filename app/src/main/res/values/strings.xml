@@ -9,4 +9,12 @@
     <string name="game_over_score_text">Your Score:</string>
     <string name="score_placeholder_text">0</string>
     <string name="settings_switch_enable_sound">Enable Sound FX</string>
+
+    <!-- Settings strings -->
+    <string name="settings_sounds_header">Sounds</string>
+    <string name="settings_switch_menu_sounds">Menu Sounds</string>
+    <string name="settings_switch_game_sounds">Game Sounds</string>
+    <string name="settings_switch_action_sounds">Action Sounds</string>
+
+
 </resources>

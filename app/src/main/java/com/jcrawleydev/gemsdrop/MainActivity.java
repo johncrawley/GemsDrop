@@ -11,6 +11,7 @@ import com.jcrawleydev.gemsdrop.view.TransparentView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
@@ -37,6 +38,16 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         setupTransparentViews();
         initGame();
     }
+
+
+    private void setupFragments() {
+        Fragment mainMenuFragment = new MainMenuFragment();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, mainMenuFragment)
+                .commit();
+    }
+
+
 
 
     private void hideActionBar(){
