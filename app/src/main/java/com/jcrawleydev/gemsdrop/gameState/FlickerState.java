@@ -43,7 +43,7 @@ public class FlickerState extends AbstractGameState{
         evaluator.deleteMarkedGems();
         int count = gemCountTracker.getDifference();
         score.addPointsFor(count);
-        soundPlayer.playSound(SoundPlayer.Sounds.DISAPPEAR);
+        soundPlayer.playSound(SoundPlayer.Sound.DISAPPEAR);
 
         score.incMultiplier();
         scoreBoardLayer.draw();

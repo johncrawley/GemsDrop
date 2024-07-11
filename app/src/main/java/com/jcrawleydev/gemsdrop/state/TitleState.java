@@ -1,9 +1,11 @@
 package com.jcrawleydev.gemsdrop.state;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
@@ -30,21 +32,21 @@ public class TitleState implements GameState {
     private boolean hasClicked = false;
     private List<ImageView> titleGems;
     private final Animation rotateAnimation;
-    private final MainActivity activity;
+    private final View parentView;
 
-    public TitleState(MainActivity activity, Game game, View titleView, int screenHeight){
-        this.activity = activity;
+    public TitleState(View parentView, Context context, Game game, View titleView, int screenHeight){
+        this.parentView = parentView;
         this.game = game;
         this.titleView = titleView;
         this.screenHeight = screenHeight;
-        textAnimation =  AnimationUtils.loadAnimation(activity, R.anim.text_bounce);
-        rotateAnimation =  AnimationUtils.loadAnimation(activity, R.anim.rotate_infinite);
+        textAnimation =  AnimationUtils.loadAnimation(context, R.anim.text_bounce);
+        rotateAnimation =  AnimationUtils.loadAnimation(context, R.anim.rotate_infinite);
         textAnimation.setRepeatCount(Animation.INFINITE);
-        tapToPlayText = activity.findViewById(R.id.tapToPlayTextView);
-        TextView titleTextView = activity.findViewById(R.id.titleTextView);
-        Typeface customTypeface = ResourcesCompat.getFont(activity, R.font.pcalc_font);
+        tapToPlayText = parentView.findViewById(R.id.tapToPlayTextView);
+        TextView titleTextView = parentView.findViewById(R.id.titleTextView);
+        Typeface customTypeface = ResourcesCompat.getFont(context, R.font.pcalc_font);
         tapToPlayText.setTypeface(customTypeface);
-        int topColor = activity.getColor(R.color.score_text_top);
+        int topColor = context.getColor(R.color.score_text_top);
         titleTextView.setTextColor(topColor);
         setupTitleViewAnimation();
         setupTitleGems();
@@ -60,7 +62,7 @@ public class TitleState implements GameState {
 
 
     private void addGemView(int id){
-        titleGems.add(activity.findViewById(id));
+        titleGems.add(parentView.findViewById(id));
     }
 
 

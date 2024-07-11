@@ -1,12 +1,10 @@
 package com.jcrawleydev.gemsdrop;
 
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,8 +14,8 @@ public class SoundPlayer {
     private MediaPlayer mediaPlayer;
     private final Context context;
     private SoundPool soundPool;
-    public enum Sounds { DISAPPEAR }
-    private final Map<Sounds, Integer> soundsMap;
+    public enum Sound { DISAPPEAR, MENU_BUTTON }
+    private final Map<Sound, Integer> soundsMap;
 
     public SoundPlayer(Context context, MainViewModel viewModel){
         this.context = context;
@@ -59,7 +57,7 @@ public class SoundPlayer {
     }
 
 
-    public void playSound(Sounds sound){
+    public void playSound(Sound sound){
         Integer soundId = soundsMap.get(sound);
         if(soundId != null){
             soundPool.play(soundId, 100, 100, 1, 0, 1);
@@ -68,12 +66,12 @@ public class SoundPlayer {
 
 
     private void loadSounds(){
-        loadSound(R.raw.disappear, Sounds.DISAPPEAR);
+        loadSound(R.raw.disappear, Sound.DISAPPEAR);
     }
 
 
 
-    private void loadSound(int soundResId, Sounds sound){
+    private void loadSound(int soundResId, Sound sound){
         int id = soundPool.load(context, soundResId, 1);
         soundsMap.put(sound, id);
     }

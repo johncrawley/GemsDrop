@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.jcrawleydev.gemsdrop.view.BitmapLoader;
 import com.jcrawleydev.gemsdrop.view.TransparentView;
+import com.jcrawleydev.gemsdrop.view.fragments.MainMenuFragment;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,6 +49,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
 
+    public void playSound(SoundPlayer.Sound sound){
+
+    }
 
 
     private void hideActionBar(){
@@ -145,6 +149,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         game.initBorder(titleBackgroundView, bitmapLoader);
         game.initBorder(gameOverBackgroundView, bitmapLoader);
         game.init();
+    }
+
+    public View getMainView(){
+        return findViewById(R.id.titleViewInclude);
     }
 
 

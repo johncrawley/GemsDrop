@@ -10,6 +10,13 @@
     <string name="score_placeholder_text">0</string>
     <string name="settings_switch_enable_sound">Enable Sound FX</string>
 
+
+    <!-- Main menu buttons -->
+    <string name="button_new_game">New Game</string>
+    <string name="button_options">Options</string>
+    <string name="button_about">About</string>
+
+
     <!-- Settings strings -->
     <string name="settings_sounds_header">Sounds</string>
     <string name="settings_switch_menu_sounds">Menu Sounds</string>

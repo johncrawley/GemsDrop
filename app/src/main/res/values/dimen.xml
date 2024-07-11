@@ -9,4 +9,8 @@
     <dimen name="game_over_score_text_size">32sp</dimen>
     <dimen name="title_gem_padding">8dp</dimen>
     <dimen name="title_gem_margin_horizontal">8dp</dimen>
+
+    <!-- Main Menu -->
+    <dimen name="menu_button_min_width">120dp</dimen>
+
 </resources>

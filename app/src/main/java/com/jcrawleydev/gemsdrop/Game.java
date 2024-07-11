@@ -213,7 +213,7 @@ public class Game {
 
 
     private void initGameStates(){
-        titleState = new TitleState(activity,this, titleView, height);
+        titleState = new TitleState(activity.getMainView(), activity.getApplicationContext(), this, titleView, height);
         inGameState = new InGameState(this, gameStateManager, clickHandler);
         gameOverState = new GameOverState(this, gameOverView, titleView, height);
         currentGameState = titleState;
