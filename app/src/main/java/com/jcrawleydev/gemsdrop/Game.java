@@ -188,7 +188,7 @@ public class Game {
 
 
     void init(){
-        SoundPlayer soundPlayer = new SoundPlayer(activity, viewModel);
+        SoundPlayer soundPlayer = new SoundPlayer(activity);
         createGameStateManager(soundPlayer);
         initGameStates();
     }

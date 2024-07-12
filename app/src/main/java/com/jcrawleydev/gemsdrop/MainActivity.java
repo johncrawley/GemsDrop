@@ -6,6 +6,7 @@ import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.jcrawleydev.gemsdrop.service.score.ScoreStatistics;
 import com.jcrawleydev.gemsdrop.view.BitmapLoader;
 import com.jcrawleydev.gemsdrop.view.TransparentView;
 import com.jcrawleydev.gemsdrop.view.fragments.MainMenuFragment;
@@ -46,6 +47,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, mainMenuFragment)
                 .commit();
+    }
+
+    public void onGameOver(ScoreStatistics scoreStatistics){
+
+    }
+
+    public void setScore(int score){
+
     }
 
 

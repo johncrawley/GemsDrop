@@ -10,22 +10,27 @@ import java.util.Map;
 
 public class SoundPlayer {
 
-    private final MainViewModel viewModel;
     private MediaPlayer mediaPlayer;
     private final Context context;
     private SoundPool soundPool;
     public enum Sound { DISAPPEAR, MENU_BUTTON }
     private final Map<Sound, Integer> soundsMap;
+    private boolean isSoundEnabled;
 
-    public SoundPlayer(Context context, MainViewModel viewModel){
+    public SoundPlayer(Context context){
         this.context = context;
-        this.viewModel = viewModel;
         //setupMediaPlayer();
         setupSoundPool();
         soundsMap = new HashMap<>();
         loadSounds();
 
     }
+
+
+    public void setSoundEnabled(boolean isSoundEnabled){
+        this.isSoundEnabled = isSoundEnabled;
+    }
+
 
     private void setupMediaPlayer(){
         mediaPlayer = MediaPlayer.create(context, R.raw.disappear);
@@ -38,7 +43,7 @@ public class SoundPlayer {
 
 
     public void playGemDisappearSound(int multiplier){
-        if(viewModel.isSoundEnabled){
+        if(isSoundEnabled){
             mediaPlayer.start();
         }
     }
