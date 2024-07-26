@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.jcrawleydev.gemsdrop.R;
-import com.jcrawleydev.gemsdrop.view.fragments.GameFragment;
+import com.jcrawleydev.gemsdrop.view.fragments.game.GameFragment;
 import com.jcrawleydev.gemsdrop.view.fragments.GameOverFragment;
 import com.jcrawleydev.gemsdrop.view.fragments.MainMenuFragment;
 
