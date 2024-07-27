@@ -36,18 +36,22 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         setContentView(R.layout.activity_main);
         hideActionBar();
         assignScreenDimensions();
+        setupFragmentsIf(savedInstanceState == null);
         initViewModel();
-        setupTransparentViews();
-        initGame();
     }
 
 
-    private void setupFragments() {
+    private void setupFragmentsIf(boolean isSavedStateNull) {
+        if(!isSavedStateNull){
+            return;
+        }
         Fragment mainMenuFragment = new MainMenuFragment();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, mainMenuFragment)
                 .commit();
     }
+
+
 
     public void onGameOver(ScoreStatistics scoreStatistics){
 
