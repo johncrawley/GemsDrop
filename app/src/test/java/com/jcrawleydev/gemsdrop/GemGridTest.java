@@ -1,6 +1,7 @@
 package com.jcrawleydev.gemsdrop;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
+import com.jcrawleydev.gemsdrop.gem.GemColor;
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
@@ -16,10 +17,10 @@ import java.util.concurrent.ThreadLocalRandom;
 import static com.jcrawleydev.gemsdrop.gemgroup.GemGroup.Orientation.HORIZONTAL;
 
 import static com.jcrawleydev.gemsdrop.gemgroup.GemGroup.Orientation.VERTICAL;
-import static com.jcrawleydev.gemsdrop.gem.Gem.Color.RED;
-import static com.jcrawleydev.gemsdrop.gem.Gem.Color.BLUE;
-import static com.jcrawleydev.gemsdrop.gem.Gem.Color.YELLOW;
-import static com.jcrawleydev.gemsdrop.gem.Gem.Color.GREEN;
+import static com.jcrawleydev.gemsdrop.gem.GemColor.RED;
+import static com.jcrawleydev.gemsdrop.gem.GemColor.BLUE;
+import static com.jcrawleydev.gemsdrop.gem.GemColor.YELLOW;
+import static com.jcrawleydev.gemsdrop.gem.GemColor.GREEN;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -390,8 +391,8 @@ public class GemGridTest {
     }
 
 
-    private Gem.Color getRandomColor(){
-        List<Gem.Color> colors = Arrays.asList(RED,BLUE,GREEN,YELLOW);
+    private GemColor getRandomColor(){
+        List<GemColor> colors = Arrays.asList(RED,BLUE,GREEN,YELLOW);
         return colors.get(ThreadLocalRandom.current().nextInt(colors.size()));
     }
 
@@ -416,21 +417,21 @@ public class GemGridTest {
     }
 
 
-    private void addHorizontalGems(int position, Gem.Color c1, Gem.Color c2, Gem.Color c3){
+    private void addHorizontalGems(int position, GemColor c1, GemColor c2, GemColor c3){
         addGems(position, HORIZONTAL, c1, c2, c3);
     }
 
 
-    private void addGems(int position, GemGroup.Orientation orientation, Gem.Color color1, Gem.Color color2, Gem.Color color3){
+    private void addGems(int position, GemGroup.Orientation orientation, GemColor color1, GemColor color2, GemColor color3){
         int borderWidth = 30;
         GemGroup gemGroup = Utils.createGemGroup(gemGrid, position, orientation, color1, color2, color3, borderWidth);
         gemGrid.add(gemGroup);
     }
 
 
-    private void addToRow(Gem.Color... colors){
+    private void addToRow(GemColor... colors){
         int position = 0;
-        for(Gem.Color color : colors){
+        for(GemColor color : colors){
             if(position == gemGrid.getNumberOfColumns()){
                 return;
             }

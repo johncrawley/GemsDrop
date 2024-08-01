@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import com.jcrawleydev.gemsdrop.R;
-import com.jcrawleydev.gemsdrop.gem.Gem;
+import com.jcrawleydev.gemsdrop.gem.GemColor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +14,7 @@ public class BitmapLoader {
 
     private final Context context;
     private final float width;
-    private final Map<Gem.Color, Bitmap> bitmaps;
+    private final Map<GemColor, Bitmap> bitmaps;
     private Bitmap defaultGem;
 
 
@@ -27,17 +27,17 @@ public class BitmapLoader {
 
 
     private void loadBitmaps(){
-        bitmaps.put(Gem.Color.BLUE, get(R.drawable.jewel_blue));
-        bitmaps.put(Gem.Color.RED, get(R.drawable.jewel_red));
-        bitmaps.put(Gem.Color.GREEN, get(R.drawable.jewel_green));
-        bitmaps.put(Gem.Color.YELLOW, get(R.drawable.jewel_yellow));
-        bitmaps.put(Gem.Color.PURPLE, get(R.drawable.jewel_purple));
-        bitmaps.put(Gem.Color.GREY, get(R.drawable.jewel_grey));
+        bitmaps.put(GemColor.BLUE, get(R.drawable.jewel_blue));
+        bitmaps.put(GemColor.RED, get(R.drawable.jewel_red));
+        bitmaps.put(GemColor.GREEN, get(R.drawable.jewel_green));
+        bitmaps.put(GemColor.YELLOW, get(R.drawable.jewel_yellow));
+        bitmaps.put(GemColor.PURPLE, get(R.drawable.jewel_purple));
+        bitmaps.put(GemColor.GREY, get(R.drawable.jewel_grey));
         defaultGem = get(R.drawable.jewel_temp);
     }
 
 
-    public Bitmap get(Gem.Color color){
+    public Bitmap get(GemColor color){
         if(!bitmaps.containsKey(color)){
             return defaultGem;
         }

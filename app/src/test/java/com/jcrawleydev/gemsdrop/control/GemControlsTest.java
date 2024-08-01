@@ -1,7 +1,7 @@
 package com.jcrawleydev.gemsdrop.control;
 
+import com.jcrawleydev.gemsdrop.gem.GemColor;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
-import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
 import com.jcrawleydev.gemsdrop.gemgroup.Utils;
@@ -241,7 +241,7 @@ public class GemControlsTest {
 
 
     private void addVerticalGemsToGridAtPosition(int position){
-        GemGroup gemGroupToAdd = Utils.createGemGroup(gemGrid, position, GemGroup.Orientation.VERTICAL, Gem.Color.RED, Gem.Color.BLUE, Gem.Color.GREEN, borderWidth);
+        GemGroup gemGroupToAdd = Utils.createGemGroup(gemGrid, position, GemGroup.Orientation.VERTICAL, GemColor.RED, GemColor.BLUE, GemColor.GREEN, borderWidth);
         gemGrid.add(gemGroupToAdd);
     }
 

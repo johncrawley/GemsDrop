@@ -1,7 +1,5 @@
 package com.jcrawleydev.gemsdrop.view.fragments.game;
 
-import static com.jcrawleydev.gemsdrop.view.fragments.game.GameViewUtils.updateViewFrom;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +25,7 @@ public class GameFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        getContainerDimensions(container);
+        assignContainerDimensions(container);
         View parentView = inflater.inflate(R.layout.fragment_game, container, false);
         itemsMap = new HashMap<>();
         imageMap = new ImageMap();
@@ -58,8 +56,7 @@ public class GameFragment extends Fragment {
     }
 
 
-
-    private void getContainerDimensions(ViewGroup container){
+    private void assignContainerDimensions(ViewGroup container){
         if(container != null){
             containerWidth = container.getMeasuredWidth();
             containerHeight = container.getMeasuredHeight();

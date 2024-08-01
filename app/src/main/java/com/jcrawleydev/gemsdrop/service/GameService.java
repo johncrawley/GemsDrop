@@ -141,6 +141,7 @@ public class GameService extends Service {
     @Override
     public void onDestroy() {
         mainActivity = null;
+        game.onDestroy();
     }
 
 

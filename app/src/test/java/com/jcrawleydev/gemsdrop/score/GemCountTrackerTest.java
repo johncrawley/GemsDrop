@@ -1,9 +1,9 @@
 package com.jcrawleydev.gemsdrop.score;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
+import com.jcrawleydev.gemsdrop.gem.GemColor;
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
-import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;
 
 import org.junit.Before;
@@ -52,6 +52,6 @@ public class GemCountTrackerTest {
     }
 
     private void addSingleGem(){
-        gemGrid.add(new Gem(Gem.Color.GREEN), 5);
+        gemGrid.add(new Gem(GemColor.GREEN), 5);
     }
 }

@@ -4,37 +4,13 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import com.jcrawleydev.gemsdrop.R;
 import com.jcrawleydev.gemsdrop.view.DrawItem;
 import com.jcrawleydev.gemsdrop.view.item.DrawableItem;
 
-import androidx.annotation.NonNull;
-
 public class Gem implements DrawItem, DrawableItem, Cloneable {
 
-    public enum Color {
-        BLUE("B", R.drawable.jewel_blue),
-        RED("R", R.drawable.jewel_red),
-        GREEN("G", R.drawable.jewel_green),
-        YELLOW("Y", R.drawable.jewel_yellow),
-        PURPLE("P", R.drawable.jewel_purple),
-        GREY("x", R.drawable.jewel_grey);
 
-        Color(String str, int resourceId){
-            this.str = str;
-            this.resourceId = resourceId;
-        }
-        public String str;
-        public int resourceId;
-
-        @NonNull
-        public String toString(){
-            return str;
-        }
-    }
-
-
-    protected Color color;
+    protected GemColor color;
     private boolean deletionCandidateFlag = false;
     private boolean markedForDeletion = false;
     private float x,y;
@@ -42,18 +18,18 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
     private boolean visible;
 
 
-    public Gem(Color color){
+    public Gem(GemColor color){
         this.color = color;
         this.visible = true;
     }
 
 
     public void setGrey(){
-        this.color = Color.GREY;
+        this.color = GemColor.GREY;
     }
 
 
-    public Color getColor(){
+    public GemColor getColor(){
         return color;
     }
 
@@ -145,19 +121,20 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
         this.visible = false;
     }
 
+
     public void setVisible(){
         this.visible = true;
     }
 
 
-
     @Override
     public Gem clone(){
-        Gem gem = new Gem(Color.BLUE);
+        Gem gem = new Gem(GemColor.BLUE);
         try{
             gem = (Gem) super.clone();
         }catch(CloneNotSupportedException e){
-            e.printStackTrace();
+            String message = e.getMessage();
+            System.out.println("error cloning gem: " + message);
         }
         return gem;
     }

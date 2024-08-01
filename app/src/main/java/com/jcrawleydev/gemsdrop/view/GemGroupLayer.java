@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.view.View;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
+import com.jcrawleydev.gemsdrop.gem.GemColor;
 import com.jcrawleydev.gemsdrop.gem.GemPaintOptions;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.view.item.DrawableItem;
@@ -16,7 +17,7 @@ import java.util.Map;
 public class GemGroupLayer implements UpdatableView{
 
     private final TransparentView transparentView;
-    private Map<Gem.Color, Bitmap> gemColorMap;
+    private Map<GemColor, Bitmap> gemColorMap;
     private final BitmapLoader bitmapLoader;
     private GemGroup gemGroup;
 
@@ -81,15 +82,15 @@ public class GemGroupLayer implements UpdatableView{
 
     private void linkBitmapsToColorsAndAssignWidths(){
         gemColorMap = new HashMap<>();
-        link(Gem.Color.BLUE);
-        link(Gem.Color.YELLOW);
-        link(Gem.Color.GREEN);
-        link(Gem.Color.RED);
-        link(Gem.Color.PURPLE);
+        link(GemColor.BLUE);
+        link(GemColor.YELLOW);
+        link(GemColor.GREEN);
+        link(GemColor.RED);
+        link(GemColor.PURPLE);
     }
 
 
-    private void link(Gem.Color color){
+    private void link(GemColor color){
         gemColorMap.put(color, bitmapLoader.get(color.resourceId));
     }
 

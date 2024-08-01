@@ -3,7 +3,7 @@ package com.jcrawleydev.gemsdrop.gem;
 public class NullGem extends Gem{
 
     public NullGem(){
-        super(Color.BLUE);
+        super(GemColor.BLUE);
         this.color = null;
     }
 

@@ -2,7 +2,7 @@ package com.jcrawleydev.gemsdrop.gemgroup;
 
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
-import com.jcrawleydev.gemsdrop.gem.GemPaintOptions;
+import com.jcrawleydev.gemsdrop.gem.GemColor;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ public class GemGroupFactory {
     private final int NUMBER_OF_GEMS;
     private final float gemsInitialY;
     private final int initialColumnPosition;
-    private final List<Gem.Color> colors;
+    private final List<GemColor> colors;
     private final int floorY;
     private final float gemWidth;
     private final int borderWidth;
@@ -30,7 +30,7 @@ public class GemGroupFactory {
         this.gemGrid = gemGrid;
         this.initialColumnPosition = initialPosition;
         this.gemsInitialY = gemsInitialY;
-        colors = Arrays.asList(Gem.Color.RED, Gem.Color.BLUE, Gem.Color.PURPLE, Gem.Color.GREEN, Gem.Color.YELLOW);
+        colors = Arrays.asList(GemColor.RED, GemColor.BLUE, GemColor.PURPLE, GemColor.GREEN, GemColor.YELLOW);
         this.floorY = floorY;
         this.gemWidth = gemWidth;
         this.dropValue = dropValue;
@@ -67,7 +67,7 @@ public class GemGroupFactory {
     }
 
 
-    private Gem.Color getRandomColor(){
+    private GemColor getRandomColor(){
         int index = random.nextInt(colors.size());
         return colors.get(index);
     }
