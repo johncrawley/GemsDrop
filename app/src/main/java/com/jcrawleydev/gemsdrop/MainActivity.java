@@ -6,8 +6,10 @@ import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.service.score.ScoreStatistics;
 import com.jcrawleydev.gemsdrop.view.BitmapLoader;
+import com.jcrawleydev.gemsdrop.view.GameView;
 import com.jcrawleydev.gemsdrop.view.TransparentView;
 import com.jcrawleydev.gemsdrop.view.fragments.MainMenuFragment;
 
@@ -16,7 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
+public class MainActivity extends AppCompatActivity implements View.OnTouchListener, GameView {
 
     private int height, width;
     private Game game;
@@ -52,12 +54,17 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
 
-
     public void onGameOver(ScoreStatistics scoreStatistics){
 
     }
 
+
     public void setScore(int score){
+
+    }
+
+    @Override
+    public void updateGems(Gem... gem){
 
     }
 

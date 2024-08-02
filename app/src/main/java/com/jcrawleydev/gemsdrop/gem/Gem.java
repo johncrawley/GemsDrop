@@ -16,11 +16,37 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
     private float x,y;
     private Bitmap bitmap;
     private boolean visible;
+    private int column, position;
 
 
     public Gem(GemColor color){
         this.color = color;
         this.visible = true;
+        this.position = -2;
+    }
+
+    public void setColumn(int column){
+        this.column = column;
+    }
+
+
+    public int getColumn(){
+        return column;
+    }
+
+
+    public void setPosition(int position){
+        this.position = position;
+    }
+
+
+    public void incPosition(){
+        position++;
+    }
+
+
+    public int getPosition(){
+        return position;
     }
 
 
