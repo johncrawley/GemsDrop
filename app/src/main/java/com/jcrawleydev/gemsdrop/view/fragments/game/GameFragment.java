@@ -10,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.jcrawleydev.gemsdrop.R;
+import com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag;
+import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage;
+import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +32,7 @@ public class GameFragment extends Fragment {
         View parentView = inflater.inflate(R.layout.fragment_game, container, false);
         itemsMap = new HashMap<>();
         imageMap = new ImageMap();
-
+        setupListeners();
         return parentView;
     }
 
@@ -45,6 +48,20 @@ public class GameFragment extends Fragment {
                // updateViewFrom(drawInfo, viewMap, removalConsumer, getContext(), gamePane, itemTypeMap);
             }
         });
+    }
+
+
+    private void setupListeners(){
+        FragmentUtils.setListener(this, FragmentMessage.UPDATE_GEM, b -> updateGem(b));
+    }
+
+
+    private void updateGem(Bundle bundle){
+        int position = bundle.getInt(BundleTag.GEM_POSITION.toString(), -1);
+        int column = bundle.getInt(BundleTag.GEM_COLUMN.toString(), 0);
+        long id = bundle.getLong(BundleTag.GEM_ID.toString(), -1L);
+
+
     }
 
 

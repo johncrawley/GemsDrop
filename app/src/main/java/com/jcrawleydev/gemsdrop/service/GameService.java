@@ -152,6 +152,7 @@ public class GameService extends Service {
 
     public void setActivity(MainActivity mainActivity){
         this.mainActivity = mainActivity;
+        game.setView(mainActivity);
     }
 
 

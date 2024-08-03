@@ -12,6 +12,9 @@ import com.jcrawleydev.gemsdrop.view.BitmapLoader;
 import com.jcrawleydev.gemsdrop.view.GameView;
 import com.jcrawleydev.gemsdrop.view.TransparentView;
 import com.jcrawleydev.gemsdrop.view.fragments.MainMenuFragment;
+import com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag;
+import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage;
+import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private int floorY;
     private MainViewModel viewModel;
     private TransparentView gemGroupTransparentView, gemGridTransparentView, scoreTransparentView, borderView, titleBackgroundView, gameOverBackgroundView;
+
+
 
 
     @Override
@@ -63,9 +68,20 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     }
 
-    @Override
-    public void updateGems(Gem... gem){
 
+    @Override
+    public void updateGems(Gem... gems){
+        for(Gem gem : gems){
+        }
+    }
+
+
+    private void updateGem(Gem gem){
+        Bundle bundle = new Bundle();
+        bundle.putInt(BundleTag.GEM_POSITION.toString(), gem.getPosition());
+        bundle.putInt(BundleTag.GEM_COLUMN.toString(), gem.getColumn());
+        bundle.putLong(BundleTag.GEM_ID.toString(), gem.getId());
+        FragmentUtils.sendMessage(this, FragmentMessage.UPDATE_GEM, bundle);
     }
 
 
@@ -170,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         game.initBorder(gameOverBackgroundView, bitmapLoader);
         game.init();
     }
+
 
     public View getMainView(){
         return findViewById(R.id.titleViewInclude);

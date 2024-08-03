@@ -3,11 +3,13 @@ package com.jcrawleydev.gemsdrop.view.fragments.utils;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.jcrawleydev.gemsdrop.MainActivity;
 import com.jcrawleydev.gemsdrop.R;
 import com.jcrawleydev.gemsdrop.view.fragments.game.GameFragment;
 import com.jcrawleydev.gemsdrop.view.fragments.GameOverFragment;
@@ -95,6 +97,11 @@ public class FragmentUtils {
     }
 
 
+    public static void setListener(Fragment fragment, FragmentMessage fragmentMessage, Consumer<Bundle> consumer){
+        fragment.getParentFragmentManager().setFragmentResultListener(fragmentMessage.name(), fragment, (requestKey, bundle) -> consumer.accept(bundle));
+    }
+
+
     public static void sendMessage(Fragment fragment, String key){
         sendMessage(fragment, key, new Bundle());
     }
@@ -105,18 +112,23 @@ public class FragmentUtils {
     }
 
 
+    public static void sendMessage(AppCompatActivity activity, FragmentMessage message, Bundle bundle){
+        activity.getSupportFragmentManager().setFragmentResult(message.name(), bundle);
+    }
+
+
     public static int getInt(Bundle bundle, Enum<?> tag){
-        return bundle.getInt(tag.toString());
+        return bundle.getInt(tag.name());
     }
 
 
     public static String getStr(Bundle bundle, Enum<?> tag){
-        return bundle.getString(tag.toString());
+        return bundle.getString(tag.name());
     }
 
 
     public static boolean getBoolean(Bundle bundle, Enum<?> tag){
-        return  bundle.getBoolean(tag.toString());
+        return  bundle.getBoolean(tag.name());
     }
 
 
