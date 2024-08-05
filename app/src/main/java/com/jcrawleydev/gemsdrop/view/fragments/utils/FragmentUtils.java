@@ -117,6 +117,11 @@ public class FragmentUtils {
     }
 
 
+    public static void sendMessage(AppCompatActivity activity, FragmentMessage message){
+        sendMessage(activity, message, new Bundle());
+    }
+
+
     public static int getInt(Bundle bundle, Enum<?> tag){
         return bundle.getInt(tag.name());
     }

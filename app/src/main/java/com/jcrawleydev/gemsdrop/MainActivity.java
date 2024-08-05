@@ -1,12 +1,19 @@
 package com.jcrawleydev.gemsdrop;
 
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.sendMessage;
+
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
+import com.jcrawleydev.gemsdrop.service.GameService;
 import com.jcrawleydev.gemsdrop.service.score.ScoreStatistics;
 import com.jcrawleydev.gemsdrop.view.BitmapLoader;
 import com.jcrawleydev.gemsdrop.view.GameView;
@@ -21,6 +28,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener, GameView {
 
     private int height, width;
@@ -33,8 +42,27 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private int floorY;
     private MainViewModel viewModel;
     private TransparentView gemGroupTransparentView, gemGridTransparentView, scoreTransparentView, borderView, titleBackgroundView, gameOverBackgroundView;
+    private GameService gameService;
+
+    private final AtomicBoolean isServiceConnected = new AtomicBoolean(false);
 
 
+    private final ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            GameService.LocalBinder binder = (GameService.LocalBinder) service;
+            gameService = binder.getService();
+            gameService.setActivity(MainActivity.this);
+            sendMessage(MainActivity.this, FragmentMessage.NOTIFY_OF_SERVICE_CONNECTED);
+            isServiceConnected.set(true);
+        }
+
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            isServiceConnected.set(false);
+        }
+    };
 
 
     @Override
@@ -43,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         setContentView(R.layout.activity_main);
         hideActionBar();
         assignScreenDimensions();
+        setupGameService();
         setupFragmentsIf(savedInstanceState == null);
         initViewModel();
     }
@@ -56,6 +85,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, mainMenuFragment)
                 .commit();
+    }
+
+
+    private void setupGameService() {
+        Intent intent = new Intent(getApplicationContext(), GameService.class);
+        getApplicationContext().startService(intent);
+        getApplicationContext().bindService(intent, connection, 0);
     }
 
 
@@ -81,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         bundle.putInt(BundleTag.GEM_POSITION.toString(), gem.getPosition());
         bundle.putInt(BundleTag.GEM_COLUMN.toString(), gem.getColumn());
         bundle.putLong(BundleTag.GEM_ID.toString(), gem.getId());
-        FragmentUtils.sendMessage(this, FragmentMessage.UPDATE_GEM, bundle);
+        sendMessage(this, FragmentMessage.UPDATE_GEM, bundle);
     }
 
 
