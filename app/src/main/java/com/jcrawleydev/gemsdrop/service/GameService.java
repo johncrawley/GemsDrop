@@ -82,7 +82,6 @@ public class GameService extends Service {
     }
 
 
-
     public void onGameOver(ScoreStatistics scoreStatistics){
         ScoreStatistics fullScoreStats = scoreRecords.getCompleteScoreStatsAndSaveRecords(scoreStatistics);
         notifyGameOverFuture = scheduledExecutorService.scheduleWithFixedDelay(() -> mainActivity.onGameOver(fullScoreStats), 0, 2, TimeUnit.SECONDS);

@@ -1,20 +1,36 @@
 package com.jcrawleydev.gemsdrop.view.fragments.game;
 
 import com.jcrawleydev.gemsdrop.R;
+import com.jcrawleydev.gemsdrop.gem.GemColor;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ImageMap {
 
-    private Map<ItemType, Integer> map;
+    private Map<Integer, Integer> map;
 
     public ImageMap(){
         map = new HashMap<>();
-        map.put(ItemType.GREEN_GEM, R.drawable.jewel_green);
-        map.put(ItemType.BLUE_GEM, R.drawable.jewel_blue);
-        map.put(ItemType.YELLOW_GEM, R.drawable.jewel_yellow);
-        map.put(ItemType.RED_GEM, R.drawable.jewel_red);
-        map.put(ItemType.GREY_GEM, R.drawable.jewel_grey);
+        put(GemColor.GREEN, R.drawable.jewel_green);
+        put(GemColor.BLUE, R.drawable.jewel_blue);
+        put(GemColor.YELLOW, R.drawable.jewel_yellow);
+        put(GemColor.RED, R.drawable.jewel_red);
+        put(GemColor.GREY, R.drawable.jewel_grey);
     }
+
+
+    private void put(GemColor gemColor, int drawableId){
+        map.put(gemColor.ordinal(), drawableId);
+    }
+
+
+    public int getDrawableIdFor(int gemColorId){
+        Integer id = map.get(gemColorId);
+        return id == null ? R.drawable.jewel_blue : id;
+    }
+
+
+
+
 }

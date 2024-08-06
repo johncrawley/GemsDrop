@@ -7,6 +7,6 @@
     <translate
         android:fromYDelta="150%"
         android:toYDelta="0"
-        android:duration="@integer/game_over_buttons_enable_delay" />
+        android:duration="200" />
 
 </set>

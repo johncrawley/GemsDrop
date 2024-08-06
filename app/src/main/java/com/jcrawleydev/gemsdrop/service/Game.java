@@ -8,6 +8,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Game {
 
@@ -22,6 +23,7 @@ public class Game {
 
     private ScheduledExecutorService gemDropExecutor = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> gemDropFuture;
+    private AtomicBoolean isStarted = new AtomicBoolean(false);
 
 
 
@@ -36,9 +38,19 @@ public class Game {
 
 
     public void startGame(){
+        if(isStarted.get()){
+            return;
+        }
+        isStarted.set(true);
+        log("Entered startGame()");
         gemDropFuture = gemDropExecutor.scheduleWithFixedDelay(this::drop, 0, dropRate, TimeUnit.MILLISECONDS);
         gem.setPosition(-1);
         gem.setColumn(NUMBER_OF_COLUMNS / 2);
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ Game: " + msg);
     }
 
 
@@ -52,6 +64,9 @@ public class Game {
     public void drop(){
         gem.incPosition();
         gameView.updateGems(gem);
+        if(gem.getPosition() > 12){
+            gem.setPosition(0);
+        }
     }
 
 

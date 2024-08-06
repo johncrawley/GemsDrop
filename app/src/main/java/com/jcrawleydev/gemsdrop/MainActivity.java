@@ -15,19 +15,17 @@ import android.view.View;
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.service.GameService;
 import com.jcrawleydev.gemsdrop.service.score.ScoreStatistics;
-import com.jcrawleydev.gemsdrop.view.BitmapLoader;
 import com.jcrawleydev.gemsdrop.view.GameView;
-import com.jcrawleydev.gemsdrop.view.TransparentView;
 import com.jcrawleydev.gemsdrop.view.fragments.MainMenuFragment;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage;
-import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener, GameView {
@@ -41,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private int scoreBarHeight;
     private int floorY;
     private MainViewModel viewModel;
-    private TransparentView gemGroupTransparentView, gemGridTransparentView, scoreTransparentView, borderView, titleBackgroundView, gameOverBackgroundView;
     private GameService gameService;
 
     private final AtomicBoolean isServiceConnected = new AtomicBoolean(false);
@@ -134,60 +131,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
 
-    private void setupTransparentViews(){
-        setupGemGroupView();
-        setupGemGridView();
-        setupScoreView();
-        setupBorderView();
-        setupTitleBackgroundView();
-        setupGameOverBackgroundView();
-    }
-
-
     private void initViewModel(){
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
     }
 
-
-    @SuppressLint("ClickableViewAccessibility")
-    private void setupGemGroupView(){
-        gemGroupTransparentView = findViewById(R.id.gemGroupView);
-        gemGroupTransparentView.setDimensions(width, height);
-        gemGroupTransparentView.translateXToMiddle();
-        gemGroupTransparentView.setOnTouchListener(this);
-    }
-
-
-    @SuppressLint("ClickableViewAccessibility")
-    private void setupGemGridView(){
-        gemGridTransparentView = findViewById(R.id.gemGridView);
-        gemGridTransparentView.setDimensions(width - gemGridBorder, height);
-        gemGridTransparentView.setOnTouchListener(this);
-    }
-
-
-    private void setupScoreView(){
-        scoreTransparentView = findViewById(R.id.scoreView);
-        scoreTransparentView.setDimensions(width, height);
-    }
-
-
-    private void setupTitleBackgroundView(){
-        titleBackgroundView = findViewById(R.id.titleBackgroundView);
-        titleBackgroundView.setDimensions(width, height);
-    }
-
-
-    private void setupBorderView(){
-        borderView = findViewById(R.id.borderView);
-        borderView.setDimensions(width, height);
-    }
-
-
-    private void setupGameOverBackgroundView(){
-        gameOverBackgroundView = findViewById(R.id.gameOverBackgroundView);
-        gameOverBackgroundView.setDimensions(width, height);
-    }
 
 
     @Override
@@ -208,24 +155,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
 
-    private void initGame(){
-        View titleView = findViewById(R.id.titleViewInclude);
-        View gameOverView = findViewById(R.id.gameOverViewInclude);
-        BitmapLoader bitmapLoader = new BitmapLoader(this, gemWidth);
-        game = new Game(this, bitmapLoader, width, height, gemWidth,
-                dropValue, gemGridBorder, numberOColumns, scoreBarHeight, floorY, titleView, gameOverView);
-        game.initGemGridView(gemGridTransparentView);
-        game.initGemGroupLayer(gemGroupTransparentView, bitmapLoader);
-        game.initScoreboardLayer(scoreTransparentView);
-        game.initBorder(borderView, bitmapLoader);
-        game.initBorder(titleBackgroundView, bitmapLoader);
-        game.initBorder(gameOverBackgroundView, bitmapLoader);
-        game.init();
+    public View getMainView(){
+        return null;
+      //  return findViewById(R.id.titleViewInclude);
     }
 
 
-    public View getMainView(){
-        return findViewById(R.id.titleViewInclude);
+    public Optional<GameService> getGameService(){
+        return Optional.ofNullable(gameService);
     }
 
 

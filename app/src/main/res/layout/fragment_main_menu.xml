@@ -6,7 +6,7 @@
     android:background="@color/colorAccent">
 
 
-
+<!--
     <com.jcrawleydev.gemsdrop.view.TransparentView
         android:id="@+id/titleBackgroundView"
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
+-->
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
