@@ -4,6 +4,10 @@ import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gem.GemColor;
 import com.jcrawleydev.gemsdrop.view.GameView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -19,7 +23,10 @@ public class Game {
     private int initialPosition = -1;
     private int dropRate = 500;
     private Gem gem = new Gem(GemColor.BLUE);
+    private List<Gem> droppingGems = new ArrayList<>();
     private GameView gameView;
+    private Random random;
+    private final List<GemColor> gemColors = List.of(GemColor.RED, GemColor.BLUE, GemColor.PURPLE, GemColor.GREEN, GemColor.YELLOW);
 
     private ScheduledExecutorService gemDropExecutor = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> gemDropFuture;
@@ -27,14 +34,38 @@ public class Game {
 
 
 
+
     public void init(GameService gameService){
         this.gameService = gameService;
+        random = new Random(System.currentTimeMillis());
     }
 
 
     public void setDifficulty(int difficulty){
         this.difficulty = difficulty;
     }
+
+
+    private void createDroppingGems(){
+        final int numberOfDroppingGems = 3;
+        droppingGems.clear();
+        for(int i = 0; i < numberOfDroppingGems; i++ ){
+            droppingGems.add(new Gem(getRandomColor()));
+        }
+    }
+
+
+    private void rotateGems(){
+
+
+    }
+
+
+    public GemColor getRandomColor(){
+        int index = random.nextInt(gemColors.size());
+        return gemColors.get(index);
+    }
+
 
 
     public void startGame(){
@@ -58,6 +89,7 @@ public class Game {
         if(gemDropFuture != null && !gemDropFuture.isCancelled()){
             gemDropFuture.cancel(false);
         }
+        isStarted.set(false);
     }
 
 

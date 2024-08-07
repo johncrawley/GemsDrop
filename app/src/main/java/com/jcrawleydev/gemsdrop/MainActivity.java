@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     @Override
     public void updateGems(Gem... gems){
         for(Gem gem : gems){
+            updateGem(gem);
         }
     }
 

@@ -67,7 +67,7 @@ public class GemGroupFactory {
     }
 
 
-    private GemColor getRandomColor(){
+    public GemColor getRandomColor(){
         int index = random.nextInt(colors.size());
         return colors.get(index);
     }
