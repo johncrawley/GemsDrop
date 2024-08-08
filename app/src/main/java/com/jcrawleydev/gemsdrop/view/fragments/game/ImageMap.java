@@ -16,6 +16,7 @@ public class ImageMap {
         put(GemColor.BLUE, R.drawable.jewel_blue);
         put(GemColor.YELLOW, R.drawable.jewel_yellow);
         put(GemColor.RED, R.drawable.jewel_red);
+        put(GemColor.PURPLE, R.drawable.jewel_purple);
         put(GemColor.GREY, R.drawable.jewel_grey);
     }
 

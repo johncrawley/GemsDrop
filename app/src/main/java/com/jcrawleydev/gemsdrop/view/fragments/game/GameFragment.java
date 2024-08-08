@@ -24,6 +24,7 @@ import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -65,6 +66,18 @@ public class GameFragment extends Fragment {
 
     private void setupViews(View parentView){
         gemContainer = parentView.findViewById(R.id.gemContainer);
+        gemContainer.setOnClickListener(v -> rotateGems());
+    }
+
+
+    private void rotateGems(){
+        log("Entered rotateGems()");
+        getService().ifPresent(GameService::rotateGems);
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ GameFragment: " + msg);
     }
 
 
@@ -75,6 +88,16 @@ public class GameFragment extends Fragment {
             }
         });
     }
+
+
+    private Optional<GameService> getService(){
+        MainActivity mainActivity = (MainActivity) getActivity();
+        if(mainActivity != null) {
+            return mainActivity.getGameService();
+        }
+        return Optional.empty();
+    }
+
 
 
     private void setupListeners(){
@@ -98,9 +121,7 @@ public class GameFragment extends Fragment {
         int column = bundle.getInt(BundleTag.GEM_COLUMN.toString(), 0);
         long id = bundle.getLong(BundleTag.GEM_ID.toString(), -1L);
         int colorId = bundle.getInt(BundleTag.GEM_COLOR.toString(),0 );
-        if(itemsMap.containsKey(id)){
 
-        }
         ImageView gemView = itemsMap.computeIfAbsent(id, k -> createAndAddGemView(id, position, column, colorId));
         updateGemCoordinates(gemView, position, column);
     }
@@ -108,6 +129,7 @@ public class GameFragment extends Fragment {
 
     private ImageView createAndAddGemView(long id, int position, int column, int colorId){
         ImageView imageView = new ImageView(getContext());
+        log("createAndAddGemView() colorId: " + colorId);
         setGemDrawable(imageView, colorId);
         setGemDimensions(imageView);
         updateGemCoordinates(imageView, position, column);
@@ -129,6 +151,7 @@ public class GameFragment extends Fragment {
 
 
     private void updateGemCoordinates(ImageView gem, int position, int column){
+        log("Entered updateGemCoordinates() position: " + position + " , column: " + column);
         gem.setX(getXForColumn(column));
         gem.setY(getYForPosition(position));
     }

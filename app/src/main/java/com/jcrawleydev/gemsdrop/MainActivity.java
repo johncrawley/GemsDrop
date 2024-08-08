@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -103,18 +104,26 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
 
     @Override
-    public void updateGems(Gem... gems){
+    public void updateGems(List<Gem> gems){
+        log("Entered updateGems() gems.size(): " + gems.size());
         for(Gem gem : gems){
             updateGem(gem);
         }
     }
 
 
+    private void log(String msg){
+        System.out.println("^^^ MainActivity: "+ msg);
+    }
+
+
     private void updateGem(Gem gem){
         Bundle bundle = new Bundle();
-        bundle.putInt(BundleTag.GEM_POSITION.toString(), gem.getPosition());
+        bundle.putInt(BundleTag.GEM_POSITION.toString(), gem.getDepth());
         bundle.putInt(BundleTag.GEM_COLUMN.toString(), gem.getColumn());
         bundle.putLong(BundleTag.GEM_ID.toString(), gem.getId());
+        bundle.putInt(BundleTag.GEM_COLOR.toString(), gem.getColor().ordinal());
+        log("Sending message for update of gem "  + gem.getColor().ordinal());
         sendMessage(this, FragmentMessage.UPDATE_GEM, bundle);
     }
 

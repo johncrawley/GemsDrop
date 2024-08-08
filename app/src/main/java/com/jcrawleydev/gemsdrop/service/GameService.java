@@ -43,6 +43,12 @@ public class GameService extends Service {
     }
 
 
+    public void rotateGems(){
+        if(game != null){
+            System.out.println("^^^ Entered rotateGems()");
+            game.rotateGems();
+        }
+    }
 
 
     public void setLevel(int value){
@@ -50,7 +56,7 @@ public class GameService extends Service {
             gamePreferenceManager.saveLevel(value);
         }
         if(game != null){
-            game.setDifficulty(value);
+          //  game.setDifficulty(value);
         }
     }
 

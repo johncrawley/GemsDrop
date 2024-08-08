@@ -2,10 +2,12 @@ package com.jcrawleydev.gemsdrop.service;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gem.GemColor;
+import com.jcrawleydev.gemsdrop.gem.GemPosition;
+import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
+import com.jcrawleydev.gemsdrop.gemgrid.GemGrid2;
 import com.jcrawleydev.gemsdrop.view.GameView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Executors;
@@ -17,47 +19,52 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Game {
 
     private GameService gameService;
-    private int difficulty;
     private final int NUMBER_OF_ROWS = 14;
     private final int NUMBER_OF_COLUMNS = 7;
-    private int initialPosition = -1;
-    private int dropRate = 500;
-    private Gem gem = new Gem(GemColor.BLUE);
+    private final Gem gem = new Gem(GemColor.BLUE);
     private List<Gem> droppingGems = new ArrayList<>();
     private GameView gameView;
     private Random random;
     private final List<GemColor> gemColors = List.of(GemColor.RED, GemColor.BLUE, GemColor.PURPLE, GemColor.GREEN, GemColor.YELLOW);
+    private boolean isOrientationVertical = true;
 
-    private ScheduledExecutorService gemDropExecutor = Executors.newSingleThreadScheduledExecutor();
+    private final ScheduledExecutorService gemDropExecutor = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> gemDropFuture;
-    private AtomicBoolean isStarted = new AtomicBoolean(false);
+    private final AtomicBoolean isStarted = new AtomicBoolean(false);
 
-
+    private GemGrid2 gemGrid = new GemGrid2(NUMBER_OF_COLUMNS, NUMBER_OF_ROWS);
 
 
     public void init(GameService gameService){
         this.gameService = gameService;
         random = new Random(System.currentTimeMillis());
-    }
-
-
-    public void setDifficulty(int difficulty){
-        this.difficulty = difficulty;
+        createDroppingGems();
     }
 
 
     private void createDroppingGems(){
-        final int numberOfDroppingGems = 3;
         droppingGems.clear();
-        for(int i = 0; i < numberOfDroppingGems; i++ ){
-            droppingGems.add(new Gem(getRandomColor()));
+        droppingGems.add(new Gem(getRandomColor(), GemPosition.TOP));
+        droppingGems.add(new Gem(getRandomColor(), GemPosition.CENTRE));
+        droppingGems.add(new Gem(getRandomColor(), GemPosition.BOTTOM));
+    }
+
+
+    public void rotateGems(){
+        if(canRotate()){
+            isOrientationVertical = !isOrientationVertical;
+            for(Gem gem: droppingGems){
+                gem.rotate();
+            }
+            gameView.updateGems(droppingGems);
+            //gem.rotate();
+            //gameView.updateGems(List.of(gem));
         }
     }
 
 
-    private void rotateGems(){
-
-
+    private boolean canRotate(){
+        return true;
     }
 
 
@@ -67,16 +74,19 @@ public class Game {
     }
 
 
-
     public void startGame(){
         if(isStarted.get()){
             return;
         }
         isStarted.set(true);
+        gem.setPosition(GemPosition.TOP);
         log("Entered startGame()");
+        int dropRate = 500;
         gemDropFuture = gemDropExecutor.scheduleWithFixedDelay(this::drop, 0, dropRate, TimeUnit.MILLISECONDS);
-        gem.setPosition(-1);
-        gem.setColumn(NUMBER_OF_COLUMNS / 2);
+        for(Gem gem : droppingGems){
+            gem.setDepth(-1);
+            gem.setColumn(NUMBER_OF_COLUMNS / 2);
+        }
     }
 
 
@@ -94,10 +104,37 @@ public class Game {
 
 
     public void drop(){
-        gem.incPosition();
-        gameView.updateGems(gem);
-        if(gem.getPosition() > 12){
-            gem.setPosition(0);
+        log("Entered drop()");
+        int numberOfGemsPerDrop = 3;
+       droppingGems.forEach(this::incHeightOf);
+       gameView.updateGems(droppingGems);
+       droppingGems = gemGrid.addGems(droppingGems, isOrientationVertical);
+       if(droppingGems.isEmpty()){
+           switchToEvalMode();
+           return;
+       }
+       if(droppingGems.size() < numberOfGemsPerDrop){
+           switchToFreeFallMode();
+       }
+    }
+
+
+    private void switchToEvalMode(){
+
+    }
+
+
+    private void switchToFreeFallMode(){
+
+    }
+
+
+
+
+    private void incHeightOf(Gem gem){
+        gem.incDepth();
+        if(gem.getDepth() > 12){
+            gem.setDepth(0);
         }
     }
 

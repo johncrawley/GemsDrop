@@ -45,11 +45,6 @@ public class Evaluator {
     }
 
 
-    private void markGem(Gem gem){
-        gem.setDeleteCandidateFlag();
-    }
-
-
     private void evaluateRows(){
         for(int i = 0; i < NUMBER_OF_ROWS; i++){
             evaluateRow(i);
@@ -217,6 +212,11 @@ public class Evaluator {
 
         markAllCandidatesForDeletionInRange(currentIndex,gems.size()-1, gems);
         return gems.size();
+    }
+
+
+    private void markGem(Gem gem){
+        gem.setDeleteCandidateFlag();
     }
 
 

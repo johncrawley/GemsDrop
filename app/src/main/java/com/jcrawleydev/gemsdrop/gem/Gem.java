@@ -16,16 +16,41 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
     private float x,y;
     private Bitmap bitmap;
     private boolean visible;
-    private int column, position;
+    private int column, depth;
     private final long id;
+
+    private GemPosition position = GemPosition.CENTRE;
 
 
     public Gem(GemColor color){
         this.color = color;
         this.visible = true;
-        this.position = -2;
+        this.depth = -2;
         this.id = System.nanoTime();
     }
+
+
+    public Gem(GemColor color, GemPosition position){
+        this.color = color;
+        log("Gem() color: " + color.name());
+        this.position = position;
+        this.visible = true;
+        this.depth = -2;
+        this.column = 3;
+        this.id = System.nanoTime();
+    }
+
+
+    public void rotate(){
+       position = switch(position){
+           case TOP     -> GemPosition.RIGHT;
+           case RIGHT   -> GemPosition.BOTTOM;
+           case BOTTOM  -> GemPosition.LEFT;
+           case LEFT    -> GemPosition.TOP;
+           case CENTRE  -> GemPosition.CENTRE;
+        };
+    }
+
 
     public void setColumn(int column){
         this.column = column;
@@ -38,22 +63,42 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
 
 
     public int getColumn(){
-        return column;
+        return column + position.getColumnOffset();
     }
 
 
-    public void setPosition(int position){
+    public GemPosition getPosition(){
+        return position;
+    }
+
+
+    public int getBottomDepth(){
+        return depth + 1;
+    }
+
+
+    public void setDepth(int depth){
+        this.depth = depth;
+    }
+
+
+    public void incDepth(){
+        depth++;
+    }
+
+
+    public void setPosition(GemPosition position){
         this.position = position;
     }
 
 
-    public void incPosition(){
-        position++;
+    public int getDepth(){
+        return depth + position.getHeightOffset();
     }
 
 
-    public int getPosition(){
-        return position;
+    private void log(String msg){
+        System.out.println("^^^ Gem: "+ msg);
     }
 
 
@@ -65,6 +110,7 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
     public GemColor getColor(){
         return color;
     }
+
 
     @Override
     public float getX(){
