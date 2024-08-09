@@ -3,7 +3,7 @@ package com.jcrawleydev.gemsdrop.service;
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gem.GemColor;
 import com.jcrawleydev.gemsdrop.gem.GemPosition;
-import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
+import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid2;
 import com.jcrawleydev.gemsdrop.view.GameView;
 
@@ -27,17 +27,19 @@ public class Game {
     private Random random;
     private final List<GemColor> gemColors = List.of(GemColor.RED, GemColor.BLUE, GemColor.PURPLE, GemColor.GREEN, GemColor.YELLOW);
     private boolean isOrientationVertical = true;
+    private Evaluator evaluator;
 
     private final ScheduledExecutorService gemDropExecutor = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> gemDropFuture;
     private final AtomicBoolean isStarted = new AtomicBoolean(false);
 
-    private GemGrid2 gemGrid = new GemGrid2(NUMBER_OF_COLUMNS, NUMBER_OF_ROWS);
+    private final GemGrid2 gemGrid = new GemGrid2(NUMBER_OF_COLUMNS, NUMBER_OF_ROWS);
 
 
     public void init(GameService gameService){
         this.gameService = gameService;
         random = new Random(System.currentTimeMillis());
+        evaluator = new Evaluator(gemGrid.getGemColumns(), NUMBER_OF_ROWS);
         createDroppingGems();
     }
 
@@ -57,9 +59,33 @@ public class Game {
                 gem.rotate();
             }
             gameView.updateGems(droppingGems);
-            //gem.rotate();
-            //gameView.updateGems(List.of(gem));
         }
+    }
+
+
+    public void moveLeft(){
+        if(canMoveLeft()){
+            droppingGems.forEach(Gem::moveLeft);
+            gameView.updateGems(droppingGems);
+        }
+    }
+
+
+    public void moveRight(){
+        if(canMoveRight()){
+            droppingGems.forEach(Gem::moveRight);
+            gameView.updateGems(droppingGems);
+        }
+    }
+
+
+    public boolean canMoveLeft(){
+        return true;
+    }
+
+
+    public boolean canMoveRight(){
+        return true;
     }
 
 
@@ -80,9 +106,17 @@ public class Game {
         }
         isStarted.set(true);
         gem.setPosition(GemPosition.TOP);
-        log("Entered startGame()");
-        int dropRate = 500;
+        startDroppingGems(500);
+    }
+
+
+    private void startDroppingGems(int dropRate){
         gemDropFuture = gemDropExecutor.scheduleWithFixedDelay(this::drop, 0, dropRate, TimeUnit.MILLISECONDS);
+        initDroppingGems();
+    }
+
+
+    private void initDroppingGems(){
         for(Gem gem : droppingGems){
             gem.setDepth(-1);
             gem.setColumn(NUMBER_OF_COLUMNS / 2);
@@ -104,8 +138,8 @@ public class Game {
 
 
     public void drop(){
-        log("Entered drop()");
-        int numberOfGemsPerDrop = 3;
+        log("entered drop()");
+       int numberOfGemsPerDrop = 3;
        droppingGems.forEach(this::incHeightOf);
        gameView.updateGems(droppingGems);
        droppingGems = gemGrid.addGems(droppingGems, isOrientationVertical);
@@ -120,7 +154,14 @@ public class Game {
 
 
     private void switchToEvalMode(){
-
+        gemDropFuture.cancel(true);
+        evaluator.evaluate();
+       long[] markedGemIds = evaluator.evalAndDelete();
+        if(markedGemIds.length == 0){
+            switchToDropMode();
+            return;
+        }
+        gameView.wipeOut(markedGemIds);
     }
 
 
@@ -129,6 +170,9 @@ public class Game {
     }
 
 
+    private void switchToDropMode(){
+        startDroppingGems(500);
+    }
 
 
     private void incHeightOf(Gem gem){

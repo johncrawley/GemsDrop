@@ -2,11 +2,16 @@ package com.jcrawleydev.gemsdrop.view.fragments.game;
 
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.setListener;
 
+import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -19,7 +24,6 @@ import com.jcrawleydev.gemsdrop.R;
 import com.jcrawleydev.gemsdrop.service.GameService;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage;
-import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +39,7 @@ public class GameFragment extends Fragment {
     private int containerWidth, containerHeight, smallestContainerDimension;
     private LinearLayout gemContainer;
     private int gemDimension = 100;
+    private int fragmentWidth, fragmentHeight;
 
 
     @Override
@@ -44,10 +49,25 @@ public class GameFragment extends Fragment {
         View parentView = inflater.inflate(R.layout.fragment_game, container, false);
         itemsMap = new HashMap<>();
         imageMap = new ImageMap();
+        getFragmentDimensions(parentView);
         setupViews(parentView);
         setupListeners();
         startGame();
         return parentView;
+    }
+
+
+    private void getFragmentDimensions(View view){
+        ViewTreeObserver.OnGlobalLayoutListener listener = new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                fragmentWidth = view.getMeasuredWidth();
+                fragmentHeight = view.getMeasuredHeight();
+                log("fragment dimensions: " + fragmentWidth + "," + fragmentHeight);
+                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        };
+        view.getViewTreeObserver().addOnGlobalLayoutListener(listener);
     }
 
 
@@ -64,9 +84,38 @@ public class GameFragment extends Fragment {
     }
 
 
+    @SuppressLint("ClickableViewAccessibility")
     private void setupViews(View parentView){
         gemContainer = parentView.findViewById(R.id.gemContainer);
-        gemContainer.setOnClickListener(v -> rotateGems());
+        gemContainer.setOnTouchListener((view, motionEvent) -> {
+            if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                handleInput(motionEvent.getX(), motionEvent.getY());
+            }
+            return false;
+        });
+    }
+
+
+    private void handleInput(float x, float y){
+        if(x < fragmentWidth / 3f){
+            moveLeft();
+            return;
+        }
+        if(x < fragmentWidth / 1.5f ){
+            rotateGems();
+            return;
+        }
+       moveRight();
+    }
+
+
+    private void moveLeft(){
+        getService().ifPresent(GameService::moveLeft);
+    }
+
+
+    private void moveRight(){
+        getService().ifPresent(GameService::moveRight);
     }
 
 
@@ -99,10 +148,10 @@ public class GameFragment extends Fragment {
     }
 
 
-
     private void setupListeners(){
         setupListener(FragmentMessage.UPDATE_GEM, this::updateGem);
         setupListener(FragmentMessage.NOTIFY_OF_SERVICE_CONNECTED, this::onServiceConnected);
+        setupListener(FragmentMessage.REMOVE_GEMS, this::removeGems);
     }
 
 
@@ -113,6 +162,44 @@ public class GameFragment extends Fragment {
 
     private void onServiceConnected(Bundle b){
         startGame();
+    }
+
+
+    private void removeGems(Bundle bundle){
+        long[] gemIds = bundle.getLongArray(BundleTag.GEM_IDS.toString());
+        if(gemIds == null){
+            return;
+        }
+        for(long gemId : gemIds){
+            ImageView gemView = itemsMap.get(gemId);
+            if(gemView != null){
+                animateRemovalOf(gemView, gemId);
+            }
+        }
+    }
+
+
+    private void animateRemovalOf(ImageView gemView, long gemId){
+        Animation animation = new ScaleAnimation(
+                1f, 0f,
+                1f, 0f,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
+        animation.setFillAfter(true); // Needed to keep the result of the animation
+        animation.setDuration(800);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override public void onAnimationStart(Animation animation) {}
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                itemsMap.remove(gemId);
+                gemContainer.removeView(gemView);
+            }
+
+            @Override public void onAnimationRepeat(Animation animation) {}
+        });
+
+        gemView.startAnimation(animation);
     }
 
 

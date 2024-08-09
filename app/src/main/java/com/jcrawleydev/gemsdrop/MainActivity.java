@@ -112,6 +112,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
 
+    @Override
+    public void wipeOut(long[] markedGemIds){
+        Bundle bundle = new Bundle();
+        bundle.putLongArray(BundleTag.GEM_IDS.toString(), markedGemIds);
+        sendMessage(this, FragmentMessage.REMOVE_GEMS, bundle);
+    }
+
+
     private void log(String msg){
         System.out.println("^^^ MainActivity: "+ msg);
     }

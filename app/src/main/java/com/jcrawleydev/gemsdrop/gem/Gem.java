@@ -51,6 +51,15 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
         };
     }
 
+    public void moveLeft(){
+        column --;
+    }
+
+
+    public void moveRight(){
+        column ++;
+    }
+
 
     public void setColumn(int column){
         this.column = column;

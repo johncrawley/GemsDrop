@@ -8,12 +8,14 @@ import java.util.List;
 
 public class Evaluator {
 
-    private final GemGrid gemGrid;
+    private GemGrid gemGrid;
     private final List<List<Gem>> gemColumns;
     private final int MATCH_NUMBER;
     private final int NUMBER_OF_COLUMNS;
     private final int NUMBER_OF_ROWS;
     private boolean hasMarkedGems = false;
+    private final List<Gem> markedGems = new ArrayList<>();
+    private List<Long> markedGemIds = new ArrayList<>();
 
 
     public Evaluator(GemGrid gemGrid, int matchNumber){
@@ -22,6 +24,31 @@ public class Evaluator {
         this.NUMBER_OF_COLUMNS = gemGrid.getNumberOfColumns();
         this.NUMBER_OF_ROWS = gemGrid.getNumberOfRows();
         this.gemColumns = gemGrid.getGemColumns();
+    }
+
+
+    public Evaluator(List<List<Gem>> gemColumns, int numberOfRows){
+        this.MATCH_NUMBER = 3;
+        this.NUMBER_OF_COLUMNS = gemColumns.size();
+        this.NUMBER_OF_ROWS = numberOfRows;
+        this.gemColumns = gemColumns;
+    }
+
+
+    public void deleteMarkedGems(List<List<Gem>> gemColumns){
+        for(List<Gem> column : gemGrid.getGemColumns()){
+            column.removeIf(Gem::isMarkedForDeletion);
+        }
+        this.hasMarkedGems = false;
+    }
+
+
+    public long[] evalAndDelete(){
+        markedGems.clear();
+        markedGemIds.clear();
+        evaluate();
+        deleteMarkedGems();
+        return markedGemIds.stream().mapToLong(x -> x).toArray();
     }
 
 
@@ -217,6 +244,7 @@ public class Evaluator {
 
     private void markGem(Gem gem){
         gem.setDeleteCandidateFlag();
+        markedGemIds.add(gem.getId());
     }
 
 
