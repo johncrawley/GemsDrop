@@ -37,7 +37,7 @@ public class GameFragment extends Fragment {
     private ImageMap imageMap;
     private Map<Long, ImageView> itemsMap;
     private int containerWidth, containerHeight, smallestContainerDimension;
-    private LinearLayout gemContainer;
+    private ViewGroup gemContainer;
     private int gemDimension = 100;
     private int fragmentWidth, fragmentHeight;
 
@@ -97,7 +97,12 @@ public class GameFragment extends Fragment {
 
 
     private void handleInput(float x, float y){
+        if(y > fragmentHeight - (fragmentHeight /4f)){
+            getService().ifPresent(GameService::create);
+            return;
+        }
         if(x < fragmentWidth / 3f){
+            log("Entered handleInput, moving left()");
             moveLeft();
             return;
         }
@@ -105,6 +110,7 @@ public class GameFragment extends Fragment {
             rotateGems();
             return;
         }
+        log("Entered handleInput, moving right");
        moveRight();
     }
 
@@ -126,7 +132,7 @@ public class GameFragment extends Fragment {
 
 
     private void log(String msg){
-        System.out.println("^^^ GameFragment: " + msg);
+      //  System.out.println("^^^ GameFragment: " + msg);
     }
 
 

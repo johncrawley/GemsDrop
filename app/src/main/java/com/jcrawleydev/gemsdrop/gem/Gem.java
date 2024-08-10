@@ -82,7 +82,7 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
 
 
     public int getBottomDepth(){
-        return depth + 1;
+        return depth;
     }
 
 

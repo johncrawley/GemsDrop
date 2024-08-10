@@ -6,7 +6,6 @@ import androidx.annotation.Nullable;
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gem.GemPosition;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
-import com.jcrawleydev.gemsdrop.view.item.DrawableItem;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,16 +16,13 @@ public class GemGrid2 {
     private List<List<Gem>> gemColumns;
     private final int NUMBER_OF_ROWS;
     private final int NUMBER_OF_COLUMNS;
-    private float gemSize;
-    private int floorY;
-    private int startingX;
-    private int dropIncrement;
     private boolean haveAnyGemsMovedDuringLastDrop;
-    private final int INITIAL_FLOOR_POSITION = 1;
+    private final int MAX_POSITION;
 
     public GemGrid2(int numberOfColumns, int numberOfRows){
         NUMBER_OF_ROWS = numberOfRows;
         NUMBER_OF_COLUMNS = numberOfColumns;
+        MAX_POSITION = NUMBER_OF_ROWS * 2;
         initColumns();
     }
 
@@ -35,25 +31,18 @@ public class GemGrid2 {
     }
 
 
+
+    private void initColumns(){
+        gemColumns = new ArrayList<>(NUMBER_OF_COLUMNS);
+        for(int i=0; i< NUMBER_OF_COLUMNS; i++){
+            gemColumns.add(new ArrayList<>(NUMBER_OF_ROWS));
+        }
+    }
+
+
+
     public int getHighestColumnIndex(){
         return gemColumns.stream().map(List::size).max(Integer::compare).orElse(1) - 1;
-    }
-
-
-    public void setGemSize(float gemSize){
-        this.gemSize = gemSize;
-    }
-
-    public void setFloorY(int y){
-        this.floorY = y;
-    }
-
-    public void setStartingX(int x){
-        this.startingX = x;
-    }
-
-    public void setDropIncrement(int dropIncrement){
-        this.dropIncrement = dropIncrement;
     }
 
 
@@ -80,6 +69,7 @@ public class GemGrid2 {
 
 
     public List<Gem> addGems(List<Gem> gems, boolean isOrientationVertical) {
+        log("Entered addGems() isOrientationVertical? : " + isOrientationVertical);
        return isOrientationVertical? addAllVerticalGems(gems) : addHorizontalGems(gems);
     }
 
@@ -93,7 +83,7 @@ public class GemGrid2 {
                 case CENTRE -> centreGem = gem;
             }
         }
-        if(isTouchingAColumn(bottomGem)){
+        if(isTouchingAColumn(bottomGem, false)){
             addGem(bottomGem);
             addGem(centreGem);
             addGem(topGem);
@@ -104,9 +94,10 @@ public class GemGrid2 {
 
 
     private List<Gem> addHorizontalGems(List<Gem> gems){
+        log("entering addHorizontalGems, gems size: " + gems.size());
         var gemsCopy = new ArrayList<>(gems);
         for(Gem gem : gems){
-            if(isTouchingAColumn(gem)){
+            if(isTouchingAColumn(gem, true)){
                 addGem(gem);
                 gemsCopy.remove(gem);
             }
@@ -115,12 +106,20 @@ public class GemGrid2 {
     }
 
 
-    private boolean isTouchingAColumn(@Nullable Gem gem){
+    private boolean isTouchingAColumn(@Nullable Gem gem, boolean isHorizontal){
         if(gem == null){
             return false;
         }
         int gemColumn = gem.getColumn();
-        return gemColumns.get(gemColumn).size() * 2 >= gem.getBottomDepth();
+        log("isTouchingAColumn() gemColumn " + gemColumn + " size: " + gemColumns.get(gemColumn).size() + " heightOfDroppingGem: " + getColumnHeightOfDropping(gem, isHorizontal) + " gem bottom depth: " + gem.getBottomDepth());
+        return gemColumns.get(gemColumn).size() >= getColumnHeightOfDropping(gem, isHorizontal);
+    }
+
+
+    private int getColumnHeightOfDropping(Gem gem, boolean isHorizontal){
+        int bottomDepth = gem.getBottomDepth() + (isHorizontal ? 0 : 2);
+        int alignedPosition = bottomDepth + (bottomDepth % 2 == 1 ? 1 : 0);
+        return (MAX_POSITION - alignedPosition) /2;
     }
 
 
@@ -134,118 +133,9 @@ public class GemGrid2 {
     }
 
 
-    public float getTopYOfColumn(int position){
-        int index = Math.max(0, position);
-        index = Math.min(gemColumns.size()-1, index);
-        return floorY - (gemColumns.get(index).size() * gemSize);
-    }
-
-
-    public boolean addAnyFrom(GemGroup gemGroup){
-        if(isVertical(gemGroup)) {
-            return false;
-        }
-        boolean hasGemBeenAdded = false;
-        List<Gem> gems = gemGroup.getGridGems();
-
-        for(int i = 0, position = gemGroup.getBaseXPosition(); i< gems.size(); i++, position++){
-            Gem gem = gems.get(i);
-            if(isColumnSizeGreaterThanGemGroupBottomPositionReal(gemGroup, position)){
-                add(gem, position);
-                hasGemBeenAdded = true;
-            }
-        }
-        return hasGemBeenAdded;
-    }
-
-
-    private boolean isColumnSizeGreaterThanGemGroupBottomPositionReal(GemGroup gemGroup, int position){
-        return getRealColumnHeight(position) >= gemGroup.getRealBottomPosition();
-    }
-
 
     private void log(String msg){
-        System.out.println("GemGrid: "+  msg);
-    }
-
-
-    boolean isVertical(GemGroup gemGroup){
-        return gemGroup.getOrientation() == GemGroup.Orientation.VERTICAL;
-    }
-
-
-    private boolean areAllGemsConnectingToColumnsReal(GemGroup gemGroup){
-        for(int position : gemGroup.getGemPositions()){
-            if(gemGroup.getRealBottomPosition() > getRealColumnHeight(position)){
-                return false;
-            }
-        }
-        return true;
-    }
-
-
-    public int getColumnHeight(int position){
-        return INITIAL_FLOOR_POSITION + gemColumns.get(position).size();
-    }
-
-
-    public boolean doesColumnHeightMeetLowestGem(int columnIndex, GemGroup gemGroup){
-        return getRealColumnHeight(columnIndex) > gemGroup.getRealBottomPosition();
-    }
-
-
-    public boolean isColumnAsTallAsTopOfBottomGem(int columnIndex, GemGroup gemGroup){
-        return getRealColumnHeight(columnIndex) >= gemGroup.getTopOfBottomGem();
-    }
-
-
-    public int getRealColumnHeight(int xPosition){
-        int columnIndex = Math.max(0, Math.min(gemColumns.size()-1, xPosition));
-        int numberOfGemsInColumn = gemColumns.get(columnIndex).size();
-        return INITIAL_FLOOR_POSITION + (numberOfGemsInColumn * 2);
-    }
-
-
-    public List<DrawableItem> getAllGems(){
-        List<DrawableItem> allGems = new ArrayList<>(NUMBER_OF_COLUMNS * NUMBER_OF_ROWS);
-        for(List<Gem> column : gemColumns){
-            allGems.addAll(column);
-        }
-        return allGems;
-    }
-
-
-    public List<Gem> getAllGemsInGrid(){
-        List<Gem> allGems = new ArrayList<>(NUMBER_OF_COLUMNS * NUMBER_OF_ROWS);
-        for(List<Gem> column : gemColumns){
-            allGems.addAll(column);
-        }
-        return allGems;
-    }
-
-
-    public int getNumberOfColumns(){
-        return NUMBER_OF_COLUMNS;
-    }
-
-
-    public int getNumberOfRows(){
-        return NUMBER_OF_ROWS;
-    }
-
-
-    private void initColumns(){
-        gemColumns = new ArrayList<>(NUMBER_OF_COLUMNS);
-        for(int i=0; i< NUMBER_OF_COLUMNS; i++){
-            gemColumns.add(new ArrayList<>(NUMBER_OF_ROWS));
-        }
-    }
-
-
-    public void clear(){
-        for(List<Gem> column : gemColumns) {
-            column.clear();
-        }
+        System.out.println("^^^ GemGrid: "+  msg);
     }
 
 
@@ -257,23 +147,6 @@ public class GemGrid2 {
         }
     }
 
-
-    public void add(GemGroup gemGroup) {
-        List<Gem> gems = gemGroup.getCopyOfGemsToAddToGrid();
-        int position = gemGroup.getXPosition();
-
-        if (gemGroup.getOrientation() == GemGroup.Orientation.HORIZONTAL) {
-            addHorizontal(gems, position);
-        } else {
-            addVertical(gems, position);
-        }
-    }
-
-
-    public void add(Gem gem, int position){
-        addGemToColumn(gem.clone(), position);
-        gem.setInvisible();
-    }
 
 
     public boolean isEmpty(){
@@ -308,41 +181,7 @@ public class GemGrid2 {
     }
 
 
-    private void addHorizontal(List<Gem> gems, int gemGroupPosition){
-        int initialOffset = gemGroupPosition - gems.size()/ 2;
-        for (int i = 0; i < gems.size(); i++) {
-            addGemToColumn(gems.get(i), initialOffset + i);
-        }
-    }
 
-
-    private void addGemToColumn(Gem gem, int columnIndex){
-        if(!gem.isVisible()){
-            return;
-        }
-        List<Gem> column = gemColumns.get(columnIndex);
-        int rowIndex = column.size();
-        setGemCoordinatesToGridPosition(gem, rowIndex, columnIndex);
-        column.add(gem);
-    }
-
-
-    private void addVertical(List<Gem> gems, int columnIndex){
-        List<Gem> column = gemColumns.get(columnIndex);
-
-        for(Gem gem : gems){
-            int rowIndex = column.size();
-            setGemCoordinatesToGridPosition(gem, rowIndex, columnIndex);
-            column.add(gem);
-        }
-    }
-
-
-    private void setGemCoordinatesToGridPosition(Gem gem, int rowIndex, int columnIndex){
-        float gemX = startingX + (gemSize * columnIndex);
-        float gemY = floorY - ((rowIndex + 1) * gemSize);
-        gem.setXY(gemX, gemY);
-    }
 
 
     private void appendRowTo(StringBuilder stringBuilder, int rowIndex){
@@ -356,45 +195,5 @@ public class GemGrid2 {
         }
     }
 
-
-    public void dropGems(){
-        for(List<Gem> column : gemColumns){
-            dropGemsInColumn(column);
-        }
-    }
-
-
-    private void dropGemsInColumn(List<Gem> column){
-        for(int i =0; i< column.size(); i++){
-            dropGemIfAboveGridPosition(column.get(i), i);
-        }
-    }
-
-
-    private void dropGemIfAboveGridPosition(Gem gem, int actualRowIndex){
-        float gridTopY = getYForRowTop(actualRowIndex);
-        if(gem.getY() < gridTopY){
-            float distance = Math.min(gridTopY - gem.getY(), dropIncrement);
-            dropGem(gem, distance);
-        }
-    }
-
-
-    private void dropGem(Gem gem, float distance){
-        gem.incY(distance);
-        haveAnyGemsMovedDuringLastDrop = true;
-    }
-
-
-    private float getYForRowTop(int rowIndex){
-        return this.floorY - ((1 + rowIndex) * gemSize);
-    }
-
-
-    public boolean isStable(){
-        boolean isStable = !haveAnyGemsMovedDuringLastDrop;
-        haveAnyGemsMovedDuringLastDrop = false;
-        return isStable;
-    }
 
 }

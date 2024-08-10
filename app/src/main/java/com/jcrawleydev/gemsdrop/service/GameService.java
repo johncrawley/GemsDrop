@@ -70,6 +70,10 @@ public class GameService extends Service {
         }
     }
 
+    public void create(){
+        game.create();
+    }
+
 
     public int getLevel(){
         if(gamePreferenceManager != null){
@@ -116,7 +120,7 @@ public class GameService extends Service {
 
     @Override
     public void onCreate() {
-        game.init(this);
+        game.init();
         soundPlayer = new SoundPlayer(getApplicationContext());
         gamePreferenceManager = new GamePreferenceManager(this);
         setupScoreRecords();

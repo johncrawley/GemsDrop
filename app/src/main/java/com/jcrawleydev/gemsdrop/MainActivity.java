@@ -121,18 +121,20 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
 
     private void log(String msg){
-        System.out.println("^^^ MainActivity: "+ msg);
+
+ //       System.out.println("^^^ MainActivity: "+ msg);
     }
 
 
     private void updateGem(Gem gem){
+
         Bundle bundle = new Bundle();
         bundle.putInt(BundleTag.GEM_POSITION.toString(), gem.getDepth());
         bundle.putInt(BundleTag.GEM_COLUMN.toString(), gem.getColumn());
         bundle.putLong(BundleTag.GEM_ID.toString(), gem.getId());
         bundle.putInt(BundleTag.GEM_COLOR.toString(), gem.getColor().ordinal());
         log("Sending message for update of gem "  + gem.getColor().ordinal());
-        sendMessage(this, FragmentMessage.UPDATE_GEM, bundle);
+        runOnUiThread(()->sendMessage(this, FragmentMessage.UPDATE_GEM, bundle) );
     }
 
 
