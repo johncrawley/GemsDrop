@@ -103,6 +103,7 @@ public class DroppingGems {
         gems.add(bottomGem);
     }
 
+
     private void initGems(){
         gems.forEach(g ->{
             g.setDepth(-1);

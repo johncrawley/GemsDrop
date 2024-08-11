@@ -38,7 +38,7 @@ public class GameFragment extends Fragment {
     private Map<Long, ImageView> itemsMap;
     private int containerWidth, containerHeight, smallestContainerDimension;
     private ViewGroup gemContainer;
-    private int gemDimension = 100;
+    private float gemDimension = 100f;
     private int fragmentWidth, fragmentHeight;
 
 
@@ -239,7 +239,8 @@ public class GameFragment extends Fragment {
 
 
     private void setGemDimensions(ImageView gem){
-        gem.setLayoutParams(new LinearLayout.LayoutParams(gemDimension, gemDimension, 1.0f));
+        gemDimension = containerWidth / 7f;
+        gem.setLayoutParams(new LinearLayout.LayoutParams((int)gemDimension, (int)gemDimension, 1.0f));
     }
 
 
@@ -251,12 +252,12 @@ public class GameFragment extends Fragment {
 
 
     private int getYForPosition(int position){
-        return position * 50;
+        return (position * (int)(gemDimension / 2f)) - (int)gemDimension /2;
     }
 
 
     private int getXForColumn(int column){
-        return column * 100;
+        return column * (int)gemDimension;
     }
 
 
