@@ -49,7 +49,7 @@ public class GameFragment extends Fragment {
         View parentView = inflater.inflate(R.layout.fragment_game, container, false);
         itemsMap = new HashMap<>();
         imageMap = new ImageMap();
-        getFragmentDimensions(parentView);
+        //getFragmentDimensions(parentView);
         setupViews(parentView);
         setupListeners();
         startGame();
@@ -87,6 +87,7 @@ public class GameFragment extends Fragment {
     @SuppressLint("ClickableViewAccessibility")
     private void setupViews(View parentView){
         gemContainer = parentView.findViewById(R.id.gemContainer);
+        getFragmentDimensions(gemContainer);
         gemContainer.setOnTouchListener((view, motionEvent) -> {
             if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
                 handleInput(motionEvent.getX(), motionEvent.getY());
@@ -252,7 +253,7 @@ public class GameFragment extends Fragment {
 
 
     private int getYForPosition(int position){
-        return (position * (int)(gemDimension / 2f)) - (int)gemDimension /2;
+        return (position * (int)(gemDimension / 2f)) - (int)gemDimension;
     }
 
 

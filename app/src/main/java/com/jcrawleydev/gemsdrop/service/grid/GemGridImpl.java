@@ -1,25 +1,24 @@
-package com.jcrawleydev.gemsdrop.gemgrid;
+package com.jcrawleydev.gemsdrop.service.grid;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gem.GemPosition;
-import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class GemGrid2 {
+public class GemGridImpl implements GemGrid {
     private List<List<Gem>> gemColumns;
     private final int NUMBER_OF_ROWS;
     private final int NUMBER_OF_COLUMNS;
     private boolean haveAnyGemsMovedDuringLastDrop;
     private final int MAX_POSITION;
 
-    public GemGrid2(int numberOfColumns, int numberOfRows){
+    public GemGridImpl(int numberOfColumns, int numberOfRows){
         NUMBER_OF_ROWS = numberOfRows;
         NUMBER_OF_COLUMNS = numberOfColumns;
         MAX_POSITION = NUMBER_OF_ROWS * 2;
@@ -40,6 +39,16 @@ public class GemGrid2 {
     }
 
 
+    @Override
+    public int getHeightAtColumn(int columnIndex){
+        return gemColumns.get(columnIndex).size();
+    }
+
+
+    @Override
+    public int getNumberOfColumns(){
+        return NUMBER_OF_COLUMNS;
+    }
 
     public int getHighestColumnIndex(){
         return gemColumns.stream().map(List::size).max(Integer::compare).orElse(1) - 1;

@@ -10,6 +10,7 @@ import com.jcrawleydev.gemsdrop.gem.GemColor;
 import com.jcrawleydev.gemsdrop.gem.GemPosition;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -18,14 +19,15 @@ public class DroppingGems {
     private final List<Gem> gems;
     private final int INITIAL_NUMBER_OF_GEMS = 3;
     private final Random random;
-    private final int numberOfColumns;
+    private final int numberOfRows, numberOfColumns;
     private Gem bottomGem, centreGem, topGem;
     enum Orientation { NORTH, EAST, SOUTH, WEST }
     private Orientation orientation = Orientation.NORTH;
     private final List<GemColor> gemColors = List.of(GemColor.RED, GemColor.BLUE, GemColor.PURPLE, GemColor.GREEN, GemColor.YELLOW);
 
 
-    public DroppingGems(int numberOfColumns){
+    public DroppingGems(int numberOfRows, int numberOfColumns){
+        this.numberOfRows = numberOfRows;
         this.numberOfColumns = numberOfColumns;
         random = new Random(System.currentTimeMillis());
         gems = new ArrayList<>(INITIAL_NUMBER_OF_GEMS);
@@ -37,6 +39,28 @@ public class DroppingGems {
         for(Gem gem: gems){
             gem.rotate();
         }
+    }
+
+
+    public int getLowestHeight(){
+        return convertDepthToHeight(gems.stream().mapToInt(Gem::getDepth).max().getAsInt());
+    }
+
+
+    private int convertDepthToHeight(int depth){
+        return numberOfRows - depth;
+    }
+
+
+    public void setColumn(int columnIndex){
+        for(Gem gem: gems){
+            gem.setColumn(columnIndex);
+        }
+    }
+
+
+    private boolean canRotate(){
+        return false;
     }
 
 
@@ -105,10 +129,12 @@ public class DroppingGems {
 
 
     private void initGems(){
-        gems.forEach(g ->{
-            g.setDepth(-1);
-            g.setColumn(numberOfColumns / 2);
-        });
+        int depth = -3;
+        for(Gem gem : gems){
+            gem.setDepth(depth);
+            depth++;
+            gem.setColumn(numberOfColumns/2);
+        }
     }
 
 

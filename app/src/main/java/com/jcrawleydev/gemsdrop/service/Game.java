@@ -1,10 +1,9 @@
 package com.jcrawleydev.gemsdrop.service;
 
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
-import com.jcrawleydev.gemsdrop.gemgrid.GemGrid2;
+import com.jcrawleydev.gemsdrop.service.grid.GemGridImpl;
 import com.jcrawleydev.gemsdrop.view.GameView;
 
-import java.util.Arrays;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -24,12 +23,12 @@ public class Game {
     private ScheduledFuture<?> gemDropFuture;
     private final AtomicBoolean isStarted = new AtomicBoolean(false);
 
-    private final GemGrid2 gemGrid = new GemGrid2(NUMBER_OF_COLUMNS, NUMBER_OF_ROWS);
+    private final GemGridImpl gemGrid = new GemGridImpl(NUMBER_OF_COLUMNS, NUMBER_OF_ROWS);
 
 
     public void init(){
         evaluator = new Evaluator(gemGrid.getGemColumns(), NUMBER_OF_ROWS);
-        droppingGems = new DroppingGems(NUMBER_OF_COLUMNS);
+        droppingGems = new DroppingGems(NUMBER_OF_ROWS, NUMBER_OF_COLUMNS);
         droppingGems.create();
     }
 
@@ -83,7 +82,9 @@ public class Game {
 
 
     private boolean canRotate(){
-        return true;
+        return  !droppingGems.isOrientationVertical()
+                    || (droppingGems.getLeftmostColumn() > 0
+                        || droppingGems.getRightmostColumn() < NUMBER_OF_COLUMNS);
     }
 
 
