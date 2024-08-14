@@ -50,6 +50,7 @@ public class GemGridImpl implements GemGrid {
         return NUMBER_OF_COLUMNS;
     }
 
+
     public int getHighestColumnIndex(){
         return gemColumns.stream().map(List::size).max(Integer::compare).orElse(1) - 1;
     }

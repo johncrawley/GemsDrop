@@ -41,6 +41,16 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
     }
 
 
+    public Gem(GemColor color, GemPosition position, int initialDepth){
+        this.color = color;
+        this.position = position;
+        this.visible = true;
+        this.depth = initialDepth;
+        this.column = 3;
+        this.id = System.nanoTime();
+    }
+
+
     public void rotate(){
        position = switch(position){
            case TOP     -> GemPosition.RIGHT;

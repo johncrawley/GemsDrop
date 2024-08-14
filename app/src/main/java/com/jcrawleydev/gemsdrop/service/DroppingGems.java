@@ -4,6 +4,7 @@ import static com.jcrawleydev.gemsdrop.service.DroppingGems.Orientation.EAST;
 import static com.jcrawleydev.gemsdrop.service.DroppingGems.Orientation.NORTH;
 import static com.jcrawleydev.gemsdrop.service.DroppingGems.Orientation.SOUTH;
 import static com.jcrawleydev.gemsdrop.service.DroppingGems.Orientation.WEST;
+import static com.jcrawleydev.gemsdrop.service.GemUtils.convertDepthToHeight;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gem.GemColor;
@@ -12,6 +13,7 @@ import com.jcrawleydev.gemsdrop.gem.GemPosition;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.OptionalInt;
 import java.util.Random;
 
 public class DroppingGems {
@@ -43,12 +45,16 @@ public class DroppingGems {
 
 
     public int getLowestHeight(){
-        return convertDepthToHeight(gems.stream().mapToInt(Gem::getDepth).max().getAsInt());
+        OptionalInt lowestPoint = gems.stream().mapToInt(Gem::getDepth).max();
+        if(lowestPoint.isPresent()){
+            return convertDepthToHeight(lowestPoint.getAsInt(), numberOfRows);
+        }
+        return 0;
     }
 
 
-    private int convertDepthToHeight(int depth){
-        return numberOfRows - depth;
+    public int getBottomDepth(){
+       return getBottomGem().getBottomDepth();
     }
 
 
@@ -77,6 +83,7 @@ public class DroppingGems {
             case WEST -> NORTH;
         };
     }
+
 
     public void moveLeft(){
         if(getLeftmostColumn() > 0){
@@ -110,31 +117,35 @@ public class DroppingGems {
     }
 
 
+    public Gem getBottomGem(){
+        return switch (orientation){
+            case NORTH -> topGem;
+            case SOUTH -> bottomGem;
+            case EAST, WEST -> centreGem;
+        };
+    }
+
+
+    public Gem getCentreGem(){
+        return centreGem;
+    }
+
+
     public void create(){
         gems.clear();
         orientation = NORTH;
         createGems();
-        initGems();
     }
 
 
     private void createGems(){
-        topGem = new Gem(getRandomColor(), GemPosition.TOP);
-        centreGem = new Gem(getRandomColor(), GemPosition.CENTRE);
-        bottomGem = new Gem(getRandomColor(), GemPosition.BOTTOM);
+        topGem = new Gem(getRandomColor(), GemPosition.TOP, -6);
+        centreGem = new Gem(getRandomColor(), GemPosition.CENTRE, -4);
+        bottomGem = new Gem(getRandomColor(), GemPosition.BOTTOM, -2);
         gems.add(topGem);
         gems.add(centreGem);
         gems.add(bottomGem);
-    }
-
-
-    private void initGems(){
-        int depth = -3;
-        for(Gem gem : gems){
-            gem.setDepth(depth);
-            depth++;
-            gem.setColumn(numberOfColumns/2);
-        }
+        gems.forEach(g -> g.setColumn(numberOfColumns/2));
     }
 
 

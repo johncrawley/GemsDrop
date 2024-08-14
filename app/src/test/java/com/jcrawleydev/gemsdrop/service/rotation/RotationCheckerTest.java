@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.service.DroppingGems;
 import com.jcrawleydev.gemsdrop.service.RotationChecker;
 import com.jcrawleydev.gemsdrop.service.grid.GemGrid;
@@ -22,15 +21,15 @@ public class RotationCheckerTest {
 
     @Before
     public void init(){
-        int[] columnHeights = new int[]{0,0,1,7,1,7,0};
+        int[] columnHeights = new int[]{0,0,7,0,0,7,0};
         GemGrid gemGrid = new MockGemGrid(columnHeights);
         int numberOfColumns = columnHeights.length;
         maxColumnIndex = numberOfColumns -1;
 
-        rotationChecker = new RotationChecker(gemGrid);
-        droppingGems = new DroppingGems(14, numberOfColumns);
+        int NUMBER_OF_ROWS = 14;
+        rotationChecker = new RotationChecker(gemGrid, NUMBER_OF_ROWS);
+        droppingGems = new DroppingGems(NUMBER_OF_ROWS, numberOfColumns);
         droppingGems.create();
-
     }
 
 
@@ -67,18 +66,36 @@ public class RotationCheckerTest {
 
     @Test
     public void cannotRotateWhenVerticalAndToTheRightOfAColumn(){
-        droppingGems.setColumn(4);
+        droppingGems.setColumn(3); // just after the column of height 7
         assertCanRotate();
         System.out.println("lowest gem position: " + droppingGems.getLowestHeight());
+        dropToDepth(14);
+        assertCanRotate();
         droppingGems.drop();
-        for(Gem gem: droppingGems.get()){
-            System.out.println("gem depth after drop: " + gem.getDepth());
+        assertCannotRotate();
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ RotationCheckerTest: " + msg);
+    }
+
+
+
+    private void dropToDepth(int depth){
+        while(droppingGems.getBottomDepth() < depth){
+            droppingGems.drop();
         }
     }
 
 
     private void assertCanRotate(){
         assertTrue(rotationChecker.canRotate(droppingGems));
+    }
+
+
+    private void assertCannotRotate(){
+        assertFalse(rotationChecker.canRotate(droppingGems));
     }
 
 }
