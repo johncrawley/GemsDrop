@@ -1,7 +1,6 @@
 package com.jcrawleydev.gemsdrop.service;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gem.GemColor;
@@ -10,6 +9,8 @@ import com.jcrawleydev.gemsdrop.gem.GemPosition;
 import org.junit.Test;
 
 public class GemUtilsTest {
+
+    private GridProps gridProps = new GridProps(14, 7, 2);
 
     @Test
     public void canCovertDepthToHeight(){
@@ -38,7 +39,7 @@ public class GemUtilsTest {
 
     private void assertGemColumnAdjacency(int gemDepth, int columnHeight, int numberOfRows, boolean expectedResult){
         Gem gem = new Gem(GemColor.BLUE, GemPosition.BOTTOM,gemDepth);
-        assertEquals(expectedResult, GemUtils.isGemAdjacentToColumn(gem, columnHeight, numberOfRows));
+        assertEquals(expectedResult, GemUtils.isGemAdjacentToColumn(gem, columnHeight, gridProps));
     }
 
 }

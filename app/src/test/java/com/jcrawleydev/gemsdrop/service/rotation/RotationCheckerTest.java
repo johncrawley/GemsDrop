@@ -5,6 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.jcrawleydev.gemsdrop.service.DroppingGems;
+import com.jcrawleydev.gemsdrop.service.GemUtils;
+import com.jcrawleydev.gemsdrop.service.GridProps;
 import com.jcrawleydev.gemsdrop.service.RotationChecker;
 import com.jcrawleydev.gemsdrop.service.grid.GemGrid;
 
@@ -17,18 +19,17 @@ public class RotationCheckerTest {
     private RotationChecker rotationChecker;
     private DroppingGems droppingGems;
     private int maxColumnIndex;
+    private final GridProps gridProps = new GridProps(14,7,2);
 
 
     @Before
     public void init(){
         int[] columnHeights = new int[]{0,0,7,0,0,7,0};
-        GemGrid gemGrid = new MockGemGrid(columnHeights);
+        GemGrid gemGrid = new MockGemGrid(gridProps, columnHeights);
         int numberOfColumns = columnHeights.length;
         maxColumnIndex = numberOfColumns -1;
-
-        int NUMBER_OF_ROWS = 14;
-        rotationChecker = new RotationChecker(gemGrid, NUMBER_OF_ROWS);
-        droppingGems = new DroppingGems(NUMBER_OF_ROWS, numberOfColumns);
+        rotationChecker = new RotationChecker(gemGrid, gridProps);
+        droppingGems = new DroppingGems(gridProps);
         droppingGems.create();
     }
 
@@ -68,22 +69,49 @@ public class RotationCheckerTest {
     public void cannotRotateWhenVerticalAndToTheRightOfAColumn(){
         droppingGems.setColumn(3); // just after the column of height 7
         assertCanRotate();
-        System.out.println("lowest gem position: " + droppingGems.getLowestHeight());
-        dropToDepth(14);
+        dropToGridRow(7);
         assertCanRotate();
         droppingGems.drop();
         assertCannotRotate();
     }
 
 
-    private void log(String msg){
-        System.out.println("^^^ RotationCheckerTest: " + msg);
+    @Test
+    public void cannotRotateWhenVerticalAndToTheLeftOfAColumn(){
+        droppingGems.setColumn(4); // just before the second column of height 7
+        assertCanRotate();
+        dropToGridRow(7);
+        assertEquals(16, GemUtils.getBottomHeightOf(droppingGems.getCentreGem(), gridProps));
+        assertCanRotate();
+        droppingGems.drop(); // the lowest dropping gem is now half a gem beneath the top of the column
+        assertCanRotate();
+        droppingGems.drop(); // the lowest dropping gem is now adjacent to the top gem in the column
+        assertCanRotate();
+        droppingGems.drop(); // the middle dropping gem is now half a gem beneath the top of the column
+        assertCannotRotate();
     }
 
 
+    @Test
+    public void cannotRotateWhenHorizontalAndAboveColumns(){
+        droppingGems.rotate();
+        assertCanRotate();
+        droppingGems.setColumn(2); //above the first column 7 gems high
+        dropToGridRow(8);
+        assertCanRotate();
+        droppingGems.drop();
+        assertCannotRotate();
 
-    private void dropToDepth(int depth){
-        while(droppingGems.getBottomDepth() < depth){
+        droppingGems.rotate();
+        droppingGems.setColumn(5);
+        droppingGems.rotate();
+        assertCannotRotate();
+    }
+
+
+    private void dropToGridRow(int gridRow){
+        int targetHeight = gridRow * 2;
+        while(droppingGems.getBottomHeight() > targetHeight){
             droppingGems.drop();
         }
     }

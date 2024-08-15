@@ -7,18 +7,18 @@ public enum GemPosition {
     LEFT(-1, 0),
     CENTRE(0,0);
 
-    private final int columnOffset, heightOffset;
+    private final int columnOffset, depthOffset;
 
-    GemPosition(int columnOffset, int heightOffset){
+    GemPosition(int columnOffset, int depthOffset){
         this.columnOffset = columnOffset;
-        this.heightOffset = heightOffset;
+        this.depthOffset = depthOffset;
     }
 
     public int getColumnOffset(){
         return columnOffset;
     }
 
-    public int getHeightOffset(){
-        return heightOffset;
+    public int getDepthOffset(){
+        return depthOffset;
     }
 }

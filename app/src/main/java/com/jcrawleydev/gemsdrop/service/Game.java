@@ -12,8 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Game {
 
-    private final int NUMBER_OF_ROWS = 14;
-    private final int NUMBER_OF_COLUMNS = 7;
+    private final GridProps gridProps = new GridProps(14, 7, 2);
     private DroppingGems droppingGems;
 
     private GameView gameView;
@@ -23,12 +22,12 @@ public class Game {
     private ScheduledFuture<?> gemDropFuture;
     private final AtomicBoolean isStarted = new AtomicBoolean(false);
 
-    private final GemGridImpl gemGrid = new GemGridImpl(NUMBER_OF_COLUMNS, NUMBER_OF_ROWS);
+    private final GemGridImpl gemGrid = new GemGridImpl(gridProps);
 
 
     public void init(){
-        evaluator = new Evaluator(gemGrid.getGemColumns(), NUMBER_OF_ROWS);
-        droppingGems = new DroppingGems(NUMBER_OF_ROWS, NUMBER_OF_COLUMNS);
+        evaluator = new Evaluator(gemGrid.getGemColumns(), gridProps.numberOfRows());
+        droppingGems = new DroppingGems(gridProps);
         droppingGems.create();
     }
 
@@ -84,7 +83,7 @@ public class Game {
     private boolean canRotate(){
         return  !droppingGems.isOrientationVertical()
                     || (droppingGems.getLeftmostColumn() > 0
-                        || droppingGems.getRightmostColumn() < NUMBER_OF_COLUMNS);
+                        || droppingGems.getRightmostColumn() < gridProps.numberOfColumns());
     }
 
 

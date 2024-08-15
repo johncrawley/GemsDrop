@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gem.GemPosition;
+import com.jcrawleydev.gemsdrop.service.GridProps;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,15 +14,13 @@ import java.util.Optional;
 
 public class GemGridImpl implements GemGrid {
     private List<List<Gem>> gemColumns;
-    private final int NUMBER_OF_ROWS;
-    private final int NUMBER_OF_COLUMNS;
+    private final GridProps gridProps;
     private boolean haveAnyGemsMovedDuringLastDrop;
     private final int MAX_POSITION;
 
-    public GemGridImpl(int numberOfColumns, int numberOfRows){
-        NUMBER_OF_ROWS = numberOfRows;
-        NUMBER_OF_COLUMNS = numberOfColumns;
-        MAX_POSITION = NUMBER_OF_ROWS * 2;
+    public GemGridImpl(GridProps gridProps){
+        this.gridProps = gridProps;
+        MAX_POSITION = gridProps.numberOfRows() * gridProps.depthPerDrop();
         initColumns();
     }
 
@@ -30,24 +29,26 @@ public class GemGridImpl implements GemGrid {
     }
 
 
-
     private void initColumns(){
-        gemColumns = new ArrayList<>(NUMBER_OF_COLUMNS);
-        for(int i=0; i< NUMBER_OF_COLUMNS; i++){
-            gemColumns.add(new ArrayList<>(NUMBER_OF_ROWS));
+        gemColumns = new ArrayList<>(gridProps.numberOfColumns());
+        for(int i=0; i< gridProps.numberOfColumns(); i++){
+            gemColumns.add(new ArrayList<>(gridProps.numberOfRows()));
         }
     }
 
 
     @Override
-    public int getHeightAtColumn(int columnIndex){
-        return gemColumns.get(columnIndex).size();
+    public int getHeightOfColumn(int columnIndex){
+        if(columnIndex > gemColumns.size() -1 || columnIndex < 0){
+            return 10_000;
+        }
+        return gemColumns.get(columnIndex).size() * gridProps.depthPerDrop();
     }
 
 
     @Override
     public int getNumberOfColumns(){
-        return NUMBER_OF_COLUMNS;
+        return gridProps.numberOfColumns();
     }
 
 
@@ -57,7 +58,7 @@ public class GemGridImpl implements GemGrid {
 
 
     public List<Integer> getColumnHeights(){
-        List<Integer> heights = new ArrayList<>(NUMBER_OF_COLUMNS);
+        List<Integer> heights = new ArrayList<>(gridProps.numberOfColumns());
         for(List<?> column : gemColumns){
             heights.add(column.size());
         }
@@ -182,7 +183,7 @@ public class GemGridImpl implements GemGrid {
     public String toString(){
         StringBuilder str = new StringBuilder();
 
-        for(int i = NUMBER_OF_ROWS-1; i>=0; i--) {
+        for(int i = gridProps.numberOfRows(); i>=0; i--) {
             str.append("[ ");
             appendRowTo(str, i);
             str.append("] ");

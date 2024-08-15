@@ -112,7 +112,7 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
 
 
     public int getDepth(){
-        return depth + position.getHeightOffset();
+        return depth + position.getDepthOffset();
     }
 
 

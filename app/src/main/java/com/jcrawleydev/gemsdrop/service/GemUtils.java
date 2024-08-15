@@ -10,16 +10,13 @@ public class GemUtils {
     }
 
 
-    public static boolean isGemAdjacentToColumn(Gem gem, int numberOfGemsInColumn, int numberOfRows){
-        int numberOfDepthsPerGemHeight = 2;
-        int numberOfDepths = numberOfRows * numberOfDepthsPerGemHeight;
-        int gemDepth = gem.getBottomDepth();
-        int columnHeight = numberOfGemsInColumn * numberOfDepthsPerGemHeight;
+    public static int getBottomHeightOf(Gem gem, GridProps gridProps){
+        return gridProps.numberOfDepths() - gem.getBottomDepth();
+    }
 
-        int gemBottomHeight =  numberOfDepths - gemDepth;
-        System.out.println("GemUtils isGemAdjacentToColumn() columnHeight: " + columnHeight
-        + " gemHeight : " + gemBottomHeight);
 
+    public static boolean isGemAdjacentToColumn(Gem gem, int columnHeight, GridProps gridProps){
+        int gemBottomHeight =  getBottomHeightOf(gem, gridProps);
         return gemBottomHeight < columnHeight;
     }
 

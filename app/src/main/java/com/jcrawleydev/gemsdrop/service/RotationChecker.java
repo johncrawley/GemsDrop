@@ -7,40 +7,52 @@ public class RotationChecker {
 
 
     private final GemGrid gemGrid;
-    private final int numberOfRows;
+    private final GridProps gridProps;
 
-    public RotationChecker(GemGrid gemGrid, int numberOfRows){
+    public RotationChecker(GemGrid gemGrid, GridProps gridProps){
         this.gemGrid = gemGrid;
-        this.numberOfRows = numberOfRows;
+        this.gridProps = gridProps;
     }
 
 
     public boolean canRotate(DroppingGems droppingGems){
         if(droppingGems.isOrientationVertical()){
-            if(isAtBoundary(droppingGems) || areDroppingGemsObstructedByColumns(droppingGems)){
-                return false;
-            }
+            return !isAtBoundary(droppingGems) && !areDroppingGemsObstructedByColumns(droppingGems);
         }
-        return true;
+        return isEnoughSpaceUnderneath(droppingGems.getCentreGem())
+                && isEnoughSpaceUnderneath(droppingGems.getRightmostGem());
     }
 
+
+    public boolean isEnoughSpaceUnderneath(Gem gem){
+        int columnHeight = getColumnHeightUnder(gem);
+        int gemBottomHeight = GemUtils.getBottomHeightOf(gem, gridProps);
+        return gemBottomHeight >= columnHeight + gridProps.depthPerDrop();
+    }
+
+
+    private int getColumnHeightUnder(Gem gem){
+        return gemGrid.getHeightOfColumn(gem.getColumn());
+    }
 
     private boolean areDroppingGemsObstructedByColumns(DroppingGems droppingGems){
-        return isGemAdjacentToColumn(droppingGems.getBottomGem(), -1);
-             //   || isGemAdjacentToColumn(droppingGems.getCentreGem(), 1);
-    }
-
-
-    private boolean isGemAdjacentToColumn(Gem gem, int columnOffset){
-
-        int gemColumnHeight = gemGrid.getHeightAtColumn(gem.getColumn() + columnOffset);
-        log(" isGemAdjacentToColumn() gemBottomDepth: " + gem.getBottomDepth() + " columnHeight: " + gemColumnHeight);
-        return GemUtils.isGemAdjacentToColumn(gem, gemColumnHeight, numberOfRows);
+        return isGemAdjacentToColumn(droppingGems.getBottomGem(), -1)
+               || isGemAdjacentToColumn(droppingGems.getCentreGem(), 1);
     }
 
 
     private void log(String msg){
         System.out.println("^^^ RotationChecker: " + msg);
+    }
+
+
+    private boolean isGemAdjacentToColumn(Gem gem, int columnOffset){
+        if(columnOffset == 1){
+            log("Entered isGemAdjacentToColumn() checking centre gem against right column");
+            log("centreGem bottomDepth: "+  gem.getBottomDepth());
+        }
+        int gemColumnHeight = gemGrid.getHeightOfColumn(gem.getColumn() + columnOffset);
+        return GemUtils.isGemAdjacentToColumn(gem, gemColumnHeight, gridProps);
     }
 
 

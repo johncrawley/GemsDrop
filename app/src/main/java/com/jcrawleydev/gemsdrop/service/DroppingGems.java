@@ -5,6 +5,7 @@ import static com.jcrawleydev.gemsdrop.service.DroppingGems.Orientation.NORTH;
 import static com.jcrawleydev.gemsdrop.service.DroppingGems.Orientation.SOUTH;
 import static com.jcrawleydev.gemsdrop.service.DroppingGems.Orientation.WEST;
 import static com.jcrawleydev.gemsdrop.service.GemUtils.convertDepthToHeight;
+import static com.jcrawleydev.gemsdrop.service.GemUtils.getBottomHeightOf;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gem.GemColor;
@@ -18,19 +19,18 @@ import java.util.Random;
 
 public class DroppingGems {
 
+    private final GridProps gridProps;
     private final List<Gem> gems;
     private final int INITIAL_NUMBER_OF_GEMS = 3;
     private final Random random;
-    private final int numberOfRows, numberOfColumns;
     private Gem bottomGem, centreGem, topGem;
     enum Orientation { NORTH, EAST, SOUTH, WEST }
     private Orientation orientation = Orientation.NORTH;
     private final List<GemColor> gemColors = List.of(GemColor.RED, GemColor.BLUE, GemColor.PURPLE, GemColor.GREEN, GemColor.YELLOW);
 
 
-    public DroppingGems(int numberOfRows, int numberOfColumns){
-        this.numberOfRows = numberOfRows;
-        this.numberOfColumns = numberOfColumns;
+    public DroppingGems(GridProps gridProps){
+        this.gridProps = gridProps;
         random = new Random(System.currentTimeMillis());
         gems = new ArrayList<>(INITIAL_NUMBER_OF_GEMS);
     }
@@ -47,14 +47,19 @@ public class DroppingGems {
     public int getLowestHeight(){
         OptionalInt lowestPoint = gems.stream().mapToInt(Gem::getDepth).max();
         if(lowestPoint.isPresent()){
-            return convertDepthToHeight(lowestPoint.getAsInt(), numberOfRows);
+            return convertDepthToHeight(lowestPoint.getAsInt(), gridProps.numberOfRows());
         }
         return 0;
     }
 
 
     public int getBottomDepth(){
-       return getBottomGem().getBottomDepth();
+       return getBottomGem().getDepth() + gridProps.depthPerDrop();
+    }
+
+
+    public int getBottomHeight(){
+        return getBottomHeightOf(getBottomGem(), gridProps);
     }
 
 
@@ -62,11 +67,6 @@ public class DroppingGems {
         for(Gem gem: gems){
             gem.setColumn(columnIndex);
         }
-    }
-
-
-    private boolean canRotate(){
-        return false;
     }
 
 
@@ -93,7 +93,7 @@ public class DroppingGems {
 
 
     public void moveRight(){
-        if(getRightmostColumn() < numberOfColumns -1){
+        if(getRightmostColumn() < gridProps.numberOfColumns() -1){
             gems.forEach(Gem::moveRight);
         }
     }
@@ -117,17 +117,26 @@ public class DroppingGems {
     }
 
 
-    public Gem getBottomGem(){
+    public Gem getRightmostGem(){
         return switch (orientation){
-            case NORTH -> topGem;
-            case SOUTH -> bottomGem;
-            case EAST, WEST -> centreGem;
+            case NORTH, SOUTH -> centreGem;
+            case EAST -> topGem;
+            case WEST -> bottomGem;
         };
     }
 
 
     public Gem getCentreGem(){
         return centreGem;
+    }
+
+
+    public Gem getBottomGem(){
+        return switch (orientation){
+            case NORTH -> bottomGem;
+            case SOUTH -> topGem;
+            case EAST, WEST -> centreGem;
+        };
     }
 
 
@@ -145,7 +154,7 @@ public class DroppingGems {
         gems.add(topGem);
         gems.add(centreGem);
         gems.add(bottomGem);
-        gems.forEach(g -> g.setColumn(numberOfColumns/2));
+        gems.forEach(g -> g.setColumn(gridProps.numberOfColumns()/2));
     }
 
 
