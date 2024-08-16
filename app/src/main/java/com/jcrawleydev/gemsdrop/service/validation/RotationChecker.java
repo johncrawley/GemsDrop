@@ -1,6 +1,9 @@
-package com.jcrawleydev.gemsdrop.service;
+package com.jcrawleydev.gemsdrop.service.validation;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
+import com.jcrawleydev.gemsdrop.service.DroppingGems;
+import com.jcrawleydev.gemsdrop.service.GemUtils;
+import com.jcrawleydev.gemsdrop.service.GridProps;
 import com.jcrawleydev.gemsdrop.service.grid.GemGrid;
 
 public class RotationChecker {

@@ -1,4 +1,4 @@
-package com.jcrawleydev.gemsdrop.service.rotation;
+package com.jcrawleydev.gemsdrop.service.validation;
 
 import com.jcrawleydev.gemsdrop.service.GridProps;
 import com.jcrawleydev.gemsdrop.service.grid.GemGrid;

@@ -1,4 +1,4 @@
-package com.jcrawleydev.gemsdrop.service.rotation;
+package com.jcrawleydev.gemsdrop.service.validation;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import com.jcrawleydev.gemsdrop.service.DroppingGems;
 import com.jcrawleydev.gemsdrop.service.GemUtils;
 import com.jcrawleydev.gemsdrop.service.GridProps;
-import com.jcrawleydev.gemsdrop.service.RotationChecker;
 import com.jcrawleydev.gemsdrop.service.grid.GemGrid;
 
 import org.junit.Before;
