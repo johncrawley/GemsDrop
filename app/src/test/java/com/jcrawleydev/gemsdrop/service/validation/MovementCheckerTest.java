@@ -1,10 +1,10 @@
 package com.jcrawleydev.gemsdrop.service.validation;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import com.jcrawleydev.gemsdrop.service.DroppingGems;
 import com.jcrawleydev.gemsdrop.service.GridProps;
+import com.jcrawleydev.gemsdrop.service.grid.GemGrid;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,10 +14,12 @@ public class MovementCheckerTest {
     private final GridProps gridProps = new GridProps(7, 14, 2);
     private MovementChecker movementChecker;
     private DroppingGems droppingGems;
+    private GemGrid gemGrid;
 
     @Before
     public void init(){
-        movementChecker = new MovementChecker(gridProps);
+        gemGrid = new MockGemGrid(gridProps, 0,0,0,9,0,0,0);
+        movementChecker = new MovementChecker(gridProps, gemGrid);
         droppingGems = new DroppingGems(gridProps);
         droppingGems.create();
     }
@@ -34,6 +36,15 @@ public class MovementCheckerTest {
         droppingGems.setColumn(lastColumnIndex - 1);
         assertRightMovement(true);
         droppingGems.moveRight();
+        assertRightMovement(false);
+    }
+
+
+    @Test
+    public void cannotMovePastObstructingGemColumns(){
+        droppingGems.setColumn(1);
+        Utils.dropToAboveGridRow(droppingGems, 8);
+        assertRightMovement(true);
         assertRightMovement(false);
     }
 

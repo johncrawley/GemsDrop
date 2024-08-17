@@ -1,5 +1,6 @@
 package com.jcrawleydev.gemsdrop.service.validation;
 
+import static com.jcrawleydev.gemsdrop.service.validation.Utils.dropToAboveGridRow;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -68,7 +69,7 @@ public class RotationCheckerTest {
     public void cannotRotateWhenVerticalAndToTheRightOfAColumn(){
         droppingGems.setColumn(3); // just after the column of height 7
         assertCanRotate();
-        dropToGridRow(7);
+        dropToAboveGridRow(droppingGems, 7);
         assertCanRotate();
         droppingGems.drop();
         assertCannotRotate();
@@ -79,7 +80,7 @@ public class RotationCheckerTest {
     public void cannotRotateWhenVerticalAndToTheLeftOfAColumn(){
         droppingGems.setColumn(4); // just before the second column of height 7
         assertCanRotate();
-        dropToGridRow(7);
+        dropToAboveGridRow(droppingGems, 7);
         assertEquals(16, GemUtils.getBottomHeightOf(droppingGems.getCentreGem(), gridProps));
         assertCanRotate();
         droppingGems.drop(); // the lowest dropping gem is now half a gem beneath the top of the column
@@ -96,7 +97,7 @@ public class RotationCheckerTest {
         droppingGems.rotate();
         assertCanRotate();
         droppingGems.setColumn(2); //above the first column 7 gems high
-        dropToGridRow(8);
+        dropToAboveGridRow(droppingGems, 8);
         assertCanRotate();
         droppingGems.drop();
         assertCannotRotate();
@@ -105,14 +106,6 @@ public class RotationCheckerTest {
         droppingGems.setColumn(5);
         droppingGems.rotate();
         assertCannotRotate();
-    }
-
-
-    private void dropToGridRow(int gridRow){
-        int targetHeight = gridRow * 2;
-        while(droppingGems.getBottomHeight() > targetHeight){
-            droppingGems.drop();
-        }
     }
 
 
