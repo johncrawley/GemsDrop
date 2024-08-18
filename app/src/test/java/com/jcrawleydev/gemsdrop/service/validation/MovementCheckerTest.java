@@ -11,7 +11,7 @@ import org.junit.Test;
 
 public class MovementCheckerTest {
 
-    private final GridProps gridProps = new GridProps(7, 14, 2);
+    private final GridProps gridProps = new GridProps(14, 7, 2);
     private MovementChecker movementChecker;
     private DroppingGems droppingGems;
     private GemGrid gemGrid;
@@ -45,8 +45,16 @@ public class MovementCheckerTest {
         droppingGems.setColumn(1);
         Utils.dropToAboveGridRow(droppingGems, 8);
         assertRightMovement(true);
+        droppingGems.moveRight();
         assertRightMovement(false);
+
+        droppingGems.setColumn(5);
+        assertLeftMovement(true);
+        droppingGems.moveLeft();
+        assertLeftMovement(false);
+
     }
+
 
 
     private void assertLeftMovement(boolean expectedResult){
