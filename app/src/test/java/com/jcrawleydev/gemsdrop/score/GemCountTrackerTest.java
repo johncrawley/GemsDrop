@@ -41,7 +41,7 @@ public class GemCountTrackerTest {
         gemCountTracker.startTracking();
         assertTrackerHas(0);
         evaluator.evaluate();
-        evaluator.deleteMarkedGems();
+        evaluator.deleteMarkedGemsOLD();
         assertTrackerHas(3);
 
     }

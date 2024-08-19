@@ -18,6 +18,7 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
     private boolean visible;
     private int column, depth;
     private final long id;
+    private final int gemWidth = 2;
 
     private GemPosition position = GemPosition.CENTRE;
 
@@ -70,6 +71,11 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
         column ++;
     }
 
+    public void moveUp(){ depth -= gemWidth;}
+
+
+    public void moveDown(){ depth += gemWidth;}
+
 
     public void setColumn(int column){
         this.column = column;
@@ -92,7 +98,7 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
 
 
     public int getBottomDepth(){
-        return depth;
+        return getDepth() + gemWidth;
     }
 
 

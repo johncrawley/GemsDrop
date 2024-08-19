@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Evaluator {
 
-    private GemGrid gemGrid;
+    private GemGrid gemGridOld;
     private final List<List<Gem>> gemColumns;
     private final int MATCH_NUMBER;
     private final int NUMBER_OF_COLUMNS;
@@ -18,12 +18,12 @@ public class Evaluator {
     private List<Long> markedGemIds = new ArrayList<>();
 
 
-    public Evaluator(GemGrid gemGrid, int matchNumber){
-        this.gemGrid = gemGrid;
+    public Evaluator(GemGrid gemGridOld, int matchNumber){
+        this.gemGridOld = gemGridOld;
         this.MATCH_NUMBER = matchNumber;
-        this.NUMBER_OF_COLUMNS = gemGrid.getNumberOfColumns();
-        this.NUMBER_OF_ROWS = gemGrid.getNumberOfRows();
-        this.gemColumns = gemGrid.getGemColumns();
+        this.NUMBER_OF_COLUMNS = gemGridOld.getNumberOfColumns();
+        this.NUMBER_OF_ROWS = gemGridOld.getNumberOfRows();
+        this.gemColumns = gemGridOld.getGemColumns();
     }
 
 
@@ -35,8 +35,8 @@ public class Evaluator {
     }
 
 
-    public void deleteMarkedGems(List<List<Gem>> gemColumns){
-        for(List<Gem> column : gemGrid.getGemColumns()){
+    public void deleteMarkedGemsOLD(List<List<Gem>> gemColumns){
+        for(List<Gem> column : gemGridOld.getGemColumns()){
             column.removeIf(Gem::isMarkedForDeletion);
         }
         this.hasMarkedGems = false;
@@ -64,10 +64,16 @@ public class Evaluator {
     }
 
 
-    public void deleteMarkedGems(){
-        for(List<Gem> column : gemGrid.getGemColumns()){
+    public void deleteMarkedGemsOLD(){
+        for(List<Gem> column : gemGridOld.getGemColumns()){
             column.removeIf(Gem::isMarkedForDeletion);
         }
+        this.hasMarkedGems = false;
+    }
+
+
+    private void deleteMarkedGems(){
+        gemColumns.forEach(gc -> gc.removeIf(Gem::isMarkedForDeletion));
         this.hasMarkedGems = false;
     }
 

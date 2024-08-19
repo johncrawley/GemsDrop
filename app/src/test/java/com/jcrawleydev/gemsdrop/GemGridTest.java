@@ -459,7 +459,7 @@ public class GemGridTest {
 
     private void evaluateAndDeleteMarkedGems(){
         evaluator.evaluate();
-        evaluator.deleteMarkedGems();
+        evaluator.deleteMarkedGemsOLD();
     }
 
 

@@ -19,7 +19,7 @@ public class MovementCheckerTest {
     @Before
     public void init(){
         gemGrid = new MockGemGrid(gridProps, 0,0,0,9,0,0,0);
-        movementChecker = new MovementChecker(gridProps, gemGrid);
+        movementChecker = new MovementChecker(gemGrid, gridProps);
         droppingGems = new DroppingGems(gridProps);
         droppingGems.create();
     }

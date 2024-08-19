@@ -2,6 +2,8 @@ package com.jcrawleydev.gemsdrop.service;
 
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.service.grid.GemGridImpl;
+import com.jcrawleydev.gemsdrop.service.validation.MovementChecker;
+import com.jcrawleydev.gemsdrop.service.validation.RotationChecker;
 import com.jcrawleydev.gemsdrop.view.GameView;
 
 import java.util.concurrent.Executors;
@@ -17,6 +19,8 @@ public class Game {
 
     private GameView gameView;
     private Evaluator evaluator;
+    private MovementChecker movementChecker;
+    private RotationChecker rotationChecker;
 
     private final ScheduledExecutorService gemDropExecutor = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> gemDropFuture;
@@ -27,33 +31,85 @@ public class Game {
 
     public void init(){
         evaluator = new Evaluator(gemGrid.getGemColumns(), gridProps.numberOfRows());
+        movementChecker = new MovementChecker(gemGrid, gridProps);
+        rotationChecker = new RotationChecker(gemGrid, gridProps);
         droppingGems = new DroppingGems(gridProps);
         droppingGems.create();
     }
 
 
-
     public void rotateGems(){
-        if(canRotate()){
+        syncMovement(this::rotate);
+    }
+
+
+    public void moveLeft(){
+        syncMovement(this::left);
+    }
+
+
+    public void moveRight(){
+        syncMovement(this::right);
+    }
+
+    public void moveUp(){
+        syncMovement(this::up);
+    }
+
+    public void moveDown(){
+        log("Entered moveDown()");
+        syncMovement(this::down);
+    }
+
+
+    public void rotate(){
+        if(rotationChecker.canRotate(droppingGems)){
             droppingGems.rotate();
             gameView.updateGems(droppingGems.get());
         }
     }
 
 
-    public void moveLeft(){
-        if(canMoveLeft()){
+    public void left(){
+        log("Entering left");
+        if(movementChecker.canMoveLeft(droppingGems)){
             droppingGems.moveLeft();
             gameView.updateGems(droppingGems.get());
         }
+        log("Exiting left!");
     }
 
 
-    public void moveRight(){
-        if(canMoveRight()){
+    public void right(){
+        log("Entering right()");
+        if(movementChecker.canMoveRight(droppingGems)){
             droppingGems.moveRight();
             updateGemsOnView();
         }
+        log("Exiting right()!");
+    }
+
+
+
+    public void up(){
+        log("Entering up()");
+        droppingGems.moveUp();
+        updateGemsOnView();
+        log("Exiting up()!");
+    }
+
+
+
+    public void down(){
+        log("Entering down()");
+        dropGems();
+        log("Exiting down()!");
+    }
+
+
+    private synchronized void syncMovement(Runnable runnable){
+        runnable.run();
+        log("Exiting syncMovement!");
     }
 
 
@@ -92,7 +148,8 @@ public class Game {
             return;
         }
         isStarted.set(true);
-        startDroppingGems(500);
+
+        //startDroppingGems(500);
     }
 
 
@@ -107,39 +164,42 @@ public class Game {
 
 
     private void log(String msg){
-      //  System.out.println("^^^ Game: " + msg);
+       System.out.println("^^^ Game: " + msg);
     }
 
 
     public void onDestroy(){
-        if(gemDropFuture != null && !gemDropFuture.isCancelled()){
-            gemDropFuture.cancel(false);
-        }
+        cancelDrop();
         isStarted.set(false);
     }
 
 
-    public void drop(){
-        log("entered drop() thread id : " + getThreadId());
-       int numberOfGemsPerDrop = 3;
-       droppingGems.drop();
-       updateGemsOnView();
-       droppingGems.setGems(gemGrid.addGems(droppingGems.get(), droppingGems.isOrientationVertical()));
-       if(droppingGems.isEmpty()){
-           switchToEvalMode();
-           return;
-       }
-       if(droppingGems.haveReducedInNumber()){
-           log("drop() about to free fall");
-           switchToFreeFallMode();
-       }
+    private void drop(){
+        syncMovement(this::dropGems);
+    }
+
+
+    private void dropGems(){
+        log("entered dropGems()");
+        droppingGems.drop();
+        updateGemsOnView();
+        droppingGems.setGems(gemGrid.addGems(droppingGems.get(), droppingGems.isOrientationVertical()));
+        if(droppingGems.isEmpty()){
+            switchToEvalMode();
+            return;
+        }
+        if(droppingGems.haveReducedInNumber()){
+            log("drop() about to free fall");
+            switchToFreeFallMode();
+        }
+       log("Exiting dropGems()");
     }
 
 
     private void switchToEvalMode(){
         log("Entered evalMode");
         long [] markedGemIds = new long[]{};
-        gemDropFuture.cancel(true);
+        cancelDrop();
         try {
             evaluator.evaluate();
             markedGemIds = evaluator.evalAndDelete();
@@ -156,6 +216,12 @@ public class Game {
         gameView.wipeOut(markedGemIds);
     }
 
+    private void cancelDrop(){
+        if(gemDropFuture != null && !gemDropFuture.isCancelled()){
+            gemDropFuture.cancel(true);
+        }
+    }
+
 
     private void switchToFreeFallMode(){
 
@@ -164,7 +230,7 @@ public class Game {
 
     private void switchToDropMode(){
         create();
-        startDroppingGems(500);
+        //startDroppingGems(500);
     }
 
 

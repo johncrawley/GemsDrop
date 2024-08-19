@@ -61,6 +61,15 @@ public class GameService extends Service {
     }
 
 
+    public void moveUp(){
+        game.moveUp();
+    }
+
+    public void moveDown(){
+        game.moveDown();
+    }
+
+
     public void setLevel(int value){
         if(gamePreferenceManager != null){
             gamePreferenceManager.saveLevel(value);

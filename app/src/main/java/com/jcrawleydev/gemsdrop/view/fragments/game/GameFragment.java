@@ -98,20 +98,28 @@ public class GameFragment extends Fragment {
 
 
     private void handleInput(float x, float y){
-        if(y > fragmentHeight - (fragmentHeight /4f)){
-            getService().ifPresent(GameService::create);
+        log("handleInput(" + (int)x + "," +  (int)y + ")");
+        if( y < 350f){
+            log("handleInput() move up!");
+            moveUp();
+            return;
+        }
+        if( y > 1100f){
+            log("handleInput() move down!");
+            moveDown();
             return;
         }
         if(x < fragmentWidth / 3f){
-            log("Entered handleInput, moving left()");
+            log("handleInput() move left!");
             moveLeft();
             return;
         }
         if(x < fragmentWidth / 1.5f ){
+            log("handleInput() rotate!");
             rotateGems();
             return;
         }
-        log("Entered handleInput, moving right");
+        log("handleInput() move right!!");
        moveRight();
     }
 
@@ -126,6 +134,16 @@ public class GameFragment extends Fragment {
     }
 
 
+    private void moveUp(){
+        getService().ifPresent(GameService::moveUp);
+    }
+
+
+    private void moveDown(){
+        getService().ifPresent(GameService::moveDown);
+    }
+
+
     private void rotateGems(){
         log("Entered rotateGems()");
         getService().ifPresent(GameService::rotateGems);
@@ -133,16 +151,7 @@ public class GameFragment extends Fragment {
 
 
     private void log(String msg){
-      //  System.out.println("^^^ GameFragment: " + msg);
-    }
-
-
-    private void updateViewsFrom(List<DrawInfo> drawInfoList, Map<Long, ImageView> viewMap, BiConsumer<DrawInfo, ImageView> removalConsumer){
-        runOnUiThread(()-> {
-            for (DrawInfo drawInfo : drawInfoList) {
-               // updateViewFrom(drawInfo, viewMap, removalConsumer, getContext(), gamePane, itemTypeMap);
-            }
-        });
+       // System.out.println("^^^ GameFragment: " + msg);
     }
 
 
@@ -246,7 +255,7 @@ public class GameFragment extends Fragment {
 
 
     private void updateGemCoordinates(ImageView gem, int position, int column){
-        log("Entered updateGemCoordinates() position: " + position + " , column: " + column);
+       // log("Entered updateGemCoordinates() position: " + position + " , column: " + column);
         gem.setX(getXForColumn(column));
         gem.setY(getYForPosition(position));
     }

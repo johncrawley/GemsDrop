@@ -99,6 +99,16 @@ public class DroppingGems {
     }
 
 
+    public void moveUp(){
+        gems.forEach(Gem::moveUp);
+    }
+
+
+    public void moveDown(){
+        gems.forEach(Gem::moveDown);
+    }
+
+
     public int getLeftmostColumn(){
         return switch (orientation){
             case NORTH, SOUTH -> centreGem.getColumn();
@@ -148,15 +158,23 @@ public class DroppingGems {
 
 
     private void createGems(){
-        topGem = new Gem(getRandomColor(), GemPosition.TOP, -6);
-        centreGem = new Gem(getRandomColor(), GemPosition.CENTRE, -4);
-        bottomGem = new Gem(getRandomColor(), GemPosition.BOTTOM, -2);
+        int depthPerDrop = gridProps.depthPerDrop();
+        int initialPosition = INITIAL_NUMBER_OF_GEMS * depthPerDrop * -1;
+        topGem = new Gem(getRandomColor(), GemPosition.TOP, initialPosition);
+        centreGem = new Gem(getRandomColor(), GemPosition.CENTRE, initialPosition);
+        bottomGem = new Gem(getRandomColor(), GemPosition.BOTTOM, initialPosition);
         gems.add(topGem);
         gems.add(centreGem);
         gems.add(bottomGem);
         gems.forEach(g -> g.setColumn(gridProps.numberOfColumns()/2));
+
+        gems.forEach(g -> log("createGems() gem bottom depth: " + g.getBottomDepth()));
     }
 
+
+    private void log(String msg){
+        System.out.println("^^^ DroppingGems: " + msg);
+    }
 
     public void drop(){
         gems.forEach(Gem::incDepth);
