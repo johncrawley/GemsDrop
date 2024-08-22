@@ -8,4 +8,6 @@
     <color name="score_text_top">#E1E143</color>
     <color name="score_text_bottom">#E68E1E</color>
     <color name="game_over_text">#BF360C</color>
+
+    <color name="main_menu_background">#2E2626</color>
 </resources>

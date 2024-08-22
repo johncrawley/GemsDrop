@@ -3,19 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent">
+    android:background="@color/main_menu_background">
 
-
-<!--
-    <com.jcrawleydev.gemsdrop.view.TransparentView
-        android:id="@+id/titleBackgroundView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
--->
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
@@ -26,7 +15,7 @@
         android:shadowDy="15"
         android:shadowRadius="2"
         android:text="@string/title"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/main_menu_background"
         android:textSize="@dimen/title_text_size"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
