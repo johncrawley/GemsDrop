@@ -30,6 +30,7 @@ public class Game {
 
 
     public void init(){
+        log("entered init()");
         evaluator = new Evaluator(gemGrid.getGemColumns(), gridProps.numberOfRows());
         movementChecker = new MovementChecker(gemGrid, gridProps);
         rotationChecker = new RotationChecker(gemGrid, gridProps);
@@ -39,6 +40,7 @@ public class Game {
 
 
     public void rotateGems(){
+        log("entered rotateGems()");
         syncMovement(this::rotate);
     }
 

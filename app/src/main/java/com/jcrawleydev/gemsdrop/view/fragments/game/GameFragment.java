@@ -25,11 +25,10 @@ import com.jcrawleydev.gemsdrop.service.GameService;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiConsumer;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 public class GameFragment extends Fragment {
@@ -47,7 +46,7 @@ public class GameFragment extends Fragment {
                              Bundle savedInstanceState) {
         assignContainerDimensions(container);
         View parentView = inflater.inflate(R.layout.fragment_game, container, false);
-        itemsMap = new HashMap<>();
+        itemsMap = new ConcurrentHashMap<>();
         imageMap = new ImageMap();
         //getFragmentDimensions(parentView);
         setupViews(parentView);
@@ -151,7 +150,7 @@ public class GameFragment extends Fragment {
 
 
     private void log(String msg){
-       // System.out.println("^^^ GameFragment: " + msg);
+       System.out.println("^^^ GameFragment: " + msg);
     }
 
 
@@ -237,7 +236,7 @@ public class GameFragment extends Fragment {
         setGemDimensions(imageView);
         updateGemCoordinates(imageView, position, column);
         gemContainer.addView(imageView);
-        itemsMap.put(id, imageView);
+        //itemsMap.put(id, imageView);
         return imageView;
     }
 
@@ -284,6 +283,7 @@ public class GameFragment extends Fragment {
             containerWidth = container.getMeasuredWidth();
             containerHeight = container.getMeasuredHeight();
             smallestContainerDimension = Math.min(containerWidth, containerHeight);
+            log("assignContainerDimensions() containerWidth, height: " + containerWidth + "," + containerHeight);
         }
     }
 }

@@ -156,21 +156,26 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
 
-
     @Override
     public void onPause(){
+        /*
         if(game != null){
             game.onPause();
         }
+        */
+
         super.onPause();
     }
 
 
     @Override
     public void onResume(){
+        /*
         if(game != null){
             // game.onResume();
         }
+
+         */
         super.onResume();
     }
 
@@ -198,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         }
         int x = (int)e.getX();
         int y = (int)e.getY();
-        game.click(x, y);
+        //game.click(x, y);
         return true;
     }
 
