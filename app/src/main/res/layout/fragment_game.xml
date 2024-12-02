@@ -19,6 +19,7 @@
 
 
     <LinearLayout
+        android:background="@color/colorPrimaryDark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -27,20 +28,38 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:padding="12dp"
         app:layout_constraintTop_toBottomOf="@id/gemContainer">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
             android:id="@+id/gemXPositions"
+            android:textSize="18sp"
             android:text="gem x positions:"
             />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/gemYPositions"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp"
             android:text="gem y positions:"
             />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create"
+            android:id="@+id/create"/>
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Destroy"
+            android:id="@+id/destroy"/>
 
     </LinearLayout>
 

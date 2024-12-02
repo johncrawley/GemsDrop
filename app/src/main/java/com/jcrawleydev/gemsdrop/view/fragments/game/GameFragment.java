@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -48,7 +49,7 @@ public class GameFragment extends Fragment {
         View parentView = inflater.inflate(R.layout.fragment_game, container, false);
         itemsMap = new ConcurrentHashMap<>();
         imageMap = new ImageMap();
-        //getFragmentDimensions(parentView);
+        getFragmentDimensions(parentView);
         setupViews(parentView);
         setupListeners();
         startGame();
@@ -63,6 +64,9 @@ public class GameFragment extends Fragment {
                 fragmentWidth = view.getMeasuredWidth();
                 fragmentHeight = view.getMeasuredHeight();
                 log("fragment dimensions: " + fragmentWidth + "," + fragmentHeight);
+                ViewGroup container = view.findViewById(R.id.gemContainer);
+                assignContainerDimensions(container);
+                log("gemContainerWidth, containerHeight: " + containerWidth + "," + containerHeight );
                 view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         };
@@ -250,6 +254,7 @@ public class GameFragment extends Fragment {
     private void setGemDimensions(ImageView gem){
         gemDimension = containerWidth / 7f;
         gem.setLayoutParams(new LinearLayout.LayoutParams((int)gemDimension, (int)gemDimension, 1.0f));
+        log("setGemDimensions: gemDimension: " + gemDimension);
     }
 
 
@@ -257,6 +262,7 @@ public class GameFragment extends Fragment {
        // log("Entered updateGemCoordinates() position: " + position + " , column: " + column);
         gem.setX(getXForColumn(column));
         gem.setY(getYForPosition(position));
+        log("updateGemCoordinates() position: " + position + " column: " + column);
     }
 
 
@@ -277,6 +283,20 @@ public class GameFragment extends Fragment {
         getActivity().runOnUiThread(runnable);
     }
 
+    private void setupCreateAndDestroyButtons(View parentView){
+        Button createButton = parentView.findViewById(R.id.create);
+        createButton.setOnClickListener(v -> createGems());
+        Button destroyButton = parentView.findViewById(R.id.destroy);
+        destroyButton.setOnClickListener(v -> destroyGems());
+    }
+
+    private void createGems(){
+
+    }
+
+    private void destroyGems(){
+
+    }
 
     private void assignContainerDimensions(ViewGroup container){
         if(container != null){
