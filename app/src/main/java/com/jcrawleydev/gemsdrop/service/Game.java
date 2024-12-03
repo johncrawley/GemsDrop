@@ -58,6 +58,14 @@ public class Game {
         syncMovement(this::up);
     }
 
+    public void createGems(){
+
+    }
+
+    public void destroyGems(){
+
+    }
+
     public void moveDown(){
         log("Entered moveDown()");
         syncMovement(this::down);

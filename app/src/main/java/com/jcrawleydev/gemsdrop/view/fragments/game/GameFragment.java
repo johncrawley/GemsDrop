@@ -128,23 +128,39 @@ public class GameFragment extends Fragment {
 
 
     private void moveLeft(){
-        getService().ifPresent(GameService::moveLeft);
+        runOnService(GameService::moveLeft);
     }
 
 
     private void moveRight(){
-        getService().ifPresent(GameService::moveRight);
+        runOnService(GameService::moveRight);
     }
 
 
     private void moveUp(){
-        getService().ifPresent(GameService::moveUp);
+        runOnService(GameService::moveUp);
     }
 
 
     private void moveDown(){
-        getService().ifPresent(GameService::moveDown);
+        runOnService(GameService::moveDown);
     }
+
+
+    private void createGems(){
+        runOnService(GameService::createGems);
+    }
+
+    private void destroyGems(){
+        runOnService(GameService::destroyGems);
+    }
+
+
+    private void runOnService(Consumer<GameService> consumer){
+        getService().ifPresent(consumer);
+    }
+
+
 
 
     private void rotateGems(){
@@ -290,13 +306,6 @@ public class GameFragment extends Fragment {
         destroyButton.setOnClickListener(v -> destroyGems());
     }
 
-    private void createGems(){
-
-    }
-
-    private void destroyGems(){
-
-    }
 
     private void assignContainerDimensions(ViewGroup container){
         if(container != null){

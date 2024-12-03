@@ -65,6 +65,14 @@ public class GameService extends Service {
         game.moveUp();
     }
 
+
+    public void createGems(){
+        game.createGems();
+    }
+    public void destroyGems(){
+        game.destroyGems();
+    }
+
     public void moveDown(){
         game.moveDown();
     }
