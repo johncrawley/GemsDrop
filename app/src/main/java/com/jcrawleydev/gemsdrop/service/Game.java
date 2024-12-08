@@ -34,8 +34,7 @@ public class Game {
         evaluator = new Evaluator(gemGrid.getGemColumns(), gridProps.numberOfRows());
         movementChecker = new MovementChecker(gemGrid, gridProps);
         rotationChecker = new RotationChecker(gemGrid, gridProps);
-        droppingGems = new DroppingGems(gridProps);
-        droppingGems.create();
+        createGems();
     }
 
 
@@ -54,17 +53,22 @@ public class Game {
         syncMovement(this::right);
     }
 
+
     public void moveUp(){
         syncMovement(this::up);
     }
 
-    public void createGems(){
 
+    public void createGems(){
+        droppingGems = new DroppingGems(gridProps);
+        droppingGems.create();
     }
+
 
     public void destroyGems(){
 
     }
+
 
     public void moveDown(){
         log("Entered moveDown()");
