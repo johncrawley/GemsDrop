@@ -144,7 +144,6 @@ public class GemGridImpl implements GemGrid {
     }
 
 
-
     private void log(String msg){
         System.out.println("^^^ GemGrid: "+  msg);
     }
@@ -157,7 +156,6 @@ public class GemGridImpl implements GemGrid {
             }
         }
     }
-
 
 
     public boolean isEmpty(){
@@ -190,9 +188,6 @@ public class GemGridImpl implements GemGrid {
         }
         return str.toString();
     }
-
-
-
 
 
     private void appendRowTo(StringBuilder stringBuilder, int rowIndex){

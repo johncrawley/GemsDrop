@@ -3,6 +3,7 @@ package com.jcrawleydev.gemsdrop.view.fragments.game;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.setListener;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
@@ -97,27 +99,44 @@ public class GameFragment extends Fragment {
             }
             return false;
         });
+        setupPositionMarkers(gemContainer);
+    }
+
+
+    private void setupPositionMarkers(ViewGroup container){
+        for(int i = 0; i < 17; i++){
+            TextView textView = new TextView(getContext());
+            container.addView(textView);
+            textView.setText("" + i);
+            textView.setY(getYForPosition(i));
+            textView.setX(20);
+            textView.setTextSize(20);
+            textView.setTextColor(Color.RED);
+        }
     }
 
 
     private void handleInput(float x, float y){
-        log("handleInput(" + (int)x + "," +  (int)y + ")");
-        if( y < 350f){
+
+        log("handleInput(" + (int)x + "," +  (int)y + ")" + " gemContainer AbsoluteY: "+ gemContainer.getY() + " height: " + gemContainer.getMeasuredHeight());
+        int height = gemContainer.getMeasuredHeight();
+        int width = gemContainer.getMeasuredWidth();
+        if( y < height/4f){
             log("handleInput() move up!");
             moveUp();
             return;
         }
-        if( y > 1100f){
+        if( y > (height / 3f) * 2){
             log("handleInput() move down!");
             moveDown();
             return;
         }
-        if(x < fragmentWidth / 3f){
+        if(x < width / 3f){
             log("handleInput() move left!");
             moveLeft();
             return;
         }
-        if(x < fragmentWidth / 1.5f ){
+        if(x < width / 1.5f ){
             log("handleInput() rotate!");
             rotateGems();
             return;
@@ -151,6 +170,7 @@ public class GameFragment extends Fragment {
         runOnService(GameService::createGems);
     }
 
+
     private void destroyGems(){
         runOnService(GameService::destroyGems);
     }
@@ -159,8 +179,6 @@ public class GameFragment extends Fragment {
     private void runOnService(Consumer<GameService> consumer){
         getService().ifPresent(consumer);
     }
-
-
 
 
     private void rotateGems(){
