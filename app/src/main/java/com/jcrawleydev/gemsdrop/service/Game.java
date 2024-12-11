@@ -197,7 +197,8 @@ public class Game {
         log("entered dropGems()");
         droppingGems.drop();
         updateGemsOnView();
-        droppingGems.setGems(gemGrid.addGems(droppingGems.get(), droppingGems.isOrientationVertical()));
+        var remainingGems = gemGrid.addGems(droppingGems.get(), droppingGems.isOrientationVertical());
+        droppingGems.setGems(remainingGems);
         if(droppingGems.isEmpty()){
             switchToEvalMode();
             return;
