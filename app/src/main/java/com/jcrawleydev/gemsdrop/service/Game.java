@@ -104,7 +104,6 @@ public class Game {
     }
 
 
-
     public void up(){
         log("Entering up()");
         droppingGems.moveUp();
@@ -113,10 +112,11 @@ public class Game {
     }
 
 
-
     public void down(){
         log("Entering down()");
-        dropGems();
+        //dropGems();
+        droppingGems.moveDown();
+        updateGemsOnView();
         log("Exiting down()!");
     }
 
