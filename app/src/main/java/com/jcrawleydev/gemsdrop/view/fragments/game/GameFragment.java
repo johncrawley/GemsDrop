@@ -104,10 +104,11 @@ public class GameFragment extends Fragment {
 
 
     private void setupPositionMarkers(ViewGroup container){
-        for(int i = 0; i < 17; i++){
+        for(int i = 30; i >0; i--){
             TextView textView = new TextView(getContext());
             container.addView(textView);
-            textView.setText("" + i);
+            String positionMarker = String.valueOf(i);
+            textView.setText(positionMarker);
             textView.setY(getYForPosition(i));
             textView.setX(20);
             textView.setTextSize(20);
