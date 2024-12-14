@@ -14,6 +14,7 @@ import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -42,6 +43,8 @@ public class GameFragment extends Fragment {
     private ViewGroup gemContainer;
     private float gemDimension = 100f;
     private int fragmentWidth, fragmentHeight;
+    private final int GEM_COLUMNS = 7;
+    private final int GEM_ROWS = GEM_COLUMNS * 2;
 
 
     @Override
@@ -75,6 +78,17 @@ public class GameFragment extends Fragment {
         view.getViewTreeObserver().addOnGlobalLayoutListener(listener);
     }
 
+
+    private void assignContainerDimensions(ViewGroup container){
+        if(container != null){
+            containerWidth = container.getMeasuredWidth();
+            containerHeight = container.getMeasuredHeight();
+            container.setLayoutParams(new FrameLayout.LayoutParams(containerWidth, containerWidth * 2));
+
+            smallestContainerDimension = Math.min(containerWidth, containerHeight);
+            log("assignContainerDimensions() containerWidth, height: " + containerWidth + "," + containerHeight);
+        }
+    }
 
     private void startGame(){
         MainActivity mainActivity = (MainActivity) getActivity();
@@ -326,12 +340,4 @@ public class GameFragment extends Fragment {
     }
 
 
-    private void assignContainerDimensions(ViewGroup container){
-        if(container != null){
-            containerWidth = container.getMeasuredWidth();
-            containerHeight = container.getMeasuredHeight();
-            smallestContainerDimension = Math.min(containerWidth, containerHeight);
-            log("assignContainerDimensions() containerWidth, height: " + containerWidth + "," + containerHeight);
-        }
-    }
 }
