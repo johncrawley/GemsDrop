@@ -50,7 +50,7 @@ public class GameFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        assignContainerDimensions(container);
+        //assignContainerDimensions(container);
         View parentView = inflater.inflate(R.layout.fragment_game, container, false);
         itemsMap = new ConcurrentHashMap<>();
         imageMap = new ImageMap();
@@ -70,7 +70,7 @@ public class GameFragment extends Fragment {
                 fragmentHeight = view.getMeasuredHeight();
                 log("fragment dimensions: " + fragmentWidth + "," + fragmentHeight);
                 ViewGroup container = view.findViewById(R.id.gemContainer);
-                assignContainerDimensions(container);
+                assignGemContainerDimensions(view, container);
                 log("gemContainerWidth, containerHeight: " + containerWidth + "," + containerHeight );
                 view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
@@ -79,12 +79,27 @@ public class GameFragment extends Fragment {
     }
 
 
-    private void assignContainerDimensions(ViewGroup container){
-        if(container != null){
-            containerWidth = container.getMeasuredWidth();
-            containerHeight = container.getMeasuredHeight();
-            container.setLayoutParams(new FrameLayout.LayoutParams(containerWidth, containerWidth * 2));
 
+    private void assignGemContainerDimensions(View parent, ViewGroup container){
+        if(container != null){
+
+            int parentWidth = parent.getMeasuredWidth();
+            int parentHeight = parent.getMeasuredHeight();
+
+            int marginWidth = parentWidth / 12;
+
+            containerWidth = parentWidth - marginWidth;
+            containerHeight = containerWidth * 2;
+            int marginHeight = containerHeight / 16;
+            int adjustedContainerHeight = containerHeight - marginHeight;
+
+            int verticalMargin = marginWidth / 2;
+            int horizontalMargin = marginHeight / 2;
+
+            int adjustedWith = containerWidth - 100;
+            var layoutParams = new FrameLayout.LayoutParams(containerWidth, adjustedContainerHeight);
+            layoutParams.setMargins(horizontalMargin,verticalMargin,horizontalMargin,verticalMargin);
+            container.setLayoutParams(layoutParams);
             smallestContainerDimension = Math.min(containerWidth, containerHeight);
             log("assignContainerDimensions() containerWidth, height: " + containerWidth + "," + containerHeight);
         }
@@ -106,7 +121,6 @@ public class GameFragment extends Fragment {
     @SuppressLint("ClickableViewAccessibility")
     private void setupViews(View parentView){
         gemContainer = parentView.findViewById(R.id.gemContainer);
-        getFragmentDimensions(gemContainer);
         gemContainer.setOnTouchListener((view, motionEvent) -> {
             if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
                 handleInput(motionEvent.getX(), motionEvent.getY());
