@@ -69,7 +69,7 @@ public class GameFragment extends Fragment {
                 fragmentWidth = view.getMeasuredWidth();
                 fragmentHeight = view.getMeasuredHeight();
                 log("fragment dimensions: " + fragmentWidth + "," + fragmentHeight);
-                ViewGroup container = view.findViewById(R.id.gemContainer);
+                FrameLayout container = view.findViewById(R.id.gemContainer);
                 assignGemContainerDimensions(view, container);
                 log("gemContainerWidth, containerHeight: " + containerWidth + "," + containerHeight );
                 view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
@@ -79,8 +79,7 @@ public class GameFragment extends Fragment {
     }
 
 
-
-    private void assignGemContainerDimensions(View parent, ViewGroup container){
+    private void assignGemContainerDimensions(View parent, FrameLayout container){
         if(container != null){
 
             int parentWidth = parent.getMeasuredWidth();
@@ -97,7 +96,8 @@ public class GameFragment extends Fragment {
             int horizontalMargin = marginHeight / 2;
 
             int adjustedWith = containerWidth - 100;
-            var layoutParams = new FrameLayout.LayoutParams(containerWidth, adjustedContainerHeight);
+            // var layoutParams;// = new FrameLayout.LayoutParams(containerWidth, adjustedContainerHeight);
+            var layoutParams = new FrameLayout.LayoutParams(400, 600);
             layoutParams.setMargins(horizontalMargin,verticalMargin,horizontalMargin,verticalMargin);
             container.setLayoutParams(layoutParams);
             smallestContainerDimension = Math.min(containerWidth, containerHeight);
