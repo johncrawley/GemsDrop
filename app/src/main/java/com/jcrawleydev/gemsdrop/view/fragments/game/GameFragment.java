@@ -41,7 +41,7 @@ public class GameFragment extends Fragment {
     private Map<Long, ImageView> itemsMap;
     private int containerWidth, containerHeight, smallestContainerDimension;
     private ViewGroup gemContainer;
-    private float gemDimension = 100f;
+    private float gemWidth = 10f;
     private int fragmentWidth, fragmentHeight;
     private final int GEM_COLUMNS = 7;
     private final int GEM_ROWS = GEM_COLUMNS * 2;
@@ -97,12 +97,18 @@ public class GameFragment extends Fragment {
 
             int adjustedWith = containerWidth - 100;
             // var layoutParams;// = new FrameLayout.LayoutParams(containerWidth, adjustedContainerHeight);
-            var layoutParams = new FrameLayout.LayoutParams(400, 600);
+            int containerWidth = 400;
+            var layoutParams = new LinearLayout.LayoutParams(containerWidth, 600);
             layoutParams.setMargins(horizontalMargin,verticalMargin,horizontalMargin,verticalMargin);
             container.setLayoutParams(layoutParams);
             smallestContainerDimension = Math.min(containerWidth, containerHeight);
             log("assignContainerDimensions() containerWidth, height: " + containerWidth + "," + containerHeight);
+            assignGemWidth(containerWidth);
         }
+    }
+
+    private void assignGemWidth( int gemContainerWidth){
+        gemWidth = gemContainerWidth / 7f;
     }
 
     private void startGame(){
@@ -300,7 +306,6 @@ public class GameFragment extends Fragment {
         ImageView imageView = new ImageView(getContext());
         log("createAndAddGemView() colorId: " + colorId);
         setGemDrawable(imageView, colorId);
-        setGemDimensions(imageView);
         updateGemCoordinates(imageView, position, column);
         gemContainer.addView(imageView);
         //itemsMap.put(id, imageView);
@@ -314,13 +319,6 @@ public class GameFragment extends Fragment {
     }
 
 
-    private void setGemDimensions(ImageView gem){
-        gemDimension = containerWidth / 7f;
-        gem.setLayoutParams(new LinearLayout.LayoutParams((int)gemDimension, (int)gemDimension, 1.0f));
-        log("setGemDimensions: gemDimension: " + gemDimension);
-    }
-
-
     private void updateGemCoordinates(ImageView gem, int position, int column){
        // log("Entered updateGemCoordinates() position: " + position + " , column: " + column);
         gem.setX(getXForColumn(column));
@@ -330,12 +328,12 @@ public class GameFragment extends Fragment {
 
 
     private int getYForPosition(int position){
-        return (position * (int)(gemDimension / 2f)) - (int)gemDimension;
+        return (position * (int)(gemWidth / 2f)) - (int) gemWidth;
     }
 
 
     private int getXForColumn(int column){
-        return column * (int)gemDimension;
+        return column * (int) gemWidth;
     }
 
 
