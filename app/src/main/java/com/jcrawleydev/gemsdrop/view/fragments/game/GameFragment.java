@@ -109,6 +109,10 @@ public class GameFragment extends Fragment {
 
     private void assignGemWidth( int gemContainerWidth){
         gemWidth = gemContainerWidth / 7f;
+
+        for(View gemView : itemsMap.values()){
+            setGemViewDimensions(gemView);
+        }
     }
 
     private void startGame(){
@@ -303,13 +307,28 @@ public class GameFragment extends Fragment {
 
 
     private ImageView createAndAddGemView(long id, int position, int column, int colorId){
+        log("entered createAndAddGemView()");
         ImageView imageView = new ImageView(getContext());
         log("createAndAddGemView() colorId: " + colorId);
         setGemDrawable(imageView, colorId);
         updateGemCoordinates(imageView, position, column);
+        setGemViewDimensions(imageView, false);
         gemContainer.addView(imageView);
         //itemsMap.put(id, imageView);
         return imageView;
+    }
+
+
+    private void setGemViewDimensions(View gemView){
+        log("entered setGemViewDimensions");
+        var layoutParams = new LinearLayout.LayoutParams((int)gemWidth, (int)gemWidth);
+        gemView.setLayoutParams(layoutParams);
+    }
+
+    private void setGemViewDimensions(View gemView, boolean x){
+        log("entered setGemViewDimensions for createAndAddGemView()");
+        var layoutParams = new LinearLayout.LayoutParams((int)gemWidth, (int)gemWidth);
+        gemView.setLayoutParams(layoutParams);
     }
 
 
