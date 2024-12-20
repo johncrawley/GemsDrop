@@ -45,7 +45,7 @@ public class GameFragment extends Fragment {
     private int fragmentWidth, fragmentHeight;
     private final int GEM_COLUMNS = 7;
     private final int GEM_ROWS = GEM_COLUMNS * 2;
-
+    private int containerBottomY = 500;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -97,13 +97,15 @@ public class GameFragment extends Fragment {
 
             int adjustedWith = containerWidth - 100;
             // var layoutParams;// = new FrameLayout.LayoutParams(containerWidth, adjustedContainerHeight);
-            int containerWidth = 400;
-            var layoutParams = new LinearLayout.LayoutParams(containerWidth, 600);
+            containerWidth = 400;
+            containerHeight = (int)(containerWidth * 2.4f);
+            var layoutParams = new LinearLayout.LayoutParams(containerWidth, containerHeight);
             layoutParams.setMargins(horizontalMargin,verticalMargin,horizontalMargin,verticalMargin);
             container.setLayoutParams(layoutParams);
             smallestContainerDimension = Math.min(containerWidth, containerHeight);
             log("assignContainerDimensions() containerWidth, height: " + containerWidth + "," + containerHeight);
             assignGemWidth(containerWidth);
+            containerBottomY = (int)container.getY() + containerHeight;
         }
     }
 
@@ -347,7 +349,10 @@ public class GameFragment extends Fragment {
 
 
     private int getYForPosition(int position){
-        return (position * (int)(gemWidth / 2f)) - (int) gemWidth;
+        int y = containerBottomY - (position * (int)(gemWidth / 2f)) - (int)gemWidth;
+        log("getYForPosition() : position: " + position + " y: " + y + " containerBottomY: " + containerBottomY);
+        return containerBottomY - (position * (int)(gemWidth / 2f)) - (int)gemWidth;
+        //return (position * (int)(gemWidth / 2f)) - (int) gemWidth;
     }
 
 
