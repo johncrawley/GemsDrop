@@ -158,10 +158,9 @@ public class DroppingGems {
 
 
     private void createGems(){
-        int depthPerDrop = gridProps.depthPerDrop();
-        int initialPosition = INITIAL_NUMBER_OF_GEMS * depthPerDrop * -1;
-        topGem = new Gem(getRandomColor(), GemPosition.TOP, initialPosition);
-        centreGem = new Gem(getRandomColor(), GemPosition.CENTRE, initialPosition);
+        int initialPosition = gridProps.numberOfPositions();
+        topGem = new Gem(getRandomColor(), GemPosition.TOP, initialPosition + 2);
+        centreGem = new Gem(getRandomColor(), GemPosition.CENTRE, initialPosition + 1);
         bottomGem = new Gem(getRandomColor(), GemPosition.BOTTOM, initialPosition);
         gems.add(topGem);
         gems.add(centreGem);

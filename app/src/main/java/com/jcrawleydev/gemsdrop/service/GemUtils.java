@@ -11,7 +11,7 @@ public class GemUtils {
 
 
     public static int getBottomHeightOf(Gem gem, GridProps gridProps){
-        return gridProps.numberOfDepths() - gem.getBottomDepth();
+        return gridProps.numberOfPositions() - gem.getBottomDepth();
     }
 
 

@@ -71,10 +71,10 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
         column ++;
     }
 
-    public void moveUp(){ depth -= gemWidth;}
+    public void moveUp(){ depth += gemWidth;}
 
 
-    public void moveDown(){ depth += gemWidth;}
+    public void moveDown(){ depth -= gemWidth;}
 
 
     public void setColumn(int column){
@@ -167,7 +167,6 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
     public void setY(float y){
         this.y = y;
     }
-
 
 
     public void setXY(float x, float y){

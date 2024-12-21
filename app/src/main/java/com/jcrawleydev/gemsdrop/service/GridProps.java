@@ -2,7 +2,7 @@ package com.jcrawleydev.gemsdrop.service;
 
 public record GridProps(int numberOfRows, int numberOfColumns, int depthPerDrop) {
 
-    public int numberOfDepths(){
+    public int numberOfPositions(){
         return numberOfRows * depthPerDrop;
     }
 }
