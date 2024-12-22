@@ -8,8 +8,9 @@ import android.os.IBinder;
 
 import com.jcrawleydev.gemsdrop.MainActivity;
 import com.jcrawleydev.gemsdrop.SoundPlayer;
-import com.jcrawleydev.gemsdrop.service.score.ScoreRecords;
-import com.jcrawleydev.gemsdrop.service.score.ScoreStatistics;
+import com.jcrawleydev.gemsdrop.service.game.Game;
+import com.jcrawleydev.gemsdrop.service.game.score.ScoreRecords;
+import com.jcrawleydev.gemsdrop.service.game.score.ScoreStatistics;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

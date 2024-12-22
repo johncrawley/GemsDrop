@@ -1,4 +1,4 @@
-package com.jcrawleydev.gemsdrop.service.grid;
+package com.jcrawleydev.gemsdrop.service.game.grid;
 
 public interface GemGrid {
 

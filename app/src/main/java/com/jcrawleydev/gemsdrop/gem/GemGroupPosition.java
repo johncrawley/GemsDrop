@@ -1,6 +1,6 @@
 package com.jcrawleydev.gemsdrop.gem;
 
-public enum GemPosition {
+public enum GemGroupPosition {
     TOP(0,-2),
     RIGHT(1, 0),
     BOTTOM(0,2),
@@ -9,7 +9,7 @@ public enum GemPosition {
 
     private final int columnOffset, depthOffset;
 
-    GemPosition(int columnOffset, int depthOffset){
+    GemGroupPosition(int columnOffset, int depthOffset){
         this.columnOffset = columnOffset;
         this.depthOffset = depthOffset;
     }

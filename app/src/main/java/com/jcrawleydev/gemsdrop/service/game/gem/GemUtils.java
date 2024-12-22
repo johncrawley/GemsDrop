@@ -1,11 +1,10 @@
-package com.jcrawleydev.gemsdrop.service;
+package com.jcrawleydev.gemsdrop.service.game.gem;
 import com.jcrawleydev.gemsdrop.gem.Gem;
+import com.jcrawleydev.gemsdrop.service.game.GridProps;
 
 public class GemUtils {
 
-    //Gem Depth is from the top, height it in the gem grid, and is from the bottom
-    // i.e. at height 0, the gem depth should be 26, if there are 14 rows
-    public static int convertDepthToHeight(int depth, int numberOfRows){
+    public static int convertContainerPositionToGridHeight(int depth, int numberOfRows){
         return numberOfRows - (depth / 2);
     }
 

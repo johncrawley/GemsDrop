@@ -1,6 +1,6 @@
 package com.jcrawleydev.gemsdrop.service.validation;
 
-import com.jcrawleydev.gemsdrop.service.DroppingGems;
+import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems;
 
 public class Utils {
 

@@ -16,49 +16,49 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
     private float x,y;
     private Bitmap bitmap;
     private boolean visible;
-    private int column, depth;
+    private int column, containerPosition;
     private final long id;
     private final int gemWidth = 2;
 
-    private GemPosition position = GemPosition.CENTRE;
+    private GemGroupPosition gemGroupPosition = GemGroupPosition.CENTRE;
 
 
     public Gem(GemColor color){
         this.color = color;
         this.visible = true;
-        this.depth = -2;
+        this.containerPosition = -2;
         this.id = System.nanoTime();
     }
 
 
-    public Gem(GemColor color, GemPosition position){
+    public Gem(GemColor color, GemGroupPosition gemGroupPosition){
         this.color = color;
         log("Gem() color: " + color.name());
-        this.position = position;
+        this.gemGroupPosition = gemGroupPosition;
         this.visible = true;
-        this.depth = -2;
+        this.containerPosition = 18;
         this.column = 3;
         this.id = System.nanoTime();
     }
 
 
-    public Gem(GemColor color, GemPosition position, int initialDepth){
+    public Gem(GemColor color, GemGroupPosition gemGroupPosition, int containerPosition){
         this.color = color;
-        this.position = position;
+        this.gemGroupPosition = gemGroupPosition;
         this.visible = true;
-        this.depth = initialDepth;
+        this.containerPosition = containerPosition;
         this.column = 3;
         this.id = System.nanoTime();
     }
 
 
     public void rotate(){
-       position = switch(position){
-           case TOP     -> GemPosition.RIGHT;
-           case RIGHT   -> GemPosition.BOTTOM;
-           case BOTTOM  -> GemPosition.LEFT;
-           case LEFT    -> GemPosition.TOP;
-           case CENTRE  -> GemPosition.CENTRE;
+       gemGroupPosition = switch(gemGroupPosition){
+           case TOP     -> GemGroupPosition.RIGHT;
+           case RIGHT   -> GemGroupPosition.BOTTOM;
+           case BOTTOM  -> GemGroupPosition.LEFT;
+           case LEFT    -> GemGroupPosition.TOP;
+           case CENTRE  -> GemGroupPosition.CENTRE;
         };
     }
 
@@ -71,10 +71,10 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
         column ++;
     }
 
-    public void moveUp(){ depth += gemWidth;}
+    public void moveUp(){ containerPosition += gemWidth;}
 
 
-    public void moveDown(){ depth -= gemWidth;}
+    public void moveDown(){ containerPosition -= gemWidth;}
 
 
     public void setColumn(int column){
@@ -88,37 +88,37 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
 
 
     public int getColumn(){
-        return column + position.getColumnOffset();
+        return column + gemGroupPosition.getColumnOffset();
     }
 
 
-    public GemPosition getPosition(){
-        return position;
+    public GemGroupPosition getGemGroupPosition(){
+        return gemGroupPosition;
     }
 
 
     public int getBottomDepth(){
-        return getDepth() + gemWidth;
+        return getContainerPosition() + gemWidth;
     }
 
 
-    public void setDepth(int depth){
-        this.depth = depth;
+    public void setContainerPosition(int containerPosition){
+        this.containerPosition = containerPosition;
     }
 
 
     public void incDepth(){
-        depth++;
+        containerPosition++;
     }
 
 
-    public void setPosition(GemPosition position){
-        this.position = position;
+    public void setGemGroupPosition(GemGroupPosition gemGroupPosition){
+        this.gemGroupPosition = gemGroupPosition;
     }
 
 
-    public int getDepth(){
-        return depth + position.getDepthOffset();
+    public int getContainerPosition(){
+        return containerPosition + gemGroupPosition.getDepthOffset();
     }
 
 

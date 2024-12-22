@@ -1,4 +1,4 @@
-package com.jcrawleydev.gemsdrop.service.score;
+package com.jcrawleydev.gemsdrop.service.game.score;
 
 public class ScoreRecords {
 

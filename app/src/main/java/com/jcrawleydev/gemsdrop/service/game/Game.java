@@ -1,9 +1,10 @@
-package com.jcrawleydev.gemsdrop.service;
+package com.jcrawleydev.gemsdrop.service.game;
 
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
-import com.jcrawleydev.gemsdrop.service.grid.GemGridImpl;
-import com.jcrawleydev.gemsdrop.service.validation.MovementChecker;
-import com.jcrawleydev.gemsdrop.service.validation.RotationChecker;
+import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems;
+import com.jcrawleydev.gemsdrop.service.game.grid.GemGridImpl;
+import com.jcrawleydev.gemsdrop.service.game.utils.MovementChecker;
+import com.jcrawleydev.gemsdrop.service.game.utils.RotationChecker;
 import com.jcrawleydev.gemsdrop.view.GameView;
 
 import java.util.concurrent.Executors;

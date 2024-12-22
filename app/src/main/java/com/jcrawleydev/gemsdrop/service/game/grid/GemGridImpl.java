@@ -1,11 +1,11 @@
-package com.jcrawleydev.gemsdrop.service.grid;
+package com.jcrawleydev.gemsdrop.service.game.grid;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
-import com.jcrawleydev.gemsdrop.gem.GemPosition;
-import com.jcrawleydev.gemsdrop.service.GridProps;
+import com.jcrawleydev.gemsdrop.gem.GemGroupPosition;
+import com.jcrawleydev.gemsdrop.service.game.GridProps;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -88,7 +88,7 @@ public class GemGridImpl implements GemGrid {
     private List<Gem> addAllVerticalGems(List<Gem> gems){
         Gem topGem = null, centreGem = null, bottomGem = null;
         for(Gem gem: gems) {
-            switch (gem.getPosition()) {
+            switch (gem.getGemGroupPosition()) {
                 case TOP -> topGem = gem;
                 case BOTTOM -> bottomGem = gem;
                 case CENTRE -> centreGem = gem;
@@ -140,7 +140,7 @@ public class GemGridImpl implements GemGrid {
 
 
     private Optional<Gem> getBottomGem(List<Gem> gems){
-        return gems.stream().filter(g -> g.getPosition() == GemPosition.BOTTOM).findFirst();
+        return gems.stream().filter(g -> g.getGemGroupPosition() == GemGroupPosition.BOTTOM).findFirst();
     }
 
 

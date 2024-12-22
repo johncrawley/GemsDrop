@@ -1,4 +1,4 @@
-package com.jcrawleydev.gemsdrop.service;
+package com.jcrawleydev.gemsdrop.service.game;
 
 public record GridProps(int numberOfRows, int numberOfColumns, int depthPerDrop) {
 

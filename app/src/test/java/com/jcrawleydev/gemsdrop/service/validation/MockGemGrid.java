@@ -1,7 +1,7 @@
 package com.jcrawleydev.gemsdrop.service.validation;
 
-import com.jcrawleydev.gemsdrop.service.GridProps;
-import com.jcrawleydev.gemsdrop.service.grid.GemGrid;
+import com.jcrawleydev.gemsdrop.service.game.GridProps;
+import com.jcrawleydev.gemsdrop.service.game.grid.GemGrid;
 
 public class MockGemGrid implements GemGrid {
 

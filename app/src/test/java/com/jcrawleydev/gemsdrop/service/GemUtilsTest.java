@@ -4,7 +4,9 @@ import static org.junit.Assert.assertEquals;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.gem.GemColor;
-import com.jcrawleydev.gemsdrop.gem.GemPosition;
+import com.jcrawleydev.gemsdrop.gem.GemGroupPosition;
+import com.jcrawleydev.gemsdrop.service.game.GridProps;
+import com.jcrawleydev.gemsdrop.service.game.gem.GemUtils;
 
 import org.junit.Test;
 
@@ -23,7 +25,7 @@ public class GemUtilsTest {
 
 
     private void assertDepthConversion(int numberOfRows, int depth, int expectedHeight){
-        int result = GemUtils.convertDepthToHeight(depth, numberOfRows);
+        int result = GemUtils.convertContainerPositionToGridHeight(depth, numberOfRows);
         assertEquals( expectedHeight, result);
     }
 
@@ -38,7 +40,7 @@ public class GemUtilsTest {
 
 
     private void assertGemColumnAdjacency(int gemDepth, int columnHeight, int numberOfRows, boolean expectedResult){
-        Gem gem = new Gem(GemColor.BLUE, GemPosition.BOTTOM,gemDepth);
+        Gem gem = new Gem(GemColor.BLUE, GemGroupPosition.BOTTOM,gemDepth);
         assertEquals(expectedResult, GemUtils.isGemAdjacentToColumn(gem, columnHeight, gridProps));
     }
 

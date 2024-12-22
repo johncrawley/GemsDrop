@@ -14,7 +14,7 @@ import android.view.View;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.service.GameService;
-import com.jcrawleydev.gemsdrop.service.score.ScoreStatistics;
+import com.jcrawleydev.gemsdrop.service.game.score.ScoreStatistics;
 import com.jcrawleydev.gemsdrop.view.GameView;
 import com.jcrawleydev.gemsdrop.view.fragments.MainMenuFragment;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag;
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private void updateGem(Gem gem){
 
         Bundle bundle = new Bundle();
-        bundle.putInt(BundleTag.GEM_POSITION.toString(), gem.getDepth());
+        bundle.putInt(BundleTag.GEM_POSITION.toString(), gem.getContainerPosition());
         bundle.putInt(BundleTag.GEM_COLUMN.toString(), gem.getColumn());
         bundle.putLong(BundleTag.GEM_ID.toString(), gem.getId());
         bundle.putInt(BundleTag.GEM_COLOR.toString(), gem.getColor().ordinal());
