@@ -1,7 +1,7 @@
 package com.jcrawleydev.gemsdrop.score;
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
-import com.jcrawleydev.gemsdrop.gem.GemColor;
+import com.jcrawleydev.gemsdrop.service.game.gem.GemColor;
 import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroupFactory;

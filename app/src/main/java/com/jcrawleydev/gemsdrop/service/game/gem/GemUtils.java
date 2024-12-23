@@ -1,5 +1,4 @@
 package com.jcrawleydev.gemsdrop.service.game.gem;
-import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.service.game.GridProps;
 
 public class GemUtils {
@@ -10,7 +9,7 @@ public class GemUtils {
 
 
     public static int getBottomHeightOf(Gem gem, GridProps gridProps){
-        return gridProps.numberOfPositions() - gem.getBottomDepth();
+        return gridProps.numberOfPositions() - gem.getContainerPosition();
     }
 
 

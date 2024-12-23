@@ -1,9 +1,5 @@
 package com.jcrawleydev.gemsdrop.service.game.gem;
 
-import com.jcrawleydev.gemsdrop.gem.GemColor;
-import com.jcrawleydev.gemsdrop.gem.GemGroupPosition;
-import com.jcrawleydev.gemsdrop.service.game.GridProps;
-
 public class Gem {
 
 
@@ -12,6 +8,8 @@ public class Gem {
     private boolean markedForDeletion = false;
     private boolean visible;
     private int column;
+    private GemGroupPosition gemGroupPosition;
+
     /*
          container position refers to the position of the bottom of the gem,
             so the lowest possible value is 0.
@@ -19,15 +17,33 @@ public class Gem {
     private int containerPosition;
     private final long id;
 
-    private GemGroupPosition gemGroupPosition = GemGroupPosition.CENTRE;
 
-
-    public Gem(GemColor color, int containerPosition){
+    public Gem(GemColor color, GemGroupPosition gemGroupPosition, int initialContainerPosition){
         this.color = color;
+        this.gemGroupPosition = gemGroupPosition;
+        this.containerPosition = initialContainerPosition;
         this.visible = true;
-        this.containerPosition = containerPosition;
         this.column = 3;
         this.id = System.nanoTime();
+    }
+
+
+
+    public GemGroupPosition getGemGroupPosition(){
+        return gemGroupPosition;
+    }
+
+
+    public void rotateClockwise(){
+        gemGroupPosition = switch(gemGroupPosition){
+            case TOP     -> GemGroupPosition.RIGHT;
+            case RIGHT   -> GemGroupPosition.BOTTOM;
+            case BOTTOM  -> GemGroupPosition.LEFT;
+            case LEFT    -> GemGroupPosition.TOP;
+            case CENTRE  -> GemGroupPosition.CENTRE;
+        };
+        containerPosition += gemGroupPosition.getClockwiseContainerPositionOffset();
+        column += gemGroupPosition.getClockwiseColumnOffset();
     }
 
 
@@ -99,9 +115,8 @@ public class Gem {
     }
 
 
-    public boolean isNotSameColorAs(com.jcrawleydev.gemsdrop.gem.Gem otherGem){
-        return false;
-        //return this instanceof NullGem || this.getColor() != otherGem.getColor();
+    public boolean isNotSameColorAs(Gem otherGem){
+        return this instanceof NullGem || this.getColor() != otherGem.getColor();
     }
 
 

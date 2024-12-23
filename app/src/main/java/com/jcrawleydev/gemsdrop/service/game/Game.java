@@ -1,8 +1,8 @@
 package com.jcrawleydev.gemsdrop.service.game;
 
-import com.jcrawleydev.gemsdrop.gemgrid.Evaluator;
 import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems;
 import com.jcrawleydev.gemsdrop.service.game.grid.GemGridImpl;
+import com.jcrawleydev.gemsdrop.service.game.grid.GridEvaluator;
 import com.jcrawleydev.gemsdrop.service.game.utils.MovementChecker;
 import com.jcrawleydev.gemsdrop.service.game.utils.RotationChecker;
 import com.jcrawleydev.gemsdrop.view.GameView;
@@ -19,7 +19,7 @@ public class Game {
     private DroppingGems droppingGems;
 
     private GameView gameView;
-    private Evaluator evaluator;
+    private GridEvaluator evaluator;
     private MovementChecker movementChecker;
     private RotationChecker rotationChecker;
 
@@ -32,7 +32,7 @@ public class Game {
 
     public void init(){
         log("entered init()");
-        evaluator = new Evaluator(gemGrid.getGemColumns(), gridProps.numberOfRows());
+        evaluator = new GridEvaluator(gemGrid.getGemColumns(), gridProps.numberOfRows());
         movementChecker = new MovementChecker(gemGrid, gridProps);
         rotationChecker = new RotationChecker(gemGrid, gridProps);
         createGems();
@@ -198,7 +198,7 @@ public class Game {
         log("entered dropGems()");
         droppingGems.drop();
         updateGemsOnView();
-        var remainingGems = gemGrid.addGems(droppingGems.get(), droppingGems.isOrientationVertical());
+        var remainingGems = gemGrid.addGems(droppingGems);
         droppingGems.setGems(remainingGems);
         if(droppingGems.isEmpty()){
             switchToEvalMode();

@@ -1,7 +1,10 @@
 package com.jcrawleydev.gemsdrop.service.validation;
 
 import com.jcrawleydev.gemsdrop.service.game.GridProps;
+import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.service.game.grid.GemGrid;
+
+import java.util.List;
 
 public class MockGemGrid implements GemGrid {
 
@@ -24,4 +27,8 @@ public class MockGemGrid implements GemGrid {
     public int getNumberOfColumns(){
         return columnHeights.length;
     }
+
+
+    @Override
+    public List<List<Gem>> getGemColumns(){ return null; }
 }

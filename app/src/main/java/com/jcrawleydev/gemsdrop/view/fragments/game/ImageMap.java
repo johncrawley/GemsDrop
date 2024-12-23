@@ -1,7 +1,7 @@
 package com.jcrawleydev.gemsdrop.view.fragments.game;
 
 import com.jcrawleydev.gemsdrop.R;
-import com.jcrawleydev.gemsdrop.gem.GemColor;
+import com.jcrawleydev.gemsdrop.service.game.gem.GemColor;
 
 import java.util.HashMap;
 import java.util.Map;

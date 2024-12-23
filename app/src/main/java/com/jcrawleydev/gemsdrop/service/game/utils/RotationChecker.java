@@ -1,7 +1,6 @@
 package com.jcrawleydev.gemsdrop.service.game.utils;
-
-import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems;
+import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.service.game.gem.GemUtils;
 import com.jcrawleydev.gemsdrop.service.game.GridProps;
 import com.jcrawleydev.gemsdrop.service.game.grid.GemGrid;
@@ -52,7 +51,7 @@ public class RotationChecker {
     private boolean isGemAdjacentToColumn(Gem gem, int columnOffset){
         if(columnOffset == 1){
             log("Entered isGemAdjacentToColumn() checking centre gem against right column");
-            log("centreGem bottomDepth: "+  gem.getBottomDepth());
+            log("centreGem container position: "+  gem.getContainerPosition());
         }
         int gemColumnHeight = gemGrid.getHeightOfColumn(gem.getColumn() + columnOffset);
         return GemUtils.isGemAdjacentToColumn(gem, gemColumnHeight, gridProps);

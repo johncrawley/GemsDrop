@@ -3,7 +3,7 @@ package com.jcrawleydev.gemsdrop.view.title;
 import android.graphics.Bitmap;
 import android.view.View;
 
-import com.jcrawleydev.gemsdrop.gem.GemColor;
+import com.jcrawleydev.gemsdrop.service.game.gem.GemColor;
 import com.jcrawleydev.gemsdrop.gemgroup.GemGroup;
 import com.jcrawleydev.gemsdrop.view.BitmapLoader;
 import com.jcrawleydev.gemsdrop.view.TransparentView;

@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import com.jcrawleydev.gemsdrop.service.game.gem.GemColor;
+import com.jcrawleydev.gemsdrop.service.game.gem.GemGroupPosition;
 import com.jcrawleydev.gemsdrop.view.DrawItem;
 import com.jcrawleydev.gemsdrop.view.item.DrawableItem;
 

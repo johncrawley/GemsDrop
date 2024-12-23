@@ -1,6 +1,8 @@
 package com.jcrawleydev.gemsdrop.view;
 
-import com.jcrawleydev.gemsdrop.gem.Gem;
+
+
+import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
 
 import java.util.List;
 

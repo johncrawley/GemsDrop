@@ -1,4 +1,4 @@
-package com.jcrawleydev.gemsdrop.gem;
+package com.jcrawleydev.gemsdrop.service.game.gem;
 
 import androidx.annotation.NonNull;
 

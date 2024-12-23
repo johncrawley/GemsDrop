@@ -8,12 +8,11 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.jcrawleydev.gemsdrop.gem.Gem;
 import com.jcrawleydev.gemsdrop.service.GameService;
+import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.service.game.score.ScoreStatistics;
 import com.jcrawleydev.gemsdrop.view.GameView;
 import com.jcrawleydev.gemsdrop.view.fragments.MainMenuFragment;
@@ -31,14 +30,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener, GameView {
 
-    private int height, width;
     private Game game;
-    private float gemWidth;
-    private float dropValue;
-    private int gemGridBorder;
-    private int numberOColumns;
-    private int scoreBarHeight;
-    private int floorY;
     private MainViewModel viewModel;
     private GameService gameService;
 
@@ -68,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         hideActionBar();
-        assignScreenDimensions();
         setupGameService();
         setupFragmentsIf(savedInstanceState == null);
         initViewModel();
@@ -127,7 +118,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
 
     private void updateGem(Gem gem){
-
         Bundle bundle = new Bundle();
         bundle.putInt(BundleTag.GEM_POSITION.toString(), gem.getContainerPosition());
         bundle.putInt(BundleTag.GEM_COLUMN.toString(), gem.getColumn());
@@ -205,23 +195,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         int y = (int)e.getY();
         //game.click(x, y);
         return true;
-    }
-
-
-    private void assignScreenDimensions(){
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        height = displayMetrics.heightPixels;
-        width = displayMetrics.widthPixels;
-
-        numberOColumns = getResources().getInteger(R.integer.number_of_columns);
-        scoreBarHeight = height / 15;
-        int bottomBorderHeight = 50 + (height / 18);
-        floorY = height - bottomBorderHeight;
-        int maxRows = getResources().getInteger(R.integer.maximum_rows);
-        gemWidth = (float)(height - (scoreBarHeight + bottomBorderHeight)) / maxRows;
-        dropValue = gemWidth /2;
-        gemGridBorder = (int)(this.width - (gemWidth * numberOColumns)) / 2;
     }
 
 }

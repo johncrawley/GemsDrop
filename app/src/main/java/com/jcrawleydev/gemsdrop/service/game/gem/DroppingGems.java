@@ -1,17 +1,14 @@
 package com.jcrawleydev.gemsdrop.service.game.gem;
 
-import static com.jcrawleydev.gemsdrop.gem.GemGroupPosition.BOTTOM;
-import static com.jcrawleydev.gemsdrop.gem.GemGroupPosition.CENTRE;
-import static com.jcrawleydev.gemsdrop.gem.GemGroupPosition.TOP;
+import static com.jcrawleydev.gemsdrop.service.game.gem.GemGroupPosition.BOTTOM;
+import static com.jcrawleydev.gemsdrop.service.game.gem.GemGroupPosition.CENTRE;
+import static com.jcrawleydev.gemsdrop.service.game.gem.GemGroupPosition.TOP;
 import static com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems.Orientation.EAST;
 import static com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems.Orientation.NORTH;
 import static com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems.Orientation.SOUTH;
 import static com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems.Orientation.WEST;
 import static com.jcrawleydev.gemsdrop.service.game.gem.GemUtils.convertContainerPositionToGridHeight;
-import static com.jcrawleydev.gemsdrop.service.game.gem.GemUtils.getBottomHeightOf;
 
-import com.jcrawleydev.gemsdrop.gem.GemColor;
-import com.jcrawleydev.gemsdrop.gem.GemGroupPosition;
 import com.jcrawleydev.gemsdrop.service.game.GridProps;
 
 import java.util.ArrayList;
@@ -45,17 +42,9 @@ public class DroppingGems {
         }
     }
 
-    private void rotateGem(Gem gem){
-        /*
-        gemGroupPosition = switch(gemGroupPosition){
-            case TOP     -> GemGroupPosition.RIGHT;
-            case RIGHT   -> GemGroupPosition.BOTTOM;
-            case BOTTOM  -> GemGroupPosition.LEFT;
-            case LEFT    -> GemGroupPosition.TOP;
-            case CENTRE  -> GemGroupPosition.CENTRE;
-        }
 
-         */
+    private void rotateGem(Gem gem){
+        gem.rotateClockwise();
     }
 
 
@@ -157,6 +146,11 @@ public class DroppingGems {
     }
 
 
+    public Gem getTopGem(){
+        return centreGem;
+    }
+
+
     public Gem getBottomGem(){
         return switch (orientation){
             case NORTH -> bottomGem;
@@ -190,9 +184,9 @@ public class DroppingGems {
     private Gem createGem(GemGroupPosition gemGroupPosition, int offset){
         int initialPosition = gridProps.numberOfPositions() - 1;
         log("createGem() gridProps.depthsPerDrop: " + gridProps.depthPerDrop());
-        int offsetPosition = initialPosition + (gridProps.depthPerDrop() * offset);
-        log("createGem() offsetPosition: " + offsetPosition);
-        return new Gem(getRandomColor(), offsetPosition);
+        int initialContainerPosition = initialPosition + (gridProps.depthPerDrop() * offset);
+        log("createGem() offsetPosition: " + initialContainerPosition);
+        return new Gem(getRandomColor(), gemGroupPosition, initialContainerPosition);
     }
 
 

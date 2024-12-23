@@ -2,7 +2,7 @@ package com.jcrawleydev.gemsdrop.gemgroup;
 
 
 import com.jcrawleydev.gemsdrop.gem.Gem;
-import com.jcrawleydev.gemsdrop.gem.GemColor;
+import com.jcrawleydev.gemsdrop.service.game.gem.GemColor;
 import com.jcrawleydev.gemsdrop.gemgrid.GemGrid;
 
 import java.util.ArrayList;

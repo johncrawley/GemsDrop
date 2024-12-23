@@ -3,9 +3,11 @@ package com.jcrawleydev.gemsdrop.service.game.grid;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.jcrawleydev.gemsdrop.gem.Gem;
-import com.jcrawleydev.gemsdrop.gem.GemGroupPosition;
+
+import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems;
+import com.jcrawleydev.gemsdrop.service.game.gem.GemGroupPosition;
 import com.jcrawleydev.gemsdrop.service.game.GridProps;
+import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -79,32 +81,43 @@ public class GemGridImpl implements GemGrid {
     }
 
 
-    public List<Gem> addGems(List<Gem> gems, boolean isOrientationVertical) {
+    public List<Gem> addGems(DroppingGems droppingGems) {
+        boolean isOrientationVertical = droppingGems.isOrientationVertical();
         log("Entered addGems() isOrientationVertical? : " + isOrientationVertical);
-       return isOrientationVertical? addAllVerticalGems(gems) : addHorizontalGems(gems);
+        return isOrientationVertical? addAllVerticalGems(droppingGems) : addHorizontalGems(droppingGems);
     }
 
 
-    private List<Gem> addAllVerticalGems(List<Gem> gems){
-        Gem topGem = null, centreGem = null, bottomGem = null;
-        for(Gem gem: gems) {
-            switch (gem.getGemGroupPosition()) {
-                case TOP -> topGem = gem;
-                case BOTTOM -> bottomGem = gem;
-                case CENTRE -> centreGem = gem;
-            }
-        }
+    private List<Gem> addAllVerticalGems(DroppingGems droppingGems){
+        Gem topGem = droppingGems.getTopGem();
+        Gem centreGem = droppingGems.getCentreGem();
+        Gem bottomGem = droppingGems.getBottomGem();
+
         if(isTouchingAColumn(bottomGem, false)){
             addGem(bottomGem);
             addGem(centreGem);
             addGem(topGem);
             return Collections.emptyList();
         }
-        return gems;
+        return List.of(topGem, centreGem, bottomGem );
     }
 
 
     private List<Gem> addHorizontalGems(List<Gem> gems){
+        log("entering addHorizontalGems, gems size: " + gems.size());
+        var gemsCopy = new ArrayList<>(gems);
+        for(Gem gem : gems){
+            if(isTouchingAColumn(gem, true)){
+                addGem(gem);
+                gemsCopy.remove(gem);
+            }
+        }
+        return gemsCopy;
+    }
+
+
+    private List<Gem> addHorizontalGems(DroppingGems droppingGems){
+        List<Gem> gems = droppingGems.get();
         log("entering addHorizontalGems, gems size: " + gems.size());
         var gemsCopy = new ArrayList<>(gems);
         for(Gem gem : gems){
@@ -122,20 +135,22 @@ public class GemGridImpl implements GemGrid {
             return false;
         }
         int gemColumn = gem.getColumn();
-        log("isTouchingAColumn() gemColumn " + gemColumn + " size: " + gemColumns.get(gemColumn).size() + " heightOfDroppingGem: " + getColumnHeightOfDropping(gem, isHorizontal) + " gem bottom depth: " + gem.getBottomDepth());
+        log("isTouchingAColumn() gemColumn " + gemColumn + " size: " + gemColumns.get(gemColumn).size() + " heightOfDroppingGem: " + getColumnHeightOfDropping(gem, isHorizontal) + " gem container position: " + gem.getContainerPosition());
         return gemColumns.get(gemColumn).size() >= getColumnHeightOfDropping(gem, isHorizontal);
     }
 
 
     private int getColumnHeightOfDropping(Gem gem, boolean isHorizontal){
-        int bottomDepth = gem.getBottomDepth() + (isHorizontal ? 0 : 2);
+        int bottomDepth = gem.getContainerPosition() + (isHorizontal ? 0 : 2);
         int alignedPosition = bottomDepth + (bottomDepth % 2 == 1 ? 1 : 0);
         return (MAX_POSITION - alignedPosition) /2;
     }
 
 
     private void addGem(@Nullable Gem gem){
-        gemColumns.get(gem.getColumn()).add(gem);
+        if(gem != null){
+            gemColumns.get(gem.getColumn()).add(gem);
+        }
     }
 
 
