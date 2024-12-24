@@ -18,6 +18,11 @@ public class RotationChecker {
 
 
     public boolean canRotate(DroppingGems droppingGems){
+        if(!droppingGems.isOrientationVertical()){
+            if(droppingGems.getCentreGem().getContainerPosition() < 2){
+                return false;
+            }
+        }
         if(droppingGems.isOrientationVertical()){
             return !isAtBoundary(droppingGems) && !areDroppingGemsObstructedByColumns(droppingGems);
         }

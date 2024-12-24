@@ -28,7 +28,6 @@ public class Gem {
     }
 
 
-
     public GemGroupPosition getGemGroupPosition(){
         return gemGroupPosition;
     }

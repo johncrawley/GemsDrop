@@ -22,6 +22,11 @@ public class MovementChecker {
     }
 
 
+    public boolean canMoveDown(DroppingGems droppingGems){
+       return droppingGems.getBottomGem().getContainerPosition() > 0;
+    }
+
+
 
     public boolean canMoveRight(DroppingGems droppingGems){
         int nextColumnIndex = droppingGems.getRightmostColumn() + 1;

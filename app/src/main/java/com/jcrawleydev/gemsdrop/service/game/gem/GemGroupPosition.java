@@ -5,10 +5,10 @@ package com.jcrawleydev.gemsdrop.service.game.gem;
  */
 
 public enum GemGroupPosition {
-    TOP(0,-2,1, -1),
-    RIGHT(1, 0, 1, 1),
-    BOTTOM(0,2, -1, 1),
-    LEFT(-1, 0, -1, -1),
+    TOP(0,-2,1, 2),
+    RIGHT(1, 0, 1, -2),
+    BOTTOM(0,2, -1, -2),
+    LEFT(-1, 0, -1, 2),
     CENTRE(0,0, 0, 0);
 
     private final int columnOffset, depthOffset, clockwiseColumnOffset, clockwiseContainerPositionOffset;

@@ -349,10 +349,9 @@ public class GameFragment extends Fragment {
 
 
     private int getYForPosition(int position){
-        int y = containerBottomY - (position * (int)(gemWidth / 2f)) - (int)gemWidth;
-        log("getYForPosition() : position: " + position + " y: " + y + " containerBottomY: " + containerBottomY);
-        return containerBottomY - (position * (int)(gemWidth / 2f)) - (int)gemWidth;
-        //return (position * (int)(gemWidth / 2f)) - (int) gemWidth;
+        return gemContainer.getMeasuredHeight()
+                - (int)gemWidth
+                - (position * (int)(gemWidth / 2f));
     }
 
 

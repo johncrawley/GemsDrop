@@ -13,6 +13,7 @@ import com.jcrawleydev.gemsdrop.service.game.GridProps;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.OptionalInt;
 import java.util.Random;
 
@@ -24,7 +25,7 @@ public class DroppingGems {
     private final Random random;
     private Gem bottomGem, centreGem, topGem;
     enum Orientation { NORTH, EAST, SOUTH, WEST }
-    private Orientation orientation = Orientation.NORTH;
+    private Orientation orientation = NORTH;
     private final List<GemColor> gemColors = List.of(GemColor.RED, GemColor.BLUE, GemColor.PURPLE, GemColor.GREEN, GemColor.YELLOW);
 
 
@@ -40,6 +41,7 @@ public class DroppingGems {
         for(Gem gem: gems){
             rotateGem(gem);
         }
+        printGemDetails();
     }
 
 
@@ -93,6 +95,7 @@ public class DroppingGems {
     public void moveLeft(){
         if(getLeftmostColumn() > 0){
             gems.forEach(Gem::moveLeft);
+            printGemDetails();
         }
     }
 
@@ -100,17 +103,20 @@ public class DroppingGems {
     public void moveRight(){
         if(getRightmostColumn() < gridProps.numberOfColumns() -1){
             gems.forEach(Gem::moveRight);
+            printGemDetails();
         }
     }
 
 
     public void moveUp(){
         gems.forEach(Gem::moveUp);
+        printGemDetails();
     }
 
 
     public void moveDown(){
         gems.forEach(Gem::moveDown);
+        printGemDetails();
     }
 
 
@@ -166,11 +172,14 @@ public class DroppingGems {
         createGems();
     }
 
+    private Map<String, Gem> originalGems;
 
     private void createGems(){
         topGem = createGem(TOP, 3);
         centreGem = createGem(CENTRE, 2);
         bottomGem = createGem(BOTTOM, 1);
+
+        originalGems = Map.of("originalTopGem", topGem, "originalCentreGem", centreGem, "originalBottomGem", bottomGem);
 
         gems.add(topGem);
         gems.add(centreGem);
@@ -178,6 +187,17 @@ public class DroppingGems {
         gems.forEach(g -> g.setColumn(gridProps.numberOfColumns()/2));
         log("createGems() gems created about to log initial gem positions: ");
         log("exiting createGems()");
+    }
+
+
+    private void printGemDetails(){
+        log("************** gem details ****************");
+        for(String gemName: originalGems.keySet()){
+            Gem gem = originalGems.get(gemName);
+            if(gem == null) continue;
+            log("-->: " + gemName + " color: " + gem.getColor().toString() + " column: " + gem.getColumn() + " containerPosition: " + gem.getContainerPosition());
+        }
+        log("*******************************************");
     }
 
 
