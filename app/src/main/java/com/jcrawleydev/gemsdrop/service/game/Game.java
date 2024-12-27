@@ -115,9 +115,11 @@ public class Game {
 
     public void down(){
         log("Entering down()");
-        //dropGems();
-        droppingGems.moveDown();
-        updateGemsOnView();
+        if(movementChecker.canMoveDown(droppingGems)){
+            droppingGems.moveDown();
+            //dropGems();
+            updateGemsOnView();
+        }
         log("Exiting down()!");
     }
 

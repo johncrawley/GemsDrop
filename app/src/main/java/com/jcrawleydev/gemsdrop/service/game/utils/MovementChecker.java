@@ -27,7 +27,6 @@ public class MovementChecker {
     }
 
 
-
     public boolean canMoveRight(DroppingGems droppingGems){
         int nextColumnIndex = droppingGems.getRightmostColumn() + 1;
         log("canMoveRight() nextColumnIndex: " + nextColumnIndex);
