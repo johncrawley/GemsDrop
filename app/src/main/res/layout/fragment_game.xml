@@ -10,20 +10,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:padding="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@drawable/background_1"
     android:gravity="center"
-    android:tileMode="mirror"
-    >
+    android:tileMode="mirror">
 
-    <FrameLayout
-        android:id="@+id/gemContainer"
-        android:background="@color/colorPrimaryDark"
-        android:layout_width="100dp"
-        android:layout_height="300dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="2dp"
         android:layout_margin="20dp"
-        android:foregroundGravity="center" />
+        android:background="@color/colorAccent"
+        android:id="@+id/container_border">
 
+        <FrameLayout
+            android:id="@+id/gemContainer"
+            android:background="@color/colorPrimaryDark"
+            android:layout_width="100dp"
+            android:layout_height="300dp"
+            android:foregroundGravity="center" />
+    </LinearLayout>
 
     <LinearLayout
         android:background="@color/colorPrimaryDark"
