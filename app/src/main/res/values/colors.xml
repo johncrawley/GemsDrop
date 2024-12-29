@@ -10,4 +10,6 @@
     <color name="game_over_text">#BF360C</color>
 
     <color name="main_menu_background">#2E2626</color>
+    <color name="grid_border_color">#524D4D</color>
+
 </resources>

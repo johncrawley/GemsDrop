@@ -19,9 +19,11 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="2dp"
+        android:paddingTop="0dp"
+        android:paddingHorizontal="2dp"
+        android:paddingBottom="2dp"
         android:layout_margin="20dp"
-        android:background="@color/colorAccent"
+        android:background="?attr/gridBorderColor"
         android:id="@+id/container_border">
 
         <FrameLayout
