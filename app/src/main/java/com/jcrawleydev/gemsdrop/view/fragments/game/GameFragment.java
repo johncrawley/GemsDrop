@@ -79,7 +79,7 @@ public class GameFragment extends Fragment {
     }
 
 
-    private void assignGemContainerDimensions(View parent, FrameLayout container){
+    private void assignGemContainerDimensionsOLD(View parent, FrameLayout container){
         if(container != null){
 
             int parentWidth = parent.getMeasuredWidth();
@@ -104,47 +104,38 @@ public class GameFragment extends Fragment {
             containerBottomY = (int)container.getY() + containerHeight;
         }
     }
-    private void assignGemContainerDimensionsAlt(View parent, FrameLayout container){
+
+
+    private void assignGemContainerDimensions(View parent, FrameLayout container){
         if(container != null){
-
-            int parentWidth = parent.getMeasuredWidth();
-            int parentHeight = parent.getMeasuredHeight();
-
             int otherViewsHeight = 800;
-
             int remainingAvailableHeight = parent.getMeasuredHeight() - otherViewsHeight;
-
             int maxWidth = parent.getMeasuredWidth() - 50;
             int numberOfRows = 16;
+            int adjustmentCount = 0;
 
             containerWidth = maxWidth;
             containerHeight = Integer.MAX_VALUE;
+            log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^ assignGemContainerDimensions ^^^^^^^^^^^^^^^^^^^");
             while(containerHeight > remainingAvailableHeight){
+                adjustmentCount++;
                 containerWidth -= 10;
                 gemWidth = containerWidth / 7f;
                 containerHeight = (int)(gemWidth * numberOfRows);
+               // log(" ----> "  + adjustmentCount + " <-----  current container dimensions: " + containerWidth + "," + containerHeight, " available height: ");
+
             }
+            log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^");
 
-            int marginWidth = parentWidth / 12;
-
-            containerWidth = parentWidth - marginWidth;
-            containerHeight = containerWidth * 2;
-            int marginHeight = containerHeight / 16;
-            int adjustedContainerHeight = containerHeight - marginHeight;
-
-
-            int adjustedWith = containerWidth - 100;
-            // var layoutParams;// = new FrameLayout.LayoutParams(containerWidth, adjustedContainerHeight);
-            containerWidth = 400;
-            containerHeight = (int)(containerWidth * 2.4f);
             var layoutParams = new LinearLayout.LayoutParams(containerWidth, containerHeight);
             container.setLayoutParams(layoutParams);
             smallestContainerDimension = Math.min(containerWidth, containerHeight);
-            log("assignContainerDimensions() containerWidth, height: " + containerWidth + "," + containerHeight);
+            log("assignContainerDimensions() containerWidth, height: " + containerWidth + "," + containerHeight + " ---- adjustment count: " + adjustmentCount);
             assignGemWidth(containerWidth);
             containerBottomY = (int)container.getY() + containerHeight;
         }
     }
+
 
     private void assignGemWidth( int gemContainerWidth){
         gemWidth = gemContainerWidth / 7f;
