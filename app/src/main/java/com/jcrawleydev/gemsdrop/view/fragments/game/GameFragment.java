@@ -39,18 +39,15 @@ public class GameFragment extends Fragment {
 
     private ImageMap imageMap;
     private Map<Long, ImageView> itemsMap;
-    private int containerWidth, containerHeight, smallestContainerDimension;
+    private int containerWidth;
+    private int containerHeight;
     private ViewGroup gemContainer;
     private float gemWidth = 10f;
     private int fragmentWidth, fragmentHeight;
-    private final int GEM_COLUMNS = 7;
-    private final int GEM_ROWS = GEM_COLUMNS * 2;
-    private int containerBottomY = 500;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //assignContainerDimensions(container);
         View parentView = inflater.inflate(R.layout.fragment_game, container, false);
         itemsMap = new ConcurrentHashMap<>();
         imageMap = new ImageMap();
@@ -58,6 +55,7 @@ public class GameFragment extends Fragment {
         setupViews(parentView);
         setupListeners();
         startGame();
+        setupCreateAndDestroyButtons(parentView);
         return parentView;
     }
 
@@ -79,60 +77,22 @@ public class GameFragment extends Fragment {
     }
 
 
-    private void assignGemContainerDimensionsOLD(View parent, FrameLayout container){
-        if(container != null){
-
-            int parentWidth = parent.getMeasuredWidth();
-
-            int marginWidth = parentWidth / 12;
-
-            containerWidth = parentWidth - marginWidth;
-            containerHeight = containerWidth * 2;
-            int marginHeight = containerHeight / 16;
-            int adjustedContainerHeight = containerHeight - marginHeight;
-
-
-            int adjustedWith = containerWidth - 100;
-            // var layoutParams;// = new FrameLayout.LayoutParams(containerWidth, adjustedContainerHeight);
-            containerWidth = 400;
-            containerHeight = (int)(containerWidth * 2.4f);
-            var layoutParams = new LinearLayout.LayoutParams(containerWidth, containerHeight);
-            container.setLayoutParams(layoutParams);
-            smallestContainerDimension = Math.min(containerWidth, containerHeight);
-            log("assignContainerDimensions() containerWidth, height: " + containerWidth + "," + containerHeight);
-            assignGemWidth(containerWidth);
-            containerBottomY = (int)container.getY() + containerHeight;
-        }
-    }
-
-
     private void assignGemContainerDimensions(View parent, FrameLayout container){
         if(container != null){
-            int otherViewsHeight = 800;
+            int otherViewsHeight = 350;
             int remainingAvailableHeight = parent.getMeasuredHeight() - otherViewsHeight;
             int maxWidth = parent.getMeasuredWidth() - 50;
             int numberOfRows = 16;
-            int adjustmentCount = 0;
-
             containerWidth = maxWidth;
             containerHeight = Integer.MAX_VALUE;
-            log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^ assignGemContainerDimensions ^^^^^^^^^^^^^^^^^^^");
             while(containerHeight > remainingAvailableHeight){
-                adjustmentCount++;
                 containerWidth -= 10;
                 gemWidth = containerWidth / 7f;
                 containerHeight = (int)(gemWidth * numberOfRows);
-               // log(" ----> "  + adjustmentCount + " <-----  current container dimensions: " + containerWidth + "," + containerHeight, " available height: ");
-
             }
-            log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^");
-
             var layoutParams = new LinearLayout.LayoutParams(containerWidth, containerHeight);
             container.setLayoutParams(layoutParams);
-            smallestContainerDimension = Math.min(containerWidth, containerHeight);
-            log("assignContainerDimensions() containerWidth, height: " + containerWidth + "," + containerHeight + " ---- adjustment count: " + adjustmentCount);
             assignGemWidth(containerWidth);
-            containerBottomY = (int)container.getY() + containerHeight;
         }
     }
 
@@ -300,6 +260,34 @@ public class GameFragment extends Fragment {
         }
     }
 
+    private boolean haveGemsDisappeared = false;
+
+    private void animateGems(){
+
+        if(haveGemsDisappeared){
+            for(ImageView gem : itemsMap.values()){
+                animateAppearanceOf(gem);
+            }
+        }
+        else{
+            for(ImageView gem : itemsMap.values()){
+                animateRemovalOf(gem, -1);
+            }
+        }
+        haveGemsDisappeared = !haveGemsDisappeared;
+    }
+
+
+    private void animateAppearanceOf(ImageView gemView) {
+        Animation animation = new ScaleAnimation(
+                1f, 1f,
+                1f, 1f,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
+        animation.setFillAfter(true); // Needed to keep the result of the animation
+        animation.setDuration(800);
+        gemView.startAnimation(animation);
+    }
 
     private void animateRemovalOf(ImageView gemView, long gemId){
         Animation animation = new ScaleAnimation(
@@ -311,14 +299,14 @@ public class GameFragment extends Fragment {
         animation.setDuration(800);
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override public void onAnimationStart(Animation animation) {}
+            @Override public void onAnimationRepeat(Animation animation) {}
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                itemsMap.remove(gemId);
-                gemContainer.removeView(gemView);
+               // itemsMap.remove(gemId);
+               // gemContainer.removeView(gemView);
             }
 
-            @Override public void onAnimationRepeat(Animation animation) {}
         });
 
         gemView.startAnimation(animation);
@@ -400,6 +388,9 @@ public class GameFragment extends Fragment {
         createButton.setOnClickListener(v -> createGems());
         Button destroyButton = parentView.findViewById(R.id.destroy);
         destroyButton.setOnClickListener(v -> destroyGems());
+        Button animateButton = parentView.findViewById(R.id.animate);
+        animateButton.setOnClickListener(v -> animateGems());
+
     }
 
 
