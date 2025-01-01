@@ -1,18 +1,18 @@
 package com.jcrawleydev.gemsdrop.view.fragments.game;
 
+import static com.jcrawleydev.gemsdrop.view.fragments.game.GemAnimator.animateAppearanceOf;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.setListener;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -38,7 +38,7 @@ import java.util.function.Consumer;
 public class GameFragment extends Fragment {
 
     private ImageMap imageMap;
-    private Map<Long, ImageView> itemsMap;
+    private Map<Long, ViewGroup> itemsMap;
     private int containerWidth;
     private int containerHeight;
     private ViewGroup gemContainer;
@@ -253,63 +253,37 @@ public class GameFragment extends Fragment {
             return;
         }
         for(long gemId : gemIds){
-            ImageView gemView = itemsMap.get(gemId);
-            if(gemView != null){
-                animateRemovalOf(gemView, gemId);
+            ViewGroup gemLayout= itemsMap.get(gemId);
+            if(gemLayout != null){
+                GemAnimator.animateRemovalOf(gemLayout, this::cleanupGem);
             }
         }
     }
 
-    private boolean haveGemsDisappeared = false;
 
     private void animateGems(){
-
-        if(haveGemsDisappeared){
-            for(ImageView gem : itemsMap.values()){
-                animateAppearanceOf(gem);
+        if(itemsMap.isEmpty()){
+            return;
+        }
+        ViewGroup first = itemsMap.values().stream().findFirst().get();
+        if(first.getVisibility() != View.VISIBLE){
+            for(ViewGroup gemLayout: itemsMap.values()){
+                animateAppearanceOf(gemLayout);
             }
         }
         else{
-            for(ImageView gem : itemsMap.values()){
-                animateRemovalOf(gem, -1);
+            for(ViewGroup gemLayout : itemsMap.values()){
+                GemAnimator.animateRemovalOf(gemLayout, this::cleanupGem);
             }
         }
-        haveGemsDisappeared = !haveGemsDisappeared;
     }
 
 
-    private void animateAppearanceOf(ImageView gemView) {
-        Animation animation = new ScaleAnimation(
-                1f, 1f,
-                1f, 1f,
-                Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f);
-        animation.setFillAfter(true); // Needed to keep the result of the animation
-        animation.setDuration(800);
-        gemView.startAnimation(animation);
-    }
-
-    private void animateRemovalOf(ImageView gemView, long gemId){
-        Animation animation = new ScaleAnimation(
-                1f, 0f,
-                1f, 0f,
-                Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f);
-        animation.setFillAfter(true); // Needed to keep the result of the animation
-        animation.setDuration(800);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override public void onAnimationStart(Animation animation) {}
-            @Override public void onAnimationRepeat(Animation animation) {}
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-               // itemsMap.remove(gemId);
-               // gemContainer.removeView(gemView);
-            }
-
-        });
-
-        gemView.startAnimation(animation);
+    private void cleanupGem(ViewGroup gemLayout){
+        long id = (long)gemLayout.getTag();
+        gemLayout.setVisibility(View.GONE);
+        //gemContainer.removeView(gemLayout);
+      //  itemsMap.remove(id);
     }
 
 
@@ -319,23 +293,33 @@ public class GameFragment extends Fragment {
         long id = bundle.getLong(BundleTag.GEM_ID.toString(), -1L);
         int colorId = bundle.getInt(BundleTag.GEM_COLOR.toString(),0 );
 
-        ImageView gemView = itemsMap.computeIfAbsent(id, k -> createAndAddGemView(id, position, column, colorId));
+        var gemView = itemsMap.computeIfAbsent(id, k -> createAndAddGemLayout(id, position, column, colorId));
         updateGemCoordinates(gemView, position, column);
     }
 
 
-    private ImageView createAndAddGemView(long id, int position, int column, int colorId){
+    private ViewGroup createAndAddGemLayout(long id, int position, int column, int colorId){
         log("entered createAndAddGemView()");
+        LinearLayout gemLayout = new LinearLayout(getContext());
+        gemLayout.setTag(id);
         ImageView imageView = new ImageView(getContext());
         log("createAndAddGemView() colorId: " + colorId);
         setGemDrawable(imageView, colorId);
-        updateGemCoordinates(imageView, position, column);
+        updateGemCoordinates(gemLayout, position, column);
         setGemViewDimensions(imageView, false);
-        gemContainer.addView(imageView);
-        //itemsMap.put(id, imageView);
-        return imageView;
+        gemLayout.addView(imageView);
+        setLayoutParamsOn(gemLayout);
+        gemContainer.addView(gemLayout);
+        return gemLayout;
     }
 
+
+    private void setLayoutParamsOn(ViewGroup gemLayout){
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.weight = 1.0f;
+        params.gravity = Gravity.TOP;
+        gemLayout.setLayoutParams(params);
+    }
 
     private void setGemViewDimensions(View gemView){
         log("entered setGemViewDimensions");
@@ -356,10 +340,10 @@ public class GameFragment extends Fragment {
     }
 
 
-    private void updateGemCoordinates(ImageView gem, int position, int column){
+    private void updateGemCoordinates(ViewGroup gemLayout, int position, int column){
        // log("Entered updateGemCoordinates() position: " + position + " , column: " + column);
-        gem.setX(getXForColumn(column));
-        gem.setY(getYForPosition(position));
+        gemLayout.setX(getXForColumn(column));
+        gemLayout.setY(getYForPosition(position));
         log("updateGemCoordinates() position: " + position + " column: " + column);
     }
 
