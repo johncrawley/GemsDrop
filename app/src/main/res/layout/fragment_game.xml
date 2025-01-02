@@ -7,40 +7,26 @@
     android:tileMode="mirror"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:padding="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@drawable/background_1"
+
     android:gravity="center"
+    android:weightSum="1"
     android:tileMode="mirror">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="0dp"
-        android:paddingHorizontal="2dp"
-        android:paddingBottom="2dp"
-        android:layout_margin="20dp"
-        android:background="?attr/gridBorderColor"
-        android:id="@+id/container_border">
-
-        <FrameLayout
-            android:id="@+id/gemContainer"
-            android:background="@color/colorPrimaryDark"
-            android:layout_width="100dp"
-            android:layout_height="300dp"
-            android:foregroundGravity="center" />
-    </LinearLayout>
 
     <LinearLayout
         android:background="@color/colorPrimaryDark"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="horizontal"
         android:id="@+id/statsLayout"
-
+        android:layout_weight=".1"
         android:padding="12dp">
 
         <TextView
@@ -83,6 +69,34 @@
             android:id="@+id/animate"/>
 
     </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/game_pane"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="top|center"
+        android:layout_weight=".9">
+
+        <LinearLayout
+            android:id="@+id/container_border"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="0dp"
+            android:paddingHorizontal="2dp"
+            android:paddingBottom="2dp"
+            android:background="?attr/gridBorderColor"
+            >
+
+            <FrameLayout
+                android:id="@+id/gemContainer"
+                android:background="@color/colorPrimaryDark"
+                android:layout_width="100dp"
+                android:layout_height="300dp"
+                android:foregroundGravity="center" />
+        </LinearLayout>
+    </LinearLayout>
+
 
 
 </LinearLayout>

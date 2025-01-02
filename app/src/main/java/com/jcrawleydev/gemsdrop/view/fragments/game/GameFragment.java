@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -41,9 +40,9 @@ public class GameFragment extends Fragment {
     private Map<Long, ViewGroup> itemsMap;
     private int containerWidth;
     private int containerHeight;
-    private ViewGroup gemContainer;
+    private ViewGroup gemContainer, gamePane;
     private float gemWidth = 10f;
-    private int fragmentWidth, fragmentHeight;
+    private GameInputHandler gameInputHandler;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -51,7 +50,10 @@ public class GameFragment extends Fragment {
         View parentView = inflater.inflate(R.layout.fragment_game, container, false);
         itemsMap = new ConcurrentHashMap<>();
         imageMap = new ImageMap();
-        getFragmentDimensions(parentView);
+        gemContainer = parentView.findViewById(R.id.gemContainer);
+        gamePane = parentView.findViewById(R.id.game_pane);
+        gameInputHandler = new GameInputHandler(this);
+        assignLayoutDimensions();
         setupViews(parentView);
         setupListeners();
         startGame();
@@ -60,50 +62,63 @@ public class GameFragment extends Fragment {
     }
 
 
-    private void getFragmentDimensions(View view){
+    private void assignLayoutDimensions(){
         ViewTreeObserver.OnGlobalLayoutListener listener = new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                fragmentWidth = view.getMeasuredWidth();
-                fragmentHeight = view.getMeasuredHeight();
-                log("fragment dimensions: " + fragmentWidth + "," + fragmentHeight);
-                FrameLayout container = view.findViewById(R.id.gemContainer);
-                assignGemContainerDimensions(view, container);
+                assignGemContainerDimensions();
+                assignWidthToExistingGems();
+               // setupPositionMarkers();
+               // setupTestLayouts();
                 log("gemContainerWidth, containerHeight: " + containerWidth + "," + containerHeight );
-                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                gamePane.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         };
-        view.getViewTreeObserver().addOnGlobalLayoutListener(listener);
+        gamePane.getViewTreeObserver().addOnGlobalLayoutListener(listener);
     }
 
 
-    private void assignGemContainerDimensions(View parent, FrameLayout container){
-        if(container != null){
-            int otherViewsHeight = 350;
-            int remainingAvailableHeight = parent.getMeasuredHeight() - otherViewsHeight;
-            int maxWidth = parent.getMeasuredWidth() - 50;
-            int numberOfRows = 16;
-            containerWidth = maxWidth;
-            containerHeight = Integer.MAX_VALUE;
-            while(containerHeight > remainingAvailableHeight){
-                containerWidth -= 10;
-                gemWidth = containerWidth / 7f;
-                containerHeight = (int)(gemWidth * numberOfRows);
-            }
-            var layoutParams = new LinearLayout.LayoutParams(containerWidth, containerHeight);
-            container.setLayoutParams(layoutParams);
-            assignGemWidth(containerWidth);
+    private void assignGemContainerDimensions(){
+        if(gemContainer == null) {
+            log("assignGemContainerDimensions() gemContainer is null, returning");
+            return;
         }
+        reduceGemContainerHeightAndWidth();
+        assignGemContainerLayoutParams();
     }
 
 
-    private void assignGemWidth( int gemContainerWidth){
-        gemWidth = gemContainerWidth / 7f;
+    private void reduceGemContainerHeightAndWidth(){
+        int availableHeight = gamePane.getMeasuredHeight();
+        int minimumBorder = 50;
+        containerWidth = gamePane.getMeasuredWidth() - minimumBorder;
+        containerHeight = Integer.MAX_VALUE;
+        int numberOfRows = 16;
+        int containerAdjustmentCount = 0;
+        while(containerHeight > (availableHeight - minimumBorder)){
+            containerAdjustmentCount++;
+            containerWidth -= 2;
+            gemWidth = containerWidth / 7f;
+            containerHeight = (int)(gemWidth * numberOfRows);
+            log("containerHeight adjustment, is now: " + containerHeight);
+        }
+        log("Exiting reduceGemContainerHeightAndWidth() container height: " + containerHeight + " game pane height: " + gamePane.getMeasuredHeight());
+        log("Exiting reduceGemContainerHeightAndWidth() adjustments made: " + containerAdjustmentCount);
+    }
 
+
+    private void assignGemContainerLayoutParams(){
+        var params = new LinearLayout.LayoutParams(containerWidth, containerHeight);
+        gemContainer.setLayoutParams(params);
+    }
+
+
+    private void assignWidthToExistingGems(){
         for(View gemView : itemsMap.values()){
             setGemViewDimensions(gemView);
         }
     }
+
 
     private void startGame(){
         MainActivity mainActivity = (MainActivity) getActivity();
@@ -120,99 +135,30 @@ public class GameFragment extends Fragment {
 
     @SuppressLint("ClickableViewAccessibility")
     private void setupViews(View parentView){
-        gemContainer = parentView.findViewById(R.id.gemContainer);
-        gemContainer.setOnTouchListener((view, motionEvent) -> {
+        ViewGroup gamePane = parentView.findViewById(R.id.game_pane);
+        gamePane.setOnTouchListener((view, motionEvent) -> {
             if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
-                handleInput(motionEvent.getX(), motionEvent.getY());
+                gameInputHandler.handleInput(motionEvent.getX(), motionEvent.getY(), gamePane);
             }
             return false;
         });
-        setupPositionMarkers(gemContainer);
     }
 
 
-    private void setupPositionMarkers(ViewGroup container){
-        for(int i = 30; i >0; i--){
+    private void setupPositionMarkers(){
+        for(int i = 0; i < 30; i++){
             TextView textView = new TextView(getContext());
-            container.addView(textView);
+            gemContainer.addView(textView);
             String positionMarker = String.valueOf(i);
+            int textX = 20;
+            int textY = getYForPosition(i);
             textView.setText(positionMarker);
-            textView.setY(getYForPosition(i));
-            textView.setX(20);
+            textView.setX(textX);
+            textView.setY(textY);
+
             textView.setTextSize(20);
             textView.setTextColor(Color.RED);
         }
-    }
-
-
-    private void handleInput(float x, float y){
-
-        log("handleInput(" + (int)x + "," +  (int)y + ")" + " gemContainer AbsoluteY: "+ gemContainer.getY() + " height: " + gemContainer.getMeasuredHeight());
-        int height = gemContainer.getMeasuredHeight();
-        int width = gemContainer.getMeasuredWidth();
-        if( y < height/4f){
-            log("handleInput() move up!");
-            moveUp();
-            return;
-        }
-        if( y > (height / 3f) * 2){
-            log("handleInput() move down!");
-            moveDown();
-            return;
-        }
-        if(x < width / 3f){
-            log("handleInput() move left!");
-            moveLeft();
-            return;
-        }
-        if(x < width / 1.5f ){
-            log("handleInput() rotate!");
-            rotateGems();
-            return;
-        }
-        log("handleInput() move right!!");
-       moveRight();
-    }
-
-
-    private void moveLeft(){
-        runOnService(GameService::moveLeft);
-    }
-
-
-    private void moveRight(){
-        runOnService(GameService::moveRight);
-    }
-
-
-    private void moveUp(){
-        runOnService(GameService::moveUp);
-    }
-
-
-    private void moveDown(){
-        runOnService(GameService::moveDown);
-    }
-
-
-    private void createGems(){
-        runOnService(GameService::createGems);
-    }
-
-
-    private void destroyGems(){
-        runOnService(GameService::destroyGems);
-    }
-
-
-    private void runOnService(Consumer<GameService> consumer){
-        getService().ifPresent(consumer);
-    }
-
-
-    private void rotateGems(){
-        log("Entered rotateGems()");
-        getService().ifPresent(GameService::rotateGems);
     }
 
 
@@ -221,7 +167,7 @@ public class GameFragment extends Fragment {
     }
 
 
-    private Optional<GameService> getService(){
+    public Optional<GameService> getService(){
         MainActivity mainActivity = (MainActivity) getActivity();
         if(mainActivity != null) {
             return mainActivity.getGameService();
@@ -306,7 +252,7 @@ public class GameFragment extends Fragment {
         log("createAndAddGemView() colorId: " + colorId);
         setGemDrawable(imageView, colorId);
         updateGemCoordinates(gemLayout, position, column);
-        setGemViewDimensions(imageView, false);
+        setGemViewDimensions(imageView);
         gemLayout.addView(imageView);
         setLayoutParamsOn(gemLayout);
         gemContainer.addView(gemLayout);
@@ -321,14 +267,8 @@ public class GameFragment extends Fragment {
         gemLayout.setLayoutParams(params);
     }
 
-    private void setGemViewDimensions(View gemView){
-        log("entered setGemViewDimensions");
-        var layoutParams = new LinearLayout.LayoutParams((int)gemWidth, (int)gemWidth);
-        gemView.setLayoutParams(layoutParams);
-    }
 
-    private void setGemViewDimensions(View gemView, boolean x){
-        log("entered setGemViewDimensions for createAndAddGemView()");
+    private void setGemViewDimensions(View gemView){
         var layoutParams = new LinearLayout.LayoutParams((int)gemWidth, (int)gemWidth);
         gemView.setLayoutParams(layoutParams);
     }
@@ -349,9 +289,68 @@ public class GameFragment extends Fragment {
 
 
     private int getYForPosition(int position){
-        return gemContainer.getMeasuredHeight()
-                - (int)gemWidth
-                - (position * (int)(gemWidth / 2f));
+        /*
+        log("getYForPosition(" + position + ") gemContainer measuredHeight: "
+                + gemContainer.getMeasuredHeight()
+                + " gem container y: " + gemContainer.getY()
+                + " ; gem container height: " + containerHeight
+                + " gem width: " + gemWidth ); */
+        float containerBottom = gemContainer.getY() + containerHeight;
+        int retVal = (int)containerBottom
+                - ((int)gemWidth + (position * (int)(gemWidth / 2f)));
+       // log("getYForPosition(" + position + ") returnValue: " + retVal);
+        return retVal;
+    }
+
+
+    private void setupTestLayout(int color, int x, int y){
+        LinearLayout view = new LinearLayout(getContext());
+        view.setBackgroundColor(color);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)gemWidth, (int)gemWidth);
+        view.setLayoutParams(params);
+        gemContainer.addView(view);
+        view.setX(x);
+        view.setY(y);
+
+    }
+
+
+    private void setupTestHalfwayLayout(int color, int x, int y){
+        LinearLayout view = new LinearLayout(getContext());
+        view.setBackgroundColor(color);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(containerWidth, 2);
+        view.setLayoutParams(params);
+        gemContainer.addView(view);
+        view.setX(x);
+        view.setY(y);
+
+    }
+
+    private void setupLineLayout(int color, int x, int y){
+        LinearLayout view = new LinearLayout(getContext());
+        view.setBackgroundColor(color);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(containerWidth/2, 2);
+        view.setLayoutParams(params);
+        gemContainer.addView(view);
+        view.setX(x);
+        view.setY(y);
+
+    }
+
+    private void setupTestLayouts(){
+        int testWidth = (int)gemWidth;
+        setupTestLayout(Color.RED, 400, 10);
+        setupTestLayout(Color.GREEN, 200, containerHeight - (testWidth));
+        setupTestLayout(Color.YELLOW, 100, 0);
+        setupTestLayout(Color.BLUE, 500, containerHeight - (testWidth + 10));
+        setupTestHalfwayLayout(Color.GREEN, (containerWidth /2), (containerHeight / 2));
+
+        log("setupTestLayouts() containerHeight: " + containerHeight);
+
+        for(int i = 0; i < containerHeight; i = i + (int)gemWidth){
+            log("setupTestLayouts() drawing line at y: " + i);
+            setupLineLayout(Color.MAGENTA, 0, i);
+        }
     }
 
 
@@ -367,6 +366,7 @@ public class GameFragment extends Fragment {
         getActivity().runOnUiThread(runnable);
     }
 
+
     private void setupCreateAndDestroyButtons(View parentView){
         Button createButton = parentView.findViewById(R.id.create);
         createButton.setOnClickListener(v -> createGems());
@@ -377,5 +377,14 @@ public class GameFragment extends Fragment {
 
     }
 
+
+    private void createGems(){
+        getService().ifPresent(GameService::createGems);
+    }
+
+
+    private void destroyGems(){
+        getService().ifPresent(GameService::destroyGems);
+    }
 
 }
