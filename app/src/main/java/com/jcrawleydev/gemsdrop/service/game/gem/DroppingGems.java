@@ -29,6 +29,7 @@ public class DroppingGems {
     private final List<GemColor> gemColors = List.of(GemColor.RED, GemColor.BLUE, GemColor.PURPLE, GemColor.GREEN, GemColor.YELLOW);
 
 
+
     public DroppingGems(GridProps gridProps){
         this.gridProps = gridProps;
         random = new Random(System.currentTimeMillis());
@@ -56,6 +57,16 @@ public class DroppingGems {
             return convertContainerPositionToGridHeight(lowestPoint.getAsInt(), gridProps.numberOfRows());
         }
         return 0;
+    }
+
+
+    public boolean areAnyAddedToGrid(){
+        return bottomGem.isAddedToGrid() || centreGem.isAddedToGrid() || topGem.isAddedToGrid();
+    }
+
+
+    public boolean areAllAddedToGrid(){
+        return bottomGem.isAddedToGrid() && centreGem.isAddedToGrid() && topGem.isAddedToGrid();
     }
 
 
@@ -94,7 +105,7 @@ public class DroppingGems {
 
     public void moveLeft(){
         if(getLeftmostColumn() > 0){
-            gems.forEach(Gem::moveLeft);
+            getFreeGems().forEach(Gem::moveLeft);
             printGemDetails();
         }
     }
@@ -102,20 +113,25 @@ public class DroppingGems {
 
     public void moveRight(){
         if(getRightmostColumn() < gridProps.numberOfColumns() -1){
-            gems.forEach(Gem::moveRight);
+            getFreeGems().forEach(Gem::moveRight);
             printGemDetails();
         }
     }
 
 
+    public List<Gem> getFreeGems(){
+        return gems.stream().filter(gem -> !gem.isAddedToGrid()).toList();
+    }
+
+
     public void moveUp(){
-        gems.forEach(Gem::moveUp);
+        getFreeGems().forEach(Gem::moveUp);
         printGemDetails();
     }
 
 
     public void moveDown(){
-        gems.forEach(Gem::moveDown);
+        getFreeGems().forEach(Gem::moveDown);
         printGemDetails();
     }
 
@@ -213,11 +229,6 @@ public class DroppingGems {
     private void log(String msg){
         System.out.println("^^^ DroppingGems: " + msg);
     }
-
-    public void drop(){
-        gems.forEach(Gem::moveDown);
-    }
-
 
     public void setGems(List<Gem> remainingGems){
         gems.clear();

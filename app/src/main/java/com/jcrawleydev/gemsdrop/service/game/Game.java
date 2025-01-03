@@ -77,7 +77,7 @@ public class Game {
     }
 
 
-    public void rotate(){
+    private void rotate(){
         if(rotationChecker.canRotate(droppingGems)){
             droppingGems.rotate();
             gameView.updateGems(droppingGems.get());
@@ -85,7 +85,7 @@ public class Game {
     }
 
 
-    public void left(){
+    private void left(){
         log("Entering left");
         if(movementChecker.canMoveLeft(droppingGems)){
             droppingGems.moveLeft();
@@ -95,7 +95,7 @@ public class Game {
     }
 
 
-    public void right(){
+    private void right(){
         log("Entering right()");
         if(movementChecker.canMoveRight(droppingGems)){
             droppingGems.moveRight();
@@ -105,7 +105,7 @@ public class Game {
     }
 
 
-    public void up(){
+    private void up(){
         log("Entering up()");
         droppingGems.moveUp();
         updateGemsOnView();
@@ -113,11 +113,17 @@ public class Game {
     }
 
 
-    public void down(){
+    private void down(){
+       dropGems();
+      //  switchToFreeFallMode();
+    }
+
+
+    public void downTEST(){
         log("Entering down()");
         if(movementChecker.canMoveDown(droppingGems)){
             droppingGems.moveDown();
-            //dropGems();
+
             updateGemsOnView();
         }
         log("Exiting down()!");
@@ -135,28 +141,10 @@ public class Game {
     }
 
 
-    public boolean canMoveLeft(){
-
-        return true;
-    }
-
-
     public void create(){
 
         droppingGems.create();
         updateGemsOnView();
-    }
-
-
-    public boolean canMoveRight(){
-        return true;
-    }
-
-
-    private boolean canRotate(){
-        return  !droppingGems.isOrientationVertical()
-                    || (droppingGems.getLeftmostColumn() > 0
-                        || droppingGems.getRightmostColumn() < gridProps.numberOfColumns());
     }
 
 
@@ -195,20 +183,29 @@ public class Game {
         syncMovement(this::dropGems);
     }
 
+    public void downTEST2(){
+        log("Entering down()");
+        if(movementChecker.canMoveDown(droppingGems)){
+            droppingGems.moveDown();
+
+            updateGemsOnView();
+        }
+        log("Exiting down()!");
+    }
+
 
     private void dropGems(){
         log("entered dropGems()");
-        droppingGems.drop();
+        droppingGems.moveDown();
         updateGemsOnView();
-        var remainingGems = gemGrid.addGems(droppingGems);
-        droppingGems.setGems(remainingGems);
-        if(droppingGems.isEmpty()){
-            switchToEvalMode();
+        gemGrid.addConnectingGemsFrom(droppingGems);
+        if(droppingGems.areAllAddedToGrid()){
+            //switchToEvalMode();
+            createGems();
             return;
         }
-        if(droppingGems.haveReducedInNumber()){
-            log("drop() about to free fall");
-            switchToFreeFallMode();
+        if(droppingGems.areAnyAddedToGrid()){
+           // switchToFreeFallMode();
         }
        log("Exiting dropGems()");
     }
@@ -222,7 +219,7 @@ public class Game {
             evaluator.evaluate();
             markedGemIds = evaluator.evalAndDelete();
         }catch (RuntimeException e){
-            e.printStackTrace();
+            printStackTrace(e);
         }
        log("switchToEvalMode() number of markedGemIds: " + markedGemIds.length);
         if(markedGemIds.length == 0){
@@ -234,6 +231,11 @@ public class Game {
         gameView.wipeOut(markedGemIds);
     }
 
+
+    private void printStackTrace(Exception e){
+        log("Exception: " + e.getMessage());
+    }
+
     private void cancelDrop(){
         if(gemDropFuture != null && !gemDropFuture.isCancelled()){
             gemDropFuture.cancel(true);
@@ -241,8 +243,13 @@ public class Game {
     }
 
 
+    /* should be the same for quick drop (when the user presses "down")
+     and when one or two gems are added to the grid
+     */
     private void switchToFreeFallMode(){
-
+        // cancel current drop task
+        // disable user controls
+        // start drop task again, but with faster time
     }
 
 

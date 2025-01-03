@@ -9,6 +9,7 @@ public class Gem {
     private boolean visible;
     private int column;
     private GemGroupPosition gemGroupPosition;
+    private boolean isAddedToGrid;
 
     /*
          container position refers to the position of the bottom of the gem,
@@ -25,6 +26,16 @@ public class Gem {
         this.visible = true;
         this.column = 3;
         this.id = System.nanoTime();
+    }
+
+
+    public void markAsAddedToGrid(){
+        isAddedToGrid = true;
+    }
+
+
+    public boolean isAddedToGrid(){
+        return isAddedToGrid;
     }
 
 

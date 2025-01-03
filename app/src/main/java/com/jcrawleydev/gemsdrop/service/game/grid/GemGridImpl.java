@@ -38,6 +38,21 @@ public class GemGridImpl implements GemGrid {
         }
     }
 
+    public void addConnectingGemsFrom(DroppingGems droppingGems){
+        for(Gem gem: droppingGems.getFreeGems()){
+            addIfConnecting(gem);
+        }
+    }
+
+
+    private void addIfConnecting(Gem gem){
+        var column = gemColumns.get(gem.getColumn());
+        if(gem.getContainerPosition() <= column.size() * 2){
+            column.add(gem);
+            gem.markAsAddedToGrid();
+        }
+    }
+
 
     @Override
     public int getHeightOfColumn(int columnIndex){
@@ -103,19 +118,6 @@ public class GemGridImpl implements GemGrid {
     }
 
 
-    private List<Gem> addHorizontalGems(List<Gem> gems){
-        log("entering addHorizontalGems, gems size: " + gems.size());
-        var gemsCopy = new ArrayList<>(gems);
-        for(Gem gem : gems){
-            if(isTouchingAColumn(gem, true)){
-                addGem(gem);
-                gemsCopy.remove(gem);
-            }
-        }
-        return gemsCopy;
-    }
-
-
     private List<Gem> addHorizontalGems(DroppingGems droppingGems){
         List<Gem> gems = droppingGems.get();
         log("entering addHorizontalGems, gems size: " + gems.size());
@@ -136,7 +138,11 @@ public class GemGridImpl implements GemGrid {
         }
         int gemColumn = gem.getColumn();
         log("isTouchingAColumn() gemColumn " + gemColumn + " size: " + gemColumns.get(gemColumn).size() + " heightOfDroppingGem: " + getColumnHeightOfDropping(gem, isHorizontal) + " gem container position: " + gem.getContainerPosition());
-        return gemColumns.get(gemColumn).size() >= getColumnHeightOfDropping(gem, isHorizontal);
+        if(gem.getContainerPosition() == 0){
+            return true;
+        }
+
+        return (gemColumns.get(gemColumn).size() * 2) >= gem.getContainerPosition();
     }
 
 
