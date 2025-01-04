@@ -38,14 +38,8 @@ public class GemGridImpl implements GemGrid {
         }
     }
 
-    public void addConnectingGemsFrom(DroppingGems droppingGems){
-        for(Gem gem: droppingGems.getFreeGems()){
-            addIfConnecting(gem);
-        }
-    }
 
-
-    private void addIfConnecting(Gem gem){
+    public void addIfConnecting(Gem gem){
         var column = gemColumns.get(gem.getColumn());
         if(gem.getContainerPosition() <= column.size() * 2){
             column.add(gem);

@@ -198,7 +198,7 @@ public class Game {
         log("entered dropGems()");
         droppingGems.moveDown();
         updateGemsOnView();
-        gemGrid.addConnectingGemsFrom(droppingGems);
+        droppingGems.addConnectingGemsTo(gemGrid);
         if(droppingGems.areAllAddedToGrid()){
             //switchToEvalMode();
             createGems();

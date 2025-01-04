@@ -9,4 +9,5 @@ public interface GemGrid {
     int getHeightOfColumn(int columnIndex);
     int getNumberOfColumns();
     List<List<Gem>> getGemColumns();
+    void addIfConnecting(Gem gem);
 }

@@ -10,6 +10,7 @@ import static com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems.Orientation
 import static com.jcrawleydev.gemsdrop.service.game.gem.GemUtils.convertContainerPositionToGridHeight;
 
 import com.jcrawleydev.gemsdrop.service.game.GridProps;
+import com.jcrawleydev.gemsdrop.service.game.grid.GemGrid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,12 @@ public class DroppingGems {
 
     private void rotateGem(Gem gem){
         gem.rotateClockwise();
+    }
+
+    public void addConnectingGemsTo(GemGrid gemGrid){
+        gemGrid.addIfConnecting(bottomGem);
+        gemGrid.addIfConnecting(centreGem);
+        gemGrid.addIfConnecting(topGem);
     }
 
 
