@@ -15,21 +15,6 @@ public class GemUtilsTest {
 
     private GridProps gridProps = new GridProps(14, 7, 2);
 
-    @Test
-    public void canCovertDepthToHeight(){
-        assertDepthConversion(10, 0, 10);
-        assertDepthConversion( 10, 1, 10);
-        assertDepthConversion(10, 5, 8);
-        assertDepthConversion(10, 19, 1);
-
-    }
-
-
-    private void assertDepthConversion(int numberOfRows, int depth, int expectedHeight){
-        int result = GemUtils.convertContainerPositionToGridHeight(depth, numberOfRows);
-        assertEquals( expectedHeight, result);
-    }
-
 
     @Test
     public void canDetermineIfGemIsAdjacentToColumn(){

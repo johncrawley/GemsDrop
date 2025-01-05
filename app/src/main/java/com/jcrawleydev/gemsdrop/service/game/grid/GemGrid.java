@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface GemGrid {
 
-    int getHeightOfColumn(int columnIndex);
+    int getColumnHeightAt(int columnIndex);
     int getNumberOfColumns();
     List<List<Gem>> getGemColumns();
     void addIfConnecting(Gem gem);

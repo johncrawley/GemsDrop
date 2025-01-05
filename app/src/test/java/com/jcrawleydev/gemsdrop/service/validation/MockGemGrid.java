@@ -18,7 +18,7 @@ public class MockGemGrid implements GemGrid {
 
 
     @Override
-    public int getHeightOfColumn(int columnIndex){
+    public int getColumnHeightAt(int columnIndex){
         return columnHeights[columnIndex] * gridProps.depthPerDrop();
     }
 

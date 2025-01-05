@@ -3,20 +3,13 @@ import com.jcrawleydev.gemsdrop.service.game.GridProps;
 
 public class GemUtils {
 
-    public static int convertContainerPositionToGridHeight(int depth, int numberOfRows){
-        return numberOfRows - (depth / 2);
+
+    public static boolean isGemAdjacentToColumn(Gem gem, int columnHeight, GridProps gridProps){
+        return false;
     }
 
 
     public static int getBottomHeightOf(Gem gem, GridProps gridProps){
-        return gridProps.numberOfPositions() - gem.getContainerPosition();
+        return gem.getContainerPosition();
     }
-
-
-    public static boolean isGemAdjacentToColumn(Gem gem, int columnHeight, GridProps gridProps){
-        int gemBottomHeight =  getBottomHeightOf(gem, gridProps);
-        return gemBottomHeight < columnHeight;
-    }
-
-
 }

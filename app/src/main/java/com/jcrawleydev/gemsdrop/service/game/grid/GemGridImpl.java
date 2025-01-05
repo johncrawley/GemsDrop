@@ -49,7 +49,7 @@ public class GemGridImpl implements GemGrid {
 
 
     @Override
-    public int getHeightOfColumn(int columnIndex){
+    public int getColumnHeightAt(int columnIndex){
         if(columnIndex > gemColumns.size() -1 || columnIndex < 0){
             return 10_000;
         }

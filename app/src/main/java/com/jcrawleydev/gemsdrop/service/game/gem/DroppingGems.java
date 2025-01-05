@@ -7,7 +7,6 @@ import static com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems.Orientation
 import static com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems.Orientation.NORTH;
 import static com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems.Orientation.SOUTH;
 import static com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems.Orientation.WEST;
-import static com.jcrawleydev.gemsdrop.service.game.gem.GemUtils.convertContainerPositionToGridHeight;
 
 import com.jcrawleydev.gemsdrop.service.game.GridProps;
 import com.jcrawleydev.gemsdrop.service.game.grid.GemGrid;
@@ -15,7 +14,6 @@ import com.jcrawleydev.gemsdrop.service.game.grid.GemGrid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.OptionalInt;
 import java.util.Random;
 
 public class DroppingGems {
@@ -28,6 +26,7 @@ public class DroppingGems {
     enum Orientation { NORTH, EAST, SOUTH, WEST }
     private Orientation orientation = NORTH;
     private final List<GemColor> gemColors = List.of(GemColor.RED, GemColor.BLUE, GemColor.PURPLE, GemColor.GREEN, GemColor.YELLOW);
+    private Map<String, Gem> originalGems;
 
 
 
@@ -51,19 +50,18 @@ public class DroppingGems {
         gem.rotateClockwise();
     }
 
+
     public void addConnectingGemsTo(GemGrid gemGrid){
-        gemGrid.addIfConnecting(bottomGem);
-        gemGrid.addIfConnecting(centreGem);
-        gemGrid.addIfConnecting(topGem);
+        addIfConnecting(bottomGem, gemGrid);
+        addIfConnecting(centreGem, gemGrid);
+        addIfConnecting(topGem, gemGrid);
     }
 
 
-    public int getLowestHeight(){
-        OptionalInt lowestPoint = gems.stream().mapToInt(Gem::getContainerPosition).max();
-        if(lowestPoint.isPresent()){
-            return convertContainerPositionToGridHeight(lowestPoint.getAsInt(), gridProps.numberOfRows());
+    private void addIfConnecting(Gem gem, GemGrid gemGrid){
+        if(!gem.isAddedToGrid()){
+            gemGrid.addIfConnecting(gem);
         }
-        return 0;
     }
 
 
@@ -77,14 +75,8 @@ public class DroppingGems {
     }
 
 
-    public int getBottomDepth(){
-       return getBottomGem().getContainerPosition() + gridProps.depthPerDrop();
-    }
-
-
-    public int getBottomHeight(){
-      //  return getBottomHeightOf(getBottomGem(), gridProps);
-        return 0;
+    public int getLowestGemPosition(){
+        return bottomGem.getContainerPosition();
     }
 
 
@@ -195,7 +187,6 @@ public class DroppingGems {
         createGems();
     }
 
-    private Map<String, Gem> originalGems;
 
     private void createGems(){
         topGem = createGem(TOP, 3);

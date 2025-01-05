@@ -63,11 +63,17 @@ public class Game {
     public void createGems(){
         droppingGems = new DroppingGems(gridProps);
         droppingGems.create();
+        printGemGridColumnHeights();
     }
 
 
     public void destroyGems(){
 
+    }
+
+    private void printGemGridColumnHeights(){
+        String colHeights = gemGrid.getColumnHeights().stream().map(String::valueOf).reduce("", (total, colHeight) -> total + " " + colHeight);
+        log("printGemGridColumnHeights() : " + colHeights);
     }
 
 
