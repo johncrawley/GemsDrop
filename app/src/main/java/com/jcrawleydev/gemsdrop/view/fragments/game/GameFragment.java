@@ -228,8 +228,8 @@ public class GameFragment extends Fragment {
     private void cleanupGem(ViewGroup gemLayout){
         long id = (long)gemLayout.getTag();
         gemLayout.setVisibility(View.GONE);
-        //gemContainer.removeView(gemLayout);
-      //  itemsMap.remove(id);
+        gemContainer.removeView(gemLayout);
+        itemsMap.remove(id);
     }
 
 
@@ -289,81 +289,14 @@ public class GameFragment extends Fragment {
 
 
     private int getYForPosition(int position){
-        /*
-        log("getYForPosition(" + position + ") gemContainer measuredHeight: "
-                + gemContainer.getMeasuredHeight()
-                + " gem container y: " + gemContainer.getY()
-                + " ; gem container height: " + containerHeight
-                + " gem width: " + gemWidth ); */
         float containerBottom = gemContainer.getY() + containerHeight;
-        int retVal = (int)containerBottom
+        return (int)containerBottom
                 - ((int)gemWidth + (position * (int)(gemWidth / 2f)));
-       // log("getYForPosition(" + position + ") returnValue: " + retVal);
-        return retVal;
-    }
-
-
-    private void setupTestLayout(int color, int x, int y){
-        LinearLayout view = new LinearLayout(getContext());
-        view.setBackgroundColor(color);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)gemWidth, (int)gemWidth);
-        view.setLayoutParams(params);
-        gemContainer.addView(view);
-        view.setX(x);
-        view.setY(y);
-
-    }
-
-
-    private void setupTestHalfwayLayout(int color, int x, int y){
-        LinearLayout view = new LinearLayout(getContext());
-        view.setBackgroundColor(color);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(containerWidth, 2);
-        view.setLayoutParams(params);
-        gemContainer.addView(view);
-        view.setX(x);
-        view.setY(y);
-
-    }
-
-    private void setupLineLayout(int color, int x, int y){
-        LinearLayout view = new LinearLayout(getContext());
-        view.setBackgroundColor(color);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(containerWidth/2, 2);
-        view.setLayoutParams(params);
-        gemContainer.addView(view);
-        view.setX(x);
-        view.setY(y);
-
-    }
-
-    private void setupTestLayouts(){
-        int testWidth = (int)gemWidth;
-        setupTestLayout(Color.RED, 400, 10);
-        setupTestLayout(Color.GREEN, 200, containerHeight - (testWidth));
-        setupTestLayout(Color.YELLOW, 100, 0);
-        setupTestLayout(Color.BLUE, 500, containerHeight - (testWidth + 10));
-        setupTestHalfwayLayout(Color.GREEN, (containerWidth /2), (containerHeight / 2));
-
-        log("setupTestLayouts() containerHeight: " + containerHeight);
-
-        for(int i = 0; i < containerHeight; i = i + (int)gemWidth){
-            log("setupTestLayouts() drawing line at y: " + i);
-            setupLineLayout(Color.MAGENTA, 0, i);
-        }
     }
 
 
     private int getXForColumn(int column){
         return column * (int) gemWidth;
-    }
-
-
-    private void runOnUiThread(Runnable runnable){
-        if(getActivity() == null){
-            return;
-        }
-        getActivity().runOnUiThread(runnable);
     }
 
 
@@ -374,7 +307,6 @@ public class GameFragment extends Fragment {
         destroyButton.setOnClickListener(v -> destroyGems());
         Button animateButton = parentView.findViewById(R.id.animate);
         animateButton.setOnClickListener(v -> animateGems());
-
     }
 
 
@@ -384,7 +316,7 @@ public class GameFragment extends Fragment {
 
 
     private void destroyGems(){
-        getService().ifPresent(GameService::destroyGems);
+        getService().ifPresent(GameService::evalGems);
     }
 
 }

@@ -126,6 +126,20 @@ public class Gem {
 
 
     public boolean isNotSameColorAs(Gem otherGem){
+
+        if(otherGem == null || otherGem instanceof NullGem ){
+            log("other gem is null, or instance of null gem, returning true");
+            return true;
+        }
+        if(getColor() == null){
+            log("this gem's colour is null, returning true");
+            return true;
+        }
+        if(otherGem.getColor() == null){
+            log("the other gem's colour is somehow null, returning true");
+            return true;
+        }
+        log("entered isNotSameColorAs() : thisGem: " + this.getColor().toString() + " other gem: " + otherGem.getColor().toString());
         return this instanceof NullGem || this.getColor() != otherGem.getColor();
     }
 

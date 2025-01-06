@@ -7,6 +7,7 @@ import com.jcrawleydev.gemsdrop.service.game.utils.MovementChecker;
 import com.jcrawleydev.gemsdrop.service.game.utils.RotationChecker;
 import com.jcrawleydev.gemsdrop.view.GameView;
 
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -70,6 +71,7 @@ public class Game {
     public void destroyGems(){
 
     }
+
 
     private void printGemGridColumnHeights(){
         String colHeights = gemGrid.getColumnHeights().stream().map(String::valueOf).reduce("", (total, colHeight) -> total + " " + colHeight);
@@ -235,6 +237,12 @@ public class Game {
         }
         log("wiping out ids on game view");
         gameView.wipeOut(markedGemIds);
+    }
+
+    // public access for the sake of testing via direct calls from the game fragment
+    public void evalGems(){
+       long[] markedGemsIds =  evaluator.evalAndDelete();
+        gameView.wipeOut(markedGemsIds);
     }
 
 

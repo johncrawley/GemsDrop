@@ -26,7 +26,8 @@ public class DroppingGems {
     enum Orientation { NORTH, EAST, SOUTH, WEST }
     private Orientation orientation = NORTH;
     private final List<GemColor> gemColors = List.of(GemColor.RED, GemColor.BLUE, GemColor.PURPLE, GemColor.GREEN, GemColor.YELLOW);
-    private Map<String, Gem> originalGems;
+    //private Map<String, Gem> originalGems;
+    private final int middleColumnIndex;
 
 
 
@@ -34,6 +35,7 @@ public class DroppingGems {
         this.gridProps = gridProps;
         random = new Random(System.currentTimeMillis());
         gems = new ArrayList<>(INITIAL_NUMBER_OF_GEMS);
+        middleColumnIndex = gridProps.numberOfColumns() / 2;
     }
 
 
@@ -42,7 +44,6 @@ public class DroppingGems {
         for(Gem gem: gems){
             rotateGem(gem);
         }
-        printGemDetails();
     }
 
 
@@ -105,7 +106,6 @@ public class DroppingGems {
     public void moveLeft(){
         if(getLeftmostColumn() > 0){
             getFreeGems().forEach(Gem::moveLeft);
-            printGemDetails();
         }
     }
 
@@ -113,7 +113,6 @@ public class DroppingGems {
     public void moveRight(){
         if(getRightmostColumn() < gridProps.numberOfColumns() -1){
             getFreeGems().forEach(Gem::moveRight);
-            printGemDetails();
         }
     }
 
@@ -125,13 +124,11 @@ public class DroppingGems {
 
     public void moveUp(){
         getFreeGems().forEach(Gem::moveUp);
-        printGemDetails();
     }
 
 
     public void moveDown(){
         getFreeGems().forEach(Gem::moveDown);
-        printGemDetails();
     }
 
 
@@ -193,17 +190,15 @@ public class DroppingGems {
         centreGem = createGem(CENTRE, 2);
         bottomGem = createGem(BOTTOM, 1);
 
-        originalGems = Map.of("originalTopGem", topGem, "originalCentreGem", centreGem, "originalBottomGem", bottomGem);
+        //originalGems = Map.of("originalTopGem", topGem, "originalCentreGem", centreGem, "originalBottomGem", bottomGem);
 
         gems.add(topGem);
         gems.add(centreGem);
         gems.add(bottomGem);
-        gems.forEach(g -> g.setColumn(gridProps.numberOfColumns()/2));
-        log("createGems() gems created about to log initial gem positions: ");
-        log("exiting createGems()");
+        gems.forEach(g -> g.setColumn(middleColumnIndex));
     }
 
-
+    /*
     private void printGemDetails(){
         log("************** gem details ****************");
         for(String gemName: originalGems.keySet()){
@@ -213,13 +208,11 @@ public class DroppingGems {
         }
         log("*******************************************");
     }
-
+*/
 
     private Gem createGem(GemGroupPosition gemGroupPosition, int offset){
         int initialPosition = gridProps.numberOfPositions() - 1;
-        log("createGem() gridProps.depthsPerDrop: " + gridProps.depthPerDrop());
         int initialContainerPosition = initialPosition + (gridProps.depthPerDrop() * offset);
-        log("createGem() offsetPosition: " + initialContainerPosition);
         return new Gem(getRandomColor(), gemGroupPosition, initialContainerPosition);
     }
 
@@ -227,6 +220,7 @@ public class DroppingGems {
     private void log(String msg){
         System.out.println("^^^ DroppingGems: " + msg);
     }
+
 
     public void setGems(List<Gem> remainingGems){
         gems.clear();

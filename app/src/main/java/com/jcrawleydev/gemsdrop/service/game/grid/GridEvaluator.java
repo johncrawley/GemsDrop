@@ -4,50 +4,86 @@ import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.service.game.gem.NullGem;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class GridEvaluator {
 
     private final List<List<Gem>> gemColumns;
-    private final int MATCH_NUMBER;
+    private final int MINIMUM_MATCH_NUMBER;
     private final int NUMBER_OF_COLUMNS;
     private final int NUMBER_OF_ROWS;
-    private boolean hasMarkedGems = false;
-    private final List<Gem> markedGems = new ArrayList<>();
-    private List<Long> markedGemIds = new ArrayList<>();
+    private final Set<Long> markedGemIds = new HashSet<>();
+    private final SectionEvaluator sectionEvaluator;
 
         public GridEvaluator(List<List<Gem>> gemColumns, int numberOfRows){
-        this.MATCH_NUMBER = 3;
+        this.MINIMUM_MATCH_NUMBER = 3;
         this.NUMBER_OF_COLUMNS = gemColumns.size();
         this.NUMBER_OF_ROWS = numberOfRows;
         this.gemColumns = gemColumns;
+        sectionEvaluator = new SectionEvaluator(MINIMUM_MATCH_NUMBER);
     }
 
 
     public long[] evalAndDelete(){
-        markedGems.clear();
+        log("Entered evalAndDelete()");
         markedGemIds.clear();
         evaluate();
+        updateSetOfMarkedGemIds();
         deleteMarkedGems();
         return markedGemIds.stream().mapToLong(x -> x).toArray();
     }
 
 
+    private void log(String msg){
+        System.out.println("GridEvaluator: " + msg);
+    }
+
+
+    private void updateSetOfMarkedGemIds(){
+       for(var column : gemColumns){
+           for(var gem: column){
+               if(gem.isMarkedForDeletion()){
+                   markedGemIds.add(gem.getId());
+               }
+           }
+       }
+    }
+
+
     public void evaluate(){
+        log("Entered evaluate");
         evaluateRows();
         evaluateColumns();
         evaluateDiagonals();
     }
 
 
-    public boolean hasMarkedGems(){
-        return hasMarkedGems;
+    public List<Long> getFreeFallGemIds(){
+        List<Long> gemsToMove = new ArrayList<>();
+        for(var column : gemColumns){
+            gemsToMove.addAll(getGemsForPositionalChange(column));
+        }
+        return gemsToMove;
+    }
+
+
+    private List<Long> getGemsForPositionalChange(List<Gem> column){
+        List<Long> gemsToMove = new ArrayList<>();
+        int gemWidth = 2;
+        for(int i = 0; i < column.size(); i++){
+            var gem = column.get(i);
+            if(gem.getContainerPosition() > i * gemWidth){
+                gemsToMove.add(gem.getId());
+            }
+        }
+        return gemsToMove;
     }
 
 
     private void deleteMarkedGems(){
-        gemColumns.forEach(gc -> gc.removeIf(Gem::isMarkedForDeletion));
-        this.hasMarkedGems = false;
+        gemColumns.forEach(column -> column.removeIf(Gem::isMarkedForDeletion));
     }
 
 
@@ -60,7 +96,7 @@ public class GridEvaluator {
 
     private void evaluateColumns(){
         for(List<Gem> column: gemColumns){
-            evaluateGems(column);
+            sectionEvaluator.evaluateGemsIn(column);
         }
     }
 
@@ -73,14 +109,14 @@ public class GridEvaluator {
         addUpperHalfReverseDiagonalsTo(diagonals);
 
         for(List<Gem> diagonal : diagonals){
-            evaluateGems(diagonal);
+            sectionEvaluator.evaluateGemsIn(diagonal);
         }
     }
 
 
     private void addLowerHalfDiagonalsTo(List<List<Gem>> diagonals){
 
-        for(int i=0; i< (NUMBER_OF_ROWS - MATCH_NUMBER); i++) {
+        for(int i = 0; i< (NUMBER_OF_ROWS - MINIMUM_MATCH_NUMBER); i++) {
             List<Gem> diagonal = new ArrayList<>();
             for (int currentRowIndex = 0 ; currentRowIndex < (NUMBER_OF_COLUMNS - i); currentRowIndex++) {
                 int colIndex = i + currentRowIndex;
@@ -92,8 +128,7 @@ public class GridEvaluator {
 
 
     private void addUpperHalfDiagonalsTo(List<List<Gem>> diagonals){
-
-        for(int startingRow = 1; startingRow < NUMBER_OF_ROWS - MATCH_NUMBER; startingRow++) {
+        for(int startingRow = 1; startingRow < NUMBER_OF_ROWS - MINIMUM_MATCH_NUMBER; startingRow++) {
             List<Gem> diagonal = new ArrayList<>();
             for (int columnIndex = 0; columnIndex < NUMBER_OF_COLUMNS; columnIndex++) {
                 List<Gem> column = gemColumns.get(columnIndex);
@@ -134,19 +169,11 @@ public class GridEvaluator {
 
     private void addUpperHalfReverseDiagonalsTo(List<List<Gem>> diagonals){
 
-        for(int startingRow= 1; startingRow < NUMBER_OF_ROWS - MATCH_NUMBER; startingRow++){
-
+        for(int startingRow = 1; startingRow < NUMBER_OF_ROWS - MINIMUM_MATCH_NUMBER; startingRow++){
             List<Gem> diagonal = new ArrayList<>();
-            for(int rowIndex = startingRow, columnIndex = NUMBER_OF_COLUMNS -1; rowIndex < NUMBER_OF_ROWS; rowIndex++, columnIndex--){
-                if(columnIndex < 0){
-                    break;
-                }
+            for(int rowIndex = startingRow, columnIndex = NUMBER_OF_COLUMNS -1; rowIndex < NUMBER_OF_ROWS && columnIndex >= 0; rowIndex++, columnIndex--){
                 List<Gem> column = gemColumns.get(columnIndex);
-                if(rowIndex >= column.size()){
-                    diagonal.add(new NullGem());
-                    continue;
-                }
-                diagonal.add(column.get(rowIndex));
+                diagonal.add( rowIndex < column.size() ? column.get(rowIndex) : new NullGem());
             }
             diagonals.add(diagonal);
         }
@@ -155,12 +182,12 @@ public class GridEvaluator {
 
     private void evaluateRow(int i){
         List<Gem> filledOutRow = constructRow(i);
-        evaluateGems(filledOutRow);
+        sectionEvaluator.evaluateGemsIn(filledOutRow);
     }
 
 
     private void addLowerHalfReverseDiagonalsTo(List<List<Gem>> diagonals){
-        for(int i= NUMBER_OF_COLUMNS - 1; i >= MATCH_NUMBER -1; i--){
+        for(int i = NUMBER_OF_COLUMNS - 1; i >= MINIMUM_MATCH_NUMBER -1; i--){
             diagonals.add(getLowerHalfReverseDiagonalStartingFromColumn(i));
         }
     }
@@ -183,63 +210,6 @@ public class GridEvaluator {
         return column.get(rowIndex);
     }
 
-
-    private void evaluateGems(List<Gem> gems){
-        int i = 0;
-        while( i < gems.size() - (MATCH_NUMBER - 1)){
-            i = evaluateSection(gems, i);
-        }
-    }
-
-
-    private int evaluateSection(List<Gem> gems, int currentIndex){
-        Gem currentGem = gems.get(currentIndex);
-        int nextIndex = currentIndex + 1;
-        if(currentGem instanceof NullGem){
-            return nextIndex;
-        }
-
-        markGem(currentGem);
-        int sameColorCount = 1;
-
-        for(int comparisonIndex = nextIndex; comparisonIndex < gems.size(); comparisonIndex++){
-            Gem comparisonGem = gems.get(comparisonIndex);
-            if(comparisonGem.isNotSameColorAs(currentGem)){
-                if(sameColorCount >= MATCH_NUMBER){
-                    markAllCandidatesForDeletionInRange(currentIndex, comparisonIndex, gems);
-                    return comparisonIndex;
-                }
-                resetFlagForAllGemsInRange(currentIndex,comparisonIndex,gems);
-                return nextIndex;
-            }
-            sameColorCount++;
-            markGem(comparisonGem);
-        }
-
-        markAllCandidatesForDeletionInRange(currentIndex,gems.size()-1, gems);
-        return gems.size();
-    }
-
-
-    private void markGem(Gem gem){
-        gem.setDeleteCandidateFlag();
-        markedGemIds.add(gem.getId());
-    }
-
-
-    private void resetFlagForAllGemsInRange(int startIndex, int endIndex, List<Gem> gems){
-        for(int i=startIndex; i<= endIndex; i++){
-            gems.get(i).resetDeleteCandidateFlag();
-        }
-    }
-
-
-    private void markAllCandidatesForDeletionInRange(int startIndex, int endIndex, List<Gem> gems){
-        for(int i=startIndex; i<= endIndex; i++){
-            gems.get(i).setMarkedForDeletion();
-        }
-        hasMarkedGems = true;
-    }
 
 
 }

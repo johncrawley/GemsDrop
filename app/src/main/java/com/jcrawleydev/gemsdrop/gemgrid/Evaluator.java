@@ -268,6 +268,4 @@ public class Evaluator {
         hasMarkedGems = true;
     }
 
-
-
 }

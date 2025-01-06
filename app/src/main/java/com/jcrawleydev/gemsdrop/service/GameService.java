@@ -70,9 +70,19 @@ public class GameService extends Service {
     public void createGems(){
         game.createGems();
     }
+
+
+    public void evalGems(){
+        game.evalGems();
+    }
+
+
+
     public void destroyGems(){
         game.destroyGems();
     }
+
+
 
     public void moveDown(){
         game.moveDown();

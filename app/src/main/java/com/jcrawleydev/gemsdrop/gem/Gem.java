@@ -73,11 +73,6 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
         column ++;
     }
 
-    public void moveUp(){ containerPosition += gemWidth;}
-
-
-    public void moveDown(){ containerPosition -= gemWidth;}
-
 
     public void setColumn(int column){
         this.column = column;
@@ -91,36 +86,6 @@ public class Gem implements DrawItem, DrawableItem, Cloneable {
 
     public int getColumn(){
         return column + gemGroupPosition.getColumnOffset();
-    }
-
-
-    public GemGroupPosition getGemGroupPosition(){
-        return gemGroupPosition;
-    }
-
-
-    public int getBottomDepth(){
-        return getContainerPosition() + gemWidth;
-    }
-
-
-    public void setContainerPosition(int containerPosition){
-        this.containerPosition = containerPosition;
-    }
-
-
-    public void incDepth(){
-        containerPosition++;
-    }
-
-
-    public void setGemGroupPosition(GemGroupPosition gemGroupPosition){
-        this.gemGroupPosition = gemGroupPosition;
-    }
-
-
-    public int getContainerPosition(){
-        return containerPosition + gemGroupPosition.getDepthOffset();
     }
 
 
