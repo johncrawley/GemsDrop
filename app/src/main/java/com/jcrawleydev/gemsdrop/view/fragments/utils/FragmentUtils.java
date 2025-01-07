@@ -121,6 +121,12 @@ public class FragmentUtils {
         sendMessage(activity, message, new Bundle());
     }
 
+    public static Bundle createBundleOf(BundleTag tag, int value){
+        var bundle = new Bundle();
+        bundle.putInt(tag.toString(), value);
+        return bundle;
+    }
+
 
     public static int getInt(Bundle bundle, Enum<?> tag){
         return bundle.getInt(tag.name());

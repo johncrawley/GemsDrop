@@ -1,5 +1,6 @@
 package com.jcrawleydev.gemsdrop;
 
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.createBundleOf;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.sendMessage;
 
 import android.annotation.SuppressLint;
@@ -90,7 +91,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
 
     public void setScore(int score){
-
+        Bundle bundle = createBundleOf(BundleTag.SCORE, score);
+        sendMessage(this, FragmentMessage.UPDATE_SCORE, bundle);
     }
 
 

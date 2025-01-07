@@ -5,5 +5,6 @@ public enum BundleTag {
     GEM_COLUMN,
     GEM_ID,
     GEM_IDS,
-    GEM_COLOR
+    GEM_COLOR,
+    SCORE
 }

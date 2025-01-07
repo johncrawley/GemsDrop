@@ -43,6 +43,7 @@ public class GameFragment extends Fragment {
     private ViewGroup gemContainer, gamePane;
     private float gemWidth = 10f;
     private GameInputHandler gameInputHandler;
+    private TextView scoreView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -142,6 +143,8 @@ public class GameFragment extends Fragment {
             }
             return false;
         });
+
+        scoreView = parentView.findViewById(R.id.scoreView);
     }
 
 
@@ -180,6 +183,7 @@ public class GameFragment extends Fragment {
         setupListener(FragmentMessage.UPDATE_GEM, this::updateGem);
         setupListener(FragmentMessage.NOTIFY_OF_SERVICE_CONNECTED, this::onServiceConnected);
         setupListener(FragmentMessage.REMOVE_GEMS, this::removeGems);
+        setupListener(FragmentMessage.UPDATE_SCORE, this::updateScore);
     }
 
 
@@ -234,13 +238,29 @@ public class GameFragment extends Fragment {
 
 
     private void updateGem(Bundle bundle){
-        int position = bundle.getInt(BundleTag.GEM_POSITION.toString(), -1);
-        int column = bundle.getInt(BundleTag.GEM_COLUMN.toString(), 0);
+        int position = getIntFrom(bundle, BundleTag.GEM_POSITION, -1);
+        int column = getIntFrom(bundle, BundleTag.GEM_COLUMN);
         long id = bundle.getLong(BundleTag.GEM_ID.toString(), -1L);
-        int colorId = bundle.getInt(BundleTag.GEM_COLOR.toString(),0 );
+        int colorId = getIntFrom(bundle,BundleTag.GEM_COLOR);
 
         var gemView = itemsMap.computeIfAbsent(id, k -> createAndAddGemLayout(id, position, column, colorId));
         updateGemCoordinates(gemView, position, column);
+    }
+
+
+
+    private void updateScore(Bundle bundle){
+        int score = getIntFrom(bundle, BundleTag.SCORE);
+        scoreView.setText(score);
+    }
+
+
+    private int getIntFrom(Bundle bundle, BundleTag tag, int defaultValue){
+        return bundle.getInt(tag.toString(), defaultValue);
+    }
+
+    private int getIntFrom(Bundle bundle, BundleTag tag){
+        return getIntFrom(bundle, tag, 0);
     }
 
 
