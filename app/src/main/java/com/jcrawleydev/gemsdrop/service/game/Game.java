@@ -239,6 +239,19 @@ public class Game {
         gameView.wipeOut(markedGemIds);
     }
 
+
+    public void onGemRemovalAnimationDone(){
+        gemGrid.removeMarkedGems();
+        updateScore(0);
+
+    }
+
+
+    private void updateScore(int numberOfRemovedGems){
+
+    }
+
+
     // public access for the sake of testing via direct calls from the game fragment
     public void evalGems(){
        long[] markedGemsIds =  evaluator.evalAndDelete();

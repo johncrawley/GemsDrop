@@ -39,6 +39,11 @@ public class GemGridImpl implements GemGrid {
     }
 
 
+    public void removeMarkedGems(){
+        gemColumns.forEach(column -> column.removeIf(Gem::isMarkedForDeletion));
+    }
+
+
     public void addIfConnecting(Gem gem){
         var column = gemColumns.get(gem.getColumn());
         if(gem.getContainerPosition() <= column.size() * 2){

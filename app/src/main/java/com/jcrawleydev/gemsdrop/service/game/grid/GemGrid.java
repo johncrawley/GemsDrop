@@ -10,4 +10,5 @@ public interface GemGrid {
     int getNumberOfColumns();
     List<List<Gem>> getGemColumns();
     void addIfConnecting(Gem gem);
+    void removeMarkedGems();
 }

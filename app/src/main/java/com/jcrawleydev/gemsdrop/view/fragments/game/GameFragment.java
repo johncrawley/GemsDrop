@@ -4,7 +4,6 @@ import static com.jcrawleydev.gemsdrop.view.fragments.game.GemAnimator.animateAp
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.setListener;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -69,9 +68,6 @@ public class GameFragment extends Fragment {
             public void onGlobalLayout() {
                 assignGemContainerDimensions();
                 assignWidthToExistingGems();
-               // setupPositionMarkers();
-               // setupTestLayouts();
-                log("gemContainerWidth, containerHeight: " + containerWidth + "," + containerHeight );
                 gamePane.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         };
@@ -148,23 +144,6 @@ public class GameFragment extends Fragment {
     }
 
 
-    private void setupPositionMarkers(){
-        for(int i = 0; i < 30; i++){
-            TextView textView = new TextView(getContext());
-            gemContainer.addView(textView);
-            String positionMarker = String.valueOf(i);
-            int textX = 20;
-            int textY = getYForPosition(i);
-            textView.setText(positionMarker);
-            textView.setX(textX);
-            textView.setY(textY);
-
-            textView.setTextSize(20);
-            textView.setTextColor(Color.RED);
-        }
-    }
-
-
     private void log(String msg){
        System.out.println("^^^ GameFragment: " + msg);
     }
@@ -234,6 +213,12 @@ public class GameFragment extends Fragment {
         gemLayout.setVisibility(View.GONE);
         gemContainer.removeView(gemLayout);
         itemsMap.remove(id);
+        notifyGameOfGemRemovalCompletion();
+    }
+
+
+    private void notifyGameOfGemRemovalCompletion(){
+        getService().ifPresent(GameService::notifyThatGameFinished);
     }
 
 
@@ -248,7 +233,6 @@ public class GameFragment extends Fragment {
     }
 
 
-
     private void updateScore(Bundle bundle){
         int score = getIntFrom(bundle, BundleTag.SCORE);
         scoreView.setText(score);
@@ -258,6 +242,7 @@ public class GameFragment extends Fragment {
     private int getIntFrom(Bundle bundle, BundleTag tag, int defaultValue){
         return bundle.getInt(tag.toString(), defaultValue);
     }
+
 
     private int getIntFrom(Bundle bundle, BundleTag tag){
         return getIntFrom(bundle, tag, 0);

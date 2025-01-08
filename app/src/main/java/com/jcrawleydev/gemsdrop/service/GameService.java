@@ -141,6 +141,11 @@ public class GameService extends Service {
     }
 
 
+    public void onGemRemovalAnimationDone(){
+        game.onGemRemovalAnimationDone();
+    }
+
+
     public void startGame(){
         game.startGame();
     }
