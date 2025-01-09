@@ -7,7 +7,6 @@ import com.jcrawleydev.gemsdrop.service.game.utils.MovementChecker;
 import com.jcrawleydev.gemsdrop.service.game.utils.RotationChecker;
 import com.jcrawleydev.gemsdrop.view.GameView;
 
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -191,16 +190,6 @@ public class Game {
         syncMovement(this::dropGems);
     }
 
-    public void downTEST2(){
-        log("Entering down()");
-        if(movementChecker.canMoveDown(droppingGems)){
-            droppingGems.moveDown();
-
-            updateGemsOnView();
-        }
-        log("Exiting down()!");
-    }
-
 
     private void dropGems(){
         log("entered dropGems()");
@@ -224,8 +213,7 @@ public class Game {
         long [] markedGemIds = new long[]{};
         cancelDrop();
         try {
-            evaluator.evaluate();
-            markedGemIds = evaluator.evalAndDelete();
+            markedGemIds = evaluator.evaluateGemGrid();
         }catch (RuntimeException e){
             printStackTrace(e);
         }
@@ -241,9 +229,25 @@ public class Game {
 
 
     public void onGemRemovalAnimationDone(){
+        int initialGemCount = gemGrid.gemCount();
         gemGrid.removeMarkedGems();
-        updateScore(0);
+        int removedGemsCount = initialGemCount - gemGrid.gemCount();
+        updateScore(removedGemsCount);
+        if(removedGemsCount > 0){
+            activateGridFreeFall();
+        }
+    }
 
+
+    private void activateGridFreeFall(){
+
+
+    }
+
+
+    private void freeFallGridGems(){
+        var fallenGems = gemGrid.freeFall();
+        gameView.freeFall(fallenGems);
     }
 
 
@@ -254,8 +258,8 @@ public class Game {
 
     // public access for the sake of testing via direct calls from the game fragment
     public void evalGems(){
-       long[] markedGemsIds =  evaluator.evalAndDelete();
-        gameView.wipeOut(markedGemsIds);
+       long[] markedGemsIds = evaluator.evaluateGemGrid();
+       gameView.wipeOut(markedGemsIds);
     }
 
 

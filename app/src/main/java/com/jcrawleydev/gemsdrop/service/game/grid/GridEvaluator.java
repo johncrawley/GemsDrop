@@ -26,12 +26,11 @@ public class GridEvaluator {
     }
 
 
-    public long[] evalAndDelete(){
+    public long[] evaluateGemGrid(){
         log("Entered evalAndDelete()");
         markedGemIds.clear();
         evaluate();
         updateSetOfMarkedGemIds();
-        deleteMarkedGems();
         return markedGemIds.stream().mapToLong(x -> x).toArray();
     }
 
@@ -52,7 +51,7 @@ public class GridEvaluator {
     }
 
 
-    public void evaluate(){
+    private void evaluate(){
         log("Entered evaluate");
         evaluateRows();
         evaluateColumns();
@@ -79,11 +78,6 @@ public class GridEvaluator {
             }
         }
         return gemsToMove;
-    }
-
-
-    private void deleteMarkedGems(){
-        gemColumns.forEach(column -> column.removeIf(Gem::isMarkedForDeletion));
     }
 
 

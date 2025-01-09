@@ -11,8 +11,10 @@ import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class GemGridImpl implements GemGrid {
     private List<List<Gem>> gemColumns;
@@ -36,6 +38,21 @@ public class GemGridImpl implements GemGrid {
         for(int i=0; i< gridProps.numberOfColumns(); i++){
             gemColumns.add(new ArrayList<>(gridProps.numberOfRows()));
         }
+    }
+
+
+    public long[] freeFall(){
+        Set<Long> gemIds = new HashSet<>();
+        for(var col : gemColumns){
+            for(int i = 0; i < col.size(); i++){
+                var gem = col.get(i);
+                if(gem.getContainerPosition() > i){
+                    gem.decrementContainerPosition();
+                    gemIds.add(gem.getId());
+                }
+            }
+        }
+        return gemIds.stream().mapToLong(l -> l).toArray();
     }
 
 
@@ -189,11 +206,7 @@ public class GemGridImpl implements GemGrid {
 
 
     public int gemCount(){
-        int amount = 0;
-        for(List<Gem> column : gemColumns){
-            amount += column.size();
-        }
-        return amount;
+        return gemColumns.stream().map(List::size).reduce(0, Integer::sum);
     }
 
 

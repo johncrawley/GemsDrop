@@ -98,6 +98,11 @@ public class Gem {
     }
 
 
+    public void decrementContainerPosition(){
+         containerPosition--;
+    }
+
+
     private void log(String msg){
         System.out.println("^^^ Gem: "+ msg);
     }
