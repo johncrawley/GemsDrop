@@ -19,7 +19,6 @@ import java.util.Set;
 public class GemGridImpl implements GemGrid {
     private List<List<Gem>> gemColumns;
     private final GridProps gridProps;
-    private boolean haveAnyGemsMovedDuringLastDrop;
     private final int MAX_POSITION;
 
     public GemGridImpl(GridProps gridProps){
@@ -41,18 +40,23 @@ public class GemGridImpl implements GemGrid {
     }
 
 
-    public long[] freeFall(){
-        Set<Long> gemIds = new HashSet<>();
+    public long[] freeFallOnePosition(){
+        Set<Long> freeFallIds = new HashSet<>();
         for(var col : gemColumns){
             for(int i = 0; i < col.size(); i++){
-                var gem = col.get(i);
-                if(gem.getContainerPosition() > i){
-                    gem.decrementContainerPosition();
-                    gemIds.add(gem.getId());
-                }
+                freeFallGem(col, i, freeFallIds);
             }
         }
-        return gemIds.stream().mapToLong(l -> l).toArray();
+        return freeFallIds.stream().mapToLong(l -> l).toArray();
+    }
+
+
+    private void freeFallGem(List<Gem> column, int index, Set<Long> freeFallIds){
+        var gem = column.get(index);
+        if(gem.getContainerPosition() > index * gridProps.depthPerDrop()){
+            gem.decrementContainerPosition();
+            freeFallIds.add(gem.getId());
+        }
     }
 
 
@@ -63,7 +67,7 @@ public class GemGridImpl implements GemGrid {
 
     public void addIfConnecting(Gem gem){
         var column = gemColumns.get(gem.getColumn());
-        if(gem.getContainerPosition() <= column.size() * 2){
+        if(gem.getContainerPosition() <= column.size() * gridProps.depthPerDrop()){
             column.add(gem);
             gem.markAsAddedToGrid();
         }

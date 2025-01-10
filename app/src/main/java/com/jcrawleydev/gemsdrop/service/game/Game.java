@@ -13,6 +13,39 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+
+    /*
+        There are four kinds of gem downward movement
+
+        - gem drop, handled by task, the gem group drops a position at a scheduled rate
+        - rotation, invoked by the user, a gem in the top position, can move downwards in a clockwise motion
+        - quick drop, invoked by the user, locks controls, gem group falls at a faster pace.
+        - free fall, if one or two gems gets added to the grid the remaining gem(s) will drop, controls are locked
+        - grid gravity, if gems are removed from the grid, any gems above will fall down to occupy the empty space
+
+
+        game flow:
+            - create gems
+            - drop gems
+              - check if falling gems are touching grid
+                    - yes:
+                            - stop drop task
+                            - evaluate grid, mark any gems to be removed
+                            - if there are gems to be removed
+                                - animate removal of gems on view, once finished:
+                                    - update score
+                                    - remove gems from grid columns
+                                    - start grid gravity task, move out-of-position gems one position per task invocation
+                                        - once gems are all dropped via grid gravity, run eval step
+
+                             - if there are no gems to be removed:
+                                - start drop task
+
+                             - if there are no falling gems left, create new gems and start drop task
+
+
+     */
+
 public class Game {
 
     private final GridProps gridProps = new GridProps(14, 7, 2);
@@ -149,7 +182,6 @@ public class Game {
 
 
     public void create(){
-
         droppingGems.create();
         updateGemsOnView();
     }
@@ -181,7 +213,7 @@ public class Game {
 
 
     public void onDestroy(){
-        cancelDrop();
+        cancelTask();
         isStarted.set(false);
     }
 
@@ -211,7 +243,7 @@ public class Game {
     private void switchToEvalMode(){
         log("Entered evalMode");
         long [] markedGemIds = new long[]{};
-        cancelDrop();
+        cancelTask();
         try {
             markedGemIds = evaluator.evaluateGemGrid();
         }catch (RuntimeException e){
@@ -240,14 +272,19 @@ public class Game {
 
 
     private void activateGridFreeFall(){
-
-
+        int freeFallDelay = 300;
+        gemDropFuture = gemDropExecutor.scheduleWithFixedDelay(this::freeFallGridGems, 0, freeFallDelay, TimeUnit.MILLISECONDS);
     }
 
 
     private void freeFallGridGems(){
-        var fallenGems = gemGrid.freeFall();
-        gameView.freeFall(fallenGems);
+        var fallenGems = gemGrid.freeFallOnePosition();
+        if(fallenGems.length == 0){
+            cancelTask();
+        }
+        else{
+            gameView.freeFall(fallenGems);
+        }
     }
 
 
@@ -267,7 +304,7 @@ public class Game {
         log("Exception: " + e.getMessage());
     }
 
-    private void cancelDrop(){
+    private void cancelTask(){
         if(gemDropFuture != null && !gemDropFuture.isCancelled()){
             gemDropFuture.cancel(true);
         }

@@ -31,7 +31,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener, GameView {
 
-    private Game game;
     private MainViewModel viewModel;
     private GameService gameService;
 

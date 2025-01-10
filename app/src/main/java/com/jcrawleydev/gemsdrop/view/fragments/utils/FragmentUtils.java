@@ -123,13 +123,18 @@ public class FragmentUtils {
 
     public static Bundle createBundleOf(BundleTag tag, int value){
         var bundle = new Bundle();
-        bundle.putInt(tag.toString(), value);
+        bundle.putInt(tag.name(), value);
         return bundle;
     }
 
 
     public static int getInt(Bundle bundle, Enum<?> tag){
         return bundle.getInt(tag.name());
+    }
+
+
+    public static long[] getLongArray(Bundle bundle, Enum<?> tag){
+        return bundle.getLongArray(tag.name());
     }
 
 

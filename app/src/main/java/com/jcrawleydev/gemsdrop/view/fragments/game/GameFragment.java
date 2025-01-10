@@ -1,6 +1,7 @@
 package com.jcrawleydev.gemsdrop.view.fragments.game;
 
 import static com.jcrawleydev.gemsdrop.view.fragments.game.GemAnimator.animateAppearanceOf;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getLongArray;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.setListener;
 
 import android.annotation.SuppressLint;
@@ -125,11 +126,6 @@ public class GameFragment extends Fragment {
     }
 
 
-    public void updateItems(List<DrawInfo> drawInfoList) {
-      //  updateViewsFrom(drawInfoList, itemsMap, this::removeEnemyShip);
-    }
-
-
     @SuppressLint("ClickableViewAccessibility")
     private void setupViews(View parentView){
         ViewGroup gamePane = parentView.findViewById(R.id.game_pane);
@@ -163,6 +159,7 @@ public class GameFragment extends Fragment {
         setupListener(FragmentMessage.NOTIFY_OF_SERVICE_CONNECTED, this::onServiceConnected);
         setupListener(FragmentMessage.REMOVE_GEMS, this::removeGems);
         setupListener(FragmentMessage.UPDATE_SCORE, this::updateScore);
+        setupListener(FragmentMessage.FREE_FALL_GEMS, this::freeFallGems);
     }
 
 
@@ -176,15 +173,31 @@ public class GameFragment extends Fragment {
     }
 
 
+    private void freeFallGems(Bundle bundle){
+        doActionOnGemIdsFrom(bundle, this::dropGemLayout);
+    }
+
+
+    private void dropGemLayout(ViewGroup gemLayout){
+        float updatedY = gemLayout.getY() + (gemWidth / 2f);
+        gemLayout.setY(updatedY);
+    }
+
+
     private void removeGems(Bundle bundle){
-        long[] gemIds = bundle.getLongArray(BundleTag.GEM_IDS.toString());
+        doActionOnGemIdsFrom(bundle, gemLayout -> GemAnimator.animateRemovalOf(gemLayout, this::cleanupGem));
+    }
+
+
+    private void doActionOnGemIdsFrom(Bundle bundle, Consumer<ViewGroup> consumer){
+        long[] gemIds = getLongArray(bundle, BundleTag.GEM_IDS);
         if(gemIds == null){
             return;
         }
         for(long gemId : gemIds){
-            ViewGroup gemLayout= itemsMap.get(gemId);
+            ViewGroup gemLayout = itemsMap.get(gemId);
             if(gemLayout != null){
-                GemAnimator.animateRemovalOf(gemLayout, this::cleanupGem);
+                consumer.accept(gemLayout);
             }
         }
     }
