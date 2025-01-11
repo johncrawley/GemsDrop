@@ -59,6 +59,7 @@ public class Game {
     private final ScheduledExecutorService gemDropExecutor = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> gemDropFuture;
     private final AtomicBoolean isStarted = new AtomicBoolean(false);
+    private final AtomicBoolean isControlEnabled = new AtomicBoolean(true);
 
     private final GemGridImpl gemGrid = new GemGridImpl(gridProps);
 
@@ -96,6 +97,7 @@ public class Game {
     public void createGems(){
         droppingGems = new DroppingGems(gridProps);
         droppingGems.create();
+        isControlEnabled.set(true);
         printGemGridColumnHeights();
     }
 
@@ -176,6 +178,13 @@ public class Game {
     }
 
 
+    private synchronized void syncUserMovement(Runnable runnable){
+        if (isControlEnabled.get()) {
+            runnable.run();
+        }
+    }
+
+
     private void updateGemsOnView(){
         gameView.updateGems(droppingGems.get());
     }
@@ -228,6 +237,7 @@ public class Game {
         droppingGems.moveDown();
         updateGemsOnView();
         droppingGems.addConnectingGemsTo(gemGrid);
+        isControlEnabled.set(!droppingGems.areAnyAddedToGrid());
         if(droppingGems.areAllAddedToGrid()){
             //switchToEvalMode();
             createGems();
@@ -271,9 +281,20 @@ public class Game {
     }
 
 
+    private void freeFallGems(){
+
+
+    }
+
+
     private void activateGridFreeFall(){
         int freeFallDelay = 300;
         gemDropFuture = gemDropExecutor.scheduleWithFixedDelay(this::freeFallGridGems, 0, freeFallDelay, TimeUnit.MILLISECONDS);
+    }
+
+
+    private void lockControls(){
+        isControlEnabled.set(false);
     }
 
 
