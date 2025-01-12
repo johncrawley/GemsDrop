@@ -40,7 +40,7 @@ public class GemGridImpl implements GemGrid {
     }
 
 
-    public long[] freeFallOnePosition(){
+    public long[] gravityDropOnePosition(){
         Set<Long> freeFallIds = new HashSet<>();
         for(var col : gemColumns){
             for(int i = 0; i < col.size(); i++){

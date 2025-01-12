@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
 
     @Override
-    public void freeFall(long[] gemsIds){
+    public void dropOnePosition(long[] gemsIds){
         Bundle bundle = new Bundle();
         bundle.putLongArray(BundleTag.GEM_IDS.toString(), gemsIds);
         sendMessage(this, FragmentMessage.FREE_FALL_GEMS, bundle);

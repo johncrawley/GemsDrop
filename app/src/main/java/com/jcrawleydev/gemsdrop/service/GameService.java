@@ -73,7 +73,7 @@ public class GameService extends Service {
 
 
     public void evalGems(){
-        game.evalGems();
+        game.evaluateGemGrid();
     }
 
 

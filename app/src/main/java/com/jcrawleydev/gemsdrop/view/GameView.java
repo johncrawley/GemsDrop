@@ -10,5 +10,5 @@ public interface GameView {
 
     void updateGems(List<Gem> gems);
     void wipeOut(long[] markedGemIds);
-    void freeFall(long[] gemIds);
+    void dropOnePosition(long[] gemIds);
 }

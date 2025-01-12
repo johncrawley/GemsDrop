@@ -57,7 +57,7 @@ public class Game {
     private RotationChecker rotationChecker;
 
     private final ScheduledExecutorService gemDropExecutor = Executors.newSingleThreadScheduledExecutor();
-    private ScheduledFuture<?> gemDropFuture;
+    private ScheduledFuture<?> future;
     private final AtomicBoolean isStarted = new AtomicBoolean(false);
     private final AtomicBoolean isControlEnabled = new AtomicBoolean(true);
 
@@ -186,7 +186,7 @@ public class Game {
 
 
     private void updateGemsOnView(){
-        gameView.updateGems(droppingGems.get());
+        gameView.updateGems(droppingGems.getFreeGems());
     }
 
 
@@ -207,7 +207,7 @@ public class Game {
 
 
     private void startDroppingGems(int dropRate){
-        gemDropFuture = gemDropExecutor.scheduleWithFixedDelay(this::drop, 0, dropRate, TimeUnit.MILLISECONDS);
+        future = gemDropExecutor.scheduleWithFixedDelay(this::drop, 0, dropRate, TimeUnit.MILLISECONDS);
     }
 
 
@@ -239,12 +239,12 @@ public class Game {
         droppingGems.addConnectingGemsTo(gemGrid);
         isControlEnabled.set(!droppingGems.areAnyAddedToGrid());
         if(droppingGems.areAllAddedToGrid()){
-            //switchToEvalMode();
-            createGems();
+            evaluateGemGrid();
             return;
         }
         if(droppingGems.areAnyAddedToGrid()){
-           // switchToFreeFallMode();
+           cancelTask();
+           startGemFreeFall();
         }
        log("Exiting dropGems()");
     }
@@ -276,20 +276,31 @@ public class Game {
         int removedGemsCount = initialGemCount - gemGrid.gemCount();
         updateScore(removedGemsCount);
         if(removedGemsCount > 0){
-            activateGridFreeFall();
+            activateGridGravity();
         }
     }
 
 
-    private void freeFallGems(){
-
-
+    private void startGemFreeFall(){
+        lockControls();
+        int freeFallInterval = 300;
+        future = gemDropExecutor.scheduleWithFixedDelay(this::freeFallRemainingGems, 0, freeFallInterval, TimeUnit.MILLISECONDS);
     }
 
 
-    private void activateGridFreeFall(){
-        int freeFallDelay = 300;
-        gemDropFuture = gemDropExecutor.scheduleWithFixedDelay(this::freeFallGridGems, 0, freeFallDelay, TimeUnit.MILLISECONDS);
+    private void freeFallRemainingGems(){
+        droppingGems.moveDown();
+        updateGemsOnView();
+        droppingGems.addConnectingGemsTo(gemGrid);
+        if(droppingGems.areAllAddedToGrid()){
+            evaluateGemGrid();
+        }
+    }
+
+
+    private void activateGridGravity(){
+        int gridGravityInterval = 300;
+        future = gemDropExecutor.scheduleWithFixedDelay(this::applyGravityToGridGems, 0, gridGravityInterval, TimeUnit.MILLISECONDS);
     }
 
 
@@ -298,13 +309,13 @@ public class Game {
     }
 
 
-    private void freeFallGridGems(){
-        var fallenGems = gemGrid.freeFallOnePosition();
+    private void applyGravityToGridGems(){
+        var fallenGems = gemGrid.gravityDropOnePosition();
         if(fallenGems.length == 0){
             cancelTask();
         }
         else{
-            gameView.freeFall(fallenGems);
+            gameView.dropOnePosition(fallenGems);
         }
     }
 
@@ -315,7 +326,8 @@ public class Game {
 
 
     // public access for the sake of testing via direct calls from the game fragment
-    public void evalGems(){
+    public void evaluateGemGrid(){
+       cancelTask();
        long[] markedGemsIds = evaluator.evaluateGemGrid();
        gameView.wipeOut(markedGemsIds);
     }
@@ -325,9 +337,10 @@ public class Game {
         log("Exception: " + e.getMessage());
     }
 
+
     private void cancelTask(){
-        if(gemDropFuture != null && !gemDropFuture.isCancelled()){
-            gemDropFuture.cancel(true);
+        if(future != null && !future.isCancelled()){
+            future.cancel(true);
         }
     }
 

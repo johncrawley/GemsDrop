@@ -13,7 +13,6 @@ import com.jcrawleydev.gemsdrop.service.game.grid.GemGrid;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 public class DroppingGems {
@@ -119,6 +118,11 @@ public class DroppingGems {
 
     public List<Gem> getFreeGems(){
         return gems.stream().filter(gem -> !gem.isAddedToGrid()).toList();
+    }
+
+
+    public long[] getFreeGemIds(){
+        return gems.stream().filter(gem -> !gem.isAddedToGrid()).mapToLong(Gem::getId).toArray();
     }
 
 
