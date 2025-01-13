@@ -65,7 +65,6 @@ public class Game {
 
 
     public void init(){
-        log("entered init()");
         evaluator = new GridEvaluator(gemGrid.getGemColumns(), gridProps.numberOfRows());
         movementChecker = new MovementChecker(gemGrid, gridProps);
         rotationChecker = new RotationChecker(gemGrid, gridProps);
@@ -74,7 +73,6 @@ public class Game {
 
 
     public void rotateGems(){
-        log("entered rotateGems()");
         syncMovement(this::rotate);
     }
 
@@ -114,7 +112,6 @@ public class Game {
 
 
     public void moveDown(){
-        log("Entered moveDown()");
         syncMovement(this::down);
     }
 
@@ -128,30 +125,24 @@ public class Game {
 
 
     private void left(){
-        log("Entering left");
         if(movementChecker.canMoveLeft(droppingGems)){
             droppingGems.moveLeft();
             gameView.updateGems(droppingGems.get());
         }
-        log("Exiting left!");
     }
 
 
     private void right(){
-        log("Entering right()");
         if(movementChecker.canMoveRight(droppingGems)){
             droppingGems.moveRight();
             updateGemsOnView();
         }
-        log("Exiting right()!");
     }
 
 
     private void up(){
-        log("Entering up()");
         droppingGems.moveUp();
         updateGemsOnView();
-        log("Exiting up()!");
     }
 
 
@@ -161,20 +152,8 @@ public class Game {
     }
 
 
-    public void downTEST(){
-        log("Entering down()");
-        if(movementChecker.canMoveDown(droppingGems)){
-            droppingGems.moveDown();
-
-            updateGemsOnView();
-        }
-        log("Exiting down()!");
-    }
-
-
     private synchronized void syncMovement(Runnable runnable){
         runnable.run();
-        log("Exiting syncMovement!");
     }
 
 
