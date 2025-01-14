@@ -161,6 +161,7 @@ public class Game {
         if (isControlEnabled.get()) {
             runnable.run();
         }
+
     }
 
 
@@ -225,27 +226,6 @@ public class Game {
            cancelTask();
            startGemFreeFall();
         }
-       log("Exiting dropGems()");
-    }
-
-
-    private void switchToEvalMode(){
-        log("Entered evalMode");
-        long [] markedGemIds = new long[]{};
-        cancelTask();
-        try {
-            markedGemIds = evaluator.evaluateGemGrid();
-        }catch (RuntimeException e){
-            printStackTrace(e);
-        }
-       log("switchToEvalMode() number of markedGemIds: " + markedGemIds.length);
-        if(markedGemIds.length == 0){
-            log("markedGemIds length is 0, switching back to drop mode");
-            switchToDropMode();
-            return;
-        }
-        log("wiping out ids on game view");
-        gameView.wipeOut(markedGemIds);
     }
 
 
@@ -321,16 +301,6 @@ public class Game {
         if(future != null && !future.isCancelled()){
             future.cancel(true);
         }
-    }
-
-
-    /* should be the same for quick drop (when the user presses "down")
-     and when one or two gems are added to the grid
-     */
-    private void switchToFreeFallMode(){
-        // cancel current drop task
-        // disable user controls
-        // start drop task again, but with faster time
     }
 
 
