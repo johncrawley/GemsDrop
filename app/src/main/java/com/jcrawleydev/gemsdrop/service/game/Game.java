@@ -3,8 +3,6 @@ package com.jcrawleydev.gemsdrop.service.game;
 import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems;
 import com.jcrawleydev.gemsdrop.service.game.grid.GemGridImpl;
 import com.jcrawleydev.gemsdrop.service.game.grid.GridEvaluator;
-import com.jcrawleydev.gemsdrop.service.game.utils.MovementChecker;
-import com.jcrawleydev.gemsdrop.service.game.utils.RotationChecker;
 import com.jcrawleydev.gemsdrop.view.GameView;
 
 import java.util.concurrent.Executors;
@@ -53,49 +51,47 @@ public class Game {
 
     private GameView gameView;
     private GridEvaluator evaluator;
-    private MovementChecker movementChecker;
-    private RotationChecker rotationChecker;
 
     private final ScheduledExecutorService gemDropExecutor = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> future;
     private final AtomicBoolean isStarted = new AtomicBoolean(false);
-    private final AtomicBoolean isControlEnabled = new AtomicBoolean(true);
+    private GemMover gemMover;
 
     private final GemGridImpl gemGrid = new GemGridImpl(gridProps);
 
 
     public void init(){
         evaluator = new GridEvaluator(gemGrid.getGemColumns(), gridProps.numberOfRows());
-        movementChecker = new MovementChecker(gemGrid, gridProps);
-        rotationChecker = new RotationChecker(gemGrid, gridProps);
         createGems();
+        gemMover = new GemMover(this, gemGrid, gridProps);
     }
 
 
-    public void rotateGems(){
-        syncMovement(this::rotate);
-    }
+    public void rotateGems(){ gemMover.rotateGems(); }
 
 
     public void moveLeft(){
-        syncMovement(this::left);
+        gemMover.moveLeft();
     }
 
 
     public void moveRight(){
-        syncMovement(this::right);
+        gemMover.moveRight();
     }
 
 
     public void moveUp(){
-        syncMovement(this::up);
+        gemMover.moveUp();
     }
+
+
+    public void moveDown(){gemMover.moveDown();}
 
 
     public void createGems(){
         droppingGems = new DroppingGems(gridProps);
         droppingGems.create();
-        isControlEnabled.set(true);
+        gemMover.enableControls();
         printGemGridColumnHeights();
     }
 
@@ -111,61 +107,8 @@ public class Game {
     }
 
 
-    public void moveDown(){
-        syncMovement(this::down);
-    }
 
-
-    private void rotate(){
-        if(rotationChecker.canRotate(droppingGems)){
-            droppingGems.rotate();
-            gameView.updateGems(droppingGems.get());
-        }
-    }
-
-
-    private void left(){
-        if(movementChecker.canMoveLeft(droppingGems)){
-            droppingGems.moveLeft();
-            gameView.updateGems(droppingGems.get());
-        }
-    }
-
-
-    private void right(){
-        if(movementChecker.canMoveRight(droppingGems)){
-            droppingGems.moveRight();
-            updateGemsOnView();
-        }
-    }
-
-
-    private void up(){
-        droppingGems.moveUp();
-        updateGemsOnView();
-    }
-
-
-    private void down(){
-       dropGems();
-      //  switchToFreeFallMode();
-    }
-
-
-    private synchronized void syncMovement(Runnable runnable){
-        runnable.run();
-    }
-
-
-    private synchronized void syncUserMovement(Runnable runnable){
-        if (isControlEnabled.get()) {
-            runnable.run();
-        }
-
-    }
-
-
-    private void updateGemsOnView(){
+    public void updateGemsOnView(){
         gameView.updateGems(droppingGems.getFreeGems());
     }
 
@@ -187,7 +130,7 @@ public class Game {
 
 
     private void startDroppingGems(int dropRate){
-        future = gemDropExecutor.scheduleWithFixedDelay(this::drop, 0, dropRate, TimeUnit.MILLISECONDS);
+        future = gemDropExecutor.scheduleWithFixedDelay(()-> gemMover.dropGems(), 0, dropRate, TimeUnit.MILLISECONDS);
     }
 
 
@@ -207,28 +150,6 @@ public class Game {
     }
 
 
-    private void drop(){
-        syncMovement(this::dropGems);
-    }
-
-
-    private void dropGems(){
-        log("entered dropGems()");
-        droppingGems.moveDown();
-        updateGemsOnView();
-        droppingGems.addConnectingGemsTo(gemGrid);
-        isControlEnabled.set(!droppingGems.areAnyAddedToGrid());
-        if(droppingGems.areAllAddedToGrid()){
-            evaluateGemGrid();
-            return;
-        }
-        if(droppingGems.areAnyAddedToGrid()){
-           cancelTask();
-           startGemFreeFall();
-        }
-    }
-
-
     public void onGemRemovalAnimationDone(){
         int initialGemCount = gemGrid.gemCount();
         gemGrid.removeMarkedGems();
@@ -240,8 +161,9 @@ public class Game {
     }
 
 
-    private void startGemFreeFall(){
-        lockControls();
+    public void startGemFreeFall(){
+        cancelTask();
+        gemMover.disableControls();
         int freeFallInterval = 300;
         future = gemDropExecutor.scheduleWithFixedDelay(this::freeFallRemainingGems, 0, freeFallInterval, TimeUnit.MILLISECONDS);
     }
@@ -260,11 +182,6 @@ public class Game {
     private void activateGridGravity(){
         int gridGravityInterval = 300;
         future = gemDropExecutor.scheduleWithFixedDelay(this::applyGravityToGridGems, 0, gridGravityInterval, TimeUnit.MILLISECONDS);
-    }
-
-
-    private void lockControls(){
-        isControlEnabled.set(false);
     }
 
 
