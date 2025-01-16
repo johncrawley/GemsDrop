@@ -137,7 +137,9 @@ public class GameService extends Service {
 
 
     public void notifyThatGameFinished(){
-        notifyGameOverFuture.cancel(false);
+        if(notifyGameOverFuture != null && !notifyGameOverFuture.isCancelled()){
+            notifyGameOverFuture.cancel(false);
+        }
     }
 
 

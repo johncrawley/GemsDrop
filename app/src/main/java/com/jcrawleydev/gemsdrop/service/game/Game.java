@@ -42,6 +42,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
                              - if there are no falling gems left, create new gems and start drop task
 
 
+
+        dropping gems are moved -> are any touching? -> evaluate gem grid -> wipe out marked gems ->
+
+
      */
 
 public class Game {
@@ -62,8 +66,8 @@ public class Game {
 
     public void init(){
         evaluator = new GridEvaluator(gemGrid.getGemColumns(), gridProps.numberOfRows());
-        createGems();
         gemMover = new GemMover(this, gemGrid, gridProps);
+        createGems();
     }
 
 
@@ -75,9 +79,7 @@ public class Game {
     }
 
 
-    public void moveRight(){
-        gemMover.moveRight();
-    }
+    public void moveRight(){ gemMover.moveRight(); }
 
 
     public void moveUp(){
@@ -85,13 +87,14 @@ public class Game {
     }
 
 
-    public void moveDown(){gemMover.moveDown();}
+    public void moveDown(){ gemMover.moveDown();}
 
 
     public void createGems(){
+        log("entered createGems()");
         droppingGems = new DroppingGems(gridProps);
         droppingGems.create();
-        gemMover.enableControls();
+        gemMover.setDroppingGems(droppingGems);
         printGemGridColumnHeights();
     }
 
@@ -105,7 +108,6 @@ public class Game {
         String colHeights = gemGrid.getColumnHeights().stream().map(String::valueOf).reduce("", (total, colHeight) -> total + " " + colHeight);
         log("printGemGridColumnHeights() : " + colHeights);
     }
-
 
 
     public void updateGemsOnView(){
@@ -150,6 +152,29 @@ public class Game {
     }
 
 
+    public boolean evaluateTouchingGems(){
+        boolean haveAnyGemsBeenAdded = false;
+        droppingGems.addConnectingGemsTo(gemGrid);
+
+        if(droppingGems.areAllAddedToGrid()){
+            log("evaluateTouchingGems() all gems were added to the grid");
+            gemMover.disableControls();
+            evaluateGemGrid();
+            haveAnyGemsBeenAdded = true;
+        }
+        else if(droppingGems.areAnyAddedToGrid()){
+            log("evaluateTouchingGems() at least one gem was added to the grid");
+            gemMover.disableControls();
+            startGemFreeFall();
+            haveAnyGemsBeenAdded = true;
+        }
+        else{
+            log("evaluateTouchingGems() no gems were added to the grid");
+        }
+        return haveAnyGemsBeenAdded;
+    }
+
+
     public void onGemRemovalAnimationDone(){
         int initialGemCount = gemGrid.gemCount();
         gemGrid.removeMarkedGems();
@@ -180,7 +205,7 @@ public class Game {
 
 
     private void activateGridGravity(){
-        int gridGravityInterval = 300;
+        int gridGravityInterval = 80;
         future = gemDropExecutor.scheduleWithFixedDelay(this::applyGravityToGridGems, 0, gridGravityInterval, TimeUnit.MILLISECONDS);
     }
 
@@ -189,6 +214,7 @@ public class Game {
         var fallenGems = gemGrid.gravityDropOnePosition();
         if(fallenGems.length == 0){
             cancelTask();
+            evaluateGemGrid();
         }
         else{
             gameView.dropOnePosition(fallenGems);
@@ -205,7 +231,12 @@ public class Game {
     public void evaluateGemGrid(){
        cancelTask();
        long[] markedGemsIds = evaluator.evaluateGemGrid();
-       gameView.wipeOut(markedGemsIds);
+       if(markedGemsIds.length > 0){
+           gameView.wipeOut(markedGemsIds);
+       }
+       else{
+           createGems();
+       }
     }
 
 

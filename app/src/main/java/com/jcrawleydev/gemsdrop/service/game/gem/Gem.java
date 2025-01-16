@@ -6,7 +6,6 @@ public class Gem {
     protected GemColor color;
     private boolean deletionCandidateFlag = false;
     private boolean markedForDeletion = false;
-    private boolean visible;
     private int column;
     private GemGroupPosition gemGroupPosition;
     private boolean isAddedToGrid;
@@ -23,7 +22,6 @@ public class Gem {
         this.color = color;
         this.gemGroupPosition = gemGroupPosition;
         this.containerPosition = initialContainerPosition;
-        this.visible = true;
         this.column = 3;
         this.id = System.nanoTime();
     }
@@ -34,13 +32,8 @@ public class Gem {
     }
 
 
-    public boolean isAddedToGrid(){
+    public boolean isAlreadyAddedToTheGrid(){
         return isAddedToGrid;
-    }
-
-
-    public GemGroupPosition getGemGroupPosition(){
-        return gemGroupPosition;
     }
 
 
@@ -54,6 +47,15 @@ public class Gem {
         };
         containerPosition += gemGroupPosition.getClockwiseContainerPositionOffset();
         column += gemGroupPosition.getClockwiseColumnOffset();
+        log("rotateClockwise() colour: " + color.toString()
+                + " containerPosition: " + containerPosition
+                + " gemGroupPosition: " + gemGroupPosition
+                + " clockwise column offset: " + gemGroupPosition.getClockwiseColumnOffset()
+                + " gem column: " + column);
+    }
+
+    private void log(String msg){
+        System.out.println("^^^ Gem: " + msg);
     }
 
 
@@ -103,11 +105,6 @@ public class Gem {
     }
 
 
-    private void log(String msg){
-        System.out.println("^^^ Gem: "+ msg);
-    }
-
-
     public void setGrey(){
         this.color = GemColor.GREY;
     }
@@ -133,18 +130,14 @@ public class Gem {
     public boolean isNotSameColorAs(Gem otherGem){
 
         if(otherGem == null || otherGem instanceof NullGem ){
-            log("other gem is null, or instance of null gem, returning true");
             return true;
         }
         if(getColor() == null){
-            log("this gem's colour is null, returning true");
             return true;
         }
         if(otherGem.getColor() == null){
-            log("the other gem's colour is somehow null, returning true");
             return true;
         }
-        log("entered isNotSameColorAs() : thisGem: " + this.getColor().toString() + " other gem: " + otherGem.getColor().toString());
         return this instanceof NullGem || this.getColor() != otherGem.getColor();
     }
 
@@ -158,19 +151,5 @@ public class Gem {
         deletionCandidateFlag = false;
     }
 
-
-    public boolean isVisible(){
-        return this.visible;
-    }
-
-
-    public void setInvisible(){
-        this.visible = false;
-    }
-
-
-    public void setVisible(){
-        this.visible = true;
-    }
 
 }

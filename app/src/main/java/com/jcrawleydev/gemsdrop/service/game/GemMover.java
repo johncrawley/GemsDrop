@@ -13,24 +13,24 @@ public class GemMover {
     private final MovementChecker movementChecker;
     private final RotationChecker rotationChecker;
     private final Game game;
-    private final GemGrid gemGrid;
-    private final GridProps gridProps;
+
     private DroppingGems droppingGems;
     private final AtomicBoolean isControlEnabled = new AtomicBoolean(true);
+    private final AtomicBoolean areFutureSyncMovementsAllowed = new AtomicBoolean(true);
 
 
     public GemMover(Game game, GemGrid gemGrid, GridProps gridProps){
-
         this.game = game;
-        this.gemGrid = gemGrid;
-        this.gridProps = gridProps;
-
         movementChecker = new MovementChecker(gemGrid, gridProps);
         rotationChecker = new RotationChecker(gemGrid, gridProps);
     }
 
+
     public void setDroppingGems(DroppingGems droppingGems){
+        log("entered setDroppingGems()");
         this.droppingGems = droppingGems;
+        areFutureSyncMovementsAllowed.set(true);
+        isControlEnabled.set(true);
     }
 
 
@@ -38,6 +38,10 @@ public class GemMover {
         isControlEnabled.set(false);
     }
 
+
+    private void enableControls(){
+        isControlEnabled.set(true);
+    }
 
 
     public void rotateGems(){ syncUserMovement(this::rotate);}
@@ -58,7 +62,9 @@ public class GemMover {
     }
 
 
-    public void moveDown(){syncUserMovement(this::down);}
+    public void moveDown(){
+        log("Entered moveDown()");
+        syncUserMovement(this::down); }
 
 
     public void dropGems(){
@@ -73,21 +79,32 @@ public class GemMover {
     }
 
 
-    private synchronized void syncMovement(Runnable runnable){
-        isControlEnabled.set(false);
-        boolean wereAnyGemsTouching = evaluateTouchingGems();
+    private void log(String msg){
+        System.out.println("^^^ GemMover: " + msg);
+    }
 
-        if(wereAnyGemsTouching){
+
+    private synchronized void syncMovement(Runnable runnable){
+        log("syncMovement() are futureSyncMovementsAllowed: "  + areFutureSyncMovementsAllowed.get());
+        if(!areFutureSyncMovementsAllowed.get()){
+            return;
+        }
+        disableControls();
+        boolean wereAnyGemsAdded = game.evaluateTouchingGems();
+
+        if(wereAnyGemsAdded){
+          //  cancelFutureSyncMovements();
             return;
         }
         runnable.run();
         game.updateGemsOnView();
-        isControlEnabled.set(true);
+        enableControls();
     }
 
 
-    public void enableControls(){
-        isControlEnabled.set(true);
+    private void cancelFutureSyncMovements(){
+        log("Entered cancelFutureSyncMovements()");
+        areFutureSyncMovementsAllowed.set(false);
     }
 
 
@@ -118,24 +135,12 @@ public class GemMover {
 
 
     private void down(){
-        dropGems();
+        if(movementChecker.canMoveDown(droppingGems)){
+            droppingGems.moveDown();
+        }
         //  switchToFreeFallMode();
     }
 
-
-    private boolean evaluateTouchingGems(){
-        droppingGems.addConnectingGemsTo(gemGrid);
-        isControlEnabled.set(!droppingGems.areAnyAddedToGrid());
-        if(droppingGems.areAllAddedToGrid()){
-            game.evaluateGemGrid();
-            return true;
-        }
-        if(droppingGems.areAnyAddedToGrid()){
-            game.startGemFreeFall();
-            return true;
-        }
-        return false;
-    }
 
 
 }

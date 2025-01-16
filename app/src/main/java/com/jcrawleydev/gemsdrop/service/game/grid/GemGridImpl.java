@@ -1,29 +1,22 @@
 package com.jcrawleydev.gemsdrop.service.game.grid;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 
-import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems;
-import com.jcrawleydev.gemsdrop.service.game.gem.GemGroupPosition;
 import com.jcrawleydev.gemsdrop.service.game.GridProps;
 import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 public class GemGridImpl implements GemGrid {
     private List<List<Gem>> gemColumns;
     private final GridProps gridProps;
-    private final int MAX_POSITION;
 
     public GemGridImpl(GridProps gridProps){
         this.gridProps = gridProps;
-        MAX_POSITION = gridProps.numberOfRows() * gridProps.depthPerDrop();
         initColumns();
     }
 
@@ -67,10 +60,32 @@ public class GemGridImpl implements GemGrid {
 
     public void addIfConnecting(Gem gem){
         var column = gemColumns.get(gem.getColumn());
-        if(gem.getContainerPosition() <= column.size() * gridProps.depthPerDrop()){
+        log("addIfConnecting() gem container position: " + gem.getContainerPosition() + " gem column index: " + gem.getColumn() + " top position of column: " + getTopPositionOf(column) + " gemId: " + gem.getId());
+        if(gem.getContainerPosition() <= getTopPositionOf(column)){
             column.add(gem);
             gem.markAsAddedToGrid();
         }
+    }
+
+
+    public void addIfConnecting(Gem bottomGem, Gem middleGem, Gem topGem ){
+        var column = gemColumns.get(bottomGem.getColumn());
+        if(bottomGem.getContainerPosition() <= getTopPositionOf(column)){
+            add(bottomGem, column);
+            add(middleGem, column);
+            add(topGem, column);
+        }
+    }
+
+
+    private void add(Gem gem, List<Gem> column){
+        column.add(gem);
+        gem.markAsAddedToGrid();
+    }
+
+
+    private int getTopPositionOf(List<Gem> column){
+        return column.size() * gridProps.depthPerDrop();
     }
 
 
@@ -79,7 +94,8 @@ public class GemGridImpl implements GemGrid {
         if(columnIndex > gemColumns.size() -1 || columnIndex < 0){
             return 10_000;
         }
-        return gemColumns.get(columnIndex).size() * gridProps.depthPerDrop();
+        var column = gemColumns.get(columnIndex);
+        return getTopPositionOf(column);
     }
 
 
@@ -116,75 +132,6 @@ public class GemGridImpl implements GemGrid {
     }
 
 
-    public List<Gem> addGems(DroppingGems droppingGems) {
-        boolean isOrientationVertical = droppingGems.isOrientationVertical();
-        log("Entered addGems() isOrientationVertical? : " + isOrientationVertical);
-        return isOrientationVertical? addAllVerticalGems(droppingGems) : addHorizontalGems(droppingGems);
-    }
-
-
-    private List<Gem> addAllVerticalGems(DroppingGems droppingGems){
-        Gem topGem = droppingGems.getTopGem();
-        Gem centreGem = droppingGems.getCentreGem();
-        Gem bottomGem = droppingGems.getBottomGem();
-
-        if(isTouchingAColumn(bottomGem, false)){
-            addGem(bottomGem);
-            addGem(centreGem);
-            addGem(topGem);
-            return Collections.emptyList();
-        }
-        return List.of(topGem, centreGem, bottomGem );
-    }
-
-
-    private List<Gem> addHorizontalGems(DroppingGems droppingGems){
-        List<Gem> gems = droppingGems.get();
-        log("entering addHorizontalGems, gems size: " + gems.size());
-        var gemsCopy = new ArrayList<>(gems);
-        for(Gem gem : gems){
-            if(isTouchingAColumn(gem, true)){
-                addGem(gem);
-                gemsCopy.remove(gem);
-            }
-        }
-        return gemsCopy;
-    }
-
-
-    private boolean isTouchingAColumn(@Nullable Gem gem, boolean isHorizontal){
-        if(gem == null){
-            return false;
-        }
-        int gemColumn = gem.getColumn();
-        log("isTouchingAColumn() gemColumn " + gemColumn + " size: " + gemColumns.get(gemColumn).size() + " heightOfDroppingGem: " + getColumnHeightOfDropping(gem, isHorizontal) + " gem container position: " + gem.getContainerPosition());
-        if(gem.getContainerPosition() == 0){
-            return true;
-        }
-
-        return (gemColumns.get(gemColumn).size() * 2) >= gem.getContainerPosition();
-    }
-
-
-    private int getColumnHeightOfDropping(Gem gem, boolean isHorizontal){
-        int bottomDepth = gem.getContainerPosition() + (isHorizontal ? 0 : 2);
-        int alignedPosition = bottomDepth + (bottomDepth % 2 == 1 ? 1 : 0);
-        return (MAX_POSITION - alignedPosition) /2;
-    }
-
-
-    private void addGem(@Nullable Gem gem){
-        if(gem != null){
-            gemColumns.get(gem.getColumn()).add(gem);
-        }
-    }
-
-
-    private Optional<Gem> getBottomGem(List<Gem> gems){
-        return gems.stream().filter(g -> g.getGemGroupPosition() == GemGroupPosition.BOTTOM).findFirst();
-    }
-
-
     private void log(String msg){
         System.out.println("^^^ GemGrid: "+  msg);
     }
@@ -196,16 +143,6 @@ public class GemGridImpl implements GemGrid {
                 gem.setGrey();
             }
         }
-    }
-
-
-    public boolean isEmpty(){
-        for(List<Gem> column : gemColumns){
-            if(!column.isEmpty()){
-                return false;
-            }
-        }
-        return true;
     }
 
 

@@ -25,7 +25,9 @@ public class MovementChecker {
 
 
     public boolean canMoveDown(DroppingGems droppingGems){
-       return droppingGems.getBottomGem().getContainerPosition() > 0;
+        int position = droppingGems.getBottomGem().getContainerPosition();
+        boolean areAllGemsAboveColumns = droppingGems.get().stream().allMatch( gem -> gem.getContainerPosition() > gemGrid.getColumnHeightAt(gem.getColumn()));
+        return position > 0; // && areAllGemsAboveColumns;
     }
 
 

@@ -231,7 +231,7 @@ public class GameFragment extends Fragment {
 
 
     private void notifyGameOfGemRemovalCompletion(){
-        getService().ifPresent(GameService::notifyThatGameFinished);
+        getService().ifPresent(GameService::onGemRemovalAnimationDone);
     }
 
 
