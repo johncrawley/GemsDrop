@@ -65,6 +65,6 @@ public class RotationChecker {
 
     public boolean isAtBoundary(DroppingGems droppingGems){
        return droppingGems.getLeftmostColumn() == 0
-               ||  droppingGems.getRightmostColumn() >= gemGrid.getNumberOfColumns() -1;
+               ||  droppingGems.getRightmostColumn() >= gridProps.numberOfColumns() -1;
     }
 }

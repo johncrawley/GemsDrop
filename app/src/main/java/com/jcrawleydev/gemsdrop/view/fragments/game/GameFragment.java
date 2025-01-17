@@ -28,7 +28,6 @@ import com.jcrawleydev.gemsdrop.service.GameService;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -243,6 +242,7 @@ public class GameFragment extends Fragment {
 
         var gemView = itemsMap.computeIfAbsent(id, k -> createAndAddGemLayout(id, position, column, colorId));
         updateGemCoordinates(gemView, position, column);
+        updateGemColor(gemView, colorId);
     }
 
 
@@ -267,7 +267,6 @@ public class GameFragment extends Fragment {
         LinearLayout gemLayout = new LinearLayout(getContext());
         gemLayout.setTag(id);
         ImageView imageView = new ImageView(getContext());
-        log("createAndAddGemView() colorId: " + colorId);
         setGemDrawable(imageView, colorId);
         updateGemCoordinates(gemLayout, position, column);
         setGemViewDimensions(imageView);
@@ -299,10 +298,21 @@ public class GameFragment extends Fragment {
 
 
     private void updateGemCoordinates(ViewGroup gemLayout, int position, int column){
-       // log("Entered updateGemCoordinates() position: " + position + " , column: " + column);
+        // log("Entered updateGemCoordinates() position: " + position + " , column: " + column);
         gemLayout.setX(getXForColumn(column));
         gemLayout.setY(getYForPosition(position));
         log("updateGemCoordinates() position: " + position + " column: " + column);
+    }
+
+
+    private void updateGemColor(ViewGroup gemLayout, int colorId){
+        var gemImageView = getGemViewFrom(gemLayout);
+        setGemDrawable(gemImageView, colorId);
+    }
+
+
+    private ImageView getGemViewFrom(ViewGroup gemLayout){
+        return (ImageView) gemLayout.getChildAt(0);
     }
 
 

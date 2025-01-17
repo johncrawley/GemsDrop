@@ -60,27 +60,10 @@ public class GemGridImpl implements GemGrid {
 
     public void addIfConnecting(Gem gem){
         var column = gemColumns.get(gem.getColumn());
-        log("addIfConnecting() gem container position: " + gem.getContainerPosition() + " gem column index: " + gem.getColumn() + " top position of column: " + getTopPositionOf(column) + " gemId: " + gem.getId());
         if(gem.getContainerPosition() <= getTopPositionOf(column)){
             column.add(gem);
             gem.markAsAddedToGrid();
         }
-    }
-
-
-    public void addIfConnecting(Gem bottomGem, Gem middleGem, Gem topGem ){
-        var column = gemColumns.get(bottomGem.getColumn());
-        if(bottomGem.getContainerPosition() <= getTopPositionOf(column)){
-            add(bottomGem, column);
-            add(middleGem, column);
-            add(topGem, column);
-        }
-    }
-
-
-    private void add(Gem gem, List<Gem> column){
-        column.add(gem);
-        gem.markAsAddedToGrid();
     }
 
 
@@ -100,49 +83,22 @@ public class GemGridImpl implements GemGrid {
 
 
     @Override
-    public int getNumberOfColumns(){
-        return gridProps.numberOfColumns();
+    public void printColumnHeights(){
+        String colHeights = gemColumns.stream()
+                .map(col -> String.valueOf(getTopPositionOf(col)))
+                .reduce("", (total, colHeight) -> total + " " + colHeight);
+        log("printGemGridColumnHeights() : " + colHeights);
     }
 
 
-    public int getHighestColumnIndex(){
-        return gemColumns.stream().map(List::size).max(Integer::compare).orElse(1) - 1;
-    }
-
-
-    public List<Integer> getColumnHeights(){
-        List<Integer> heights = new ArrayList<>(gridProps.numberOfColumns());
-        for(List<?> column : gemColumns){
-            heights.add(column.size());
-        }
-        return heights;
-    }
-
-
-    public List<Gem> getGemsMarkedForDeletion(){
-        var markedGems = new ArrayList<Gem>();
-        for(List<Gem> column : gemColumns){
-            for(Gem gem: column) {
-                if (gem.isMarkedForDeletion()) {
-                    markedGems.add(gem);
-                }
-            }
-        }
-        return markedGems;
+    @Override
+    public boolean exceedsMaxHeight(){
+        return gemColumns.stream().anyMatch(col -> col.size() > gridProps.numberOfRows());
     }
 
 
     private void log(String msg){
         System.out.println("^^^ GemGrid: "+  msg);
-    }
-
-
-    public void turnAllGemsGrey(){
-        for(List<Gem> column : gemColumns){
-            for(Gem gem : column){
-                gem.setGrey();
-            }
-        }
     }
 
 

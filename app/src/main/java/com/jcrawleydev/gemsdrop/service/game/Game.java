@@ -1,10 +1,12 @@
 package com.jcrawleydev.gemsdrop.service.game;
 
 import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems;
+import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.service.game.grid.GemGridImpl;
 import com.jcrawleydev.gemsdrop.service.game.grid.GridEvaluator;
 import com.jcrawleydev.gemsdrop.view.GameView;
 
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -60,6 +62,8 @@ public class Game {
     private ScheduledFuture<?> future;
     private final AtomicBoolean isStarted = new AtomicBoolean(false);
     private GemMover gemMover;
+    private GameOverAnimator gameOverAnimator;
+    private final int GRAVITY_INTERVAL = 70;
 
     private final GemGridImpl gemGrid = new GemGridImpl(gridProps);
 
@@ -67,6 +71,7 @@ public class Game {
     public void init(){
         evaluator = new GridEvaluator(gemGrid.getGemColumns(), gridProps.numberOfRows());
         gemMover = new GemMover(this, gemGrid, gridProps);
+        gameOverAnimator = new GameOverAnimator(this, gemGrid, gridProps);
         createGems();
     }
 
@@ -95,7 +100,7 @@ public class Game {
         droppingGems = new DroppingGems(gridProps);
         droppingGems.create();
         gemMover.setDroppingGems(droppingGems);
-        printGemGridColumnHeights();
+        gemGrid.printColumnHeights();
     }
 
 
@@ -104,20 +109,19 @@ public class Game {
     }
 
 
-    private void printGemGridColumnHeights(){
-        String colHeights = gemGrid.getColumnHeights().stream().map(String::valueOf).reduce("", (total, colHeight) -> total + " " + colHeight);
-        log("printGemGridColumnHeights() : " + colHeights);
+    public void updateDroppingGemsOnView(){
+        updateGemsOnView(droppingGems.getFreeGems());
     }
 
 
-    public void updateGemsOnView(){
-        gameView.updateGems(droppingGems.getFreeGems());
+    public void updateGemsOnView(List<Gem> gems){
+        gameView.updateGems(gems);
     }
 
 
     public void create(){
         droppingGems.create();
-        updateGemsOnView();
+        updateDroppingGemsOnView();
     }
 
 
@@ -157,19 +161,14 @@ public class Game {
         droppingGems.addConnectingGemsTo(gemGrid);
 
         if(droppingGems.areAllAddedToGrid()){
-            log("evaluateTouchingGems() all gems were added to the grid");
             gemMover.disableControls();
             evaluateGemGrid();
             haveAnyGemsBeenAdded = true;
         }
         else if(droppingGems.areAnyAddedToGrid()){
-            log("evaluateTouchingGems() at least one gem was added to the grid");
             gemMover.disableControls();
             startGemFreeFall();
             haveAnyGemsBeenAdded = true;
-        }
-        else{
-            log("evaluateTouchingGems() no gems were added to the grid");
         }
         return haveAnyGemsBeenAdded;
     }
@@ -189,14 +188,13 @@ public class Game {
     public void startGemFreeFall(){
         cancelTask();
         gemMover.disableControls();
-        int freeFallInterval = 300;
-        future = gemDropExecutor.scheduleWithFixedDelay(this::freeFallRemainingGems, 0, freeFallInterval, TimeUnit.MILLISECONDS);
+        future = gemDropExecutor.scheduleWithFixedDelay(this::freeFallRemainingGems, 0, GRAVITY_INTERVAL, TimeUnit.MILLISECONDS);
     }
 
 
     private void freeFallRemainingGems(){
         droppingGems.moveDown();
-        updateGemsOnView();
+        updateDroppingGemsOnView();
         droppingGems.addConnectingGemsTo(gemGrid);
         if(droppingGems.areAllAddedToGrid()){
             evaluateGemGrid();
@@ -205,8 +203,7 @@ public class Game {
 
 
     private void activateGridGravity(){
-        int gridGravityInterval = 80;
-        future = gemDropExecutor.scheduleWithFixedDelay(this::applyGravityToGridGems, 0, gridGravityInterval, TimeUnit.MILLISECONDS);
+        future = gemDropExecutor.scheduleWithFixedDelay(this::applyGravityToGridGems, 0, GRAVITY_INTERVAL, TimeUnit.MILLISECONDS);
     }
 
 
@@ -235,9 +232,26 @@ public class Game {
            gameView.wipeOut(markedGemsIds);
        }
        else{
-           createGems();
+           checkForHeightExceeded();
        }
     }
+
+
+    public void end(){
+
+    }
+
+
+    private void checkForHeightExceeded(){
+        if(gemGrid.exceedsMaxHeight()){
+            gameOverAnimator.startGameOverSequence();
+        }
+        else{
+            createGems();
+        }
+    }
+
+
 
 
     private void printStackTrace(Exception e){

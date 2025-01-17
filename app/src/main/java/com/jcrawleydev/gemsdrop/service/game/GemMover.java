@@ -97,7 +97,7 @@ public class GemMover {
             return;
         }
         runnable.run();
-        game.updateGemsOnView();
+        game.updateDroppingGemsOnView();
         enableControls();
     }
 
