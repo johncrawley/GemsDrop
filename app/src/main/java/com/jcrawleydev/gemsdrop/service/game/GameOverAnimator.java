@@ -1,5 +1,6 @@
 package com.jcrawleydev.gemsdrop.service.game;
 
+import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems;
 import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.service.game.grid.GemGrid;
 
@@ -29,28 +30,45 @@ public class GameOverAnimator {
         this.gemGrid = gemGrid;
         this.gridProps = gridProps;
         executorService = Executors.newSingleThreadScheduledExecutor();
-
     }
 
 
     public void startGameOverSequence(){
         populateGemRows();
-        future = executorService.scheduleWithFixedDelay(this::turnNextRowGrey, 0, 120, TimeUnit.MILLISECONDS);
+        int delay = 100;
+        turnDroppingGemsGrey();
+        future = executorService.scheduleWithFixedDelay(this::turnNextRowGrey, delay, delay, TimeUnit.MILLISECONDS);
+    }
+
+
+    private void turnDroppingGemsGrey(){
+        DroppingGems droppingGems = game.getDroppingGems();
+        if(droppingGems != null){
+            var gems = droppingGems.get();
+            gems.forEach(Gem::setGrey);
+            game.updateGemsOnView(gems);
+        }
     }
 
 
     private void populateGemRows(){
         gemRows = getGemRows();
-        currentRowIndex = 0;
+        currentRowIndex = gemRows.size() - 1;
+        log("populateGemRows() currentRowIndex: " + currentRowIndex + " number of rows: " + gridProps.numberOfRows());
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ GameOverAnimator: " + msg);
     }
 
 
     private void turnNextRowGrey(){
         var row = gemRows.get(currentRowIndex);
+        currentRowIndex--;
         row.forEach(Gem::setGrey);
         game.updateGemsOnView(row);
-        currentRowIndex++;
-        if(currentRowIndex >= gemRows.size()){
+        if(currentRowIndex < 0 ){
             future.cancel(false);
             game.end();
         }
@@ -75,7 +93,6 @@ public class GameOverAnimator {
         }
         return row;
     }
-
 
 
 }

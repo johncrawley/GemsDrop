@@ -52,7 +52,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Game {
 
-    private final GridProps gridProps = new GridProps(14, 7, 2);
+    private final GridProps gridProps = new GridProps(15, 7, 2);
     private DroppingGems droppingGems;
 
     private GameView gameView;
@@ -142,6 +142,11 @@ public class Game {
 
     private Integer getThreadId(){
        return  android.os.Process.myTid();
+    }
+
+
+    public DroppingGems getDroppingGems(){
+        return droppingGems;
     }
 
 

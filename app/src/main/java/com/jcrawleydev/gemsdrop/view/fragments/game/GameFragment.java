@@ -90,7 +90,7 @@ public class GameFragment extends Fragment {
         int minimumBorder = 50;
         containerWidth = gamePane.getMeasuredWidth() - minimumBorder;
         containerHeight = Integer.MAX_VALUE;
-        int numberOfRows = 16;
+        int numberOfRows = 15;
         int containerAdjustmentCount = 0;
         while(containerHeight > (availableHeight - minimumBorder)){
             containerAdjustmentCount++;
