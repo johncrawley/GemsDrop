@@ -58,7 +58,7 @@ public class Game {
     private GameView gameView;
     private GridEvaluator evaluator;
 
-    private final ScheduledExecutorService gemDropExecutor = Executors.newSingleThreadScheduledExecutor();
+    private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> future;
     private final AtomicBoolean isStarted = new AtomicBoolean(false);
     private GemMover gemMover;
@@ -66,6 +66,8 @@ public class Game {
     private final int GRAVITY_INTERVAL = 70;
 
     private final GemGridImpl gemGrid = new GemGridImpl(gridProps);
+    private int currentDropRate = 500;
+    private int dropIntervalCounter;
 
 
     public void init(){
@@ -92,13 +94,18 @@ public class Game {
     }
 
 
-    public void moveDown(){ gemMover.moveDown();}
+    public void moveDown(){
+        cancelTask();
+        gemMover.disableControls();
+        future = executor.scheduleWithFixedDelay(()-> gemMover.dropGems(), 0, 80, TimeUnit.MILLISECONDS);
+    }
 
 
     public void createGems(){
         log("entered createGems()");
         droppingGems = new DroppingGems(gridProps);
         droppingGems.create();
+        updateDropInterval();
         gemMover.setDroppingGems(droppingGems);
         gemGrid.printColumnHeights();
     }
@@ -111,6 +118,17 @@ public class Game {
 
     public void updateDroppingGemsOnView(){
         updateGemsOnView(droppingGems.getFreeGems());
+    }
+
+
+    private void updateDropInterval(){
+        int minimumInterval = 120;
+        int intervalDecrement = 20;
+        dropIntervalCounter++;
+        if(dropIntervalCounter > 9){
+            currentDropRate = Math.max(minimumInterval, currentDropRate - intervalDecrement);
+            dropIntervalCounter = 0;
+        }
     }
 
 
@@ -130,18 +148,13 @@ public class Game {
             return;
         }
         isStarted.set(true);
-
-        //startDroppingGems(500);
+        startDroppingGems(currentDropRate);
     }
 
 
     private void startDroppingGems(int dropRate){
-        future = gemDropExecutor.scheduleWithFixedDelay(()-> gemMover.dropGems(), 0, dropRate, TimeUnit.MILLISECONDS);
-    }
-
-
-    private Integer getThreadId(){
-       return  android.os.Process.myTid();
+        create();
+        future = executor.scheduleWithFixedDelay(()-> gemMover.dropGems(), 0, dropRate, TimeUnit.MILLISECONDS);
     }
 
 
@@ -193,7 +206,7 @@ public class Game {
     public void startGemFreeFall(){
         cancelTask();
         gemMover.disableControls();
-        future = gemDropExecutor.scheduleWithFixedDelay(this::freeFallRemainingGems, 0, GRAVITY_INTERVAL, TimeUnit.MILLISECONDS);
+        future = executor.scheduleWithFixedDelay(this::freeFallRemainingGems, 0, GRAVITY_INTERVAL, TimeUnit.MILLISECONDS);
     }
 
 
@@ -208,7 +221,7 @@ public class Game {
 
 
     private void activateGridGravity(){
-        future = gemDropExecutor.scheduleWithFixedDelay(this::applyGravityToGridGems, 0, GRAVITY_INTERVAL, TimeUnit.MILLISECONDS);
+        future = executor.scheduleWithFixedDelay(this::applyGravityToGridGems, 0, GRAVITY_INTERVAL, TimeUnit.MILLISECONDS);
     }
 
 
@@ -252,11 +265,9 @@ public class Game {
             gameOverAnimator.startGameOverSequence();
         }
         else{
-            createGems();
+            startDroppingGems(currentDropRate);
         }
     }
-
-
 
 
     private void printStackTrace(Exception e){
@@ -268,12 +279,6 @@ public class Game {
         if(future != null && !future.isCancelled()){
             future.cancel(true);
         }
-    }
-
-
-    private void switchToDropMode(){
-        create();
-        //startDroppingGems(500);
     }
 
 
