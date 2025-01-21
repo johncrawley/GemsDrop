@@ -27,6 +27,7 @@ public class DroppingGems {
     private final List<GemColor> gemColors = List.of(GemColor.RED, GemColor.BLUE, GemColor.PURPLE, GemColor.GREEN, GemColor.YELLOW);
     //private Map<String, Gem> originalGems;
     private final int middleColumnIndex;
+    private final int INITIAL_POSITION;
 
 
 
@@ -35,6 +36,7 @@ public class DroppingGems {
         random = new Random(System.currentTimeMillis());
         gems = new ArrayList<>(INITIAL_NUMBER_OF_GEMS);
         middleColumnIndex = gridProps.numberOfColumns() / 2;
+        INITIAL_POSITION = gridProps.numberOfPositions() - 1;
     }
 
 
@@ -83,6 +85,11 @@ public class DroppingGems {
         return gemA.isAlreadyAddedToTheGrid()
                 && gemB.isAlreadyAddedToTheGrid()
                 && gemC.isAlreadyAddedToTheGrid();
+    }
+
+
+    public boolean areInInitialPosition(){
+        return getCentreGem().getContainerPosition() > INITIAL_POSITION;
     }
 
 
@@ -199,8 +206,7 @@ public class DroppingGems {
 
 
     private Gem createGem(GemGroupPosition gemGroupPosition, int offset){
-        int initialPosition = gridProps.numberOfPositions() - 1;
-        int initialContainerPosition = initialPosition + (gridProps.depthPerDrop() * offset);
+        int initialContainerPosition = INITIAL_POSITION + (gridProps.depthPerDrop() * offset);
         return new Gem(getRandomColor(), gemGroupPosition, initialContainerPosition);
     }
 

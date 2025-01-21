@@ -22,30 +22,25 @@ public class GameInputHandler {
 
     public void handleInput(float x, float y, ViewGroup gamePane){
 
-        log("handleInput(" + (int)x + "," +  (int)y + ")" + " gemContainer AbsoluteY: "+ gamePane.getY() + " height: " + gamePane.getMeasuredHeight());
+        //log("handleInput(" + (int)x + "," +  (int)y + ")" + " gemContainer AbsoluteY: "+ gamePane.getY() + " height: " + gamePane.getMeasuredHeight());
         int height = gamePane.getMeasuredHeight();
         int width = gamePane.getMeasuredWidth();
         if( y < height/4f){
-            log("handleInput() move up!");
             moveUp();
             return;
         }
         if( y > (height / 3f) * 2){
-            log("handleInput() move down!");
             moveDown();
             return;
         }
         if(x < width / 3f){
-            log("handleInput() move left!");
             moveLeft();
             return;
         }
         if(x < width / 1.5f ){
-            log("handleInput() rotate!");
             rotateGems();
             return;
         }
-        log("handleInput() move right!!");
         moveRight();
     }
 
@@ -82,7 +77,7 @@ public class GameInputHandler {
 
 
     private void rotateGems(){
-        log("Entered rotateGems()");
+       // log("Entered rotateGems()");
         runOnService(GameService::rotateGems);
     }
 

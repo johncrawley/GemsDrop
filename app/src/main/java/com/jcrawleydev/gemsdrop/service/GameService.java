@@ -68,20 +68,13 @@ public class GameService extends Service {
 
 
     public void createGems(){
-        game.createGems();
+     //TODO: delete this method
     }
 
 
     public void evalGems(){
         game.evaluateGemGrid();
     }
-
-
-
-    public void destroyGems(){
-        game.destroyGems();
-    }
-
 
 
     public void moveDown(){
@@ -96,10 +89,6 @@ public class GameService extends Service {
         if(game != null){
           //  game.setDifficulty(value);
         }
-    }
-
-    public void create(){
-        game.create();
     }
 
 

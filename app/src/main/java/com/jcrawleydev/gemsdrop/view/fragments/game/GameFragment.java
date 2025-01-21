@@ -56,7 +56,6 @@ public class GameFragment extends Fragment {
         assignLayoutDimensions();
         setupViews(parentView);
         setupListeners();
-        startGame();
         setupCreateAndDestroyButtons(parentView);
         return parentView;
     }
@@ -68,6 +67,7 @@ public class GameFragment extends Fragment {
             public void onGlobalLayout() {
                 assignGemContainerDimensions();
                 assignWidthToExistingGems();
+                startGame();
                 gamePane.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         };
@@ -106,6 +106,7 @@ public class GameFragment extends Fragment {
 
     private void assignGemContainerLayoutParams(){
         var params = new LinearLayout.LayoutParams(containerWidth, containerHeight);
+        log("assignGemContainerLayoutParams()");
         gemContainer.setLayoutParams(params);
     }
 
@@ -271,6 +272,7 @@ public class GameFragment extends Fragment {
         updateGemCoordinates(gemLayout, position, column);
         setGemViewDimensions(imageView);
         gemLayout.addView(imageView);
+        log("createAndAddGemLayout() about to setLayoutParams on gemLayout");
         setLayoutParamsOn(gemLayout);
         gemContainer.addView(gemLayout);
         return gemLayout;
@@ -281,12 +283,14 @@ public class GameFragment extends Fragment {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.weight = 1.0f;
         params.gravity = Gravity.TOP;
+        log("setLayoutParamsOn() about to set layout params, gravity is top, weight is 1.0f, linearLayout.LayoutParams");
         gemLayout.setLayoutParams(params);
     }
 
 
     private void setGemViewDimensions(View gemView){
         var layoutParams = new LinearLayout.LayoutParams((int)gemWidth, (int)gemWidth);
+        log("setGemViewDimensions(), about to setLayoutParams on gemView");
         gemView.setLayoutParams(layoutParams);
     }
 
@@ -298,10 +302,8 @@ public class GameFragment extends Fragment {
 
 
     private void updateGemCoordinates(ViewGroup gemLayout, int position, int column){
-        // log("Entered updateGemCoordinates() position: " + position + " , column: " + column);
         gemLayout.setX(getXForColumn(column));
         gemLayout.setY(getYForPosition(position));
-        log("updateGemCoordinates() position: " + position + " column: " + column);
     }
 
 

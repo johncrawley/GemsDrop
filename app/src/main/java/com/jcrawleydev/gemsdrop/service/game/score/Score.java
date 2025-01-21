@@ -18,21 +18,26 @@ public class Score {
         return currentScore;
     }
 
+
     public void clear(){
         currentScore = 0;
     }
+
 
     public void incMultiplier(){
         multiplier++;
     }
 
+
     public int getMultiplier(){
         return multiplier;
     }
 
+
     public void resetMultiplier(){
         multiplier = 1;
     }
+
 
     public void addPointsFor(int numberOfGems){
         currentScore += basePoints * numberOfGems * multiplier;

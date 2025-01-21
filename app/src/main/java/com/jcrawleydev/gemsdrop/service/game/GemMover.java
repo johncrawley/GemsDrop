@@ -27,7 +27,6 @@ public class GemMover {
 
 
     public void setDroppingGems(DroppingGems droppingGems){
-        log("entered setDroppingGems()");
         this.droppingGems = droppingGems;
         areFutureSyncMovementsAllowed.set(true);
         isControlEnabled.set(true);
@@ -57,16 +56,6 @@ public class GemMover {
     }
 
 
-    public void moveUp(){
-        syncUserMovement(this::up);
-    }
-
-
-    public void moveDown(){
-        log("Entered moveDown()");
-        syncUserMovement(this::down); }
-
-
     public void dropGems(){
         syncMovement(() -> droppingGems.moveDown());
     }
@@ -85,7 +74,7 @@ public class GemMover {
 
 
     private synchronized void syncMovement(Runnable runnable){
-        log("syncMovement() are futureSyncMovementsAllowed: "  + areFutureSyncMovementsAllowed.get());
+        //log("syncMovement() are futureSyncMovementsAllowed: "  + areFutureSyncMovementsAllowed.get());
         if(!areFutureSyncMovementsAllowed.get()){
             return;
         }
@@ -102,7 +91,7 @@ public class GemMover {
     }
 
 
-    private void cancelFutureSyncMovements(){
+    private void cancelFutureMovements(){
         log("Entered cancelFutureSyncMovements()");
         areFutureSyncMovementsAllowed.set(false);
     }

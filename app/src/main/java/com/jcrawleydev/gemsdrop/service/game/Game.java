@@ -90,14 +90,7 @@ public class Game {
 
 
     public void moveUp(){
-        gemMover.moveUp();
-    }
-
-
-    public void moveDown(){
-        cancelTask();
-        gemMover.disableControls();
-        future = executor.scheduleWithFixedDelay(()-> gemMover.dropGems(), 0, 80, TimeUnit.MILLISECONDS);
+      //  gemMover.moveUp();
     }
 
 
@@ -108,11 +101,6 @@ public class Game {
         updateDropInterval();
         gemMover.setDroppingGems(droppingGems);
         gemGrid.printColumnHeights();
-    }
-
-
-    public void destroyGems(){
-
     }
 
 
@@ -137,12 +125,6 @@ public class Game {
     }
 
 
-    public void create(){
-        droppingGems.create();
-        updateDroppingGemsOnView();
-    }
-
-
     public void startGame(){
         if(isStarted.get()){
             return;
@@ -152,9 +134,28 @@ public class Game {
     }
 
 
+    private final ScheduledExecutorService firstEx = Executors.newSingleThreadScheduledExecutor();
+
+
     private void startDroppingGems(int dropRate){
-        create();
-        future = executor.scheduleWithFixedDelay(()-> gemMover.dropGems(), 0, dropRate, TimeUnit.MILLISECONDS);
+        firstEx.schedule(()->{
+            log("started dropping gems!");
+            createGems();
+            updateDroppingGemsOnView();
+            future = executor.scheduleWithFixedDelay(()-> gemMover.dropGems(), 0, dropRate, TimeUnit.MILLISECONDS);
+        }, 1000, TimeUnit.MILLISECONDS);
+    }
+
+
+    public void moveDown(){
+        if(droppingGems.areAllAddedToGrid() || droppingGems.areInInitialPosition()){
+            return;
+        }
+        cancelTask();
+        gemMover.disableControls();
+        future = executor.scheduleWithFixedDelay(()-> gemMover.dropGems(), 0, 80, TimeUnit.MILLISECONDS);
+
+        // gemMover.moveDown();
     }
 
 
@@ -267,6 +268,11 @@ public class Game {
         else{
             startDroppingGems(currentDropRate);
         }
+    }
+
+
+
+    public void create(){
     }
 
 
