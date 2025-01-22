@@ -44,9 +44,8 @@ public class GameOverAnimator {
     private void turnDroppingGemsGrey(){
         DroppingGems droppingGems = game.getDroppingGems();
         if(droppingGems != null){
-            var gems = droppingGems.get();
-            gems.forEach(Gem::setGrey);
-            game.updateGemsOnView(gems);
+            droppingGems.setGrey();
+            updateColorsOnView(droppingGems.getFreeGems());
         }
     }
 
@@ -67,11 +66,16 @@ public class GameOverAnimator {
         var row = gemRows.get(currentRowIndex);
         currentRowIndex--;
         row.forEach(Gem::setGrey);
-        game.updateGemsOnView(row);
+        updateColorsOnView(row);
         if(currentRowIndex < 0 ){
             future.cancel(false);
             game.end();
         }
+    }
+
+
+    private void updateColorsOnView(List<Gem> gems){
+        game.updateGemsColorsOnView(gems);
     }
 
 

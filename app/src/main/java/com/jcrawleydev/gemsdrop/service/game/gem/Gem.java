@@ -114,6 +114,10 @@ public class Gem {
         return color;
     }
 
+    public int getColorId(){
+        return color.ordinal();
+    }
+
 
     public void setMarkedForDeletion(){
         if(deletionCandidateFlag){

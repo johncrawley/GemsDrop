@@ -1,5 +1,15 @@
 package com.jcrawleydev.gemsdrop;
 
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_COLOR_IDS;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_COLUMNS;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_IDS;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_POSITIONS;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.CREATE_GEMS;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_COLORS;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_GEMS;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_SCORE;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.addIntArrayTo;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.addLongArrayTo;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.createBundleOf;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.sendMessage;
 
@@ -28,6 +38,7 @@ import androidx.lifecycle.ViewModelProvider;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.ToIntFunction;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener, GameView {
 
@@ -91,49 +102,83 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     public void setScore(int score){
         Bundle bundle = createBundleOf(BundleTag.SCORE, score);
-        sendMessage(this, FragmentMessage.UPDATE_SCORE, bundle);
+        sendMessage(this, UPDATE_SCORE, bundle);
+    }
+
+
+    @Override
+    public void createGems(List<Gem> gems) {
+        var bundle = createGemUpdateBundleFor(gems);
+        addGemColorIdsTo(bundle, gems);
+        log("createGems() bundle created, about to send to fragment");
+        sendMessage(this, CREATE_GEMS, bundle);
+    }
+
+    private void log(String msg){
+        System.out.println("^^^ MainActivity: " +  msg);
     }
 
 
     @Override
     public void updateGems(List<Gem> gems){
-        log("Entered updateGems() gems.size(): " + gems.size());
-        for(Gem gem : gems){
-            updateGem(gem);
-        }
+        var bundle = createGemUpdateBundleFor(gems);
+        sendMessage(this, UPDATE_GEMS, bundle);
     }
 
 
     @Override
-    public void dropOnePosition(long[] gemsIds){
+    public void updateGemsColors(List<Gem> gems) {
         Bundle bundle = new Bundle();
-        bundle.putLongArray(BundleTag.GEM_IDS.toString(), gemsIds);
-        sendMessage(this, FragmentMessage.FREE_FALL_GEMS, bundle);
+        addGemIdsTo(bundle, gems);
+        addGemColorIdsTo(bundle, gems);
+        sendMessage(this, UPDATE_COLORS, bundle);
+    }
+
+
+    private Bundle createGemUpdateBundleFor(List<Gem> gems){
+        var bundle = new Bundle();
+        addGemIdsTo(bundle, gems);
+        addTo(bundle, GEM_POSITIONS, gems, Gem::getContainerPosition);
+        addTo(bundle, GEM_COLUMNS, gems, Gem::getColumn);
+        return bundle;
+    }
+
+
+    private void addGemIdsTo(Bundle bundle, List<Gem> gems){
+       addLongArrayTo(bundle, GEM_IDS, getGemIds(gems));
+    }
+
+
+    private void addTo(Bundle bundle, BundleTag tag, List<Gem> gems, ToIntFunction<Gem> func){
+        addIntArrayTo(bundle, tag, getFrom(gems, func));
+    }
+
+
+    private long[] getGemIds(List<Gem> gems){
+        return gems.stream().mapToLong(Gem::getId).toArray();
+    }
+
+
+    private void addGemColorIdsTo(Bundle bundle, List<Gem> gems){
+        addIntArrayTo(bundle, GEM_COLOR_IDS, getGemColorIds(gems));
+    }
+
+
+    private int[] getGemColorIds(List<Gem> gems){
+        return getFrom(gems, Gem::getColorId);
+    }
+
+
+    private int[] getFrom(List<Gem> gems, ToIntFunction<Gem> consumer){
+        return gems.stream().mapToInt(consumer).toArray();
     }
 
 
     @Override
     public void wipeOut(long[] markedGemIds){
         Bundle bundle = new Bundle();
-        bundle.putLongArray(BundleTag.GEM_IDS.toString(), markedGemIds);
+        bundle.putLongArray(GEM_IDS.toString(), markedGemIds);
         sendMessage(this, FragmentMessage.REMOVE_GEMS, bundle);
-    }
-
-
-    private void log(String msg){
-
- //       System.out.println("^^^ MainActivity: "+ msg);
-    }
-
-
-    private void updateGem(Gem gem){
-        Bundle bundle = new Bundle();
-        bundle.putInt(BundleTag.GEM_POSITION.toString(), gem.getContainerPosition());
-        bundle.putInt(BundleTag.GEM_COLUMN.toString(), gem.getColumn());
-        bundle.putLong(BundleTag.GEM_ID.toString(), gem.getId());
-        bundle.putInt(BundleTag.GEM_COLOR.toString(), gem.getColor().ordinal());
-        log("Sending message for update of gem "  + gem.getColor().ordinal());
-        runOnUiThread(()->sendMessage(this, FragmentMessage.UPDATE_GEM, bundle) );
     }
 
 

@@ -8,7 +8,8 @@ import java.util.List;
 
 public interface GameView {
 
+    void createGems(List<Gem> gems);
     void updateGems(List<Gem> gems);
+    void updateGemsColors(List<Gem> gems);
     void wipeOut(long[] markedGemIds);
-    void dropOnePosition(long[] gemIds);
 }

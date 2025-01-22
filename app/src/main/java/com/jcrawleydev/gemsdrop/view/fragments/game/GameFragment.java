@@ -1,7 +1,21 @@
 package com.jcrawleydev.gemsdrop.view.fragments.game;
 
 import static com.jcrawleydev.gemsdrop.view.fragments.game.GemAnimator.animateAppearanceOf;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_COLORS;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_COLOR_IDS;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_COLUMNS;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_IDS;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_POSITIONS;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.CREATE_GEMS;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.FREE_FALL_GEMS;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.NOTIFY_OF_SERVICE_CONNECTED;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.REMOVE_GEMS;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_COLORS;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_GEMS;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_SCORE;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getIntArrayFrom;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getLongArray;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getLongArrayFrom;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.setListener;
 
 import android.annotation.SuppressLint;
@@ -155,11 +169,13 @@ public class GameFragment extends Fragment {
 
 
     private void setupListeners(){
-        setupListener(FragmentMessage.UPDATE_GEM, this::updateGem);
-        setupListener(FragmentMessage.NOTIFY_OF_SERVICE_CONNECTED, this::onServiceConnected);
-        setupListener(FragmentMessage.REMOVE_GEMS, this::removeGems);
-        setupListener(FragmentMessage.UPDATE_SCORE, this::updateScore);
-        setupListener(FragmentMessage.FREE_FALL_GEMS, this::freeFallGems);
+        setupListener(CREATE_GEMS, this::createGems);
+        setupListener(UPDATE_GEMS, this::updateGems);
+        setupListener(UPDATE_COLORS, this::updateGemsColors);
+        setupListener(NOTIFY_OF_SERVICE_CONNECTED, this::onServiceConnected);
+        setupListener(REMOVE_GEMS, this::removeGems);
+        setupListener(UPDATE_SCORE, this::updateScore);
+        setupListener(FREE_FALL_GEMS, this::freeFallGems);
     }
 
 
@@ -190,7 +206,7 @@ public class GameFragment extends Fragment {
 
 
     private void doActionOnGemIdsFrom(Bundle bundle, Consumer<ViewGroup> consumer){
-        long[] gemIds = getLongArray(bundle, BundleTag.GEM_IDS);
+        long[] gemIds = getLongArray(bundle, GEM_IDS);
         if(gemIds == null){
             return;
         }
@@ -235,15 +251,67 @@ public class GameFragment extends Fragment {
     }
 
 
-    private void updateGem(Bundle bundle){
-        int position = getIntFrom(bundle, BundleTag.GEM_POSITION, -1);
-        int column = getIntFrom(bundle, BundleTag.GEM_COLUMN);
-        long id = bundle.getLong(BundleTag.GEM_ID.toString(), -1L);
-        int colorId = getIntFrom(bundle,BundleTag.GEM_COLOR);
+    private void createGems(Bundle bundle){
+        long[] ids = getLongArrayFrom(bundle, GEM_IDS);
+        int[] positions = getIntArrayFrom(bundle, GEM_POSITIONS);
+        int[] columns = getIntArrayFrom(bundle, GEM_COLUMNS);
+        int[] colorIds = getIntArrayFrom(bundle, GEM_COLOR_IDS);
 
-        var gemView = itemsMap.computeIfAbsent(id, k -> createAndAddGemLayout(id, position, column, colorId));
+        if(ids == null){
+            log("createGems() ids are null!");
+        }
+        if(positions == null){
+            log("createGems() positions are null!");
+        }
+        if(columns == null){
+            log("createGems() columns are null!");
+        }
+        if(colorIds == null){
+            log("createGems() colorIds are null!");
+        }
+
+        for(int i = 0; i < ids.length; i++){
+            createGem(ids[i], positions[i], columns[i], colorIds[i]);
+        }
+    }
+
+
+    private void updateGems(Bundle bundle){
+        long[] ids = getLongArrayFrom(bundle, GEM_IDS);
+        int[] positions = getIntArrayFrom(bundle, GEM_POSITIONS);
+        int[] columns = getIntArrayFrom(bundle, GEM_COLUMNS);
+
+        for(int i = 0; i < ids.length; i++){
+            updateGem(ids[i], positions[i], columns[i]);
+        }
+    }
+
+
+    private void updateGemsColors(Bundle bundle){
+        long[] ids = getLongArrayFrom(bundle, GEM_IDS);
+        int[] colorIds = getIntArrayFrom(bundle, GEM_COLOR_IDS);
+
+        for(int i = 0; i < ids.length; i++){
+            updateColorOf(ids[i], colorIds[i]);
+        }
+    }
+
+
+    private void updateColorOf(long id, int colorId){
+        if(itemsMap.containsKey(id)){
+            updateGemColor(itemsMap.get(id), colorId);
+        }
+    }
+
+
+    private void createGem(long id, int position, int column, int colorId){
+        itemsMap.put(id, createAndAddGemLayout(id, position, column, colorId));
+    }
+
+
+    private void updateGem(long id, int position, int column){
+        var gemView = itemsMap.computeIfAbsent(id, k -> createAndAddGemLayout(id, position, column, 0));
         updateGemCoordinates(gemView, position, column);
-        updateGemColor(gemView, colorId);
     }
 
 
@@ -331,22 +399,7 @@ public class GameFragment extends Fragment {
 
 
     private void setupCreateAndDestroyButtons(View parentView){
-        Button createButton = parentView.findViewById(R.id.create);
-        createButton.setOnClickListener(v -> createGems());
-        Button destroyButton = parentView.findViewById(R.id.destroy);
-        destroyButton.setOnClickListener(v -> destroyGems());
-        Button animateButton = parentView.findViewById(R.id.animate);
-        animateButton.setOnClickListener(v -> animateGems());
-    }
 
-
-    private void createGems(){
-        getService().ifPresent(GameService::createGems);
-    }
-
-
-    private void destroyGems(){
-        getService().ifPresent(GameService::evalGems);
     }
 
 }

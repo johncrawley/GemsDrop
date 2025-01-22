@@ -44,11 +44,31 @@ public class GemGridImpl implements GemGrid {
     }
 
 
+    public List<Gem> gravityDropGemsOnePosition(){
+        List<Gem> freeFallGems= new ArrayList<>();
+        for(var col : gemColumns){
+            for(int i = 0; i < col.size(); i++){
+                freeFallGem(col, i, freeFallGems);
+            }
+        }
+        return freeFallGems;
+    }
+
+
     private void freeFallGem(List<Gem> column, int index, Set<Long> freeFallIds){
         var gem = column.get(index);
         if(gem.getContainerPosition() > index * gridProps.depthPerDrop()){
             gem.decrementContainerPosition();
             freeFallIds.add(gem.getId());
+        }
+    }
+
+
+    private void freeFallGem(List<Gem> column, int index, List<Gem> freeFallIds){
+        var gem = column.get(index);
+        if(gem.getContainerPosition() > index * gridProps.depthPerDrop()){
+            gem.decrementContainerPosition();
+            freeFallIds.add(gem);
         }
     }
 

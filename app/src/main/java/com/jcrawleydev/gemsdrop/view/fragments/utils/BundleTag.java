@@ -1,10 +1,10 @@
 package com.jcrawleydev.gemsdrop.view.fragments.utils;
 
 public enum BundleTag {
-    GEM_POSITION,
-    GEM_COLUMN,
-    GEM_ID,
+    GEM_POSITIONS,
+    GEM_COLUMNS,
     GEM_IDS,
-    GEM_COLOR,
+    GEM_COLORS,
+    GEM_COLOR_IDS,
     SCORE
 }

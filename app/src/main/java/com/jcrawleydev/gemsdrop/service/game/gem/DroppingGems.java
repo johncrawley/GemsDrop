@@ -227,6 +227,11 @@ public class DroppingGems {
     }
 
 
+    public void setGrey(){
+        gems.forEach(Gem::setGrey);
+    }
+
+
     public GemColor getRandomColor(){
         int index = random.nextInt(gemColors.size());
         return gemColors.get(index);

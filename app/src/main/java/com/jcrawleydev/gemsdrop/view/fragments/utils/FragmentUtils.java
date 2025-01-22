@@ -113,7 +113,7 @@ public class FragmentUtils {
 
 
     public static void sendMessage(AppCompatActivity activity, FragmentMessage message, Bundle bundle){
-        activity.getSupportFragmentManager().setFragmentResult(message.name(), bundle);
+        activity.runOnUiThread(()-> activity.getSupportFragmentManager().setFragmentResult(message.name(), bundle));
     }
 
 
@@ -128,8 +128,38 @@ public class FragmentUtils {
     }
 
 
+    public static void addIntTo(Bundle bundle, BundleTag tag, int value){
+        bundle.putInt(tag.name(), value);
+    }
+
+
+    public static void addIntArrayTo(Bundle bundle, BundleTag tag, int[] values){
+        bundle.putIntArray(tag.name(), values);
+    }
+
+
+    public static void addLongArrayTo(Bundle bundle, BundleTag tag, long[] values){
+        bundle.putLongArray(tag.name(), values);
+    }
+
+
+    public static void addLongTo(Bundle bundle, BundleTag tag, long value){
+        bundle.putLong(tag.name(), value);
+    }
+
+
     public static int getInt(Bundle bundle, Enum<?> tag){
         return bundle.getInt(tag.name());
+    }
+
+
+    public static int[] getIntArrayFrom(Bundle bundle, Enum<?> tag){
+        return bundle.getIntArray(tag.name());
+    }
+
+
+    public static long[] getLongArrayFrom(Bundle bundle, Enum<?> tag){
+        return bundle.getLongArray(tag.name());
     }
 
 
@@ -146,6 +176,7 @@ public class FragmentUtils {
     public static boolean getBoolean(Bundle bundle, Enum<?> tag){
         return  bundle.getBoolean(tag.name());
     }
+
 
 
 }
