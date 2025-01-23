@@ -1,7 +1,5 @@
 package com.jcrawleydev.gemsdrop.view.fragments.game;
 
-import static com.jcrawleydev.gemsdrop.view.fragments.game.GemAnimator.animateAppearanceOf;
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_COLORS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_COLOR_IDS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_COLUMNS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_IDS;
@@ -27,7 +25,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -219,24 +216,6 @@ public class GameFragment extends Fragment {
     }
 
 
-    private void animateGems(){
-        if(itemsMap.isEmpty()){
-            return;
-        }
-        ViewGroup first = itemsMap.values().stream().findFirst().get();
-        if(first.getVisibility() != View.VISIBLE){
-            for(ViewGroup gemLayout: itemsMap.values()){
-                animateAppearanceOf(gemLayout);
-            }
-        }
-        else{
-            for(ViewGroup gemLayout : itemsMap.values()){
-                GemAnimator.animateRemovalOf(gemLayout, this::cleanupGem);
-            }
-        }
-    }
-
-
     private void cleanupGem(ViewGroup gemLayout){
         long id = (long)gemLayout.getTag();
         gemLayout.setVisibility(View.GONE);
@@ -256,19 +235,6 @@ public class GameFragment extends Fragment {
         int[] positions = getIntArrayFrom(bundle, GEM_POSITIONS);
         int[] columns = getIntArrayFrom(bundle, GEM_COLUMNS);
         int[] colorIds = getIntArrayFrom(bundle, GEM_COLOR_IDS);
-
-        if(ids == null){
-            log("createGems() ids are null!");
-        }
-        if(positions == null){
-            log("createGems() positions are null!");
-        }
-        if(columns == null){
-            log("createGems() columns are null!");
-        }
-        if(colorIds == null){
-            log("createGems() colorIds are null!");
-        }
 
         for(int i = 0; i < ids.length; i++){
             createGem(ids[i], positions[i], columns[i], colorIds[i]);

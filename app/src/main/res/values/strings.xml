@@ -10,6 +10,7 @@
     <string name="score_placeholder_text">0</string>
     <string name="settings_switch_enable_sound">Enable Sound FX</string>
 
+    <string name="default_score_value">0</string>
 
     <!-- Main menu buttons -->
     <string name="button_new_game">New Game</string>

@@ -30,48 +30,10 @@
         android:padding="12dp">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorAccent"
-            android:id="@+id/gemXPositions"
-            android:visibility="gone"
-            android:textSize="18sp"
-            android:text="gem x positions:"
-            />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/gemYPositions"
-            android:visibility="gone"
-            android:textColor="@color/colorAccent"
-            android:textSize="18sp"
-            android:text="gem y positions:"
-            />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Create"
-            android:id="@+id/create"/>
-
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Destroy"
-            android:id="@+id/destroy"/>
-
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Animate"
-            android:id="@+id/animate"/>
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/score_text_size"
+            android:text="@string/default_score_value"
             android:textColor="@color/colorAccent"
             android:id="@+id/scoreView"/>
 
