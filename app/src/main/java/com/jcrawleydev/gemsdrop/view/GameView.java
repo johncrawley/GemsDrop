@@ -12,4 +12,5 @@ public interface GameView {
     void updateGems(List<Gem> gems);
     void updateGemsColors(List<Gem> gems);
     void wipeOut(long[] markedGemIds);
+    void updateScore(int score);
 }

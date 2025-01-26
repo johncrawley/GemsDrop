@@ -41,6 +41,7 @@ public class Score {
 
     public void addPointsFor(int numberOfGems){
         currentScore += basePoints * numberOfGems * multiplier;
+        incMultiplier();
     }
 
 

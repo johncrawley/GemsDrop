@@ -4,6 +4,7 @@ import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems;
 import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.service.game.grid.GemGridImpl;
 import com.jcrawleydev.gemsdrop.service.game.grid.GridEvaluator;
+import com.jcrawleydev.gemsdrop.service.game.score.Score;
 import com.jcrawleydev.gemsdrop.view.GameView;
 
 import java.util.List;
@@ -69,12 +70,14 @@ public class Game {
     private final GemGridImpl gemGrid = new GemGridImpl(gridProps);
     private int currentDropRate = 500;
     private int dropIntervalCounter;
+    private Score score = new Score(50);
 
 
     public void init(){
         evaluator = new GridEvaluator(gemGrid.getGemColumns(), gridProps.numberOfRows());
         gemMover = new GemMover(this, gemGrid, gridProps);
         gameOverAnimator = new GameOverAnimator(this, gemGrid, gridProps);
+        score.clear();
     }
 
 
@@ -125,6 +128,7 @@ public class Game {
             return;
         }
         isStarted.set(true);
+        score.clear();
         startDroppingGems(currentDropRate);
     }
 
@@ -132,6 +136,7 @@ public class Game {
     private void startDroppingGems(int dropRate){
         firstEx.schedule(()->{
             createGems();
+            score.resetMultiplier();
             gameView.createGems(droppingGems.get());
             future = executor.scheduleWithFixedDelay(()-> gemMover.dropGems(), 0, dropRate, TimeUnit.MILLISECONDS);
         }, 1000, TimeUnit.MILLISECONDS);
@@ -247,8 +252,11 @@ public class Game {
     public void evaluateGemGrid(){
        cancelTask();
        long[] markedGemsIds = evaluator.evaluateGemGrid();
-       if(markedGemsIds.length > 0){
+       int numberOfGemsToRemove = markedGemsIds.length;
+       if(numberOfGemsToRemove > 0){
            gameView.wipeOut(markedGemsIds);
+           score.addPointsFor(numberOfGemsToRemove);
+           gameView.updateScore(score.get());
        }
        else{
            checkForHeightExceeded();

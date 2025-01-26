@@ -4,11 +4,13 @@ import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_COLOR_
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_COLUMNS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_IDS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_POSITIONS;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.SCORE;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.CREATE_GEMS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_COLORS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_GEMS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_SCORE;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.addIntArrayTo;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.addIntTo;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.addLongArrayTo;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.createBundleOf;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.sendMessage;
@@ -112,6 +114,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         addGemColorIdsTo(bundle, gems);
         log("createGems() bundle created, about to send to fragment");
         sendMessage(this, CREATE_GEMS, bundle);
+    }
+
+    @Override
+    public void updateScore(int score){
+        var bundle = new Bundle();
+        addIntTo(bundle, SCORE, score);
+        sendMessage(this, UPDATE_SCORE, bundle);
     }
 
     private void log(String msg){
