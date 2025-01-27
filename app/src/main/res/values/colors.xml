@@ -11,5 +11,6 @@
 
     <color name="main_menu_background">#2E2626</color>
     <color name="grid_border_color">#524D4D</color>
+    <color name="score_label">#aaa</color>
 
 </resources>

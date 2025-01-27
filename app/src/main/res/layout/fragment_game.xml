@@ -11,7 +11,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:padding="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@drawable/background_1"
 
@@ -26,8 +25,17 @@
         android:layout_height="0dp"
         android:orientation="horizontal"
         android:id="@+id/statsLayout"
-        android:layout_weight=".1"
-        android:padding="12dp">
+        android:layout_weight=".1">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/score_text_size"
+            android:text="@string/score_label"
+            android:textColor="@color/score_label"
+            android:paddingHorizontal="8dp"
+            android:id="@+id/scoreLAbelView"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -45,7 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:gravity="top|center"
-        android:layout_weight=".9">
+        android:layout_weight=".90">
 
         <LinearLayout
             android:id="@+id/container_border"
