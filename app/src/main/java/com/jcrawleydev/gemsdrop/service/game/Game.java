@@ -4,6 +4,8 @@ import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems;
 import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.service.game.grid.GemGridImpl;
 import com.jcrawleydev.gemsdrop.service.game.grid.GridEvaluator;
+import com.jcrawleydev.gemsdrop.service.game.level.GameLevel;
+import com.jcrawleydev.gemsdrop.service.game.level.LevelFactory;
 import com.jcrawleydev.gemsdrop.service.game.score.Score;
 import com.jcrawleydev.gemsdrop.view.GameView;
 
@@ -70,7 +72,9 @@ public class Game {
     private final GemGridImpl gemGrid = new GemGridImpl(gridProps);
     private int currentDropRate = 500;
     private int dropIntervalCounter;
-    private Score score = new Score(50);
+    private final Score score = new Score(50);
+    private final LevelFactory levelFactory = new LevelFactory();
+    private GameLevel currentGameLevel;
 
 
     public void init(){
@@ -78,6 +82,11 @@ public class Game {
         gemMover = new GemMover(this, gemGrid, gridProps);
         gameOverAnimator = new GameOverAnimator(this, gemGrid, gridProps);
         score.clear();
+        initLevel();
+    }
+
+    private void initLevel(){
+        currentGameLevel = levelFactory.getLevel(1);
     }
 
 
