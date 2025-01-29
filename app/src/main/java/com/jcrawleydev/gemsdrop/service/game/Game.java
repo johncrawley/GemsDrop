@@ -87,6 +87,7 @@ public class Game {
 
     private void initLevel(){
         currentGameLevel = levelFactory.getLevel(1);
+        currentDropRate = currentGameLevel.startingDropDuration();
     }
 
 
