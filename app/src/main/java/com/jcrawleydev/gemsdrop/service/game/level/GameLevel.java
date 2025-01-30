@@ -8,6 +8,7 @@ public record GameLevel(int number,
                         int backgroundResourceId,
                         int startingDropDuration,
                         int endingDropDuration,
-                        Set<GemColor> gemColors){
+                        Set<GemColor> gemColors,
+                        String startingGrid){
 
 }
