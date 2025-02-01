@@ -1,7 +1,5 @@
 package com.jcrawleydev.gemsdrop.service.game.grid;
 
-import androidx.constraintlayout.helper.widget.Grid;
-
 import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.service.game.gem.GemColor;
 
@@ -22,11 +20,11 @@ public class GridAdder {
         populateGemColorMap();
     }
 
-    public void addTo(Grid grid, List<String> gemRows){
+    public void addTo(GemGrid gemGrid, List<String> gemRows){
         for(var row : gemRows){
-            var gems = parseGemsFrom(gemRows);
-        }
+            gemGrid.addRow(parseGemsFrom(row));
 
+        }
     }
 
 
@@ -40,7 +38,7 @@ public class GridAdder {
         var gemStrings = gemRowStr.split(" ");
         for(var str : gemStrings){
            var gemColor = gemColorMap.getOrDefault(str, GemColor.BLUE);
-
+           gemRow.add(new Gem(gemColor));
         }
         return gemRow;
     }

@@ -12,5 +12,6 @@ public interface GemGrid {
     void removeMarkedGems();
     void printColumnHeights();
     boolean exceedsMaxHeight();
+    void addRow(List<Gem> gems);
 
 }

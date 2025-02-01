@@ -17,6 +17,10 @@ public class Gem {
     private int containerPosition;
     private final long id;
 
+    public Gem(GemColor color){
+        this(color, GemGroupPosition.BOTTOM, 0);
+    }
+
 
     public Gem(GemColor color, GemGroupPosition gemGroupPosition, int initialContainerPosition){
         this.color = color;

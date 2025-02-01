@@ -44,6 +44,26 @@ public class GemGridImpl implements GemGrid {
     }
 
 
+    @Override
+    public void addRow(List<Gem> gems){
+        for(int i = 0; i < gemColumns.size(); i++){
+            if(i < gems.size()){
+                var gem = gems.get(i);
+                var gemColumn = gemColumns.get(i);
+                setPositionsFor(gem, i, gemColumn.size());
+                gemColumn.add(gems.get(i));
+            }
+        }
+    }
+
+
+    private void setPositionsFor(Gem gem, int columnIndex, int gemColumnSize){
+        gem.setColumn(columnIndex);
+        int containerPosition = gemColumnSize * gridProps.depthPerDrop();
+        gem.setContainerPosition(containerPosition);
+    }
+
+
     public List<Gem> gravityDropGemsOnePosition(){
         List<Gem> freeFallGems= new ArrayList<>();
         for(var col : gemColumns){
