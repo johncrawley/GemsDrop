@@ -29,11 +29,6 @@ public class Score {
     }
 
 
-    public int getMultiplier(){
-        return multiplier;
-    }
-
-
     public void resetMultiplier(){
         multiplier = 1;
     }

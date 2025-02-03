@@ -3,6 +3,7 @@ package com.jcrawleydev.gemsdrop.service.game;
 import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems;
 import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.service.game.grid.GemGridImpl;
+import com.jcrawleydev.gemsdrop.service.game.grid.GridAdder;
 import com.jcrawleydev.gemsdrop.service.game.grid.GridEvaluator;
 import com.jcrawleydev.gemsdrop.service.game.level.GameLevel;
 import com.jcrawleydev.gemsdrop.service.game.level.LevelFactory;
@@ -75,6 +76,7 @@ public class Game {
     private final Score score = new Score(50);
     private final LevelFactory levelFactory = new LevelFactory();
     private GameLevel currentGameLevel;
+    private final GridAdder gridAdder = new GridAdder();
 
 
     public void init(){
@@ -85,9 +87,11 @@ public class Game {
         initLevel();
     }
 
+
     private void initLevel(){
         currentGameLevel = levelFactory.getLevel(1);
         currentDropRate = currentGameLevel.startingDropDuration();
+        gridAdder.addTo(gemGrid, currentGameLevel.startingGrid());
     }
 
 
