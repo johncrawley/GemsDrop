@@ -35,7 +35,6 @@ import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,7 +43,6 @@ import java.util.function.ToIntFunction;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener, GameView {
 
-    private MainViewModel viewModel;
     private GameService gameService;
 
     private final AtomicBoolean isServiceConnected = new AtomicBoolean(false);
@@ -75,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         hideActionBar();
         setupGameService();
         setupFragmentsIf(savedInstanceState == null);
-        initViewModel();
     }
 
 
@@ -204,18 +201,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
 
-    private void initViewModel(){
-        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-    }
-
-
     @Override
     public void onPause(){
-        /*
-        if(game != null){
-            game.onPause();
-        }
-        */
 
         super.onPause();
     }
@@ -223,29 +210,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     public void onResume(){
-        /*
-        if(game != null){
-            // game.onResume();
-        }
-
-         */
         super.onResume();
-    }
-
-
-    public View getMainView(){
-        return null;
-      //  return findViewById(R.id.titleViewInclude);
     }
 
 
     public Optional<GameService> getGameService(){
         return Optional.ofNullable(gameService);
-    }
-
-
-    public MainViewModel getViewModel(){
-        return this.viewModel;
     }
 
 
