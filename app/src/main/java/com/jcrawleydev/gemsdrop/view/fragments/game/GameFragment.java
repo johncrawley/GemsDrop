@@ -283,7 +283,9 @@ public class GameFragment extends Fragment {
 
     private void updateScore(Bundle bundle){
         int score = getIntFrom(bundle, BundleTag.SCORE);
-        scoreView.setText(score);
+        score++;
+        String scoreVal = String.valueOf(score);
+        scoreView.setText(scoreVal);
     }
 
 

@@ -257,11 +257,6 @@ public class Game {
     }
 
 
-    private void updateScore(int numberOfRemovedGems){
-
-    }
-
-
     // public access for the sake of testing via direct calls from the game fragment
     public void evaluateGemGrid(){
        cancelTask();
@@ -269,12 +264,17 @@ public class Game {
        int numberOfGemsToRemove = markedGemsIds.length;
        if(numberOfGemsToRemove > 0){
            gameView.wipeOut(markedGemsIds);
-           score.addPointsFor(numberOfGemsToRemove);
-           gameView.updateScore(score.get());
+           updateScore(numberOfGemsToRemove);
        }
        else{
            checkForHeightExceeded();
        }
+    }
+
+
+    private void updateScore(int numberOfRemovedGems){
+        score.addPointsFor(numberOfRemovedGems);
+        gameView.updateScore(score.get());
     }
 
 

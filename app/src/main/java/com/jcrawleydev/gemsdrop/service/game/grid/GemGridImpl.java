@@ -20,6 +20,7 @@ public class GemGridImpl implements GemGrid {
         initColumns();
     }
 
+    @Override
     public List<List<Gem>> getGemColumns(){
         return this.gemColumns;
     }
