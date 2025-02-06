@@ -78,7 +78,10 @@ public class GameFragment extends Fragment {
             public void onGlobalLayout() {
                 assignGemContainerDimensions();
                 assignWidthToExistingGems();
+                log("assignLayoutDimensions() about to invoke startGame()");
                 startGame();
+                getService().ifPresent(GameService::notifyGameViewReady);
+                log("assignLayoutDimensions() exited startGame()");
                 gamePane.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         };

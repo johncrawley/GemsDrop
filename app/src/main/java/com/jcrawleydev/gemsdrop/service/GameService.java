@@ -198,6 +198,10 @@ public class GameService extends Service {
         game.setView(mainActivity);
     }
 
+    public void notifyGameViewReady(){
+        game.onGameViewReady();
+    }
+
 
     public class LocalBinder extends Binder {
         public GameService getService() {

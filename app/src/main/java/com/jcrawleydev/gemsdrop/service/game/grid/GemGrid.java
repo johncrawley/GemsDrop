@@ -8,6 +8,7 @@ public interface GemGrid {
 
     int getColumnHeightAt(int columnIndex);
     List<List<Gem>> getGemColumns();
+    List<Gem> getGems();
     void addIfConnecting(Gem gem);
     void removeMarkedGems();
     void printColumnHeights();

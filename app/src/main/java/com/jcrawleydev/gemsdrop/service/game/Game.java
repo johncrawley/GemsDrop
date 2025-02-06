@@ -309,4 +309,16 @@ public class Game {
         this.gameView = gameView;
     }
 
+
+    public void onGameViewReady(){
+        updateGridGemsOnView();
+    }
+
+
+    private void updateGridGemsOnView(){
+        var gridGems = gemGrid.getGems();
+        if(!gridGems.isEmpty()){
+            gameView.createGems(gridGems);
+        }
+    }
 }

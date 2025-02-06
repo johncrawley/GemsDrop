@@ -26,12 +26,19 @@ public class GemGridImpl implements GemGrid {
     }
 
 
+    @Override
+    public List<Gem> getGems(){
+        return gemColumns.stream().flatMap(List::stream).toList();
+    }
+
     private void initColumns(){
         gemColumns = new ArrayList<>(gridProps.numberOfColumns());
         for(int i=0; i< gridProps.numberOfColumns(); i++){
             gemColumns.add(new ArrayList<>(gridProps.numberOfRows()));
         }
     }
+
+
 
 
     public long[] gravityDropOnePosition(){
