@@ -1,25 +1,24 @@
-package com.jcrawleydev.gemsdrop;
+package com.jcrawleydev.gemsdrop.service.audio;
 
 import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 
+import com.jcrawleydev.gemsdrop.R;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class SoundPlayer {
 
-    private MediaPlayer mediaPlayer;
     private final Context context;
     private SoundPool soundPool;
-    public enum Sound { DISAPPEAR, MENU_BUTTON }
-    private final Map<Sound, Integer> soundsMap;
-    private boolean isSoundEnabled;
+    private final Map<SoundEffect, Integer> soundsMap;
+    private boolean isSoundEnabled = true;
 
     public SoundPlayer(Context context){
         this.context = context;
-        //setupMediaPlayer();
         setupSoundPool();
         soundsMap = new HashMap<>();
         loadSounds();
@@ -29,23 +28,6 @@ public class SoundPlayer {
 
     public void setSoundEnabled(boolean isSoundEnabled){
         this.isSoundEnabled = isSoundEnabled;
-    }
-
-
-    private void setupMediaPlayer(){
-        mediaPlayer = MediaPlayer.create(context, R.raw.disappear);
-        mediaPlayer.setOnCompletionListener(mp -> {
-            mp.reset();
-            mp.release();
-            mediaPlayer = MediaPlayer.create(context, R.raw.disappear);
-        });
-    }
-
-
-    public void playGemDisappearSound(int multiplier){
-        if(isSoundEnabled){
-            mediaPlayer.start();
-        }
     }
 
 
@@ -62,8 +44,11 @@ public class SoundPlayer {
     }
 
 
-    public void playSound(Sound sound){
-        Integer soundId = soundsMap.get(sound);
+    public void playSound(SoundEffect soundEffect){
+        if(!isSoundEnabled){
+            return;
+        }
+        Integer soundId = soundsMap.get(soundEffect);
         if(soundId != null){
             soundPool.play(soundId, 100, 100, 1, 0, 1);
         }
@@ -71,14 +56,14 @@ public class SoundPlayer {
 
 
     private void loadSounds(){
-        loadSound(R.raw.disappear, Sound.DISAPPEAR);
+        loadSound(R.raw.disappear, SoundEffect.DISAPPEAR);
     }
 
 
 
-    private void loadSound(int soundResId, Sound sound){
+    private void loadSound(int soundResId, SoundEffect soundEffect){
         int id = soundPool.load(context, soundResId, 1);
-        soundsMap.put(sound, id);
+        soundsMap.put(soundEffect, id);
     }
 
 

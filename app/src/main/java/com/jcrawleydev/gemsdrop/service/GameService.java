@@ -7,7 +7,8 @@ import android.os.Binder;
 import android.os.IBinder;
 
 import com.jcrawleydev.gemsdrop.MainActivity;
-import com.jcrawleydev.gemsdrop.SoundPlayer;
+import com.jcrawleydev.gemsdrop.service.audio.SoundEffect;
+import com.jcrawleydev.gemsdrop.service.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.service.game.Game;
 import com.jcrawleydev.gemsdrop.service.game.score.ScoreRecords;
 import com.jcrawleydev.gemsdrop.service.game.score.ScoreStatistics;
@@ -34,8 +35,8 @@ public class GameService extends Service {
     }
 
 
-    public void playSound(SoundPlayer.Sound sound){
-        soundPlayer.playSound(sound);
+    public void playSound(SoundEffect soundEffect){
+        soundPlayer.playSound(soundEffect);
     }
 
 
@@ -148,6 +149,7 @@ public class GameService extends Service {
         soundPlayer = new SoundPlayer(getApplicationContext());
         gamePreferenceManager = new GamePreferenceManager(this);
         setupScoreRecords();
+        game.setSoundPlayer(soundPlayer);
     }
 
 

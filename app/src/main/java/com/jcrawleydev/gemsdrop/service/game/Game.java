@@ -1,5 +1,7 @@
 package com.jcrawleydev.gemsdrop.service.game;
 
+import com.jcrawleydev.gemsdrop.service.audio.SoundEffect;
+import com.jcrawleydev.gemsdrop.service.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems;
 import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.service.game.grid.GemGridImpl;
@@ -77,6 +79,7 @@ public class Game {
     private final LevelFactory levelFactory = new LevelFactory();
     private GameLevel currentGameLevel;
     private final GridAdder gridAdder = new GridAdder();
+    private SoundPlayer soundPlayer;
 
 
     public void init(){
@@ -85,6 +88,11 @@ public class Game {
         gameOverAnimator = new GameOverAnimator(this, gemGrid, gridProps);
         score.clear();
         initLevel();
+    }
+
+
+    public void setSoundPlayer(SoundPlayer soundPlayer){
+        this.soundPlayer = soundPlayer;
     }
 
 
@@ -265,10 +273,19 @@ public class Game {
        if(numberOfGemsToRemove > 0){
            gameView.wipeOut(markedGemsIds);
            updateScore(numberOfGemsToRemove);
+           playGemsRemovedSound();
        }
        else{
            checkForHeightExceeded();
        }
+    }
+
+
+    private void playGemsRemovedSound(){
+        if(soundPlayer == null){
+            return;
+        }
+        soundPlayer.playSound(SoundEffect.DISAPPEAR);
     }
 
 

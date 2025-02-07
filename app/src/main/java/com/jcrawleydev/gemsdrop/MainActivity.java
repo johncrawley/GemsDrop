@@ -25,6 +25,8 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.jcrawleydev.gemsdrop.service.GameService;
+import com.jcrawleydev.gemsdrop.service.audio.SoundEffect;
+import com.jcrawleydev.gemsdrop.service.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.service.game.score.ScoreStatistics;
 import com.jcrawleydev.gemsdrop.view.GameView;
@@ -185,11 +187,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         Bundle bundle = new Bundle();
         bundle.putLongArray(GEM_IDS.toString(), markedGemIds);
         sendMessage(this, FragmentMessage.REMOVE_GEMS, bundle);
-    }
-
-
-    public void playSound(SoundPlayer.Sound sound){
-
     }
 
 
