@@ -2,7 +2,6 @@ package com.jcrawleydev.gemsdrop.service.audio;
 
 import android.content.Context;
 import android.media.AudioAttributes;
-import android.media.MediaPlayer;
 import android.media.SoundPool;
 
 import com.jcrawleydev.gemsdrop.R;
@@ -22,7 +21,6 @@ public class SoundPlayer {
         setupSoundPool();
         soundsMap = new HashMap<>();
         loadSounds();
-
     }
 
 
@@ -56,7 +54,7 @@ public class SoundPlayer {
 
 
     private void loadSounds(){
-        loadSound(R.raw.disappear, SoundEffect.DISAPPEAR);
+        loadSound(R.raw.disappear, SoundEffect.GEMS_DISAPPEAR);
     }
 
 

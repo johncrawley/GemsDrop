@@ -285,7 +285,7 @@ public class Game {
         if(soundPlayer == null){
             return;
         }
-        soundPlayer.playSound(SoundEffect.DISAPPEAR);
+        soundPlayer.playSound(SoundEffect.GEMS_DISAPPEAR);
     }
 
 
