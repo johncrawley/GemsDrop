@@ -58,7 +58,6 @@ public class SoundPlayer {
     }
 
 
-
     private void loadSound(int soundResId, SoundEffect soundEffect){
         int id = soundPool.load(context, soundResId, 1);
         soundsMap.put(soundEffect, id);

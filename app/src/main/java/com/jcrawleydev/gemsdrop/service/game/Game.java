@@ -181,8 +181,6 @@ public class Game {
         cancelTask();
         gemMover.disableControls();
         future = executor.scheduleWithFixedDelay(()-> gemMover.dropGems(), 0, 80, TimeUnit.MILLISECONDS);
-
-        // gemMover.moveDown();
     }
 
 
@@ -215,6 +213,9 @@ public class Game {
             gemMover.disableControls();
             startGemFreeFall();
             haveAnyGemsBeenAdded = true;
+        }
+        if(haveAnyGemsBeenAdded){
+            soundPlayer.playSound(SoundEffect.GEM_HITS_FLOOR);
         }
         return haveAnyGemsBeenAdded;
     }
@@ -285,7 +286,16 @@ public class Game {
         if(soundPlayer == null){
             return;
         }
-        soundPlayer.playSound(SoundEffect.GEMS_DISAPPEAR);
+        var soundEffect = switch (score.getMultiplier()){
+            case 1 -> SoundEffect.GEMS_DISAPPEAR;
+            case 2 -> SoundEffect.GEMS_DISAPPEAR_CHAIN_REACTION_1;
+            case 3 -> SoundEffect.GEMS_DISAPPEAR_CHAIN_REACTION_2;
+            case 4 -> SoundEffect.GEMS_DISAPPEAR_CHAIN_REACTION_3;
+            case 5 -> SoundEffect.GEMS_DISAPPEAR_CHAIN_REACTION_4;
+            case 6 -> SoundEffect.GEMS_DISAPPEAR_CHAIN_REACTION_5;
+            default -> SoundEffect.GEMS_DISAPPEAR_CHAIN_REACTION_6;
+        };
+        soundPlayer.playSound(soundEffect);
     }
 
 
