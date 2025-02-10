@@ -1,5 +1,6 @@
 package com.jcrawleydev.gemsdrop.service.game;
 
+import com.jcrawleydev.gemsdrop.service.audio.SoundEffect;
 import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems;
 import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.service.game.grid.GemGrid;
@@ -45,7 +46,7 @@ public class GameOverAnimator {
         DroppingGems droppingGems = game.getDroppingGems();
         if(droppingGems != null){
             droppingGems.setGrey();
-            updateColorsOnView(droppingGems.getFreeGems());
+            updateColorsOnView(droppingGems.get());
         }
     }
 
@@ -71,6 +72,7 @@ public class GameOverAnimator {
             future.cancel(false);
             game.end();
         }
+        game.playSoundEffect(SoundEffect.GEMS_GREYED_OUT);
     }
 
 

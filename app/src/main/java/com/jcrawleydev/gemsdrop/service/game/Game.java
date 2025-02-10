@@ -96,6 +96,13 @@ public class Game {
     }
 
 
+    public void playSoundEffect(SoundEffect soundEffect){
+        if(soundPlayer != null){
+            soundPlayer.playSound(soundEffect);
+        }
+    }
+
+
     private void initLevel(){
         currentGameLevel = levelFactory.getLevel(1);
         currentDropRate = currentGameLevel.startingDropDuration();

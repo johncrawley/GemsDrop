@@ -55,6 +55,7 @@ public class SoundPlayer {
 
     private void loadSounds(){
         loadSound(R.raw.disappear, SoundEffect.GEMS_DISAPPEAR);
+        loadSound(R.raw.gems_greyed_out_1, SoundEffect.GEMS_GREYED_OUT);
     }
 
 
