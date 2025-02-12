@@ -148,8 +148,13 @@ public class FragmentUtils {
     }
 
 
-    public static int getInt(Bundle bundle, Enum<?> tag){
+    public static int getIntFrom(Bundle bundle, Enum<?> tag){
         return bundle.getInt(tag.name());
+    }
+
+
+    public static long getLongFrom(Bundle bundle, Enum<?> tag){
+        return bundle.getLong(tag.name());
     }
 
 

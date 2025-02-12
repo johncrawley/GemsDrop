@@ -5,6 +5,7 @@ import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_COLUMN
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_IDS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_POSITIONS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.CREATE_GEMS;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.CREATE_WONDER_GEM;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.FREE_FALL_GEMS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.NOTIFY_OF_SERVICE_CONNECTED;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.REMOVE_GEMS;
@@ -14,6 +15,7 @@ import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDA
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getIntArrayFrom;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getLongArray;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getLongArrayFrom;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getLongFrom;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.setListener;
 
 import android.annotation.SuppressLint;
@@ -170,6 +172,7 @@ public class GameFragment extends Fragment {
 
     private void setupListeners(){
         setupListener(CREATE_GEMS, this::createGems);
+        setupListener(CREATE_WONDER_GEM, this::createGems);
         setupListener(UPDATE_GEMS, this::updateGems);
         setupListener(UPDATE_COLORS, this::updateGemsColors);
         setupListener(NOTIFY_OF_SERVICE_CONNECTED, this::onServiceConnected);
@@ -242,6 +245,26 @@ public class GameFragment extends Fragment {
         for(int i = 0; i < ids.length; i++){
             createGem(ids[i], positions[i], columns[i], colorIds[i]);
         }
+    }
+
+
+
+    private void createWonderGem(Bundle bundle){
+        long id = getLongFrom(bundle, GEM_IDS);
+        int position = getIntFrom(bundle, GEM_POSITIONS);
+        int column = getIntFrom(bundle, GEM_COLUMNS);
+
+    }
+
+    private void startWonderGemAnimation(ImageView wonderGemView){
+        int[] imageResources = {R.drawable.jewel_blue };
+
+        ObjectAnimator animator = ObjectAnimator.ofInt(wonderGemView, "src", imageResources);
+        animator.setDuration(1000);
+        animator.setRepeatCount(ObjectAnimator.INFINITE);
+        animator.setInterpolator(new LinearInterpolator());
+
+        animator.start();
     }
 
 
