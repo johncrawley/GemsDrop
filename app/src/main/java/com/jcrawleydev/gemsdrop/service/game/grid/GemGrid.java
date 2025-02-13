@@ -10,6 +10,7 @@ public interface GemGrid {
     List<List<Gem>> getGemColumns();
     List<Gem> getGems();
     void addIfConnecting(Gem gem);
+    void addWonderGemIfConnecting(Gem wonderGem);
     void removeMarkedGems();
     void printColumnHeights();
     boolean exceedsMaxHeight();

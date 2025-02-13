@@ -10,7 +10,8 @@ public enum GemColor {
     GREEN("G", R.drawable.jewel_green),
     YELLOW("Y", R.drawable.jewel_yellow),
     PURPLE("P", R.drawable.jewel_purple),
-    GREY("x", R.drawable.jewel_grey);
+    GREY("x", R.drawable.jewel_grey),
+    WONDER("W", R.drawable.jewel_wonder_1);
 
     GemColor(String str, int resourceId) {
         this.str = str;

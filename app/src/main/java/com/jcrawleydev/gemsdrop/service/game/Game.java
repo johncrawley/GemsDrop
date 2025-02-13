@@ -80,6 +80,7 @@ public class Game {
     private GameLevel currentGameLevel;
     private final GridAdder gridAdder = new GridAdder();
     private SoundPlayer soundPlayer;
+    private int dropCount = 0;
 
 
     public void init(){
@@ -105,6 +106,7 @@ public class Game {
 
     private void initLevel(){
         currentGameLevel = levelFactory.getLevel(1);
+        dropCount = 0;
         currentDropRate = currentGameLevel.startingDropDuration();
         gridAdder.addTo(gemGrid, currentGameLevel.startingGrid());
     }
@@ -174,7 +176,8 @@ public class Game {
 
     public void createGems(){
         droppingGems = new DroppingGems(gridProps);
-        droppingGems.create();
+        dropCount++;
+        droppingGems.create(dropCount);
         updateDropInterval();
         gemMover.setDroppingGems(droppingGems);
         gemGrid.printColumnHeights();

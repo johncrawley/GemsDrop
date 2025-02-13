@@ -15,11 +15,12 @@ import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDA
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getIntArrayFrom;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getLongArray;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getLongArrayFrom;
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getLongFrom;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.setListener;
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,17 +28,20 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 import com.jcrawleydev.gemsdrop.MainActivity;
 import com.jcrawleydev.gemsdrop.R;
 import com.jcrawleydev.gemsdrop.service.GameService;
+import com.jcrawleydev.gemsdrop.service.game.gem.GemColor;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage;
 
@@ -242,25 +246,79 @@ public class GameFragment extends Fragment {
         int[] columns = getIntArrayFrom(bundle, GEM_COLUMNS);
         int[] colorIds = getIntArrayFrom(bundle, GEM_COLOR_IDS);
 
+        if(colorIds[0] == R.drawable.jewel_wonder_1){
+            createWonderGem(ids[0], positions[0], columns[0]);
+        }
+
         for(int i = 0; i < ids.length; i++){
             createGem(ids[i], positions[i], columns[i], colorIds[i]);
         }
     }
 
 
-
-    private void createWonderGem(Bundle bundle){
-        long id = getLongFrom(bundle, GEM_IDS);
-        int position = getIntFrom(bundle, GEM_POSITIONS);
-        int column = getIntFrom(bundle, GEM_COLUMNS);
-
+    private void createWonderGem(long id, int position, int column){
+        var gemLayout = createGem(id, position, column, R.drawable.jewel_wonder_1);
+        startWonderGemAnimation(gemLayout);
     }
 
-    private void startWonderGemAnimation(ImageView wonderGemView){
-        int[] imageResources = {R.drawable.jewel_blue };
+    private TransitionDrawable wonderGemTransitionDrawable;
 
-        ObjectAnimator animator = ObjectAnimator.ofInt(wonderGemView, "src", imageResources);
-        animator.setDuration(1000);
+
+    private TransitionDrawable getWonderGemTransitionDrawable(){
+        if(wonderGemTransitionDrawable == null){
+            wonderGemTransitionDrawable = createTransitionDrawable();
+        }
+        return wonderGemTransitionDrawable;
+    }
+
+
+    private TransitionDrawable createTransitionDrawable(){
+        Drawable[] drawables = new Drawable[3];
+        drawables[0] = getDrawableFor(R.drawable.jewel_wonder_1);
+        drawables[1] = getDrawableFor(R.drawable.jewel_wonder_2);
+        drawables[2] = getDrawableFor(R.drawable.jewel_wonder_3);
+        drawables[3] = getDrawableFor(R.drawable.jewel_wonder_4);
+        drawables[4] = getDrawableFor(R.drawable.jewel_wonder_5);
+        drawables[5] = getDrawableFor(R.drawable.jewel_wonder_6);
+        drawables[6] = getDrawableFor(R.drawable.jewel_wonder_7);
+        drawables[7] = getDrawableFor(R.drawable.jewel_wonder_8);
+        drawables[8] = getDrawableFor(R.drawable.jewel_wonder_9);
+        drawables[9] = getDrawableFor(R.drawable.jewel_wonder_10);
+        return new TransitionDrawable(drawables);
+    }
+
+    private Drawable[] wonderGemDrawables;
+
+    private Drawable[] getWonderGemDrawables(){
+        if(wonderGemDrawables == null){
+            wonderGemDrawables = createWonderGemDrawables();
+        }
+        return wonderGemDrawables;
+    }
+
+    private Drawable [] createWonderGemDrawables(){
+        Drawable[] drawables = new Drawable[3];
+        drawables[0] = getDrawableFor(R.drawable.jewel_wonder_1);
+        drawables[1] = getDrawableFor(R.drawable.jewel_wonder_2);
+        drawables[2] = getDrawableFor(R.drawable.jewel_wonder_3);
+        drawables[3] = getDrawableFor(R.drawable.jewel_wonder_4);
+        drawables[4] = getDrawableFor(R.drawable.jewel_wonder_5);
+        drawables[5] = getDrawableFor(R.drawable.jewel_wonder_6);
+        drawables[6] = getDrawableFor(R.drawable.jewel_wonder_7);
+        drawables[7] = getDrawableFor(R.drawable.jewel_wonder_8);
+        drawables[8] = getDrawableFor(R.drawable.jewel_wonder_9);
+        drawables[9] = getDrawableFor(R.drawable.jewel_wonder_10);
+        return drawables;
+    }
+
+    private void startWonderGemAnimation(ViewGroup gemLayout){
+        TransitionDrawable transitionDrawable = getWonderGemTransitionDrawable();
+        ImageView wonderGemView = (ImageView) gemLayout.getChildAt(0);
+        wonderGemView.setImageDrawable(transitionDrawable);
+
+        int[] imageResources = {R.drawable.jewel_blue };
+        ObjectAnimator animator = ObjectAnimator.ofInt(wonderGemView, "imageDrawable", imageResources);
+        animator.setDuration(300);
         animator.setRepeatCount(ObjectAnimator.INFINITE);
         animator.setInterpolator(new LinearInterpolator());
 
@@ -296,8 +354,10 @@ public class GameFragment extends Fragment {
     }
 
 
-    private void createGem(long id, int position, int column, int colorId){
-        itemsMap.put(id, createAndAddGemLayout(id, position, column, colorId));
+    private ViewGroup createGem(long id, int position, int column, int colorId){
+        var gemLayout = createAndAddGemLayout(id, position, column, colorId)
+        itemsMap.put(id, gemLayout);
+        return gemLayout;
     }
 
 
@@ -358,8 +418,14 @@ public class GameFragment extends Fragment {
 
 
     private void setGemDrawable(ImageView gem, int colorId){
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(),imageMap.getDrawableIdFor(colorId), null);
+        var id = imageMap.getDrawableIdFor(colorId);
+        var drawable = getDrawableFor(id);
         gem.setImageDrawable(drawable);
+    }
+
+
+    private Drawable getDrawableFor(int id){
+        return ResourcesCompat.getDrawable(getResources(), id, null);
     }
 
 

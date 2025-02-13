@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 
 import com.jcrawleydev.gemsdrop.service.game.GridProps;
 import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
+import com.jcrawleydev.gemsdrop.service.game.gem.GemColor;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -31,14 +32,13 @@ public class GemGridImpl implements GemGrid {
         return gemColumns.stream().flatMap(List::stream).toList();
     }
 
+
     private void initColumns(){
         gemColumns = new ArrayList<>(gridProps.numberOfColumns());
         for(int i=0; i< gridProps.numberOfColumns(); i++){
             gemColumns.add(new ArrayList<>(gridProps.numberOfRows()));
         }
     }
-
-
 
 
     public long[] gravityDropOnePosition(){
@@ -107,11 +107,41 @@ public class GemGridImpl implements GemGrid {
 
 
     public void addIfConnecting(Gem gem){
-        var column = gemColumns.get(gem.getColumn());
-        if(gem.getContainerPosition() <= getTopPositionOf(column)){
+        var column = getColumnBeneath(gem);
+        if(isTouching(gem, column)){
             column.add(gem);
             gem.markAsAddedToGrid();
         }
+    }
+
+
+    public void addWonderGemIfConnecting(Gem wonderGem){
+        var column = getColumnBeneath(wonderGem);
+        if(isTouching(wonderGem, column)){
+            wonderGem.markAsAddedToGrid();
+            var touchedGemColor = column.getLast().getColor();
+            markAllGemsOf(touchedGemColor);
+        }
+    }
+
+
+    private void markAllGemsOf(GemColor gemColor){
+        gemColumns.stream()
+                .flatMap(List::stream)
+                .filter(g -> g.getColor() == gemColor)
+                .forEach(Gem::markAsAddedToGrid);
+    }
+
+
+    private boolean isTouching(Gem gem, List<Gem> column){
+        return gem.getContainerPosition() <= getTopPositionOf(column);
+    }
+
+
+    private List<Gem> getColumnBeneath(Gem gem){
+        var colIndex = gem.getColumn();
+        var index = Math.min(gemColumns.size() -1, Math.max(0, colIndex));
+        return gemColumns.get(index);
     }
 
 

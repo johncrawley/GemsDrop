@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<transition xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- The drawables used here can be solid colors, gradients, shapes, images, etc. -->
+    <item android:drawable="@drawable/jewel_wonder_1" />
+    <item android:drawable="@drawable/jewel_wonder_2" />
+    <item android:drawable="@drawable/jewel_wonder_3" />
+    <item android:drawable="@drawable/jewel_wonder_4" />
+    <item android:drawable="@drawable/jewel_wonder_5" />
+    <item android:drawable="@drawable/jewel_wonder_6" />
+    <item android:drawable="@drawable/jewel_wonder_7" />
+    <item android:drawable="@drawable/jewel_wonder_8" />
+    <item android:drawable="@drawable/jewel_wonder_9" />
+    <item android:drawable="@drawable/jewel_wonder_10" />
+</transition>
