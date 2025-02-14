@@ -185,7 +185,9 @@ public class Game {
 
 
     public void moveDown(){
-        if(droppingGems.areAllAddedToGrid() || droppingGems.areInInitialPosition()){
+        if(droppingGems == null
+                || droppingGems.areAllAddedToGrid()
+                || droppingGems.areInInitialPosition()){
             return;
         }
         cancelTask();
@@ -212,6 +214,18 @@ public class Game {
 
     public boolean evaluateTouchingGems(){
         boolean haveAnyGemsBeenAdded = false;
+
+        if(droppingGems.containsWonderGem()){
+            droppingGems.addWonderGemTo(gemGrid);
+            if(droppingGems.areAllAddedToGrid()){
+                log("evaluateTouchingGems() wonder gem is added to the grid!");
+                gameView.cancelWonderGemAnimation();
+                evaluateGemGrid();
+                haveAnyGemsBeenAdded = true;
+            }
+            return haveAnyGemsBeenAdded;
+        }
+
         droppingGems.addConnectingGemsTo(gemGrid);
 
         if(droppingGems.areAllAddedToGrid()){

@@ -51,15 +51,6 @@ public class Gem {
         };
         containerPosition += gemGroupPosition.getClockwiseContainerPositionOffset();
         column += gemGroupPosition.getClockwiseColumnOffset();
-        log("rotateClockwise() colour: " + color.toString()
-                + " containerPosition: " + containerPosition
-                + " gemGroupPosition: " + gemGroupPosition
-                + " clockwise column offset: " + gemGroupPosition.getClockwiseColumnOffset()
-                + " gem column: " + column);
-    }
-
-    private void log(String msg){
-        System.out.println("^^^ Gem: " + msg);
     }
 
 

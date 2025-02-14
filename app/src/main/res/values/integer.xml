@@ -13,4 +13,5 @@
     <integer name="gravity_interval">70</integer>
     <integer name="gem_grid_gravity_drop_distance_factor">2</integer>
     <integer name="disappearing_gems_flicker_time">600</integer>
+    <integer name="wonder_gem_animation_frame_duration">100</integer>
 </resources>

@@ -181,6 +181,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         return gems.stream().mapToInt(consumer).toArray();
     }
 
+    @Override
+    public void cancelWonderGemAnimation(){
+        sendMessage(this, FragmentMessage.CANCEL_WONDER_GEM);
+    }
 
     @Override
     public void wipeOut(long[] markedGemIds){

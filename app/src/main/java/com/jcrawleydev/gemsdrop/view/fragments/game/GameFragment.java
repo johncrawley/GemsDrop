@@ -4,6 +4,7 @@ import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_COLOR_
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_COLUMNS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_IDS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_POSITIONS;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.CANCEL_WONDER_GEM;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.CREATE_GEMS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.CREATE_WONDER_GEM;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.FREE_FALL_GEMS;
@@ -17,10 +18,10 @@ import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getLon
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getLongArrayFrom;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.setListener;
 
-import android.animation.ObjectAnimator;
+
 import android.annotation.SuppressLint;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -28,13 +29,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
@@ -60,6 +59,8 @@ public class GameFragment extends Fragment {
     private float gemWidth = 10f;
     private GameInputHandler gameInputHandler;
     private TextView scoreView;
+    private AnimationDrawable wonderGemAnimation;
+    private ViewGroup wonderGemLayout;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -89,6 +90,7 @@ public class GameFragment extends Fragment {
                 getService().ifPresent(GameService::notifyGameViewReady);
                 log("assignLayoutDimensions() exited startGame()");
                 gamePane.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+               // createWonderGem(1000000L, 5,5);
             }
         };
         gamePane.getViewTreeObserver().addOnGlobalLayoutListener(listener);
@@ -183,6 +185,7 @@ public class GameFragment extends Fragment {
         setupListener(REMOVE_GEMS, this::removeGems);
         setupListener(UPDATE_SCORE, this::updateScore);
         setupListener(FREE_FALL_GEMS, this::freeFallGems);
+        setupListener(CANCEL_WONDER_GEM, this::cancelWonderGem);
     }
 
 
@@ -246,8 +249,11 @@ public class GameFragment extends Fragment {
         int[] columns = getIntArrayFrom(bundle, GEM_COLUMNS);
         int[] colorIds = getIntArrayFrom(bundle, GEM_COLOR_IDS);
 
-        if(colorIds[0] == R.drawable.jewel_wonder_1){
+        if(colorIds[0] == GemColor.WONDER.ordinal()){
+            log("createGems() about to create Wonder Gem");
             createWonderGem(ids[0], positions[0], columns[0]);
+            log("createGems() created Wonder Gem");
+            return;
         }
 
         for(int i = 0; i < ids.length; i++){
@@ -257,72 +263,24 @@ public class GameFragment extends Fragment {
 
 
     private void createWonderGem(long id, int position, int column){
-        var gemLayout = createGem(id, position, column, R.drawable.jewel_wonder_1);
-        startWonderGemAnimation(gemLayout);
+        wonderGemLayout = createGem(id, position, column);
+        startWonderGemAnimation(wonderGemLayout);
     }
 
-    private TransitionDrawable wonderGemTransitionDrawable;
 
-
-    private TransitionDrawable getWonderGemTransitionDrawable(){
-        if(wonderGemTransitionDrawable == null){
-            wonderGemTransitionDrawable = createTransitionDrawable();
+    private void cancelWonderGem(Bundle bundle){
+        wonderGemAnimation.stop();
+        if(wonderGemLayout != null){
+            GemAnimator.animateRemovalOf(wonderGemLayout, this::cleanupGem);
         }
-        return wonderGemTransitionDrawable;
     }
 
-
-    private TransitionDrawable createTransitionDrawable(){
-        Drawable[] drawables = new Drawable[3];
-        drawables[0] = getDrawableFor(R.drawable.jewel_wonder_1);
-        drawables[1] = getDrawableFor(R.drawable.jewel_wonder_2);
-        drawables[2] = getDrawableFor(R.drawable.jewel_wonder_3);
-        drawables[3] = getDrawableFor(R.drawable.jewel_wonder_4);
-        drawables[4] = getDrawableFor(R.drawable.jewel_wonder_5);
-        drawables[5] = getDrawableFor(R.drawable.jewel_wonder_6);
-        drawables[6] = getDrawableFor(R.drawable.jewel_wonder_7);
-        drawables[7] = getDrawableFor(R.drawable.jewel_wonder_8);
-        drawables[8] = getDrawableFor(R.drawable.jewel_wonder_9);
-        drawables[9] = getDrawableFor(R.drawable.jewel_wonder_10);
-        return new TransitionDrawable(drawables);
-    }
-
-    private Drawable[] wonderGemDrawables;
-
-    private Drawable[] getWonderGemDrawables(){
-        if(wonderGemDrawables == null){
-            wonderGemDrawables = createWonderGemDrawables();
-        }
-        return wonderGemDrawables;
-    }
-
-    private Drawable [] createWonderGemDrawables(){
-        Drawable[] drawables = new Drawable[3];
-        drawables[0] = getDrawableFor(R.drawable.jewel_wonder_1);
-        drawables[1] = getDrawableFor(R.drawable.jewel_wonder_2);
-        drawables[2] = getDrawableFor(R.drawable.jewel_wonder_3);
-        drawables[3] = getDrawableFor(R.drawable.jewel_wonder_4);
-        drawables[4] = getDrawableFor(R.drawable.jewel_wonder_5);
-        drawables[5] = getDrawableFor(R.drawable.jewel_wonder_6);
-        drawables[6] = getDrawableFor(R.drawable.jewel_wonder_7);
-        drawables[7] = getDrawableFor(R.drawable.jewel_wonder_8);
-        drawables[8] = getDrawableFor(R.drawable.jewel_wonder_9);
-        drawables[9] = getDrawableFor(R.drawable.jewel_wonder_10);
-        return drawables;
-    }
 
     private void startWonderGemAnimation(ViewGroup gemLayout){
-        TransitionDrawable transitionDrawable = getWonderGemTransitionDrawable();
         ImageView wonderGemView = (ImageView) gemLayout.getChildAt(0);
-        wonderGemView.setImageDrawable(transitionDrawable);
-
-        int[] imageResources = {R.drawable.jewel_blue };
-        ObjectAnimator animator = ObjectAnimator.ofInt(wonderGemView, "imageDrawable", imageResources);
-        animator.setDuration(300);
-        animator.setRepeatCount(ObjectAnimator.INFINITE);
-        animator.setInterpolator(new LinearInterpolator());
-
-        animator.start();
+        wonderGemView.setBackgroundResource(R.drawable.wonder_gem_animation);
+        wonderGemAnimation = (AnimationDrawable) wonderGemView.getBackground();
+        wonderGemAnimation.start();
     }
 
 
@@ -355,14 +313,21 @@ public class GameFragment extends Fragment {
 
 
     private ViewGroup createGem(long id, int position, int column, int colorId){
-        var gemLayout = createAndAddGemLayout(id, position, column, colorId)
+        var gemLayout = createGem(id, position, column);
+        updateGemColor(gemLayout, colorId);
+        return gemLayout;
+    }
+
+
+    private ViewGroup createGem(long id, int position, int column){
+        var gemLayout = createAndAddGemLayout(id, position, column);
         itemsMap.put(id, gemLayout);
         return gemLayout;
     }
 
 
     private void updateGem(long id, int position, int column){
-        var gemView = itemsMap.computeIfAbsent(id, k -> createAndAddGemLayout(id, position, column, 0));
+        var gemView = itemsMap.computeIfAbsent(id, k -> createAndAddGemLayout(id, position, column));
         updateGemCoordinates(gemView, position, column);
     }
 
@@ -385,12 +350,11 @@ public class GameFragment extends Fragment {
     }
 
 
-    private ViewGroup createAndAddGemLayout(long id, int position, int column, int colorId){
+    private ViewGroup createAndAddGemLayout(long id, int position, int column){
         log("entered createAndAddGemView()");
         LinearLayout gemLayout = new LinearLayout(getContext());
         gemLayout.setTag(id);
         ImageView imageView = new ImageView(getContext());
-        setGemDrawable(imageView, colorId);
         updateGemCoordinates(gemLayout, position, column);
         setGemViewDimensions(imageView);
         gemLayout.addView(imageView);

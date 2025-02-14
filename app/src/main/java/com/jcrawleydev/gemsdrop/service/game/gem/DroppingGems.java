@@ -56,11 +56,17 @@ public class DroppingGems {
     }
 
 
+    public boolean containsWonderGem(){
+        return isWonderGem;
+    }
+
+
+    public void addWonderGemTo(GemGrid gemGrid){
+        addWonderGemIfConnecting(getCentreGem(), gemGrid );
+    }
+
+
     public void addConnectingGemsTo(GemGrid gemGrid){
-        if(isWonderGem){
-            addWonderGemIfConnecting(getCentreGem(), gemGrid );
-            return;
-        }
         addIfConnecting(getBottomGem(), gemGrid);
         addIfConnecting(getCentreGem(), gemGrid);
         addIfConnecting(getTopGem(), gemGrid);
@@ -223,7 +229,10 @@ public class DroppingGems {
 
 
     private void createWonderGem(){
-        gemB = createGem(CENTRE, 1, GemColor.BLUE);
+        gemB = createGem(CENTRE, 1, GemColor.WONDER);
+        gemA = null;
+        gemC = null;
+        gems = List.of(gemB);
         isWonderGem = true;
     }
 
@@ -235,17 +244,20 @@ public class DroppingGems {
 
     private Gem createGem(GemGroupPosition gemGroupPosition, int offset, GemColor gemColor){
         int initialContainerPosition = INITIAL_POSITION + (gridProps.depthPerDrop() * offset);
-        var gem = new Gem(getRandomColor(), gemGroupPosition, initialContainerPosition);
+        var gem = new Gem(gemColor, gemGroupPosition, initialContainerPosition);
         gem.setColumn(middleColumnIndex);
         return gem;
     }
 
 
     private boolean shouldCreateWonderGem(int numberOfGemGroupsDropped){
-        if(numberOfGemGroupsDropped < 10){
+        int minimumDropsBeforeWonderGemPermitted = 2;
+        int chanceOfAWonderGem = 2;
+
+        if(numberOfGemGroupsDropped < minimumDropsBeforeWonderGemPermitted){
             return false;
         }
-        return random.nextInt(25) == 1;
+        return random.nextInt(chanceOfAWonderGem) == 1;
     }
 
 
