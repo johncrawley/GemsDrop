@@ -15,6 +15,7 @@ import java.util.Set;
 public class GemGridImpl implements GemGrid {
     private List<List<Gem>> gemColumns;
     private final GridProps gridProps;
+    private final Set<Gem> markedGems = new HashSet<>();
 
     public GemGridImpl(GridProps gridProps){
         this.gridProps = gridProps;
@@ -117,19 +118,26 @@ public class GemGridImpl implements GemGrid {
 
     public void addWonderGemIfConnecting(Gem wonderGem){
         var column = getColumnBeneath(wonderGem);
+        log("entered addWonderGemIfConnecting() is connecting: " + isTouching(wonderGem, column));
         if(isTouching(wonderGem, column)){
             wonderGem.markAsAddedToGrid();
             var touchedGemColor = column.getLast().getColor();
+            log("addWonderGemIfConnecting() touchedGemColor: " + touchedGemColor);
             markAllGemsOf(touchedGemColor);
         }
     }
 
 
     private void markAllGemsOf(GemColor gemColor){
+        markedGems.clear();
         gemColumns.stream()
                 .flatMap(List::stream)
                 .filter(g -> g.getColor() == gemColor)
-                .forEach(Gem::markAsAddedToGrid);
+                .forEach(gem -> {
+                    gem.markAsAddedToGrid();
+                    markedGems.add(gem);
+                });
+        log("markAllGemsOf() number of marked gems: " + markedGems.size());
     }
 
 

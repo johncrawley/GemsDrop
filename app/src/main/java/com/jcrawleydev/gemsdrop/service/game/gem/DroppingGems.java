@@ -62,7 +62,12 @@ public class DroppingGems {
 
 
     public void addWonderGemTo(GemGrid gemGrid){
-        addWonderGemIfConnecting(getCentreGem(), gemGrid );
+        var wonderGem = gemB;
+        log("addWonderGemTo() is already connecting: " + wonderGem.isAlreadyAddedToTheGrid());
+        if(!wonderGem.isAlreadyAddedToTheGrid()){
+            log("addWonderGemTo() not already connected, so trying now");
+            gemGrid.addWonderGemIfConnecting(wonderGem);
+        }
     }
 
 
@@ -70,13 +75,6 @@ public class DroppingGems {
         addIfConnecting(getBottomGem(), gemGrid);
         addIfConnecting(getCentreGem(), gemGrid);
         addIfConnecting(getTopGem(), gemGrid);
-    }
-
-
-    private void addWonderGemIfConnecting(Gem wonderGem, GemGrid gemGrid){
-        if(!wonderGem.isAlreadyAddedToTheGrid()){
-            gemGrid.addWonderGemIfConnecting(wonderGem);
-        }
     }
 
 
@@ -93,6 +91,8 @@ public class DroppingGems {
 
 
     public boolean areAllAddedToGrid(){
+
+
         return gems.stream().allMatch(Gem::isAlreadyAddedToTheGrid);
     }
 

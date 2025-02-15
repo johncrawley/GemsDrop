@@ -216,14 +216,7 @@ public class Game {
         boolean haveAnyGemsBeenAdded = false;
 
         if(droppingGems.containsWonderGem()){
-            droppingGems.addWonderGemTo(gemGrid);
-            if(droppingGems.areAllAddedToGrid()){
-                log("evaluateTouchingGems() wonder gem is added to the grid!");
-                gameView.cancelWonderGemAnimation();
-                evaluateGemGrid();
-                haveAnyGemsBeenAdded = true;
-            }
-            return haveAnyGemsBeenAdded;
+           return evaluateWonderGem();
         }
 
         droppingGems.addConnectingGemsTo(gemGrid);
@@ -240,6 +233,21 @@ public class Game {
         }
         if(haveAnyGemsBeenAdded){
             soundPlayer.playSound(SoundEffect.GEM_HITS_FLOOR);
+        }
+        return haveAnyGemsBeenAdded;
+    }
+
+
+    private boolean evaluateWonderGem(){
+        var haveAnyGemsBeenAdded = false;
+        log("entered evaluateWonderGem()");
+        droppingGems.addWonderGemTo(gemGrid);
+
+        if(droppingGems.areAllAddedToGrid()){
+            log("evaluateTouchingGems() wonder gem is added to the grid!");
+            gameView.cancelWonderGemAnimation();
+            evaluateGemGrid();
+            haveAnyGemsBeenAdded = true;
         }
         return haveAnyGemsBeenAdded;
     }
