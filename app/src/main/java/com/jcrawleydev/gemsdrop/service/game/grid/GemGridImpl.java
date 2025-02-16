@@ -8,6 +8,7 @@ import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.service.game.gem.GemColor;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,7 +16,6 @@ import java.util.Set;
 public class GemGridImpl implements GemGrid {
     private List<List<Gem>> gemColumns;
     private final GridProps gridProps;
-    private final Set<Gem> markedGems = new HashSet<>();
 
     public GemGridImpl(GridProps gridProps){
         this.gridProps = gridProps;
@@ -30,7 +30,9 @@ public class GemGridImpl implements GemGrid {
 
     @Override
     public List<Gem> getGems(){
-        return gemColumns.stream().flatMap(List::stream).toList();
+        return gemColumns.stream()
+                .flatMap(List::stream)
+                .toList();
     }
 
 
@@ -39,17 +41,6 @@ public class GemGridImpl implements GemGrid {
         for(int i=0; i< gridProps.numberOfColumns(); i++){
             gemColumns.add(new ArrayList<>(gridProps.numberOfRows()));
         }
-    }
-
-
-    public long[] gravityDropOnePosition(){
-        Set<Long> freeFallIds = new HashSet<>();
-        for(var col : gemColumns){
-            for(int i = 0; i < col.size(); i++){
-                freeFallGem(col, i, freeFallIds);
-            }
-        }
-        return freeFallIds.stream().mapToLong(l -> l).toArray();
     }
 
 
@@ -84,15 +75,6 @@ public class GemGridImpl implements GemGrid {
     }
 
 
-    private void freeFallGem(List<Gem> column, int index, Set<Long> freeFallIds){
-        var gem = column.get(index);
-        if(gem.getContainerPosition() > index * gridProps.depthPerDrop()){
-            gem.decrementContainerPosition();
-            freeFallIds.add(gem.getId());
-        }
-    }
-
-
     private void freeFallGem(List<Gem> column, int index, List<Gem> freeFallIds){
         var gem = column.get(index);
         if(gem.getContainerPosition() > index * gridProps.depthPerDrop()){
@@ -101,7 +83,7 @@ public class GemGridImpl implements GemGrid {
         }
     }
 
-
+    @Override
     public void removeMarkedGems(){
         gemColumns.forEach(column -> column.removeIf(Gem::isMarkedForDeletion));
     }
@@ -115,34 +97,64 @@ public class GemGridImpl implements GemGrid {
         }
     }
 
-
-    public void addWonderGemIfConnecting(Gem wonderGem){
+    @Override
+    public Set<Long> getMarkedGemIdsFromTouching(Gem wonderGem){
         var column = getColumnBeneath(wonderGem);
-        log("entered addWonderGemIfConnecting() is connecting: " + isTouching(wonderGem, column));
-        if(isTouching(wonderGem, column)){
-            wonderGem.markAsAddedToGrid();
-            var touchedGemColor = column.getLast().getColor();
-            log("addWonderGemIfConnecting() touchedGemColor: " + touchedGemColor);
-            markAllGemsOf(touchedGemColor);
+        if(isTouching(wonderGem, column) || isTouchingTheFloor(wonderGem, column)){
+            column.add(wonderGem);
+            markForDeletion(wonderGem);
+            if(column.size() < 2){
+                return Set.of(wonderGem.getId());
+            }
+            return markGemsOfTouchedColor(column, wonderGem);
         }
+        return Collections.emptySet();
     }
 
 
-    private void markAllGemsOf(GemColor gemColor){
-        markedGems.clear();
+    private Set<Long> markGemsOfTouchedColor(List<Gem> column, Gem wonderGem){
+        var chosenColor = getColorOfNextGemIn(column);
+        var markedIds = markAllGemsOf(chosenColor);
+        markedIds.add(wonderGem.getId());
+        return markedIds;
+    }
+
+
+    private void markForDeletion(Gem gem){
+        gem.setDeleteCandidateFlag();
+        gem.setMarkedForDeletion();
+    }
+
+    private GemColor getColorOfNextGemIn(List<Gem> column){
+        if(column.isEmpty()){
+            return GemColor.NULL;
+        }
+        var topGem = column.get(column.size() - 2); // minus two, because the wonder gem is in the last index.
+        return topGem.getColor();
+    }
+
+
+    private Set<Long> markAllGemsOf(GemColor gemColor){
+        var markedIds = new HashSet<Long>();
         gemColumns.stream()
                 .flatMap(List::stream)
                 .filter(g -> g.getColor() == gemColor)
                 .forEach(gem -> {
-                    gem.markAsAddedToGrid();
-                    markedGems.add(gem);
+                    gem.setDeleteCandidateFlag();
+                    gem.setMarkedForDeletion();
+                    markedIds.add(gem.getId());
                 });
-        log("markAllGemsOf() number of marked gems: " + markedGems.size());
+        return markedIds;
     }
 
 
     private boolean isTouching(Gem gem, List<Gem> column){
         return gem.getContainerPosition() <= getTopPositionOf(column);
+    }
+
+
+    private boolean isTouchingTheFloor(Gem gem, List<?> column){
+        return gem.getContainerPosition() == 0 && column.isEmpty();
     }
 
 
@@ -179,7 +191,8 @@ public class GemGridImpl implements GemGrid {
 
     @Override
     public boolean exceedsMaxHeight(){
-        return gemColumns.stream().anyMatch(col -> col.size() > gridProps.numberOfRows());
+        return gemColumns.stream()
+                .anyMatch(col -> col.size() > gridProps.numberOfRows());
     }
 
 
@@ -189,7 +202,9 @@ public class GemGridImpl implements GemGrid {
 
 
     public int gemCount(){
-        return gemColumns.stream().map(List::size).reduce(0, Integer::sum);
+        return gemColumns.stream()
+                .map(List::size)
+                .reduce(0, Integer::sum);
     }
 
 

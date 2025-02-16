@@ -3,6 +3,7 @@ package com.jcrawleydev.gemsdrop.service.game.grid;
 import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
 
 import java.util.List;
+import java.util.Set;
 
 public interface GemGrid {
 
@@ -10,7 +11,7 @@ public interface GemGrid {
     List<List<Gem>> getGemColumns();
     List<Gem> getGems();
     void addIfConnecting(Gem gem);
-    void addWonderGemIfConnecting(Gem wonderGem);
+    Set<Long> getMarkedGemIdsFromTouching(Gem wonderGem);
     void removeMarkedGems();
     void printColumnHeights();
     boolean exceedsMaxHeight();

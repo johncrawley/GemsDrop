@@ -25,8 +25,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.jcrawleydev.gemsdrop.service.GameService;
-import com.jcrawleydev.gemsdrop.service.audio.SoundEffect;
-import com.jcrawleydev.gemsdrop.service.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.service.game.score.ScoreStatistics;
 import com.jcrawleydev.gemsdrop.view.GameView;
@@ -111,7 +109,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     public void createGems(List<Gem> gems) {
         var bundle = createGemUpdateBundleFor(gems);
         addGemColorIdsTo(bundle, gems);
-        log("createGems() bundle created, about to send to fragment");
         sendMessage(this, CREATE_GEMS, bundle);
     }
 
@@ -181,10 +178,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         return gems.stream().mapToInt(consumer).toArray();
     }
 
-    @Override
-    public void cancelWonderGemAnimation(){
-        sendMessage(this, FragmentMessage.CANCEL_WONDER_GEM);
-    }
 
     @Override
     public void wipeOut(long[] markedGemIds){

@@ -1,7 +1,9 @@
 package com.jcrawleydev.gemsdrop.service.game.gem;
 
-public class Gem {
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
+public class Gem {
 
     protected GemColor color;
     private boolean deletionCandidateFlag = false;
@@ -9,6 +11,7 @@ public class Gem {
     private int column;
     private GemGroupPosition gemGroupPosition;
     private boolean isAddedToGrid;
+    private final static AtomicLong currentUUID = new AtomicLong();
 
     /*
          container position refers to the position of the bottom of the gem,
@@ -27,9 +30,23 @@ public class Gem {
         this.gemGroupPosition = gemGroupPosition;
         this.containerPosition = initialContainerPosition;
         this.column = 3;
-        this.id = System.nanoTime();
+        this.id = currentUUID.addAndGet(1L);
+        log("created Gem, id: " + id);
     }
 
+
+    Gem(){
+        this.color = GemColor.NULL;
+        this.gemGroupPosition = GemGroupPosition.NONE;
+        this.containerPosition = -1;
+        this.column = 3;
+        this.id = -100L;
+    }
+
+
+    private void log(String msg){
+        System.out.println("Gem: " + msg);
+    }
 
     public void markAsAddedToGrid(){
         isAddedToGrid = true;
@@ -48,6 +65,7 @@ public class Gem {
             case BOTTOM  -> GemGroupPosition.LEFT;
             case LEFT    -> GemGroupPosition.TOP;
             case CENTRE  -> GemGroupPosition.CENTRE;
+            case NONE    -> GemGroupPosition.NONE;
         };
         containerPosition += gemGroupPosition.getClockwiseContainerPositionOffset();
         column += gemGroupPosition.getClockwiseColumnOffset();

@@ -13,6 +13,7 @@ import com.jcrawleydev.gemsdrop.service.game.score.Score;
 import com.jcrawleydev.gemsdrop.view.GameView;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -160,17 +161,21 @@ public class Game {
         }
         isStarted.set(true);
         score.clear();
-        startDroppingGems(currentDropRate);
+        startDroppingGems();
     }
 
 
-    private void startDroppingGems(int dropRate){
-        firstEx.schedule(()->{
-            createGems();
-            score.resetMultiplier();
-            gameView.createGems(droppingGems.get());
-            future = executor.scheduleWithFixedDelay(()-> gemMover.dropGems(), 0, dropRate, TimeUnit.MILLISECONDS);
-        }, 1000, TimeUnit.MILLISECONDS);
+    private void startDroppingGems(){
+        firstEx.schedule(this::createDrop, 1000, TimeUnit.MILLISECONDS);
+    }
+
+
+    private void createDrop(){
+        log("entered createDrop()");
+        createGems();
+        score.resetMultiplier();
+        gameView.createGems(droppingGems.get());
+        future = executor.scheduleWithFixedDelay(()-> gemMover.dropGems(), 0, currentDropRate, TimeUnit.MILLISECONDS);
     }
 
 
@@ -213,12 +218,14 @@ public class Game {
 
 
     public boolean evaluateTouchingGems(){
+        return droppingGems.containsWonderGem()
+                ? evaluateWonderGem()
+                : evaluateNormalGems();
+    }
+
+
+    private boolean evaluateNormalGems(){
         boolean haveAnyGemsBeenAdded = false;
-
-        if(droppingGems.containsWonderGem()){
-           return evaluateWonderGem();
-        }
-
         droppingGems.addConnectingGemsTo(gemGrid);
 
         if(droppingGems.areAllAddedToGrid()){
@@ -240,16 +247,22 @@ public class Game {
 
     private boolean evaluateWonderGem(){
         var haveAnyGemsBeenAdded = false;
-        log("entered evaluateWonderGem()");
-        droppingGems.addWonderGemTo(gemGrid);
+        var markedGemIds = droppingGems.addWonderGemTo(gemGrid);
 
-        if(droppingGems.areAllAddedToGrid()){
-            log("evaluateTouchingGems() wonder gem is added to the grid!");
-            gameView.cancelWonderGemAnimation();
-            evaluateGemGrid();
+        if(!markedGemIds.isEmpty()){
+            cancelTask();
+            long [] ids = getArrayFrom(markedGemIds);
+            gameView.wipeOut(ids);
+            updateScore(markedGemIds.size());
+            playGemsRemovedSound();
             haveAnyGemsBeenAdded = true;
         }
         return haveAnyGemsBeenAdded;
+    }
+
+
+    private long[] getArrayFrom(Set<Long> set){
+        return set.stream().mapToLong(Long::longValue).toArray();
     }
 
 
@@ -347,7 +360,7 @@ public class Game {
             gameOverAnimator.startGameOverSequence();
         }
         else{
-            startDroppingGems(currentDropRate);
+            createDrop();
         }
     }
 

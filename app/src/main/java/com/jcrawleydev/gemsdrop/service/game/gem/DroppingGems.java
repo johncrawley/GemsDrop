@@ -12,8 +12,10 @@ import com.jcrawleydev.gemsdrop.service.game.GridProps;
 import com.jcrawleydev.gemsdrop.service.game.grid.GemGrid;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class DroppingGems {
@@ -61,13 +63,12 @@ public class DroppingGems {
     }
 
 
-    public void addWonderGemTo(GemGrid gemGrid){
+    public Set<Long> addWonderGemTo(GemGrid gemGrid){
         var wonderGem = gemB;
-        log("addWonderGemTo() is already connecting: " + wonderGem.isAlreadyAddedToTheGrid());
         if(!wonderGem.isAlreadyAddedToTheGrid()){
-            log("addWonderGemTo() not already connected, so trying now");
-            gemGrid.addWonderGemIfConnecting(wonderGem);
+            return gemGrid.getMarkedGemIdsFromTouching(wonderGem);
         }
+        return Collections.emptySet();
     }
 
 
@@ -252,17 +253,12 @@ public class DroppingGems {
 
     private boolean shouldCreateWonderGem(int numberOfGemGroupsDropped){
         int minimumDropsBeforeWonderGemPermitted = 2;
-        int chanceOfAWonderGem = 2;
+        int chanceOfAWonderGem = 10;
 
         if(numberOfGemGroupsDropped < minimumDropsBeforeWonderGemPermitted){
             return false;
         }
         return random.nextInt(chanceOfAWonderGem) == 1;
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ DroppingGems: " + msg);
     }
 
 

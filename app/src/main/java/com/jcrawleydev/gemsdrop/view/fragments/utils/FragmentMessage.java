@@ -8,6 +8,5 @@ public enum FragmentMessage {
     FREE_FALL_GEMS,
     NOTIFY_OF_SERVICE_CONNECTED,
     UPDATE_SCORE,
-    UPDATE_COLORS,
-    CANCEL_WONDER_GEM
+    UPDATE_COLORS
 }

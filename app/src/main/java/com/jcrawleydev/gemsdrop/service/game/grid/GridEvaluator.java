@@ -59,28 +59,6 @@ public class GridEvaluator {
     }
 
 
-    public List<Long> getFreeFallGemIds(){
-        List<Long> gemsToMove = new ArrayList<>();
-        for(var column : gemColumns){
-            gemsToMove.addAll(getGemsForPositionalChange(column));
-        }
-        return gemsToMove;
-    }
-
-
-    private List<Long> getGemsForPositionalChange(List<Gem> column){
-        List<Long> gemsToMove = new ArrayList<>();
-        int gemWidth = 2;
-        for(int i = 0; i < column.size(); i++){
-            var gem = column.get(i);
-            if(gem.getContainerPosition() > i * gemWidth){
-                gemsToMove.add(gem.getId());
-            }
-        }
-        return gemsToMove;
-    }
-
-
     private void evaluateRows(){
         for(int i = 0; i < NUMBER_OF_ROWS; i++){
             evaluateRow(i);

@@ -4,7 +4,6 @@ import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_COLOR_
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_COLUMNS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_IDS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_POSITIONS;
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.CANCEL_WONDER_GEM;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.CREATE_GEMS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.CREATE_WONDER_GEM;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.FREE_FALL_GEMS;
@@ -14,6 +13,7 @@ import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDA
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_GEMS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_SCORE;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getIntArrayFrom;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getIntFrom;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getLongArray;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getLongArrayFrom;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.setListener;
@@ -60,7 +60,8 @@ public class GameFragment extends Fragment {
     private GameInputHandler gameInputHandler;
     private TextView scoreView;
     private AnimationDrawable wonderGemAnimation;
-    private ViewGroup wonderGemLayout;
+    private int currentNumberOfGemsRemoved;
+    private int numberOfGemsToRemove;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -99,7 +100,6 @@ public class GameFragment extends Fragment {
 
     private void assignGemContainerDimensions(){
         if(gemContainer == null) {
-            log("assignGemContainerDimensions() gemContainer is null, returning");
             return;
         }
         reduceGemContainerHeightAndWidth();
@@ -113,16 +113,11 @@ public class GameFragment extends Fragment {
         containerWidth = gamePane.getMeasuredWidth() - minimumBorder;
         containerHeight = Integer.MAX_VALUE;
         int numberOfRows = 15;
-        int containerAdjustmentCount = 0;
         while(containerHeight > (availableHeight - minimumBorder)){
-            containerAdjustmentCount++;
             containerWidth -= 2;
             gemWidth = containerWidth / 7f;
             containerHeight = (int)(gemWidth * numberOfRows);
-            log("containerHeight adjustment, is now: " + containerHeight);
         }
-        log("Exiting reduceGemContainerHeightAndWidth() container height: " + containerHeight + " game pane height: " + gamePane.getMeasuredHeight());
-        log("Exiting reduceGemContainerHeightAndWidth() adjustments made: " + containerAdjustmentCount);
     }
 
 
@@ -185,7 +180,6 @@ public class GameFragment extends Fragment {
         setupListener(REMOVE_GEMS, this::removeGems);
         setupListener(UPDATE_SCORE, this::updateScore);
         setupListener(FREE_FALL_GEMS, this::freeFallGems);
-        setupListener(CANCEL_WONDER_GEM, this::cancelWonderGem);
     }
 
 
@@ -211,7 +205,16 @@ public class GameFragment extends Fragment {
 
 
     private void removeGems(Bundle bundle){
+        numberOfGemsToRemove = getLongArrayFrom(bundle, GEM_IDS).length;
+        stopWonderGemAnimation();
         doActionOnGemIdsFrom(bundle, gemLayout -> GemAnimator.animateRemovalOf(gemLayout, this::cleanupGem));
+    }
+
+
+    private void stopWonderGemAnimation(){
+        if(wonderGemAnimation != null && wonderGemAnimation.isRunning()){
+            wonderGemAnimation.stop();
+        }
     }
 
 
@@ -231,10 +234,14 @@ public class GameFragment extends Fragment {
 
     private void cleanupGem(ViewGroup gemLayout){
         long id = (long)gemLayout.getTag();
+        log("Entered cleanupGem() id: " + id);
         gemLayout.setVisibility(View.GONE);
         gemContainer.removeView(gemLayout);
         itemsMap.remove(id);
-        notifyGameOfGemRemovalCompletion();
+        currentNumberOfGemsRemoved++;
+        if(currentNumberOfGemsRemoved >= numberOfGemsToRemove){
+            notifyGameOfGemRemovalCompletion();
+        }
     }
 
 
@@ -250,9 +257,7 @@ public class GameFragment extends Fragment {
         int[] colorIds = getIntArrayFrom(bundle, GEM_COLOR_IDS);
 
         if(colorIds[0] == GemColor.WONDER.ordinal()){
-            log("createGems() about to create Wonder Gem");
             createWonderGem(ids[0], positions[0], columns[0]);
-            log("createGems() created Wonder Gem");
             return;
         }
 
@@ -263,16 +268,8 @@ public class GameFragment extends Fragment {
 
 
     private void createWonderGem(long id, int position, int column){
-        wonderGemLayout = createGem(id, position, column);
+        ViewGroup wonderGemLayout = createGem(id, position, column);
         startWonderGemAnimation(wonderGemLayout);
-    }
-
-
-    private void cancelWonderGem(Bundle bundle){
-        wonderGemAnimation.stop();
-        if(wonderGemLayout != null){
-            GemAnimator.animateRemovalOf(wonderGemLayout, this::cleanupGem);
-        }
     }
 
 
@@ -312,10 +309,9 @@ public class GameFragment extends Fragment {
     }
 
 
-    private ViewGroup createGem(long id, int position, int column, int colorId){
+    private void createGem(long id, int position, int column, int colorId){
         var gemLayout = createGem(id, position, column);
         updateGemColor(gemLayout, colorId);
-        return gemLayout;
     }
 
 
@@ -340,16 +336,6 @@ public class GameFragment extends Fragment {
     }
 
 
-    private int getIntFrom(Bundle bundle, BundleTag tag, int defaultValue){
-        return bundle.getInt(tag.toString(), defaultValue);
-    }
-
-
-    private int getIntFrom(Bundle bundle, BundleTag tag){
-        return getIntFrom(bundle, tag, 0);
-    }
-
-
     private ViewGroup createAndAddGemLayout(long id, int position, int column){
         log("entered createAndAddGemView()");
         LinearLayout gemLayout = new LinearLayout(getContext());
@@ -357,6 +343,8 @@ public class GameFragment extends Fragment {
         ImageView imageView = new ImageView(getContext());
         updateGemCoordinates(gemLayout, position, column);
         setGemViewDimensions(imageView);
+       // imageView.getDrawable().setRem(new BlurMaskFilter(8, BlurMaskFilter.Blur.SOLID));
+        //imageView.setRenderEffect(RenderEffect.createBlurEffect(2.0f, 2.0f, Shader.TileMode.MIRROR));
         gemLayout.addView(imageView);
         log("createAndAddGemLayout() about to setLayoutParams on gemLayout");
         setLayoutParamsOn(gemLayout);

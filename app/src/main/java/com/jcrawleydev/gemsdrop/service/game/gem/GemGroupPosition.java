@@ -9,7 +9,8 @@ public enum GemGroupPosition {
     RIGHT(1, 0, 1, -2),
     BOTTOM(0,2, -1, -2),
     LEFT(-1, 0, -1, 2),
-    CENTRE(0,0, 0, 0);
+    CENTRE(0,0, 0, 0),
+    NONE(0,0, 0, 0);
 
     private final int columnOffset, depthOffset, clockwiseColumnOffset, clockwiseContainerPositionOffset;
 

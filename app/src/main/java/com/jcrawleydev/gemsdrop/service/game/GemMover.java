@@ -81,13 +81,11 @@ public class GemMover {
         disableControls();
         boolean wereAnyGemsAdded = game.evaluateTouchingGems();
 
-        if(wereAnyGemsAdded){
-          //  cancelFutureSyncMovements();
-            return;
+        if(!wereAnyGemsAdded){
+            runnable.run();
+            game.updateDroppingGemsOnView();
+            enableControls();
         }
-        runnable.run();
-        game.updateDroppingGemsOnView();
-        enableControls();
     }
 
 

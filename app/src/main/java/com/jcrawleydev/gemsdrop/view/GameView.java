@@ -13,5 +13,4 @@ public interface GameView {
     void updateGemsColors(List<Gem> gems);
     void wipeOut(long[] markedGemIds);
     void updateScore(int score);
-    void cancelWonderGemAnimation();
 }
