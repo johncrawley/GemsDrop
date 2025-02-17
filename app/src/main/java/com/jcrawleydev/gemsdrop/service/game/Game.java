@@ -248,13 +248,14 @@ public class Game {
     private boolean evaluateWonderGem(){
         var haveAnyGemsBeenAdded = false;
         var markedGemIds = droppingGems.addWonderGemTo(gemGrid);
+        var numberOfMarkedGems = markedGemIds.size();
 
-        if(!markedGemIds.isEmpty()){
+        if(numberOfMarkedGems > 0){
             cancelTask();
             long [] ids = getArrayFrom(markedGemIds);
             gameView.wipeOut(ids);
-            updateScore(markedGemIds.size());
-            playGemsRemovedSound();
+            updateScore(numberOfMarkedGems);
+            playWonderGemRemovedSound(numberOfMarkedGems);
             haveAnyGemsBeenAdded = true;
         }
         return haveAnyGemsBeenAdded;
@@ -340,6 +341,17 @@ public class Game {
             case 6 -> SoundEffect.GEMS_DISAPPEAR_CHAIN_REACTION_5;
             default -> SoundEffect.GEMS_DISAPPEAR_CHAIN_REACTION_6;
         };
+        soundPlayer.playSound(soundEffect);
+    }
+
+
+    private void playWonderGemRemovedSound(int numberOfGemsRemoved){
+        if(soundPlayer == null){
+            return;
+        }
+        var soundEffect = numberOfGemsRemoved > 1
+                ? SoundEffect.WONDER_GEM_GEMS_DISAPPEAR
+                : SoundEffect.WONDER_GEM_HITS_FLOOR;
         soundPlayer.playSound(soundEffect);
     }
 
