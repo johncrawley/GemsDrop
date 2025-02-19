@@ -1,6 +1,6 @@
 package com.jcrawleydev.gemsdrop.service.game.state;
 
-public class EvaluateGridState implements GameState{
+public class GameStartedState implements GameState {
 
     @Override
     public void onStart() {
