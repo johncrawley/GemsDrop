@@ -1,6 +1,13 @@
 package com.jcrawleydev.gemsdrop.service.game.state;
 
-public class GemQuickDropState implements GameState{
+import com.jcrawleydev.gemsdrop.service.game.Game;
+
+public class GemQuickDropState extends AbstractGameState implements GameState{
+
+
+    public GemQuickDropState(Game game){
+        super(game);
+    }
     @Override
     public void onStart() {
 

@@ -1,6 +1,8 @@
 package com.jcrawleydev.gemsdrop.service.game.state;
 
 public enum GameEvent {
+    START_GAME,
+    LOAD_LEVEL,
     DROP_GEMS,
     GEM_REMOVAL_COMPLETE,
     ALL_GEMS_CONNECTED,

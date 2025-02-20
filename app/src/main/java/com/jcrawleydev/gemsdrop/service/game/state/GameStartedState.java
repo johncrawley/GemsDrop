@@ -1,9 +1,17 @@
 package com.jcrawleydev.gemsdrop.service.game.state;
 
-public class GameStartedState implements GameState {
+import com.jcrawleydev.gemsdrop.service.game.Game;
+
+public class GameStartedState extends AbstractGameState implements GameState {
+
+    public GameStartedState(Game game){
+        super(game);
+    }
+
 
     @Override
     public void onStart() {
 
     }
+
 }

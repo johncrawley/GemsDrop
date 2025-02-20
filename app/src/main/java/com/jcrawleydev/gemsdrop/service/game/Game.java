@@ -1,5 +1,7 @@
 package com.jcrawleydev.gemsdrop.service.game;
 
+import static com.jcrawleydev.gemsdrop.service.game.state.GameEvent.START_GAME;
+
 import com.jcrawleydev.gemsdrop.service.audio.SoundEffect;
 import com.jcrawleydev.gemsdrop.service.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems;
@@ -10,6 +12,8 @@ import com.jcrawleydev.gemsdrop.service.game.grid.GridEvaluator;
 import com.jcrawleydev.gemsdrop.service.game.level.GameLevel;
 import com.jcrawleydev.gemsdrop.service.game.level.LevelFactory;
 import com.jcrawleydev.gemsdrop.service.game.score.Score;
+import com.jcrawleydev.gemsdrop.service.game.state.GameEvent;
+import com.jcrawleydev.gemsdrop.service.game.state.StateManager;
 import com.jcrawleydev.gemsdrop.view.GameView;
 
 import java.util.List;
@@ -83,6 +87,7 @@ public class Game {
     private SoundPlayer soundPlayer;
     private int dropCount = 0;
 
+    private StateManager stateManager;
 
     public void init(){
         evaluator = new GridEvaluator(gemGrid.getGemColumns(), gridProps.numberOfRows());
@@ -90,11 +95,23 @@ public class Game {
         gameOverAnimator = new GameOverAnimator(this, gemGrid, gridProps);
         score.clear();
         initLevel();
+        stateManager = new StateManager();
+        stateManager.init(this);
+        stateManager.sendEvent(START_GAME);
     }
 
 
     public void setSoundPlayer(SoundPlayer soundPlayer){
         this.soundPlayer = soundPlayer;
+    }
+
+    public void clearScore(){
+        score.clear();
+    }
+
+
+    public StateManager getStateManager(){
+        return stateManager;
     }
 
 
