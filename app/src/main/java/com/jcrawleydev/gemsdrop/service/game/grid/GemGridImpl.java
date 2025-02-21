@@ -83,9 +83,12 @@ public class GemGridImpl implements GemGrid {
         }
     }
 
+
     @Override
-    public void removeMarkedGems(){
+    public int removeMarkedGems(){
+        int initialCount = getGemCount();
         gemColumns.forEach(column -> column.removeIf(Gem::isMarkedForDeletion));
+        return initialCount - getGemCount();
     }
 
 
@@ -201,7 +204,8 @@ public class GemGridImpl implements GemGrid {
     }
 
 
-    public int gemCount(){
+    @Override
+    public int getGemCount(){
         return gemColumns.stream()
                 .map(List::size)
                 .reduce(0, Integer::sum);

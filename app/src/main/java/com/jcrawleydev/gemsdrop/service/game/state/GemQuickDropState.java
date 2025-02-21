@@ -8,8 +8,12 @@ public class GemQuickDropState extends AbstractGameState implements GameState{
     public GemQuickDropState(Game game){
         super(game);
     }
+
+
     @Override
     public void onStart() {
-
+        taskScheduler.cancelTask();
+        gemMover.disableControls();
+        taskScheduler.schedule(()-> gemMover.dropGems(), 0, 80);
     }
 }

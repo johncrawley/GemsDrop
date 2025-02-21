@@ -8,6 +8,7 @@ import android.os.IBinder;
 
 import com.jcrawleydev.gemsdrop.MainActivity;
 import com.jcrawleydev.gemsdrop.service.audio.SoundEffect;
+import com.jcrawleydev.gemsdrop.service.audio.SoundEffectManager;
 import com.jcrawleydev.gemsdrop.service.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.service.game.Game;
 import com.jcrawleydev.gemsdrop.service.game.score.ScoreRecords;
@@ -65,16 +66,6 @@ public class GameService extends Service {
 
     public void moveUp(){
         game.moveUp();
-    }
-
-
-    public void createGems(){
-     //TODO: delete this method
-    }
-
-
-    public void evalGems(){
-        game.evaluateGemGrid();
     }
 
 
@@ -145,11 +136,9 @@ public class GameService extends Service {
 
     @Override
     public void onCreate() {
-        game.init();
-        soundPlayer = new SoundPlayer(getApplicationContext());
+        game.init(getApplicationContext());
         gamePreferenceManager = new GamePreferenceManager(this);
         setupScoreRecords();
-        game.setSoundPlayer(soundPlayer);
     }
 
 

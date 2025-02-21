@@ -26,10 +26,10 @@ public class GameOverAnimator {
     private final GridProps gridProps;
 
 
-    public GameOverAnimator(Game game, GemGrid gemGrid, GridProps gridProps){
+    public GameOverAnimator(Game game, GemGrid gemGrid){
         this.game = game;
         this.gemGrid = gemGrid;
-        this.gridProps = gridProps;
+        this.gridProps = game.getGridProps();
         executorService = Executors.newSingleThreadScheduledExecutor();
     }
 
@@ -72,7 +72,7 @@ public class GameOverAnimator {
             future.cancel(false);
             game.end();
         }
-        game.playSoundEffect(SoundEffect.GEMS_GREYED_OUT);
+        game.getSoundEffectManager().playSoundEffect(SoundEffect.GEMS_GREYED_OUT);
     }
 
 

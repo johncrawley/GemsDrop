@@ -10,9 +10,10 @@ public interface GemGrid {
     int getColumnHeightAt(int columnIndex);
     List<List<Gem>> getGemColumns();
     List<Gem> getGems();
+    int getGemCount();
     void addIfConnecting(Gem gem);
     Set<Long> getMarkedGemIdsFromTouching(Gem wonderGem);
-    void removeMarkedGems();
+    int removeMarkedGems();
     void printColumnHeights();
     boolean exceedsMaxHeight();
     void addRow(List<Gem> gems);
