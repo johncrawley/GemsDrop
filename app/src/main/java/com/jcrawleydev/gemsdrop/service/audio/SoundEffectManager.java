@@ -14,8 +14,8 @@ public class SoundEffectManager {
     }
 
 
-    public void init(Context context){
-        soundPlayer = new SoundPlayer(context);
+    public void init(SoundPlayer soundPlayer){
+        this.soundPlayer = soundPlayer;
     }
 
 

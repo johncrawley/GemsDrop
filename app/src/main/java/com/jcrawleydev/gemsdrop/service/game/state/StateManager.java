@@ -8,7 +8,6 @@ import java.util.Map;
 
 public class StateManager {
 
-    private Map<GameEvent, AbstractGameState> stateMap;
     private AbstractGameState currentGameState;
     AbstractGameState gameStartedState,
             evaluateGridState,
@@ -32,21 +31,11 @@ public class StateManager {
         gemQuickDropState = new GemQuickDropState(game);
         gemsDropState = new GemsDropState(game);
         loadLevelState = new LoadLevelState(game);
-
-        stateMap = Map.of(START_GAME, new GameStartedState(game),
-                ALL_GEMS_CONNECTED, new EvaluateGridState(game),
-                GEM_REMOVAL_ANIMATION_COMPLETE, new GemRemovalAnimationDoneState(game),
-                GEMS_REMOVED_FROM_GRID, new GridGravityState(game),
-                GEM_COLUMN_EXCEEDS_MAXIMUM_HEIGHT, new GameOverState(game),
-                SOME_GEMS_ARE_CONNECTED, new GemFreeFallState(game),
-                QUICK_DROP_INITIATED, new GemQuickDropState(game),
-                DROP_GEMS, new GemsDropState(game));
-
-        currentGameState = stateMap.get(START_GAME);
     }
 
 
     public void sendEvent(GameEvent gameEvent){
+       log("entered sendEvent() " + currentGameState + " -> " + gameEvent);
        currentGameState = switch(gameEvent){
            case START_GAME -> gameStartedState;
            case ALL_GEMS_CONNECTED -> evaluateGridState;
@@ -61,5 +50,9 @@ public class StateManager {
        currentGameState.onStart();
     }
 
+
+    private void log(String msg){
+        System.out.println("^^^ StateManager: " + msg);
+    }
 
 }

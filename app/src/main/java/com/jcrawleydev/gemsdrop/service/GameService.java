@@ -136,7 +136,8 @@ public class GameService extends Service {
 
     @Override
     public void onCreate() {
-        game.init(getApplicationContext());
+        soundPlayer = new SoundPlayer(getApplicationContext());
+        game.init(soundPlayer);
         gamePreferenceManager = new GamePreferenceManager(this);
         setupScoreRecords();
     }

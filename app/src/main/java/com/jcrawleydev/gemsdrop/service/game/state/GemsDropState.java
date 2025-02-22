@@ -36,6 +36,4 @@ public class GemsDropState extends AbstractGameState implements GameState{
         gemGrid.printColumnHeights();
     }
 
-
-
 }

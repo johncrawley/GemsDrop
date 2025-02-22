@@ -158,7 +158,7 @@ public class GameFragment extends Fragment {
 
 
     private void log(String msg){
-       System.out.println("^^^ GameFragment: " + msg);
+     //  System.out.println("^^^ GameFragment: " + msg);
     }
 
 

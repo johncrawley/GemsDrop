@@ -3,9 +3,8 @@ package com.jcrawleydev.gemsdrop.service.game;
 import static com.jcrawleydev.gemsdrop.service.game.state.GameEvent.QUICK_DROP_INITIATED;
 import static com.jcrawleydev.gemsdrop.service.game.state.GameEvent.START_GAME;
 
-import android.content.Context;
-
 import com.jcrawleydev.gemsdrop.service.audio.SoundEffectManager;
+import com.jcrawleydev.gemsdrop.service.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems;
 import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGemsEvaluator;
 import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
@@ -44,14 +43,14 @@ public class Game {
 
     private StateManager stateManager;
 
-    public void init(Context context){
+    public void init(SoundPlayer soundPlayer){
         gemMover = new GemMover(this, gemGrid, gridProps);
-        soundEffectManager.init(context);
+        soundEffectManager.init(soundPlayer);
         score.clear();
         droppingGemsEvaluator = new DroppingGemsEvaluator(this);
         stateManager = new StateManager();
         stateManager.init(this);
-        stateManager.sendEvent(START_GAME);
+     //   stateManager.sendEvent(START_GAME);
     }
 
 
@@ -157,7 +156,6 @@ public class Game {
     public int getDropCount(){
         return dropCount;
     }
-
 
 
     public void updateDropInterval(){
