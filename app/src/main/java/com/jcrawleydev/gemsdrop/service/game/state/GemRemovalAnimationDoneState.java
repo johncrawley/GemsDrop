@@ -1,5 +1,7 @@
 package com.jcrawleydev.gemsdrop.service.game.state;
 
+import static com.jcrawleydev.gemsdrop.service.game.state.GameStateName.GRID_GRAVITY;
+
 import com.jcrawleydev.gemsdrop.service.game.Game;
 
 public class GemRemovalAnimationDoneState extends AbstractGameState{
@@ -10,11 +12,11 @@ public class GemRemovalAnimationDoneState extends AbstractGameState{
 
 
     @Override
-    public void onStart(){
+    public void start(){
         int numberOfGemsRemoved = gemGrid.removeMarkedGems();
         game.updateScore(numberOfGemsRemoved);
         if(numberOfGemsRemoved > 0){
-            stateManager.sendEvent(GameEvent.GEMS_REMOVED_FROM_GRID);
+            loadState(GRID_GRAVITY);
         }
     }
 }

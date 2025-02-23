@@ -1,10 +1,13 @@
 package com.jcrawleydev.gemsdrop.service.game.state;
 
+import static com.jcrawleydev.gemsdrop.service.game.state.GameStateName.GAME_OVER;
+import static com.jcrawleydev.gemsdrop.service.game.state.GameStateName.GEMS_DROP;
+
 import com.jcrawleydev.gemsdrop.service.game.Game;
 import com.jcrawleydev.gemsdrop.service.game.grid.GridEvaluator;
 
 
-public class EvaluateGridState extends AbstractGameState implements GameState{
+public class EvaluateGridState extends AbstractGameState{
 
     private final GridEvaluator evaluator;
 
@@ -15,12 +18,13 @@ public class EvaluateGridState extends AbstractGameState implements GameState{
 
 
     @Override
-    public void onStart() {
+    public void start() {
         evaluateGemGrid();
     }
 
 
     public void evaluateGemGrid(){
+        log("entered evaluateGemGrid()");
         cancelTask();
         long[] markedGemsIds = evaluator.evaluateGemGrid();
         int numberOfGemsToRemove = markedGemsIds.length;
@@ -30,19 +34,14 @@ public class EvaluateGridState extends AbstractGameState implements GameState{
             soundEffectManager.playGemsRemovedSound();
         }
         else{
-            checkForHeightExceeded();
+            if(gemGrid.exceedsMaxHeight()){
+                loadState(GAME_OVER);
+            }
+            else{
+                log("evaluateGemGrid() grid doesn't exceed max height, so loading gems drop state");
+                loadState(GEMS_DROP);
+            }
         }
     }
-
-
-    private void checkForHeightExceeded(){
-        if(gemGrid.exceedsMaxHeight()){
-            stateManager.sendEvent(GameEvent.GEM_COLUMN_EXCEEDS_MAXIMUM_HEIGHT);
-        }
-        else{
-            stateManager.sendEvent(GameEvent.DROP_GEMS);
-        }
-    }
-
 
 }

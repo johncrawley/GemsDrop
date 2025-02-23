@@ -13,6 +13,7 @@ public interface GemGrid {
     int getGemCount();
     void addIfConnecting(Gem gem);
     Set<Long> getMarkedGemIdsFromTouching(Gem wonderGem);
+    List<Gem> gravityDropGemsOnePosition();
     int removeMarkedGems();
     void printColumnHeights();
     boolean exceedsMaxHeight();

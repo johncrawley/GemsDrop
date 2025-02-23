@@ -1,7 +1,8 @@
 package com.jcrawleydev.gemsdrop.service.game;
 
-import static com.jcrawleydev.gemsdrop.service.game.state.GameEvent.QUICK_DROP_INITIATED;
-import static com.jcrawleydev.gemsdrop.service.game.state.GameEvent.START_GAME;
+import static com.jcrawleydev.gemsdrop.service.game.state.GameStateName.GEM_QUICK_DROP;
+import static com.jcrawleydev.gemsdrop.service.game.state.GameStateName.GAME_STARTED;
+import static com.jcrawleydev.gemsdrop.service.game.state.GameStateName.GEM_REMOVAL_ANIMATION_COMPLETE;
 
 import com.jcrawleydev.gemsdrop.service.audio.SoundEffectManager;
 import com.jcrawleydev.gemsdrop.service.audio.SoundPlayer;
@@ -12,7 +13,7 @@ import com.jcrawleydev.gemsdrop.service.game.grid.GemGrid;
 import com.jcrawleydev.gemsdrop.service.game.grid.GemGridImpl;
 import com.jcrawleydev.gemsdrop.service.game.level.GameLevel;
 import com.jcrawleydev.gemsdrop.service.game.score.Score;
-import com.jcrawleydev.gemsdrop.service.game.state.GameEvent;
+import com.jcrawleydev.gemsdrop.service.game.state.GameStateName;
 import com.jcrawleydev.gemsdrop.service.game.state.StateManager;
 import com.jcrawleydev.gemsdrop.view.GameView;
 
@@ -36,7 +37,6 @@ public class Game {
     private final Score score = new Score(50);
     private final TaskScheduler taskScheduler = new TaskScheduler();
     private final SoundEffectManager soundEffectManager = new SoundEffectManager(score);
-    private DroppingGemsEvaluator droppingGemsEvaluator;
 
     private GameLevel currentGameLevel;
     private int dropCount = 0;
@@ -44,11 +44,11 @@ public class Game {
     private StateManager stateManager;
 
     public void init(SoundPlayer soundPlayer){
-        gemMover = new GemMover(this, gemGrid, gridProps);
+        stateManager = new StateManager();
+        gemMover = new GemMover(gemGrid, gridProps);
+        gemMover.setDroppingGemsEvaluator(new DroppingGemsEvaluator(this));
         soundEffectManager.init(soundPlayer);
         score.clear();
-        droppingGemsEvaluator = new DroppingGemsEvaluator(this);
-        stateManager = new StateManager();
         stateManager.init(this);
      //   stateManager.sendEvent(START_GAME);
     }
@@ -185,7 +185,7 @@ public class Game {
 
 
     public void startGame(){
-        stateManager.sendEvent(START_GAME);
+        loadState(GAME_STARTED);
     }
 
 
@@ -195,12 +195,7 @@ public class Game {
                 || droppingGems.areInInitialPosition()){
             return;
         }
-        stateManager.sendEvent(QUICK_DROP_INITIATED);
-    }
-
-
-    public boolean evaluateTouchingGems(){
-       return droppingGemsEvaluator.evaluateTouchingGems(droppingGems);
+        loadState(GEM_QUICK_DROP);
     }
 
 
@@ -221,7 +216,12 @@ public class Game {
 
 
     public void onGemRemovalAnimationDone(){
-       stateManager.sendEvent(GameEvent.GEM_REMOVAL_ANIMATION_COMPLETE);
+        loadState(GEM_REMOVAL_ANIMATION_COMPLETE);
+    }
+
+
+    private void loadState(GameStateName stateName){
+        stateManager.load(stateName, "Game");
     }
 
 

@@ -2,7 +2,7 @@ package com.jcrawleydev.gemsdrop.service.game.state;
 
 import com.jcrawleydev.gemsdrop.service.game.Game;
 
-public class GemQuickDropState extends AbstractGameState implements GameState{
+public class GemQuickDropState extends AbstractGameState{
 
 
     public GemQuickDropState(Game game){
@@ -11,7 +11,7 @@ public class GemQuickDropState extends AbstractGameState implements GameState{
 
 
     @Override
-    public void onStart() {
+    public void start() {
         taskScheduler.cancelTask();
         gemMover.disableControls();
         taskScheduler.schedule(()-> gemMover.dropGems(), 0, 80);

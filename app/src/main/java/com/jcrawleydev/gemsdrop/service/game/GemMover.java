@@ -1,6 +1,7 @@
 package com.jcrawleydev.gemsdrop.service.game;
 
 import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems;
+import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGemsEvaluator;
 import com.jcrawleydev.gemsdrop.service.game.grid.GemGrid;
 import com.jcrawleydev.gemsdrop.service.game.utils.MovementChecker;
 import com.jcrawleydev.gemsdrop.service.game.utils.RotationChecker;
@@ -12,17 +13,21 @@ public class GemMover {
 
     private final MovementChecker movementChecker;
     private final RotationChecker rotationChecker;
-    private final Game game;
 
     private DroppingGems droppingGems;
     private final AtomicBoolean isControlEnabled = new AtomicBoolean(true);
     private final AtomicBoolean areFutureSyncMovementsAllowed = new AtomicBoolean(true);
+    private DroppingGemsEvaluator droppingGemsEvaluator;
 
 
-    public GemMover(Game game, GemGrid gemGrid, GridProps gridProps){
-        this.game = game;
+    public GemMover(GemGrid gemGrid, GridProps gridProps){
         movementChecker = new MovementChecker(gemGrid, gridProps);
         rotationChecker = new RotationChecker(gemGrid, gridProps);
+    }
+
+    public void setDroppingGemsEvaluator(DroppingGemsEvaluator droppingGemsEvaluator){
+        this.droppingGemsEvaluator = droppingGemsEvaluator;
+        droppingGemsEvaluator.setGemMover(this);
     }
 
 
@@ -38,7 +43,7 @@ public class GemMover {
     }
 
 
-    private void enableControls(){
+    public void enableControls(){
         isControlEnabled.set(true);
     }
 
@@ -68,30 +73,12 @@ public class GemMover {
     }
 
 
-    private void log(String msg){
-        System.out.println("^^^ GemMover: " + msg);
-    }
-
-
     private synchronized void syncMovement(Runnable runnable){
-        //log("syncMovement() are futureSyncMovementsAllowed: "  + areFutureSyncMovementsAllowed.get());
         if(!areFutureSyncMovementsAllowed.get()){
             return;
         }
         disableControls();
-        boolean wereAnyGemsAdded = game.evaluateTouchingGems();
-
-        if(!wereAnyGemsAdded){
-            runnable.run();
-            game.updateDroppingGemsOnView();
-            enableControls();
-        }
-    }
-
-
-    private void cancelFutureMovements(){
-        log("Entered cancelFutureSyncMovements()");
-        areFutureSyncMovementsAllowed.set(false);
+        droppingGemsEvaluator.evaluateTouchingGems(droppingGems, runnable);
     }
 
 
@@ -114,20 +101,5 @@ public class GemMover {
             droppingGems.moveRight();
         }
     }
-
-
-    private void up(){
-        droppingGems.moveUp();
-    }
-
-
-    private void down(){
-        if(movementChecker.canMoveDown(droppingGems)){
-            droppingGems.moveDown();
-        }
-        //  switchToFreeFallMode();
-    }
-
-
 
 }

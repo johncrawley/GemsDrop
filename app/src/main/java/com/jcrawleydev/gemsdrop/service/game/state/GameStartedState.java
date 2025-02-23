@@ -1,8 +1,10 @@
 package com.jcrawleydev.gemsdrop.service.game.state;
 
+import static com.jcrawleydev.gemsdrop.service.game.state.GameStateName.LOAD_LEVEL;
+
 import com.jcrawleydev.gemsdrop.service.game.Game;
 
-public class GameStartedState extends AbstractGameState implements GameState {
+public class GameStartedState extends AbstractGameState{
 
 
     public GameStartedState(Game game){
@@ -11,13 +13,13 @@ public class GameStartedState extends AbstractGameState implements GameState {
 
 
     @Override
-    public void onStart() {
+    public void start() {
         if(game.isStarted()){
             return;
         }
         game.setStarted();
         game.clearScore();
-        stateManager.sendEvent(GameEvent.LOAD_LEVEL);
+        loadState(LOAD_LEVEL);
     }
 
 }

@@ -1,13 +1,15 @@
 package com.jcrawleydev.gemsdrop.service.game.gem;
 
 import static com.jcrawleydev.gemsdrop.service.audio.SoundEffect.GEM_HITS_FLOOR;
+import static com.jcrawleydev.gemsdrop.service.game.state.GameStateName.EVALUATE_GRID;
+import static com.jcrawleydev.gemsdrop.service.game.state.GameStateName.GEM_FREE_FALL;
 
 import com.jcrawleydev.gemsdrop.service.audio.SoundEffectManager;
 import com.jcrawleydev.gemsdrop.service.game.Game;
 import com.jcrawleydev.gemsdrop.service.game.GemMover;
 import com.jcrawleydev.gemsdrop.service.game.TaskScheduler;
 import com.jcrawleydev.gemsdrop.service.game.grid.GemGrid;
-import com.jcrawleydev.gemsdrop.service.game.state.GameEvent;
+import com.jcrawleydev.gemsdrop.service.game.state.GameStateName;
 import com.jcrawleydev.gemsdrop.service.game.state.StateManager;
 
 import java.util.Set;
@@ -15,7 +17,7 @@ import java.util.Set;
 public class DroppingGemsEvaluator {
 
     private final Game game;
-    private final GemMover gemMover;
+    private GemMover gemMover;
     private final GemGrid gemGrid;
     private final StateManager stateManager;
     private final SoundEffectManager soundEffectManager;
@@ -23,43 +25,55 @@ public class DroppingGemsEvaluator {
 
     public DroppingGemsEvaluator(Game game){
         this.game = game;
-        gemMover = game.getGemMover();
         gemGrid = game.getGemGrid();
         stateManager = game.getStateManager();
         soundEffectManager = game.getSoundEffectManager();
         taskScheduler = game.getTaskScheduler();
     }
 
-    public boolean evaluateTouchingGems(DroppingGems droppingGems){
-        return droppingGems.containsWonderGem()
-                ? evaluateWonderGem(droppingGems)
-                : evaluateNormalGems(droppingGems);
+
+    public void setGemMover(GemMover gemMover){
+        this.gemMover = gemMover;
     }
 
 
-    private boolean evaluateNormalGems(DroppingGems droppingGems){
-        boolean haveAnyGemsBeenAdded = false;
+    public void evaluateTouchingGems(DroppingGems droppingGems, Runnable movementRunnable){
+       if(droppingGems.containsWonderGem()){
+           evaluateWonderGem(droppingGems, movementRunnable);
+       }
+       else{
+           evaluateNormalGems(droppingGems, movementRunnable);
+       }
+    }
+
+    private void log(String msg){
+        System.out.println("^^^ DroppingGemsEvaluator() : " + msg);
+    }
+
+    private void evaluateNormalGems(DroppingGems droppingGems, Runnable movementRunnable){
+        log("Entered evaluateNormalGems()");
         droppingGems.addConnectingGemsTo(gemGrid);
 
         if(droppingGems.areAllAddedToGrid()){
+            soundEffectManager.playSoundEffect(GEM_HITS_FLOOR);
             gemMover.disableControls();
-            stateManager.sendEvent(GameEvent.ALL_GEMS_CONNECTED);
-            haveAnyGemsBeenAdded = true;
+            log("all were added to the grid(), evaluating grid");
+            loadState(EVALUATE_GRID);
         }
         else if(droppingGems.areAnyAddedToGrid()){
-            gemMover.disableControls();
-            stateManager.sendEvent(GameEvent.SOME_GEMS_ARE_CONNECTED);
-            haveAnyGemsBeenAdded = true;
-        }
-        if(haveAnyGemsBeenAdded){
             soundEffectManager.playSoundEffect(GEM_HITS_FLOOR);
+            gemMover.disableControls();
+            log("at least 1 gem added to the grid");
+            loadState(GEM_FREE_FALL);
         }
-        return haveAnyGemsBeenAdded;
+        else{
+            log("no gems added to the grid, running movement");
+            runMovement(movementRunnable);
+        }
     }
 
 
-    private boolean evaluateWonderGem(DroppingGems droppingGems){
-        var haveAnyGemsBeenAdded = false;
+    private void evaluateWonderGem(DroppingGems droppingGems, Runnable movementRunnable){
         var markedGemIds = droppingGems.addWonderGemTo(gemGrid);
         var numberOfMarkedGems = markedGemIds.size();
 
@@ -69,9 +83,22 @@ public class DroppingGemsEvaluator {
             game.removeGemsFromView(ids);
             game.updateScore(numberOfMarkedGems);
             soundEffectManager.playWonderGemRemovedSound(numberOfMarkedGems);
-            haveAnyGemsBeenAdded = true;
         }
-        return haveAnyGemsBeenAdded;
+        else{
+            runMovement(movementRunnable);
+        }
+    }
+
+
+    private void loadState(GameStateName stateName){
+        stateManager.load(stateName, this.getClass().getSimpleName());
+    }
+
+
+    private void runMovement(Runnable movementRunnable){
+        movementRunnable.run();
+        game.updateDroppingGemsOnView();
+        gemMover.enableControls();
     }
 
 

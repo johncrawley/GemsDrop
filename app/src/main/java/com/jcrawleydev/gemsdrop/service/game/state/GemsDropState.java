@@ -4,7 +4,7 @@ import com.jcrawleydev.gemsdrop.service.game.Game;
 import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems;
 
 
-public class GemsDropState extends AbstractGameState implements GameState{
+public class GemsDropState extends AbstractGameState{
 
     private DroppingGems droppingGems;
 
@@ -13,7 +13,7 @@ public class GemsDropState extends AbstractGameState implements GameState{
     }
 
     @Override
-    public void onStart() {
+    public void start() {
         createDrop();
     }
 

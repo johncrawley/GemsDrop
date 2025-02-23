@@ -1,10 +1,6 @@
 package com.jcrawleydev.gemsdrop.service.game.state;
 
-import static com.jcrawleydev.gemsdrop.service.game.state.GameEvent.*;
-
 import com.jcrawleydev.gemsdrop.service.game.Game;
-
-import java.util.Map;
 
 public class StateManager {
 
@@ -21,7 +17,6 @@ public class StateManager {
 
 
     public void init(Game game){
-
         gameStartedState = new GameStartedState(game);
         evaluateGridState = new EvaluateGridState(game);
         gemRemovalCompletedState = new GemRemovalAnimationDoneState(game);
@@ -34,20 +29,21 @@ public class StateManager {
     }
 
 
-    public void sendEvent(GameEvent gameEvent){
-       log("entered sendEvent() " + currentGameState + " -> " + gameEvent);
-       currentGameState = switch(gameEvent){
-           case START_GAME -> gameStartedState;
-           case ALL_GEMS_CONNECTED -> evaluateGridState;
+    public void load(GameStateName gameStateName, String caller){
+        var currentStateName = currentGameState == null? "null" : currentGameState.getClass().getSimpleName();
+       log("entered load() caller: " + caller + " "  + currentStateName + " -> " + gameStateName);
+       currentGameState = switch(gameStateName){
+           case GAME_STARTED -> gameStartedState;
+           case EVALUATE_GRID -> evaluateGridState;
            case GEM_REMOVAL_ANIMATION_COMPLETE -> gemRemovalCompletedState;
-           case GEMS_REMOVED_FROM_GRID -> gridGravityState;
-           case GEM_COLUMN_EXCEEDS_MAXIMUM_HEIGHT -> gameOverState;
-           case SOME_GEMS_ARE_CONNECTED -> gemFreeFallState;
-           case QUICK_DROP_INITIATED -> gemQuickDropState;
-           case DROP_GEMS -> gemsDropState;
+           case GRID_GRAVITY -> gridGravityState;
+           case GAME_OVER -> gameOverState;
+           case GEM_FREE_FALL -> gemFreeFallState;
+           case GEM_QUICK_DROP -> gemQuickDropState;
+           case GEMS_DROP -> gemsDropState;
            case LOAD_LEVEL -> loadLevelState;
        };
-       currentGameState.onStart();
+       currentGameState.start();
     }
 
 

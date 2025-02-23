@@ -25,8 +25,6 @@ public class LevelFactory {
         var gems = Set.of(BLUE, RED, YELLOW, GREEN, PURPLE);
         var startingGrid = List.of("G Y G Y G Y G",  "B R B R B R B", "Y P Y P Y P Y");
         gameLevel1 = new GameLevel(1, R.drawable.background_pattern_1, 150, 100, gems, startingGrid );
-
-
     }
 
 }

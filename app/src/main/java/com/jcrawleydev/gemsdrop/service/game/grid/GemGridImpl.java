@@ -63,7 +63,7 @@ public class GemGridImpl implements GemGrid {
         gem.setContainerPosition(containerPosition);
     }
 
-
+    @Override
     public List<Gem> gravityDropGemsOnePosition(){
         List<Gem> freeFallGems= new ArrayList<>();
         for(var col : gemColumns){
