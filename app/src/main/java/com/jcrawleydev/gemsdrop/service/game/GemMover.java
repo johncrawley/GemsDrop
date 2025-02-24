@@ -6,6 +6,8 @@ import com.jcrawleydev.gemsdrop.service.game.grid.GemGrid;
 import com.jcrawleydev.gemsdrop.service.game.utils.MovementChecker;
 import com.jcrawleydev.gemsdrop.service.game.utils.RotationChecker;
 
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GemMover {
@@ -16,8 +18,11 @@ public class GemMover {
 
     private DroppingGems droppingGems;
     private final AtomicBoolean isControlEnabled = new AtomicBoolean(true);
+    private final AtomicBoolean isMovementEnabled = new AtomicBoolean(true);
     private final AtomicBoolean areFutureSyncMovementsAllowed = new AtomicBoolean(true);
     private DroppingGemsEvaluator droppingGemsEvaluator;
+    private enum Movement { LEFT, RIGHT, ROTATE, DOWN }
+    private final Queue<Movement> movementQueue = new ConcurrentLinkedQueue<>();
 
 
     public GemMover(GemGrid gemGrid, GridProps gridProps){
@@ -35,6 +40,7 @@ public class GemMover {
         this.droppingGems = droppingGems;
         areFutureSyncMovementsAllowed.set(true);
         isControlEnabled.set(true);
+        isMovementEnabled.set(true);
     }
 
 
@@ -48,37 +54,69 @@ public class GemMover {
     }
 
 
-    public void rotateGems(){ syncUserMovement(this::rotate);}
+    public void rotateGems(){ syncUserMovement(Movement.ROTATE);}
 
 
     public void moveLeft(){
-        syncUserMovement(this::left);
+        syncUserMovement(Movement.LEFT);
     }
 
 
     public void moveRight(){
-        syncUserMovement(this::right);
+        syncUserMovement(Movement.RIGHT);
     }
 
 
     public void dropGems(){
-        syncMovement(() -> droppingGems.moveDown());
+        log("Entered dropGems()");
+        syncMovement(Movement.DOWN);
     }
 
+    private void log(String msg){
+        System.out.println("^^^ GemMover: " + msg);
+    }
 
-    private void syncUserMovement(Runnable runnable){
+    private void syncUserMovement(Movement movement){
         if (isControlEnabled.get()) {
-            syncMovement(runnable);
+            syncMovement(movement);
         }
     }
 
 
-    private synchronized void syncMovement(Runnable runnable){
+    private Runnable getMethodForMovement(Movement movement){
+        return switch (movement){
+            case ROTATE -> this::rotate;
+            case LEFT -> this::left;
+            case RIGHT -> this::right;
+            case DOWN -> this::down;
+        };
+    }
+
+
+    private synchronized void syncMovement(Movement movement){
         if(!areFutureSyncMovementsAllowed.get()){
             return;
         }
-        disableControls();
-        droppingGemsEvaluator.evaluateTouchingGems(droppingGems, runnable);
+        if(!isMovementEnabled.get()){
+            movementQueue.add(movement);
+            return;
+        }
+      //  disableControls();
+        isMovementEnabled.set(false);
+        droppingGemsEvaluator.evaluateTouchingGems(droppingGems, getMethodForMovement(movement));
+    }
+
+
+    public void enableMovement(){
+        isMovementEnabled.set(true);
+    }
+
+
+    public void syncNextQueuedMovement(){
+        if(movementQueue.isEmpty()){
+            return;
+        }
+        syncMovement(movementQueue.remove());
     }
 
 
@@ -102,4 +140,7 @@ public class GemMover {
         }
     }
 
+    private void down(){
+        droppingGems.moveDown();
+    }
 }

@@ -30,6 +30,7 @@ public class StateManager {
 
 
     public void load(GameStateName gameStateName, String caller){
+
         var currentStateName = currentGameState == null? "null" : currentGameState.getClass().getSimpleName();
        log("entered load() caller: " + caller + " "  + currentStateName + " -> " + gameStateName);
        currentGameState = switch(gameStateName){

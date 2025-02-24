@@ -99,6 +99,8 @@ public class DroppingGemsEvaluator {
         movementRunnable.run();
         game.updateDroppingGemsOnView();
         gemMover.enableControls();
+        gemMover.enableMovement();
+        gemMover.syncNextQueuedMovement();
     }
 
 
