@@ -92,8 +92,6 @@ public class DroppingGems {
 
 
     public boolean areAllAddedToGrid(){
-
-
         return gems.stream().allMatch(Gem::isAlreadyAddedToTheGrid);
     }
 
@@ -151,11 +149,6 @@ public class DroppingGems {
 
     private void forEachFreeGem(Consumer<Gem> consumer){
         gems.stream().filter(gem -> !gem.isAlreadyAddedToTheGrid()).forEach(consumer);
-    }
-
-
-    public void moveUp(){
-        forEachFreeGem(Gem::moveUp);
     }
 
 

@@ -44,4 +44,20 @@ public abstract class AbstractGameState {
     public void log(String msg){
         System.out.println("^^^ " + this.getClass().getName() + " : " + msg);
     }
+
+    public void rotate(){
+
+    }
+
+    public void left(){
+
+    }
+
+    public void right(){
+
+    }
+
+    public void down(){
+
+    }
 }

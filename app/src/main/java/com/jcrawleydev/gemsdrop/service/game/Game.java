@@ -1,6 +1,5 @@
 package com.jcrawleydev.gemsdrop.service.game;
 
-import static com.jcrawleydev.gemsdrop.service.game.state.GameStateName.GEM_QUICK_DROP;
 import static com.jcrawleydev.gemsdrop.service.game.state.GameStateName.GAME_STARTED;
 import static com.jcrawleydev.gemsdrop.service.game.state.GameStateName.GEM_REMOVAL_ANIMATION_COMPLETE;
 
@@ -13,6 +12,7 @@ import com.jcrawleydev.gemsdrop.service.game.grid.GemGrid;
 import com.jcrawleydev.gemsdrop.service.game.grid.GemGridImpl;
 import com.jcrawleydev.gemsdrop.service.game.level.GameLevel;
 import com.jcrawleydev.gemsdrop.service.game.score.Score;
+import com.jcrawleydev.gemsdrop.service.game.state.AbstractGameState;
 import com.jcrawleydev.gemsdrop.service.game.state.GameStateName;
 import com.jcrawleydev.gemsdrop.service.game.state.StateManager;
 import com.jcrawleydev.gemsdrop.view.GameView;
@@ -26,7 +26,6 @@ public class Game {
     private DroppingGems droppingGems;
 
     private GameView gameView;
-    private GemMover gemMover;
     public final int GRAVITY_INTERVAL = 70;
 
     private int currentDropRate = 500;
@@ -34,6 +33,7 @@ public class Game {
 
     private final AtomicBoolean isStarted = new AtomicBoolean(false);
     private final GemGrid gemGrid = new GemGridImpl(gridProps);
+    private final GemMover gemMover = new GemMover();
     private final Score score = new Score(50);
     private final TaskScheduler taskScheduler = new TaskScheduler();
     private final SoundEffectManager soundEffectManager = new SoundEffectManager(score);
@@ -45,12 +45,10 @@ public class Game {
 
     public void init(SoundPlayer soundPlayer){
         stateManager = new StateManager();
-        gemMover = new GemMover(gemGrid, gridProps);
-        gemMover.setDroppingGemsEvaluator(new DroppingGemsEvaluator(this));
+        gemMover.init(gemGrid, gridProps, new DroppingGemsEvaluator(this));
         soundEffectManager.init(soundPlayer);
         score.clear();
         stateManager.init(this);
-     //   stateManager.sendEvent(START_GAME);
     }
 
 
@@ -124,15 +122,18 @@ public class Game {
     }
 
 
-    public void rotateGems(){ gemMover.rotateGems(); }
+    public void rotateGems(){
+        stateManager.performMovement(AbstractGameState::rotate);}
 
 
     public void moveLeft(){
-        gemMover.moveLeft();
+        stateManager.performMovement(AbstractGameState::left);
     }
 
 
-    public void moveRight(){ gemMover.moveRight(); }
+    public void moveRight() {
+        stateManager.performMovement(AbstractGameState::right);
+    }
 
 
     public void moveUp(){
@@ -190,12 +191,7 @@ public class Game {
 
 
     public void moveDown(){
-        if(droppingGems == null
-                || droppingGems.areAllAddedToGrid()
-                || droppingGems.areInInitialPosition()){
-            return;
-        }
-        loadState(GEM_QUICK_DROP);
+        stateManager.performMovement(AbstractGameState::down);
     }
 
 

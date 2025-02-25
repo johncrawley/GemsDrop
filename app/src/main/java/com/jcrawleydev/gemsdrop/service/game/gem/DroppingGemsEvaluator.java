@@ -46,28 +46,21 @@ public class DroppingGemsEvaluator {
        }
     }
 
-    private void log(String msg){
-        System.out.println("^^^ DroppingGemsEvaluator() : " + msg);
-    }
 
     private void evaluateNormalGems(DroppingGems droppingGems, Runnable movementRunnable){
-        log("Entered evaluateNormalGems()");
         droppingGems.addConnectingGemsTo(gemGrid);
 
         if(droppingGems.areAllAddedToGrid()){
             soundEffectManager.playSoundEffect(GEM_HITS_FLOOR);
             gemMover.disableControls();
-            log("all were added to the grid(), evaluating grid");
             loadState(EVALUATE_GRID);
         }
         else if(droppingGems.areAnyAddedToGrid()){
             soundEffectManager.playSoundEffect(GEM_HITS_FLOOR);
             gemMover.disableControls();
-            log("at least 1 gem added to the grid");
             loadState(GEM_FREE_FALL);
         }
         else{
-            log("no gems added to the grid, running movement");
             runMovement(movementRunnable);
         }
     }
@@ -91,6 +84,7 @@ public class DroppingGemsEvaluator {
 
 
     private void loadState(GameStateName stateName){
+        gemMover.cancelQueuedMovements();
         stateManager.load(stateName, this.getClass().getSimpleName());
     }
 
@@ -98,9 +92,8 @@ public class DroppingGemsEvaluator {
     private void runMovement(Runnable movementRunnable){
         movementRunnable.run();
         game.updateDroppingGemsOnView();
-        gemMover.enableControls();
         gemMover.enableMovement();
-        gemMover.syncNextQueuedMovement();
+        gemMover.attemptNextQueuedMovement();
     }
 
 

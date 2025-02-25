@@ -1,5 +1,7 @@
 package com.jcrawleydev.gemsdrop.service.game.state;
 
+import static com.jcrawleydev.gemsdrop.service.game.state.GameStateName.GEM_QUICK_DROP;
+
 import com.jcrawleydev.gemsdrop.service.game.Game;
 import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems;
 
@@ -36,4 +38,26 @@ public class GemsDropState extends AbstractGameState{
         gemGrid.printColumnHeights();
     }
 
+
+    public void rotate(){
+        gemMover.rotateGems();
+    }
+
+    public void left(){
+        gemMover.moveLeft();
+    }
+
+    public void right(){
+        gemMover.moveRight();
+    }
+
+    public void down(){
+        if(droppingGems == null
+                || gemMover.areControlsDisabled()
+                || droppingGems.areAllAddedToGrid()
+                || droppingGems.areInInitialPosition()){
+            return;
+        }
+        loadState(GEM_QUICK_DROP);
+    }
 }

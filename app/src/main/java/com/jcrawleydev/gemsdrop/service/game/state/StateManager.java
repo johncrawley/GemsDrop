@@ -2,6 +2,8 @@ package com.jcrawleydev.gemsdrop.service.game.state;
 
 import com.jcrawleydev.gemsdrop.service.game.Game;
 
+import java.util.function.Consumer;
+
 public class StateManager {
 
     private AbstractGameState currentGameState;
@@ -30,9 +32,6 @@ public class StateManager {
 
 
     public void load(GameStateName gameStateName, String caller){
-
-        var currentStateName = currentGameState == null? "null" : currentGameState.getClass().getSimpleName();
-       log("entered load() caller: " + caller + " "  + currentStateName + " -> " + gameStateName);
        currentGameState = switch(gameStateName){
            case GAME_STARTED -> gameStartedState;
            case EVALUATE_GRID -> evaluateGridState;
@@ -45,6 +44,12 @@ public class StateManager {
            case LOAD_LEVEL -> loadLevelState;
        };
        currentGameState.start();
+    }
+
+    public void performMovement(Consumer<AbstractGameState> consumer){
+        if(currentGameState != null){
+            consumer.accept(currentGameState);
+        }
     }
 
 
