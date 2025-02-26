@@ -21,31 +21,26 @@ import java.util.function.Consumer;
 public class DroppingGems {
 
     private final GridProps gridProps;
-    private List<Gem> gems;
+    List<Gem> gems;
     private final Random random;
-    private Gem gemC, gemB, gemA;
+    Gem gemC, gemB, gemA;
     enum Orientation { NORTH, EAST, SOUTH, WEST }
     private Orientation orientation = NORTH;
     private final List<GemColor> gemColors = List.of(GemColor.RED, GemColor.BLUE, GemColor.PURPLE, GemColor.GREEN, GemColor.YELLOW);
     private final int middleColumnIndex;
     private final int INITIAL_POSITION;
-    private boolean isWonderGem = false;
 
 
     public DroppingGems(GridProps gridProps){
         this.gridProps = gridProps;
         random = new Random(System.currentTimeMillis());
-        int initialNumberOfGems = 3;
-        gems = new ArrayList<>(initialNumberOfGems);
         middleColumnIndex = gridProps.numberOfColumns() / 2;
         INITIAL_POSITION = gridProps.numberOfPositions() - 1;
+        create();
     }
 
 
     public void rotate(){
-        if(isWonderGem){
-            return;
-        }
         updateOrientation();
         for(Gem gem: gems){
             rotateGem(gem);
@@ -58,24 +53,11 @@ public class DroppingGems {
     }
 
 
-    public boolean containsWonderGem(){
-        return isWonderGem;
-    }
-
-
-    public Set<Long> addWonderGemTo(GemGrid gemGrid){
-        var wonderGem = gemB;
-        if(!wonderGem.isAlreadyAddedToTheGrid()){
-            return gemGrid.getMarkedGemIdsFromTouching(wonderGem);
-        }
-        return Collections.emptySet();
-    }
-
-
-    public void addConnectingGemsTo(GemGrid gemGrid){
+    public Set<Long> addConnectingGemsTo(GemGrid gemGrid){
         addIfConnecting(getBottomGem(), gemGrid);
         addIfConnecting(getCentreGem(), gemGrid);
         addIfConnecting(getTopGem(), gemGrid);
+        return Collections.emptySet();
     }
 
 
@@ -97,7 +79,7 @@ public class DroppingGems {
 
 
     public boolean areInInitialPosition(){
-        return getCentreGem().getContainerPosition() > INITIAL_POSITION;
+        return getCentreGem().getContainerPosition() > INITIAL_POSITION + 2;
     }
 
 
@@ -158,25 +140,16 @@ public class DroppingGems {
 
 
     public int getLeftmostColumn(){
-        if(isWonderGem){
-            return getCentreGem().getColumn();
-        }
         return orientation == EAST ? gemC.getColumn() : gemA.getColumn();
     }
 
 
     public int getRightmostColumn(){
-        if(isWonderGem){
-            return getCentreGem().getColumn();
-        }
         return orientation == WEST ? gemC.getColumn() : gemA.getColumn();
     }
 
 
     public Gem getRightmostGem(){
-        if(isWonderGem){
-            return getCentreGem();
-        }
         return orientation == EAST ? gemA : gemC;
     }
 
@@ -187,71 +160,33 @@ public class DroppingGems {
 
 
     public Gem getTopGem(){
-        if(isWonderGem){
-            return getCentreGem();
-        }
         return  orientation == NORTH ? gemA : gemC;
     }
 
 
     public Gem getBottomGem(){
-        if(isWonderGem){
-            return getCentreGem();
-        }
         return orientation == NORTH ? gemC : gemA;
     }
 
 
-    public void create(int numberOfGemGroupsDropped){
-        orientation = NORTH;
-        if(shouldCreateWonderGem(numberOfGemGroupsDropped)){
-            createWonderGem();
-            return;
-        }
-        createNormalGems();
-    }
-
-
-    private void createNormalGems(){
+    protected void create(){
         gemA = createGem(TOP, 3);
         gemB = createGem(CENTRE, 2);
         gemC = createGem(BOTTOM, 1);
-
         gems = List.of(gemA, gemB, gemC);
-        isWonderGem = false;
     }
 
 
-    private void createWonderGem(){
-        gemB = createGem(CENTRE, 1, GemColor.WONDER);
-        gemA = null;
-        gemC = null;
-        gems = List.of(gemB);
-        isWonderGem = true;
-    }
-
-
-    private Gem createGem(GemGroupPosition gemGroupPosition, int offset){
+    Gem createGem(GemGroupPosition gemGroupPosition, int offset){
         return createGem(gemGroupPosition, offset, getRandomColor());
     }
 
 
-    private Gem createGem(GemGroupPosition gemGroupPosition, int offset, GemColor gemColor){
+    Gem createGem(GemGroupPosition gemGroupPosition, int offset, GemColor gemColor){
         int initialContainerPosition = INITIAL_POSITION + (gridProps.depthPerDrop() * offset);
         var gem = new Gem(gemColor, gemGroupPosition, initialContainerPosition);
         gem.setColumn(middleColumnIndex);
         return gem;
-    }
-
-
-    private boolean shouldCreateWonderGem(int numberOfGemGroupsDropped){
-        int minimumDropsBeforeWonderGemPermitted = 2;
-        int chanceOfAWonderGem = 10;
-
-        if(numberOfGemGroupsDropped < minimumDropsBeforeWonderGemPermitted){
-            return false;
-        }
-        return random.nextInt(chanceOfAWonderGem) == 1;
     }
 
 

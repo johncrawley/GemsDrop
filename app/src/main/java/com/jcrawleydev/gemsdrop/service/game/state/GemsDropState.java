@@ -4,14 +4,17 @@ import static com.jcrawleydev.gemsdrop.service.game.state.GameStateName.GEM_QUIC
 
 import com.jcrawleydev.gemsdrop.service.game.Game;
 import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems;
+import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGemsFactory;
 
 
 public class GemsDropState extends AbstractGameState{
 
     private DroppingGems droppingGems;
+    private DroppingGemsFactory droppingGemsFactory;
 
     public GemsDropState(Game game){
         super(game);
+        droppingGemsFactory = game.getDroppingGemsFactory();
     }
 
     @Override
@@ -29,10 +32,9 @@ public class GemsDropState extends AbstractGameState{
 
 
     public void createGems(){
-        droppingGems = new DroppingGems(game.getGridProps());
+        droppingGems = droppingGemsFactory.createDroppingGems();
         game.setDroppingGems(droppingGems);
         game.incrementDropCount();
-        droppingGems.create(game.getDropCount());
         game.updateDropInterval();
         gemMover.setDroppingGems(droppingGems);
         gemGrid.printColumnHeights();

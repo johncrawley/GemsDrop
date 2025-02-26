@@ -38,7 +38,7 @@ public class DroppingGemsEvaluator {
 
 
     public void evaluateTouchingGems(DroppingGems droppingGems, Runnable movementRunnable){
-       if(droppingGems.containsWonderGem()){
+       if(droppingGems instanceof WonderDroppingGem){
            evaluateWonderGem(droppingGems, movementRunnable);
        }
        else{
@@ -67,7 +67,7 @@ public class DroppingGemsEvaluator {
 
 
     private void evaluateWonderGem(DroppingGems droppingGems, Runnable movementRunnable){
-        var markedGemIds = droppingGems.addWonderGemTo(gemGrid);
+        var markedGemIds = droppingGems.addConnectingGemsTo(gemGrid);
         var numberOfMarkedGems = markedGemIds.size();
 
         if(numberOfMarkedGems > 0){

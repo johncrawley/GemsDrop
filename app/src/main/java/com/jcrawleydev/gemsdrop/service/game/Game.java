@@ -7,6 +7,7 @@ import com.jcrawleydev.gemsdrop.service.audio.SoundEffectManager;
 import com.jcrawleydev.gemsdrop.service.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems;
 import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGemsEvaluator;
+import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGemsFactory;
 import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.service.game.grid.GemGrid;
 import com.jcrawleydev.gemsdrop.service.game.grid.GemGridImpl;
@@ -37,6 +38,7 @@ public class Game {
     private final Score score = new Score(50);
     private final TaskScheduler taskScheduler = new TaskScheduler();
     private final SoundEffectManager soundEffectManager = new SoundEffectManager(score);
+    private final DroppingGemsFactory droppingGemsFactory = new DroppingGemsFactory(gridProps);
 
     private GameLevel currentGameLevel;
     private int dropCount = 0;
@@ -64,6 +66,11 @@ public class Game {
 
     public void resetDropCount(){
         dropCount = 0;
+    }
+
+
+    public DroppingGemsFactory getDroppingGemsFactory(){
+        return droppingGemsFactory;
     }
 
 
