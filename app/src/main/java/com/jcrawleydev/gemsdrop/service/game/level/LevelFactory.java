@@ -22,9 +22,16 @@ public class LevelFactory {
 
 
     private void setupLevel1(){
-        var gems = Set.of(BLUE, RED, YELLOW, GREEN, PURPLE);
+        var gemColors = Set.of(TEMP1, TEMP2, YELLOW, GREEN, PURPLE);
         var startingGrid = List.of("G Y G Y G Y G",  "B R B R B R B", "Y P Y P Y P Y");
-        gameLevel1 = new GameLevel(1, R.drawable.background_pattern_1, 150, 100, gems, startingGrid );
+        var specialGemConditions = new SpecialGemConditions(8, 25, 5);
+        gameLevel1 = new GameLevel(1,
+                R.drawable.background_pattern_1,
+                150,
+                100,
+                gemColors,
+                specialGemConditions,
+                startingGrid );
     }
 
 }

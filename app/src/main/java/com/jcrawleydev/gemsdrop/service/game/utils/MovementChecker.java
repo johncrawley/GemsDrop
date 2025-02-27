@@ -17,23 +17,14 @@ public class MovementChecker {
 
     public boolean canMoveLeft(DroppingGems droppingGems){
         int nextColumnIndex = droppingGems.getLeftmostColumn() - 1;
-        log("canMoveLeft() ColumnIndex: " + nextColumnIndex);
         return !droppingGems.areAnyAddedToGrid()
                 && nextColumnIndex >= 0
                 && isUnobstructedByColumn(droppingGems, nextColumnIndex);
     }
 
 
-    public boolean canMoveDown(DroppingGems droppingGems){
-        int position = droppingGems.getBottomGem().getContainerPosition();
-        boolean areAllGemsAboveColumns = droppingGems.get().stream().allMatch( gem -> gem.getContainerPosition() > gemGrid.getColumnHeightAt(gem.getColumn()));
-        return position > 0; // && areAllGemsAboveColumns;
-    }
-
-
     public boolean canMoveRight(DroppingGems droppingGems){
         int nextColumnIndex = droppingGems.getRightmostColumn() + 1;
-        log("canMoveRight() nextColumnIndex: " + nextColumnIndex);
 
         return !droppingGems.areAnyAddedToGrid()
             && nextColumnIndex < gridProps.numberOfColumns()
@@ -41,14 +32,8 @@ public class MovementChecker {
     }
 
 
-    private void log(String msg){
-        System.out.println("^^^ MovementChecker: " + msg);
-    }
-
-
     private boolean isUnobstructedByColumn(DroppingGems droppingGems, int adjacentColumnIndex){
         int columnHeight = gemGrid.getColumnHeightAt(adjacentColumnIndex);
-        log("isUnobstructedByColumn() col Height: " + columnHeight + " droppingGems Bottom height: " + droppingGems.getLowestGemPosition());
         return columnHeight <= droppingGems.getLowestGemPosition();
     }
 

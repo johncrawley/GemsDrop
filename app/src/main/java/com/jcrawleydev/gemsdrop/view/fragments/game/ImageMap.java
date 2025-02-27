@@ -8,16 +8,13 @@ import java.util.Map;
 
 public class ImageMap {
 
-    private Map<Integer, Integer> map;
+    private final Map<Integer, Integer> map;
 
     public ImageMap(){
         map = new HashMap<>();
-        put(GemColor.GREEN, R.drawable.jewel_green);
-        put(GemColor.BLUE, R.drawable.jewel_blue);
-        put(GemColor.YELLOW, R.drawable.jewel_yellow);
-        put(GemColor.RED, R.drawable.jewel_red);
-        put(GemColor.PURPLE, R.drawable.jewel_purple);
-        put(GemColor.GREY, R.drawable.jewel_grey);
+        for(var gemColor : GemColor.values()){
+            put(gemColor, gemColor.resourceId);
+        }
     }
 
 
@@ -30,8 +27,5 @@ public class ImageMap {
         Integer id = map.get(gemColorId);
         return id == null ? R.drawable.jewel_blue : id;
     }
-
-
-
 
 }

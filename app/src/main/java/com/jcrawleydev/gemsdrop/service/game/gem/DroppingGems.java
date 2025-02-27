@@ -14,7 +14,6 @@ import com.jcrawleydev.gemsdrop.service.game.grid.GemGrid;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -22,21 +21,18 @@ public class DroppingGems {
 
     private final GridProps gridProps;
     List<Gem> gems;
-    private final Random random;
     Gem gemC, gemB, gemA;
     enum Orientation { NORTH, EAST, SOUTH, WEST }
     private Orientation orientation = NORTH;
-    private final List<GemColor> gemColors = List.of(GemColor.RED, GemColor.BLUE, GemColor.PURPLE, GemColor.GREEN, GemColor.YELLOW);
     private final int middleColumnIndex;
     private final int INITIAL_POSITION;
 
 
-    public DroppingGems(GridProps gridProps){
+    public DroppingGems(GridProps gridProps, List<GemColor> gemColors){
         this.gridProps = gridProps;
-        random = new Random(System.currentTimeMillis());
         middleColumnIndex = gridProps.numberOfColumns() / 2;
         INITIAL_POSITION = gridProps.numberOfPositions() - 1;
-        create();
+        create(gemColors);
     }
 
 
@@ -169,16 +165,11 @@ public class DroppingGems {
     }
 
 
-    protected void create(){
-        gemA = createGem(TOP, 3);
-        gemB = createGem(CENTRE, 2);
-        gemC = createGem(BOTTOM, 1);
+    protected void create(List<GemColor> gemColors){
+        gemA = createGem(TOP, 3, gemColors.get(0));
+        gemB = createGem(CENTRE, 2, gemColors.get(1));
+        gemC = createGem(BOTTOM, 1, gemColors.get(2));
         gems = List.of(gemA, gemB, gemC);
-    }
-
-
-    Gem createGem(GemGroupPosition gemGroupPosition, int offset){
-        return createGem(gemGroupPosition, offset, getRandomColor());
     }
 
 
@@ -203,12 +194,6 @@ public class DroppingGems {
 
     public void setGrey(){
         gems.forEach(Gem::setGrey);
-    }
-
-
-    public GemColor getRandomColor(){
-        int index = random.nextInt(gemColors.size());
-        return gemColors.get(index);
     }
 
 }

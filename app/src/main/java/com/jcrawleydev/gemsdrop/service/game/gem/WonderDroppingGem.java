@@ -12,19 +12,21 @@ import java.util.Set;
 public class WonderDroppingGem extends DroppingGems{
 
     public WonderDroppingGem(GridProps gridProps){
-        super(gridProps);
+        super(gridProps, Collections.emptyList());
     }
 
     @Override
-    protected void create(){
+    protected void create(List<GemColor> gemColors){
         gemB = createGem(CENTRE, 1, GemColor.WONDER);
         gems = List.of(gemB);
     }
+
 
     @Override
     public void rotate(){
         //do nothing
     }
+
 
     @Override
     public Set<Long> addConnectingGemsTo(GemGrid gemGrid){
@@ -35,13 +37,10 @@ public class WonderDroppingGem extends DroppingGems{
     }
 
 
-    public boolean containsWonderGem(){
-        return true;
-    }
-
     public int getLeftmostColumn(){
         return gemB.getColumn();
     }
+
 
     @Override
     public int getRightmostColumn(){
