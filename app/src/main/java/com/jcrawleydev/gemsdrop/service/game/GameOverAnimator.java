@@ -54,12 +54,6 @@ public class GameOverAnimator {
     private void populateGemRows(){
         gemRows = getGemRows();
         currentRowIndex = gemRows.size() - 1;
-        log("populateGemRows() currentRowIndex: " + currentRowIndex + " number of rows: " + gridProps.numberOfRows());
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ GameOverAnimator: " + msg);
     }
 
 

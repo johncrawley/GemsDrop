@@ -6,6 +6,7 @@ import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_IDS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_POSITIONS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.SCORE;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.CREATE_GEMS;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.SHOW_GAME_OVER_MESSAGE;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_COLORS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_GEMS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_SCORE;
@@ -137,6 +138,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         addGemIdsTo(bundle, gems);
         addGemColorIdsTo(bundle, gems);
         sendMessage(this, UPDATE_COLORS, bundle);
+    }
+
+
+    @Override
+    public void showGameOverAnimation(){
+        sendMessage(this, SHOW_GAME_OVER_MESSAGE);
     }
 
 

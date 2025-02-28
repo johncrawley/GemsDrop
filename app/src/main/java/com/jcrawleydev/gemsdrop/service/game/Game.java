@@ -235,7 +235,7 @@ public class Game {
 
 
     public void end(){
-
+        gameView.showGameOverAnimation();
     }
 
 

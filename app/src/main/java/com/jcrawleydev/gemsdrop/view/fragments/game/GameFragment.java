@@ -9,6 +9,7 @@ import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.CREA
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.FREE_FALL_GEMS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.NOTIFY_OF_SERVICE_CONNECTED;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.REMOVE_GEMS;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.SHOW_GAME_OVER_MESSAGE;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_COLORS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_GEMS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_SCORE;
@@ -29,6 +30,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -55,7 +57,7 @@ public class GameFragment extends Fragment {
     private Map<Long, ViewGroup> itemsMap;
     private int containerWidth;
     private int containerHeight;
-    private ViewGroup gemContainer, gamePane;
+    private ViewGroup gemContainer, gamePane, gameOverTextLayout;
     private float gemWidth = 10f;
     private GameInputHandler gameInputHandler;
     private TextView scoreView;
@@ -71,6 +73,7 @@ public class GameFragment extends Fragment {
         imageMap = new ImageMap();
         gemContainer = parentView.findViewById(R.id.gemContainer);
         gamePane = parentView.findViewById(R.id.game_pane);
+        gameOverTextLayout = parentView.findViewById(R.id.gameOverTextLayout);
         gameInputHandler = new GameInputHandler(this);
         assignLayoutDimensions();
         setupViews(parentView);
@@ -180,6 +183,7 @@ public class GameFragment extends Fragment {
         setupListener(REMOVE_GEMS, this::removeGems);
         setupListener(UPDATE_SCORE, this::updateScore);
         setupListener(FREE_FALL_GEMS, this::freeFallGems);
+        setupListener(SHOW_GAME_OVER_MESSAGE, this::showGameOverMessage);
     }
 
 
@@ -319,6 +323,15 @@ public class GameFragment extends Fragment {
         var gemLayout = createAndAddGemLayout(id, position, column);
         itemsMap.put(id, gemLayout);
         return gemLayout;
+    }
+
+
+    private void showGameOverMessage(Bundle bundle){
+        gameOverTextLayout.setVisibility(View.VISIBLE);
+        AlphaAnimation animation1 = new AlphaAnimation(0.0f, 1.0f);
+        animation1.setDuration(300);
+        animation1.setFillAfter(true);
+        gameOverTextLayout.startAnimation(animation1);
     }
 
 

@@ -34,6 +34,7 @@ public class GemMover {
 
     public void setDroppingGems(DroppingGems droppingGems){
         this.droppingGems = droppingGems;
+        movementQueue.clear();
         enableControls();
         enableMovement();
     }
