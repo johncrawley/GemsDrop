@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_menu_background">
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:shadowColor="@color/colorPrimaryDark"
+        android:shadowDx="1"
+        android:shadowDy="15"
+        android:shadowRadius="2"
+        android:text="@string/title"
+        android:textColor="@color/main_menu_background"
+        android:textSize="@dimen/title_text_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.30" />
+
+
+    <LinearLayout
+        android:id="@+id/titleGemsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/title_gems_layout_vertical_margin"
+        android:gravity="center"
+        android:orientation="horizontal"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView">
+
+        <ImageView
+            android:id="@+id/titleJewel4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/title_gem_margin_horizontal"
+            android:layout_weight=".3"
+            android:contentDescription="@string/title_gem_image_content_description"
+            android:padding="@dimen/title_gem_padding"
+            android:src="@drawable/jewel_green" />
+
+        <ImageView
+            android:id="@+id/titleJewel5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/title_gem_margin_horizontal"
+            android:layout_weight=".3"
+            android:contentDescription="@string/title_gem_image_content_description"
+            android:padding="@dimen/title_gem_padding"
+            android:src="@drawable/jewel_blue" />
+
+        <ImageView
+            android:id="@+id/titleJewel6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/title_gem_margin_horizontal"
+            android:layout_weight=".3"
+            android:contentDescription="@string/title_gem_image_content_description"
+            android:padding="@dimen/title_gem_padding"
+            android:src="@drawable/jewel_yellow" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleGemsLayout"
+        android:id="@+id/buttonsLayout">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="@dimen/menu_button_min_width"
+            android:text="@string/button_new_game"
+            android:id="@+id/newGameButton" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="@dimen/menu_button_min_width"
+            android:text="@string/button_options"
+            android:id="@+id/optionsButton" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="@dimen/menu_button_min_width"
+            android:text="@string/button_about"
+            android:id="@+id/aboutButton" />
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tapToPlayTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingVertical="@dimen/tap_to_play_text_vertical_padding"
+        android:visibility="gone"
+        android:shadowColor="@color/colorPrimaryDark"
+        android:shadowDx="1"
+        android:shadowDy="15"
+        android:shadowRadius="2"
+        android:text="@string/tap_to_start"
+        android:textAlignment="center"
+        android:textColor="@color/score_text_top"
+        android:textSize="@dimen/tap_to_play_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleGemsLayout"
+        app:layout_constraintVertical_bias="0.32" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
