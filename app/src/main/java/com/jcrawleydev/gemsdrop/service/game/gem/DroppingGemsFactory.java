@@ -32,13 +32,11 @@ public class DroppingGemsFactory {
 
 
     public DroppingGems createDroppingGems(){
-        if(++numberOfNormalGemsDropped < minNormalGemStreak
-                || isUnlucky()
-                || numberOfNormalGemsDropped < maxNormalGemStreak){
-            return new DroppingGems(gridProps, getRandomGemColors());
+        if((haveEnoughNormalGemsDropped() && isLucky()) || haveTooManyNormalGemsDropped()){
+            numberOfNormalGemsDropped = 0;
+            return new WonderDroppingGem(gridProps);
         }
-        numberOfNormalGemsDropped = 0;
-        return new WonderDroppingGem(gridProps);
+        return new DroppingGems(gridProps, getRandomGemColors());
     }
 
 
@@ -47,8 +45,17 @@ public class DroppingGemsFactory {
     }
 
 
-    private boolean isUnlucky(){
-        return random.nextInt(specialGemOdds) != 1;
+    public boolean haveEnoughNormalGemsDropped(){
+        return ++numberOfNormalGemsDropped >= minNormalGemStreak;
+    }
+
+    public boolean haveTooManyNormalGemsDropped(){
+        return numberOfNormalGemsDropped > maxNormalGemStreak;
+    }
+
+
+    private boolean isLucky(){
+        return random.nextInt(specialGemOdds) == 1;
     }
 
     public List<GemColor> getRandomGemColors(){
