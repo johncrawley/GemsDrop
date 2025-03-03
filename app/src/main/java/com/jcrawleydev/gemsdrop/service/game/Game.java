@@ -101,13 +101,16 @@ public class Game {
         return GRAVITY_INTERVAL;
     }
 
+
     public SoundEffectManager getSoundEffectManager(){
         return soundEffectManager;
     }
 
+
     public Score getScore(){
         return score;
     }
+
 
     public TaskScheduler getTaskScheduler(){
         return taskScheduler;

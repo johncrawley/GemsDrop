@@ -1,4 +1,4 @@
-package com.jcrawleydev.gemsdrop.score;
+package com.jcrawleydev.gemsdrop.service.game.score;
 
 import org.junit.Before;
 import org.junit.Test;
