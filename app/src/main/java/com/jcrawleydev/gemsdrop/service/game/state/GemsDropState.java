@@ -14,8 +14,9 @@ public class GemsDropState extends AbstractGameState{
 
     public GemsDropState(Game game){
         super(game);
-        droppingGemsFactory = game.getDroppingGemsFactory();
+        droppingGemsFactory = gameComponents.getDroppingGemsFactory();
     }
+
 
     @Override
     public void start() {

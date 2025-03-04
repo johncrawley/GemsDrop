@@ -1,12 +1,7 @@
 package com.jcrawleydev.gemsdrop.service.game.gem;
 
-import static com.jcrawleydev.gemsdrop.service.game.gem.GemGroupPosition.BOTTOM;
-import static com.jcrawleydev.gemsdrop.service.game.gem.GemGroupPosition.CENTRE;
-import static com.jcrawleydev.gemsdrop.service.game.gem.GemGroupPosition.TOP;
-import static com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems.Orientation.EAST;
-import static com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems.Orientation.NORTH;
-import static com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems.Orientation.SOUTH;
-import static com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems.Orientation.WEST;
+import static com.jcrawleydev.gemsdrop.service.game.gem.GemGroupPosition.*;
+import static com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems.Orientation.*;
 
 import com.jcrawleydev.gemsdrop.service.game.GridProps;
 import com.jcrawleydev.gemsdrop.service.game.grid.GemGrid;
@@ -16,6 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class DroppingGems {
 
@@ -121,7 +117,10 @@ public class DroppingGems {
 
 
     public List<Gem> getFreeGems(){
-        return gems.stream().filter(gem -> !gem.isAlreadyAddedToTheGrid()).toList();
+        return gems
+                .stream()
+                .filter(gem -> !gem.isAlreadyAddedToTheGrid())
+                .collect(Collectors.toList());
     }
 
 

@@ -14,6 +14,7 @@ public class GameOverState extends AbstractGameState{
 
     @Override
     public void start() {
+        gameComponents.saveScore();
         gameOverAnimator.startGameOverSequence();
     }
 

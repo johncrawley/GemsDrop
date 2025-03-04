@@ -8,11 +8,10 @@ import android.os.IBinder;
 
 import com.jcrawleydev.gemsdrop.MainActivity;
 import com.jcrawleydev.gemsdrop.service.audio.SoundEffect;
-import com.jcrawleydev.gemsdrop.service.audio.SoundEffectManager;
 import com.jcrawleydev.gemsdrop.service.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.service.game.Game;
-import com.jcrawleydev.gemsdrop.service.game.score.ScoreRecords;
 import com.jcrawleydev.gemsdrop.service.game.score.ScoreStatistics;
+import com.jcrawleydev.gemsdrop.service.records.ScoreRecords;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -111,12 +110,6 @@ public class GameService extends Service {
     }
 
 
-    public void onGameOver(ScoreStatistics scoreStatistics){
-        ScoreStatistics fullScoreStats = scoreRecords.getCompleteScoreStatsAndSaveRecords(scoreStatistics);
-        notifyGameOverFuture = scheduledExecutorService.scheduleWithFixedDelay(() -> mainActivity.onGameOver(fullScoreStats), 0, 2, TimeUnit.SECONDS);
-    }
-
-
     public void notifyThatGameFinished(){
         if(notifyGameOverFuture != null && !notifyGameOverFuture.isCancelled()){
             notifyGameOverFuture.cancel(false);
@@ -137,17 +130,12 @@ public class GameService extends Service {
     @Override
     public void onCreate() {
         soundPlayer = new SoundPlayer(getApplicationContext());
-        game.init(soundPlayer);
+        scoreRecords = new ScoreRecords(getApplicationContext());
+        game.init(soundPlayer, scoreRecords);
         gamePreferenceManager = new GamePreferenceManager(this);
-        setupScoreRecords();
     }
 
 
-    private void setupScoreRecords(){
-        scoreRecords = new ScoreRecords();
-       // scoreRecords.setScorePreferences(new ScorePreferencesImpl(getScorePrefs()));
-       // scoreRecords.setCurrentDateCreator(new CurrentDateGeneratorImpl());
-    }
 
 
     @Override

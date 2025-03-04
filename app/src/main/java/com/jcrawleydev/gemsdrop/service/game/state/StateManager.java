@@ -32,6 +32,7 @@ public class StateManager {
 
 
     public void load(GameStateName gameStateName, String caller){
+        log("Entered load: state name: " + gameStateName);
        currentGameState = switch(gameStateName){
            case GAME_STARTED -> gameStartedState;
            case EVALUATE_GRID -> evaluateGridState;

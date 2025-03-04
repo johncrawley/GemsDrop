@@ -3,19 +3,14 @@ package com.jcrawleydev.gemsdrop.service.game;
 import static com.jcrawleydev.gemsdrop.service.game.state.GameStateName.GAME_STARTED;
 import static com.jcrawleydev.gemsdrop.service.game.state.GameStateName.GEM_REMOVAL_ANIMATION_COMPLETE;
 
-import com.jcrawleydev.gemsdrop.service.audio.SoundEffectManager;
 import com.jcrawleydev.gemsdrop.service.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems;
-import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGemsEvaluator;
-import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGemsFactory;
 import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
-import com.jcrawleydev.gemsdrop.service.game.grid.GemGrid;
-import com.jcrawleydev.gemsdrop.service.game.grid.GemGridImpl;
 import com.jcrawleydev.gemsdrop.service.game.level.GameLevel;
-import com.jcrawleydev.gemsdrop.service.game.score.Score;
 import com.jcrawleydev.gemsdrop.service.game.state.AbstractGameState;
 import com.jcrawleydev.gemsdrop.service.game.state.GameStateName;
 import com.jcrawleydev.gemsdrop.service.game.state.StateManager;
+import com.jcrawleydev.gemsdrop.service.records.ScoreRecords;
 import com.jcrawleydev.gemsdrop.view.GameView;
 
 import java.util.List;
@@ -23,44 +18,21 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Game {
 
-    private final GridProps gridProps = new GridProps(15, 7, 2);
     private DroppingGems droppingGems;
-
     private GameView gameView;
     public final int GRAVITY_INTERVAL = 70;
-
     private int currentDropRate = 500;
     private int dropIntervalCounter;
-
+    private final GameComponents gameComponents = new GameComponents();
+    private final StateManager stateManager = new StateManager();
     private final AtomicBoolean isStarted = new AtomicBoolean(false);
-    private final GemGrid gemGrid = new GemGridImpl(gridProps);
-    private final GemMover gemMover = new GemMover();
-    private final Score score = new Score(50);
-    private final TaskScheduler taskScheduler = new TaskScheduler();
-    private final SoundEffectManager soundEffectManager = new SoundEffectManager(score);
-    private final DroppingGemsFactory droppingGemsFactory = new DroppingGemsFactory(gridProps);
-
     private GameLevel currentGameLevel;
     private int dropCount = 0;
 
-    private StateManager stateManager;
 
-    public void init(SoundPlayer soundPlayer){
-        stateManager = new StateManager();
-        gemMover.init(gemGrid, gridProps, new DroppingGemsEvaluator(this));
-        soundEffectManager.init(soundPlayer);
-        score.clear();
+    public void init(SoundPlayer soundPlayer, ScoreRecords scoreRecords){
+        gameComponents.init(this, soundPlayer, scoreRecords);
         stateManager.init(this);
-    }
-
-
-    public void clearScore(){
-        score.clear();
-    }
-
-
-    public GridProps getGridProps(){
-        return gridProps;
     }
 
 
@@ -68,16 +40,13 @@ public class Game {
         dropCount = 0;
     }
 
-
-    public DroppingGemsFactory getDroppingGemsFactory(){
-        return droppingGemsFactory;
+    public GameComponents getGameComponents(){
+        return this.gameComponents;
     }
-
 
     public void setCurrentGameLevel(GameLevel level){
         this.currentGameLevel = level;
     }
-
 
     public void setCurrentDropRate(int dropRate){
         this.currentDropRate = dropRate;
@@ -87,7 +56,6 @@ public class Game {
         this.droppingGems = droppingGems;
     }
 
-
     public void setStarted(){
         isStarted.set(true);
     }
@@ -96,50 +64,19 @@ public class Game {
         return isStarted.get();
     }
 
-
     public int getGravityInterval(){
         return GRAVITY_INTERVAL;
     }
-
-
-    public SoundEffectManager getSoundEffectManager(){
-        return soundEffectManager;
-    }
-
-
-    public Score getScore(){
-        return score;
-    }
-
-
-    public TaskScheduler getTaskScheduler(){
-        return taskScheduler;
-    }
-
-
-    public GemMover getGemMover(){
-        return gemMover;
-    }
-
-
-    public GemGrid getGemGrid(){
-        return gemGrid;
-    }
-
 
     public StateManager getStateManager(){
         return stateManager;
     }
 
-
-    public void rotateGems(){
-        stateManager.performMovement(AbstractGameState::rotate);}
-
+    public void rotateGems(){ stateManager.performMovement(AbstractGameState::rotate);}
 
     public void moveLeft(){
         stateManager.performMovement(AbstractGameState::left);
     }
-
 
     public void moveRight() {
         stateManager.performMovement(AbstractGameState::right);
@@ -154,7 +91,6 @@ public class Game {
     public void updateDroppingGemsOnView(){
         updateGemsOnView(droppingGems.getFreeGems());
     }
-
 
     public int getCurrentDropRate(){
         return currentDropRate;
@@ -216,7 +152,10 @@ public class Game {
 
 
     public void onDestroy(){
-        taskScheduler.cancelTask();
+        var taskScheduler = gameComponents.getTaskScheduler();
+        if(taskScheduler != null){
+            taskScheduler.cancelTask();
+        }
         isStarted.set(false);
     }
 
@@ -232,6 +171,10 @@ public class Game {
 
 
     public void updateScore(int numberOfRemovedGems){
+        var score = gameComponents.getScore();
+        if(score == null){
+            return;
+        }
         score.addPointsFor(numberOfRemovedGems);
         gameView.updateScore(score.get());
     }
@@ -263,6 +206,10 @@ public class Game {
 
 
     private void updateGridGemsOnView(){
+        var gemGrid = gameComponents.getGemGrid();
+        if(gemGrid == null){
+            return;
+        }
         var gridGems = gemGrid.getGems();
         if(!gridGems.isEmpty()){
             gameView.createGems(gridGems);

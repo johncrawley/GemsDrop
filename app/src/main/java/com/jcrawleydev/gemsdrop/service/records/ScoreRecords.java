@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class ScoreRecords {
 
-    private Context context;
+    private final Context context;
     private enum PrefName { PREVIOUS_SCORE, HIGH_SCORES }
 
 
@@ -32,6 +32,10 @@ public class ScoreRecords {
     }
 
 
+    public List<String> getOrderedHighScores(){
+        return ScoreRecordsUtils.getOrderedHighScores(getHighScores());
+
+    }
 
     public void saveDefaultHighScores(){
         var existingHighScores = getHighScores();
@@ -41,7 +45,7 @@ public class ScoreRecords {
     }
 
 
-    public void saveHighScores(Set<String> scores){
+    private void saveHighScores(Set<String> scores){
         getPrefs()
                 .edit()
                 .putStringSet(PrefName.HIGH_SCORES.name(), scores)
@@ -51,13 +55,6 @@ public class ScoreRecords {
 
     public Set<String> getHighScores(){
         return getPrefs().getStringSet(PrefName.HIGH_SCORES.name(), Collections.emptySet());
-    }
-
-
-
-    public List<String> getOrderedHighScores(){
-        return ScoreRecordsUtils.getOrderedHighScores(getHighScores());
-
     }
 
 
