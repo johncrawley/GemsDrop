@@ -71,6 +71,7 @@ public class GameOverAnimator {
         gameComponents.getSoundEffectManager().playSoundEffect(SoundEffect.GEMS_GREYED_OUT);
     }
 
+    
 
     private void updateColorsOnView(List<Gem> gems){
         game.updateGemsColorsOnView(gems);

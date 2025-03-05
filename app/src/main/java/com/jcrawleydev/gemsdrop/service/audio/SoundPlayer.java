@@ -1,5 +1,7 @@
 package com.jcrawleydev.gemsdrop.service.audio;
 
+import static com.jcrawleydev.gemsdrop.service.audio.SoundEffect.*;
+
 import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.SoundPool;
@@ -54,7 +56,14 @@ public class SoundPlayer {
 
 
     private void loadSounds(){
-        loadSound(R.raw.disappear, SoundEffect.GEMS_DISAPPEAR);
+        loadSound(R.raw.disappear_1, GEMS_DISAPPEAR);
+        loadSound(R.raw.disappear_2, GEMS_DISAPPEAR_CHAIN_REACTION_1);
+        loadSound(R.raw.disappear_3, GEMS_DISAPPEAR_CHAIN_REACTION_2);
+        loadSound(R.raw.disappear_4, GEMS_DISAPPEAR_CHAIN_REACTION_3);
+        loadSound(R.raw.disappear_5, GEMS_DISAPPEAR_CHAIN_REACTION_4);
+        loadSound(R.raw.disappear_6, GEMS_DISAPPEAR_CHAIN_REACTION_5);
+        loadSound(R.raw.disappear_7, GEMS_DISAPPEAR_CHAIN_REACTION_6);
+        loadSound(R.raw.disappear_wonder, WONDER_GEM_GEMS_DISAPPEAR);
         loadSound(R.raw.gems_greyed_out_1, SoundEffect.GEMS_GREYED_OUT);
     }
 
