@@ -32,10 +32,15 @@ public class ScoreRecords {
     }
 
 
-    public List<String> getOrderedHighScores(){
+    public List<Integer> getOrderedHighScores(){
         return ScoreRecordsUtils.getOrderedHighScores(getHighScores());
-
     }
+
+
+    public int getMostRecentScore(){
+        return getInt(PrefName.PREVIOUS_SCORE);
+    }
+
 
     public void saveDefaultHighScores(){
         var existingHighScores = getHighScores();
@@ -53,8 +58,13 @@ public class ScoreRecords {
     }
 
 
-    public Set<String> getHighScores(){
+    private Set<String> getHighScores(){
         return getPrefs().getStringSet(PrefName.HIGH_SCORES.name(), Collections.emptySet());
+    }
+
+
+    private int getInt(PrefName prefName){
+        return getPrefs().getInt(prefName.name(), 0);
     }
 
 

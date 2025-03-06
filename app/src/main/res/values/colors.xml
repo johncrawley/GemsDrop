@@ -10,6 +10,9 @@
     <color name="game_over_text">#BF360C</color>
 
     <color name="main_menu_background">#2E2626</color>
+    <color name="high_score_title_text">#D7C974</color>
+    <color name="high_score_item_text">#958F74</color>
+    <color name="high_score_background">#1D1C1C</color>
     <color name="grid_border_color">#524D4D</color>
     <color name="score_label">#aaa</color>
 

@@ -1,6 +1,5 @@
 package com.jcrawleydev.gemsdrop.service.records;
 
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,7 +16,7 @@ public class ScoreRecordsUtils {
                 .stream()
                 .map(Integer::valueOf)
                 .sorted()
-                .toList();
+                .collect(Collectors.toList()); // min API 34 for simple toList() call.
 
         return highScoreInts
                 .stream()
@@ -26,12 +25,11 @@ public class ScoreRecordsUtils {
     }
 
 
-    public static List<String> getOrderedHighScores(Set<String> highScores){
+    public static List<Integer> getOrderedHighScores(Set<String> highScores){
        return highScores.stream()
                 .map(Integer::valueOf)
                 .sorted((o1, o2) -> o2 - o1)
-                .map(String::valueOf)
-                .toList();
+                .collect(Collectors.toList());
     }
 
 }
