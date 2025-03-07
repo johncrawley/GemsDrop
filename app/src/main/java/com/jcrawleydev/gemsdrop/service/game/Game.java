@@ -185,6 +185,13 @@ public class Game {
     }
 
 
+    public void onGameOverAnimationComplete(){
+        var taskScheduler = gameComponents.getTaskScheduler();
+        taskScheduler.cancelTask();
+        taskScheduler.scheduleOnce(this::quit, 5000);
+    }
+
+
     public void quit(){
 
     }
