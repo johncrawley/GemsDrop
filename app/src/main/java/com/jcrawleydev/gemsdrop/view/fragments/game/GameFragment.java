@@ -10,6 +10,7 @@ import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.FREE
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.NOTIFY_OF_SERVICE_CONNECTED;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.REMOVE_GEMS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.SHOW_GAME_OVER_MESSAGE;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.SHOW_HIGH_SCORES;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_COLORS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_GEMS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_SCORE;
@@ -45,6 +46,7 @@ import com.jcrawleydev.gemsdrop.service.GameService;
 import com.jcrawleydev.gemsdrop.service.game.gem.GemColor;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage;
+import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 
 import java.util.Map;
 import java.util.Optional;
@@ -184,6 +186,7 @@ public class GameFragment extends Fragment {
         setupListener(UPDATE_SCORE, this::updateScore);
         setupListener(FREE_FALL_GEMS, this::freeFallGems);
         setupListener(SHOW_GAME_OVER_MESSAGE, this::showGameOverMessage);
+        setupListener(SHOW_HIGH_SCORES, this::showHighScores);
     }
 
 
@@ -233,6 +236,11 @@ public class GameFragment extends Fragment {
                 consumer.accept(gemLayout);
             }
         }
+    }
+
+
+    private void showHighScores(Bundle bundle){
+        FragmentUtils.loadHighScores(this);
     }
 
 

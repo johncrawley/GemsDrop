@@ -23,7 +23,7 @@ public class StateManager {
         evaluateGridState = new EvaluateGridState(game);
         gemRemovalCompletedState = new GemRemovalAnimationDoneState(game);
         gridGravityState = new GridGravityState(game);
-        gameOverState = new GameOverState(game);
+        gameOverState = new GameEndingState(game);
         gemFreeFallState = new GemFreeFallState(game);
         gemQuickDropState = new GemQuickDropState(game);
         gemsDropState = new GemsDropState(game);

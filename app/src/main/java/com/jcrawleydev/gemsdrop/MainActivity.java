@@ -7,6 +7,7 @@ import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_POSITI
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.SCORE;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.CREATE_GEMS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.SHOW_GAME_OVER_MESSAGE;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.SHOW_HIGH_SCORES;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_COLORS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_GEMS;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_SCORE;
@@ -97,6 +98,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     public void onGameOver(ScoreStatistics scoreStatistics){
 
+    }
+
+
+    public void showHighScores(){
+        sendMessage(this, SHOW_HIGH_SCORES);
     }
 
 

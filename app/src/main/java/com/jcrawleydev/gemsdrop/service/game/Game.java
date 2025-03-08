@@ -191,9 +191,15 @@ public class Game {
         taskScheduler.scheduleOnce(this::quit, 5000);
     }
 
+    private AtomicBoolean hasQuitBeenInvoked = new AtomicBoolean(false);
+
 
     public void quit(){
-
+        if(hasQuitBeenInvoked.get()){
+            return;
+        }
+        hasQuitBeenInvoked.set(true);
+        gameView.showHighScores();
     }
 
 

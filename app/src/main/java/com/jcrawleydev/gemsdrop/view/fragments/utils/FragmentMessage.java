@@ -10,4 +10,5 @@ public enum FragmentMessage {
     UPDATE_SCORE,
     UPDATE_COLORS,
     SHOW_GAME_OVER_MESSAGE,
+    SHOW_HIGH_SCORES
 }
