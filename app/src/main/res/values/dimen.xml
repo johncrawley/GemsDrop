@@ -9,6 +9,7 @@
     <dimen name="game_over_score_text_size">32sp</dimen>
     <dimen name="title_gem_padding">8dp</dimen>
     <dimen name="title_gem_margin_horizontal">8dp</dimen>
+    <dimen name="score_text_size">28sp</dimen>
 
     <dimen name="high_score_title_text_size">48sp</dimen>
     <dimen name="high_score_text_size">36sp</dimen>

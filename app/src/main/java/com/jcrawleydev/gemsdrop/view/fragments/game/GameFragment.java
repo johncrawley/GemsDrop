@@ -1,19 +1,7 @@
 package com.jcrawleydev.gemsdrop.view.fragments.game;
 
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_COLOR_IDS;
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_COLUMNS;
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_IDS;
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.GEM_POSITIONS;
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.CREATE_GEMS;
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.CREATE_WONDER_GEM;
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.FREE_FALL_GEMS;
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.NOTIFY_OF_SERVICE_CONNECTED;
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.REMOVE_GEMS;
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.SHOW_GAME_OVER_MESSAGE;
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.SHOW_HIGH_SCORES;
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_COLORS;
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_GEMS;
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_SCORE;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.*;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.*;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getIntArrayFrom;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getIntFrom;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getLongArray;
@@ -39,6 +27,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+
 
 import com.jcrawleydev.gemsdrop.MainActivity;
 import com.jcrawleydev.gemsdrop.R;
