@@ -27,6 +27,7 @@
         android:shadowDx="1"
         android:shadowDy="15"
         android:shadowRadius="2"
+        android:layout_marginBottom="@dimen/main_menu_title_margin_bottom"
         android:text="@string/title"
         android:textColor="@color/main_menu_background"
         android:textSize="@dimen/title_text_size"
@@ -35,7 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.30" />
+        app:layout_constraintVertical_bias="0.20" />
 
 
     <LinearLayout
@@ -48,7 +49,8 @@
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleTextView">
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+        app:layout_constraintBottom_toTopOf="@+id/buttonsLayout">
 
         <ImageView
             android:id="@+id/titleJewel4"
