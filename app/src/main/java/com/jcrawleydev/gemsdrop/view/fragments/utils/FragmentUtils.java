@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.jcrawleydev.gemsdrop.MainActivity;
 import com.jcrawleydev.gemsdrop.R;
+import com.jcrawleydev.gemsdrop.view.fragments.AboutFragment;
 import com.jcrawleydev.gemsdrop.view.fragments.HighScoresFragment;
 import com.jcrawleydev.gemsdrop.view.fragments.game.GameFragment;
 import com.jcrawleydev.gemsdrop.view.fragments.GameOverFragment;
@@ -42,7 +43,7 @@ public class FragmentUtils {
 
 
     public static void loadAbout(Fragment parentFragment){
-        loadFragment(parentFragment, new GameFragment(), "about_fragment");
+        loadFragment(parentFragment, new AboutFragment(), "about_fragment");
     }
 
 

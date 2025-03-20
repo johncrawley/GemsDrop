@@ -19,4 +19,8 @@
     <!-- Main Menu -->
     <dimen name="menu_button_min_width">120dp</dimen>
 
+    <!-- About Fragment -->
+
+    <dimen name="about_title_text_size">38sp</dimen>
+
 </resources>
