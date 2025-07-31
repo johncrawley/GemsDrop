@@ -46,7 +46,6 @@ import java.util.function.ToIntFunction;
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener, GameView {
 
     private GameService gameService;
-
     private final AtomicBoolean isServiceConnected = new AtomicBoolean(false);
 
 
