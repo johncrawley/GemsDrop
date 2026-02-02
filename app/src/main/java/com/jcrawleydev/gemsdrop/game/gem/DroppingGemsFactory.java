@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class DroppingGemsFactory {
 
-    private final GridProps gridProps;
+    private GridProps gridProps;
     private int numberOfNormalGemsDropped;
     private final Random random;
     private int minNormalGemStreak = 8;
@@ -19,10 +19,15 @@ public class DroppingGemsFactory {
     private int specialGemOdds = 10;
     private List<GemColor> gemColors;
 
-    public DroppingGemsFactory(GridProps gridProps){
-        this.gridProps = gridProps;
+    public DroppingGemsFactory(){
         random = new Random(System.currentTimeMillis());
     }
+
+
+    public void setGridProps(GridProps gridProps){
+        this.gridProps = gridProps;
+    }
+
 
     public void setSpecialGemConditions(SpecialGemConditions specialGemConditions){
         minNormalGemStreak = specialGemConditions.minNormalGemStreak();

@@ -5,28 +5,37 @@ import com.jcrawleydev.gemsdrop.service.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsEvaluator;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsFactory;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
-import com.jcrawleydev.gemsdrop.game.grid.GemGridImpl;
 import com.jcrawleydev.gemsdrop.game.score.Score;
 import com.jcrawleydev.gemsdrop.service.records.ScoreRecords;
 
 public class GameComponents {
 
-    private final GridProps gridProps = new GridProps(15, 7, 2);
-    private final GemGrid gemGrid = new GemGridImpl(gridProps);
     private final GemMover gemMover = new GemMover();
-    private final Score score = new Score(50);
     private final TaskScheduler taskScheduler = new TaskScheduler();
-    private final SoundEffectManager soundEffectManager = new SoundEffectManager(score);
-    private final DroppingGemsFactory droppingGemsFactory = new DroppingGemsFactory(gridProps);
+    private final SoundEffectManager soundEffectManager = new SoundEffectManager();
+    private final DroppingGemsFactory droppingGemsFactory = new DroppingGemsFactory();
     private ScoreRecords scoreRecords;
+    private GemGrid gemGrid;
+    private Score score;
+    private GridProps gridProps;
 
 
     public void init(Game game, SoundPlayer soundPlayer, ScoreRecords scoreRecords){
         this.scoreRecords = scoreRecords;
+        soundEffectManager.init(soundPlayer);
+        setModelComponents(game, game.getGameModel());
+        score.clear();
+    }
+
+
+    public void setModelComponents(Game game, GameModel gameModel){
+        this.gemGrid = gameModel.getGemGrid();
+        this.score = gameModel.getScore();
+        this.gridProps = gameModel.getGridProps();
         var droppingGemsEvaluator = new DroppingGemsEvaluator(game,this);
         gemMover.init(gemGrid, gridProps, droppingGemsEvaluator);
-        soundEffectManager.init(soundPlayer);
-        score.clear();
+        soundEffectManager.setScore(score);
+        droppingGemsFactory.setGridProps(gridProps);
     }
 
 

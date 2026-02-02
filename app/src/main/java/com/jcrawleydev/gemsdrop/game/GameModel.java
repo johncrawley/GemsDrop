@@ -1,11 +1,36 @@
 package com.jcrawleydev.gemsdrop.game;
 
+import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
+import com.jcrawleydev.gemsdrop.game.grid.GemGridImpl;
+import com.jcrawleydev.gemsdrop.game.score.Score;
+
 public class GameModel {
 
     public final int GRAVITY_INTERVAL = 70;
     private int dropRate = 500;
     private int dropCount = 0;
     private int dropIntervalCounter;
+
+    private final GridProps gridProps = new GridProps(15, 7, 2);
+    private final GemGrid gemGrid = new GemGridImpl(gridProps);
+    private final Score score = new Score(50);
+
+
+
+    public GemGrid getGemGrid(){
+        return gemGrid;
+    }
+
+
+    public GridProps getGridProps(){
+        return gridProps;
+    }
+
+
+    public Score getScore(){
+        return score;
+    }
+
 
     public int getDropRate(){
         return dropRate;

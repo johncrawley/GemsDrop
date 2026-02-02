@@ -5,9 +5,13 @@ import com.jcrawleydev.gemsdrop.game.score.Score;
 public class SoundEffectManager {
 
     private SoundPlayer soundPlayer;
-    private final Score score;
+    private Score score;
 
-    public SoundEffectManager(Score score){
+    public SoundEffectManager(){
+    }
+
+
+    public void setScore(Score score){
         this.score = score;
     }
 

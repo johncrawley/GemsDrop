@@ -10,7 +10,7 @@ import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsFactory;
 public class GemsDropState extends AbstractGameState{
 
     private DroppingGems droppingGems;
-    private DroppingGemsFactory droppingGemsFactory;
+    private final DroppingGemsFactory droppingGemsFactory;
 
     public GemsDropState(Game game){
         super(game);
@@ -46,13 +46,16 @@ public class GemsDropState extends AbstractGameState{
         gemMover.rotateGems();
     }
 
+
     public void left(){
         gemMover.moveLeft();
     }
 
+
     public void right(){
         gemMover.moveRight();
     }
+
 
     public void down(){
         if(droppingGems == null

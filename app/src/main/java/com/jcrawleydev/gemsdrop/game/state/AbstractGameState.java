@@ -37,30 +37,36 @@ public abstract class AbstractGameState {
 
 
     public void start() {
-
+        //Do Nothing
     }
+
 
     protected void loadState(GameStateName gameStateName){
         stateManager.load(gameStateName, this.getClass().getSimpleName());
     }
 
+
     public void log(String msg){
         System.out.println("^^^ " + this.getClass().getName() + " : " + msg);
     }
 
-    public void rotate(){
 
+    public void rotate(){
+        //do nothing
     }
+
 
     public void left(){
-
+        //do nothing
     }
+
 
     public void right(){
-
+        //do nothing
     }
 
-    public void down(){
 
+    public void down(){
+        //do nothing
     }
 }

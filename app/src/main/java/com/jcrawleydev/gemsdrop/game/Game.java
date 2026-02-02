@@ -38,6 +38,9 @@ public class Game {
     }
 
 
+    public GameModel getGameModel(){
+        return gameModel;
+    }
 
 
     public GameComponents getGameComponents(){

@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 public class StateManager {
 
     private AbstractGameState currentGameState;
-    AbstractGameState gameStartedState,
+    private AbstractGameState gameStartedState,
             evaluateGridState,
             gridGravityState,
             gemRemovalCompletedState,
