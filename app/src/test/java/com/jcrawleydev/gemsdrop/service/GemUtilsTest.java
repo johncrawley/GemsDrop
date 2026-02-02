@@ -3,11 +3,11 @@ package com.jcrawleydev.gemsdrop.service;
 import static org.junit.Assert.assertEquals;
 
 
-import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
-import com.jcrawleydev.gemsdrop.service.game.gem.GemColor;
-import com.jcrawleydev.gemsdrop.service.game.gem.GemGroupPosition;
-import com.jcrawleydev.gemsdrop.service.game.GridProps;
-import com.jcrawleydev.gemsdrop.service.game.gem.GemUtils;
+import com.jcrawleydev.gemsdrop.game.gem.Gem;
+import com.jcrawleydev.gemsdrop.game.gem.GemColor;
+import com.jcrawleydev.gemsdrop.game.gem.GemGroupPosition;
+import com.jcrawleydev.gemsdrop.game.GridProps;
+import com.jcrawleydev.gemsdrop.game.gem.GemUtils;
 
 import org.junit.Test;
 

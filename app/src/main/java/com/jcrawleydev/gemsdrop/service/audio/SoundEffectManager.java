@@ -1,8 +1,6 @@
 package com.jcrawleydev.gemsdrop.service.audio;
 
-import android.content.Context;
-
-import com.jcrawleydev.gemsdrop.service.game.score.Score;
+import com.jcrawleydev.gemsdrop.game.score.Score;
 
 public class SoundEffectManager {
 

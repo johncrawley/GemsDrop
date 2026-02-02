@@ -9,19 +9,16 @@ import android.os.IBinder;
 import com.jcrawleydev.gemsdrop.MainActivity;
 import com.jcrawleydev.gemsdrop.service.audio.SoundEffect;
 import com.jcrawleydev.gemsdrop.service.audio.SoundPlayer;
-import com.jcrawleydev.gemsdrop.service.game.Game;
-import com.jcrawleydev.gemsdrop.service.game.score.ScoreStatistics;
+import com.jcrawleydev.gemsdrop.game.Game;
 import com.jcrawleydev.gemsdrop.service.records.ScoreRecords;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 public class GameService extends Service {
     IBinder binder = new LocalBinder();
     private MainActivity mainActivity;
-    private final Game game;
     private final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> notifyGameOverFuture;
     private SoundPlayer soundPlayer;
@@ -31,7 +28,6 @@ public class GameService extends Service {
 
     public GameService() {
         super();
-        game = new Game();
     }
 
 
@@ -45,40 +41,11 @@ public class GameService extends Service {
     }
 
 
-    public void rotateGems(){
-        if(game != null){
-            System.out.println("^^^ Entered rotateGems()");
-            game.rotateGems();
-        }
-    }
-
-
-    public void moveLeft(){
-        game.moveLeft();
-    }
-
-
-    public void moveRight(){
-        game.moveRight();
-    }
-
-
-    public void moveUp(){
-        game.moveUp();
-    }
-
-
-    public void moveDown(){
-        game.moveDown();
-    }
 
 
     public void setLevel(int value){
         if(gamePreferenceManager != null){
             gamePreferenceManager.saveLevel(value);
-        }
-        if(game != null){
-          //  game.setDifficulty(value);
         }
     }
 
@@ -88,11 +55,6 @@ public class GameService extends Service {
             return gamePreferenceManager.getLevel();
         }
         return 5;
-    }
-
-
-    public void quitGame(){
-        game.quit();
     }
 
 
@@ -117,22 +79,12 @@ public class GameService extends Service {
     }
 
 
-    public void onGemRemovalAnimationDone(){
-        game.onGemRemovalAnimationDone();
-    }
-
-
-    public void startGame(){
-        game.startGame();
-    }
-
 
     @Override
     public void onCreate() {
         soundPlayer = new SoundPlayer(getApplicationContext());
         scoreRecords = new ScoreRecords(getApplicationContext());
-        game.init(soundPlayer, scoreRecords);
-        gamePreferenceManager = new GamePreferenceManager(this);
+        gamePreferenceManager = new GamePreferenceManager();
     }
 
 
@@ -164,7 +116,6 @@ public class GameService extends Service {
     @Override
     public void onDestroy() {
         mainActivity = null;
-        game.onDestroy();
     }
 
 
@@ -175,11 +126,10 @@ public class GameService extends Service {
 
     public void setActivity(MainActivity mainActivity){
         this.mainActivity = mainActivity;
-        game.setView(mainActivity);
     }
 
+
     public void notifyGameViewReady(){
-        game.onGameViewReady();
     }
 
 

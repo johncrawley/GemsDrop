@@ -2,7 +2,7 @@ package com.jcrawleydev.gemsdrop.view;
 
 
 
-import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
+import com.jcrawleydev.gemsdrop.game.gem.Gem;
 
 import java.util.List;
 

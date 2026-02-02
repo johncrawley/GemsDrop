@@ -18,62 +18,63 @@ import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.create
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.sendMessage;
 
 import android.annotation.SuppressLint;
-import android.content.ComponentName;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.jcrawleydev.gemsdrop.service.GameService;
-import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
-import com.jcrawleydev.gemsdrop.service.game.score.ScoreStatistics;
+import com.jcrawleydev.gemsdrop.game.Game;
+import com.jcrawleydev.gemsdrop.service.GamePreferenceManager;
+import com.jcrawleydev.gemsdrop.game.gem.Gem;
+import com.jcrawleydev.gemsdrop.game.score.ScoreStatistics;
+import com.jcrawleydev.gemsdrop.service.audio.SoundEffect;
+import com.jcrawleydev.gemsdrop.service.audio.SoundPlayer;
+import com.jcrawleydev.gemsdrop.service.records.ScoreRecords;
 import com.jcrawleydev.gemsdrop.view.GameView;
 import com.jcrawleydev.gemsdrop.view.fragments.MainMenuFragment;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.ToIntFunction;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener, GameView {
 
-    private GameService gameService;
-    private final AtomicBoolean isServiceConnected = new AtomicBoolean(false);
-
-
-    private final ServiceConnection connection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            GameService.LocalBinder binder = (GameService.LocalBinder) service;
-            gameService = binder.getService();
-            gameService.setActivity(MainActivity.this);
-            sendMessage(MainActivity.this, FragmentMessage.NOTIFY_OF_SERVICE_CONNECTED);
-            isServiceConnected.set(true);
-        }
-
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            isServiceConnected.set(false);
-        }
-    };
+    private MainViewModel viewModel;
+    private Game game;
+    private SoundPlayer soundPlayer;
+    private ScoreRecords scoreRecords;
+    private GamePreferenceManager gamePreferenceManager;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setupViewModel();
         hideActionBar();
-        setupGameService();
+        initGame();
         setupFragmentsIf(savedInstanceState == null);
+    }
+
+
+    public void initGame() {
+        game = new Game(viewModel.gameModel);
+        game.setView(this);
+        soundPlayer = new SoundPlayer(getApplicationContext());
+        scoreRecords = new ScoreRecords(getApplicationContext());
+        game.init(soundPlayer, scoreRecords);
+        gamePreferenceManager = new GamePreferenceManager();
+    }
+
+
+    private void setupViewModel(){
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
     }
 
 
@@ -85,13 +86,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, mainMenuFragment)
                 .commit();
-    }
-
-
-    private void setupGameService() {
-        Intent intent = new Intent(getApplicationContext(), GameService.class);
-        getApplicationContext().startService(intent);
-        getApplicationContext().bindService(intent, connection, 0);
     }
 
 
@@ -117,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         addGemColorIdsTo(bundle, gems);
         sendMessage(this, CREATE_GEMS, bundle);
     }
+
 
     @Override
     public void updateScore(int score){
@@ -220,8 +215,21 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
 
-    public Optional<GameService> getGameService(){
+    /*public Optional<GameService> getGameService(){
         return Optional.ofNullable(gameService);
+    }
+
+
+     */
+
+    @NonNull
+    public Game getGame(){
+        return game;
+    }
+
+
+    public void playSound(SoundEffect soundEffect){
+        soundPlayer.playSound(soundEffect);
     }
 
 

@@ -2,10 +2,8 @@ package com.jcrawleydev.gemsdrop.service;
 
 public class GamePreferenceManager {
 
-    private GameService gameService;
 
-    public GamePreferenceManager(GameService gameService){
-        this.gameService = gameService;
+    public GamePreferenceManager(){
     }
 
     public int getLevel(){

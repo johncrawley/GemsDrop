@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 import com.jcrawleydev.gemsdrop.MainActivity;
 import com.jcrawleydev.gemsdrop.R;
 import com.jcrawleydev.gemsdrop.service.audio.SoundEffect;
-import com.jcrawleydev.gemsdrop.service.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.view.SettingsActivity;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 
@@ -51,7 +50,9 @@ public class MainMenuFragment extends Fragment {
     @Override
     public void onDestroy(){
         super.onDestroy();
-        titleGemsAnimator.stop();
+        if(titleGemsAnimator != null){
+            titleGemsAnimator.stop();
+        }
     }
 
 
@@ -94,7 +95,7 @@ public class MainMenuFragment extends Fragment {
     private void playMenuButtonSound(){
         MainActivity mainActivity = (MainActivity) getActivity();
         if(mainActivity != null){
-            mainActivity.getGameService().ifPresent(gs -> gs.playSound(SoundEffect.MENU_BUTTON));
+            mainActivity.playSound(SoundEffect.MENU_BUTTON);
         }
     }
 

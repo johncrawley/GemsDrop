@@ -1,84 +1,43 @@
 package com.jcrawleydev.gemsdrop.view.fragments.game;
 
+import android.graphics.PointF;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
+import com.jcrawleydev.gemsdrop.game.Game;
 import com.jcrawleydev.gemsdrop.service.GameService;
 
 import java.util.function.Consumer;
 
 public class GameInputHandler {
 
-    private GameFragment gameFragment;
+    private GameInputHandler(){}
 
-    public GameInputHandler(GameFragment gameFragment){
-        this.gameFragment = gameFragment;
-    }
-
-    public void onDestroy(){
-        gameFragment = null;
-    }
-
-    public void handleInput(float x, float y, ViewGroup gamePane){
-
+    public static void handleInput(PointF p, ViewGroup gamePane, Game game){
+        if(game == null){
+            return;
+        }
         //log("handleInput(" + (int)x + "," +  (int)y + ")" + " gemContainer AbsoluteY: "+ gamePane.getY() + " height: " + gamePane.getMeasuredHeight());
         int height = gamePane.getMeasuredHeight();
         int width = gamePane.getMeasuredWidth();
-        if( y < height/4f){
-            moveUp();
+        if( p.y < height/4f){
+            game.moveUp();
             return;
         }
-        if( y > (height / 3f) * 2){
-            moveDown();
+        if( p.y > (height / 3f) * 2){
+            game.moveDown();
             return;
         }
-        if(x < width / 3f){
-            moveLeft();
+        if(p.x < width / 3f){
+            game.moveLeft();
             return;
         }
-        if(x < width / 1.5f ){
-            rotateGems();
+        if(p.x < width / 1.5f ){
+           game.rotateGems();
             return;
         }
-        moveRight();
-    }
-
-    private void log(String msg){
-        System.out.println("^^^ GameInputHandler: " + msg);
-    }
-
-
-    private void moveLeft(){
-        runOnService(GameService::moveLeft);
-    }
-
-
-    private void moveRight(){
-        runOnService(GameService::moveRight);
-    }
-
-
-    private void moveUp(){
-        runOnService(GameService::moveUp);
-    }
-
-
-    private void moveDown(){
-        runOnService(GameService::moveDown);
-    }
-
-
-    private void runOnService(Consumer<GameService> consumer){
-        if(gameFragment != null){
-            gameFragment.getService().ifPresent(consumer);
-        }
-    }
-
-
-    private void rotateGems(){
-       // log("Entered rotateGems()");
-        runOnService(GameService::rotateGems);
+        game.moveRight();
     }
 
 

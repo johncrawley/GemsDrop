@@ -10,6 +10,7 @@ import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.setLis
 
 
 import android.annotation.SuppressLint;
+import android.graphics.PointF;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -31,14 +32,13 @@ import androidx.fragment.app.Fragment;
 
 import com.jcrawleydev.gemsdrop.MainActivity;
 import com.jcrawleydev.gemsdrop.R;
-import com.jcrawleydev.gemsdrop.service.GameService;
-import com.jcrawleydev.gemsdrop.service.game.gem.GemColor;
+import com.jcrawleydev.gemsdrop.game.Game;
+import com.jcrawleydev.gemsdrop.game.gem.GemColor;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
@@ -50,26 +50,27 @@ public class GameFragment extends Fragment {
     private int containerHeight;
     private ViewGroup gemContainer, gamePane, gameOverTextLayout;
     private float gemWidth = 10f;
-    private GameInputHandler gameInputHandler;
     private TextView scoreView;
     private AnimationDrawable wonderGemAnimation;
     private int currentNumberOfGemsRemoved;
     private int numberOfGemsToRemove;
+    private Game game;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View parentView = inflater.inflate(R.layout.fragment_game, container, false);
+        game = getGame();
         itemsMap = new ConcurrentHashMap<>();
         imageMap = new ImageMap();
         gemContainer = parentView.findViewById(R.id.gemContainer);
         gamePane = parentView.findViewById(R.id.game_pane);
         gameOverTextLayout = parentView.findViewById(R.id.gameOverTextLayout);
-        gameInputHandler = new GameInputHandler(this);
         assignLayoutDimensions();
         setupViews(parentView);
         setupListeners();
         setupCreateAndDestroyButtons(parentView);
+        startGame();
         return parentView;
     }
 
@@ -82,13 +83,21 @@ public class GameFragment extends Fragment {
                 assignWidthToExistingGems();
                 log("assignLayoutDimensions() about to invoke startGame()");
                 startGame();
-                getService().ifPresent(GameService::notifyGameViewReady);
+                notifyGameViewReady();
                 log("assignLayoutDimensions() exited startGame()");
                 gamePane.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                // createWonderGem(1000000L, 5,5);
             }
         };
         gamePane.getViewTreeObserver().addOnGlobalLayoutListener(listener);
+    }
+
+
+    private void notifyGameViewReady(){
+        var game = getGame();
+        if(game != null){
+            game.onGameViewReady();
+        }
     }
 
 
@@ -130,9 +139,9 @@ public class GameFragment extends Fragment {
 
 
     private void startGame(){
-        MainActivity mainActivity = (MainActivity) getActivity();
+        var mainActivity = (MainActivity) getActivity();
         if(mainActivity != null){
-            mainActivity.getGameService().ifPresent(GameService::startGame);
+            mainActivity.getGame().startGame();
         }
     }
 
@@ -142,7 +151,8 @@ public class GameFragment extends Fragment {
         ViewGroup gamePane = parentView.findViewById(R.id.game_pane);
         gamePane.setOnTouchListener((view, motionEvent) -> {
             if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
-                gameInputHandler.handleInput(motionEvent.getX(), motionEvent.getY(), gamePane);
+                var point = new PointF(motionEvent.getX(), motionEvent.getY());
+                GameInputHandler.handleInput(point, gamePane, game);
             }
             return false;
         });
@@ -154,23 +164,13 @@ public class GameFragment extends Fragment {
     private void log(String msg){
      //  System.out.println("^^^ GameFragment: " + msg);
     }
-
-
-    public Optional<GameService> getService(){
-        MainActivity mainActivity = (MainActivity) getActivity();
-        if(mainActivity != null) {
-            return mainActivity.getGameService();
-        }
-        return Optional.empty();
-    }
-
+    
 
     private void setupListeners(){
         setupListener(CREATE_GEMS, this::createGems);
         setupListener(CREATE_WONDER_GEM, this::createGems);
         setupListener(UPDATE_GEMS, this::updateGems);
         setupListener(UPDATE_COLORS, this::updateGemsColors);
-        setupListener(NOTIFY_OF_SERVICE_CONNECTED, this::onServiceConnected);
         setupListener(REMOVE_GEMS, this::removeGems);
         setupListener(UPDATE_SCORE, this::updateScore);
         setupListener(FREE_FALL_GEMS, this::freeFallGems);
@@ -244,10 +244,18 @@ public class GameFragment extends Fragment {
             notifyGameOfGemRemovalCompletion();
         }
     }
+    
+    private Game getGame(){
+        var mainActivity = (MainActivity)getActivity();
+        return mainActivity == null ? null : mainActivity.getGame();
+    }
 
 
     private void notifyGameOfGemRemovalCompletion(){
-        getService().ifPresent(GameService::onGemRemovalAnimationDone);
+        var game = getGame();
+        if(game != null){
+            game.onGemRemovalAnimationDone();
+        }
     }
 
 

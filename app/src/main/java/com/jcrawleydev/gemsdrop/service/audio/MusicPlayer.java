@@ -1,10 +1,7 @@
 package com.jcrawleydev.gemsdrop.service.audio;
 
 import android.content.Context;
-import android.media.AudioAttributes;
 import android.media.MediaPlayer;
-import android.media.SoundPool;
-
 import com.jcrawleydev.gemsdrop.R;
 
 public class MusicPlayer {

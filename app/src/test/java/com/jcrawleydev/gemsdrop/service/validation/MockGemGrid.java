@@ -1,8 +1,8 @@
 package com.jcrawleydev.gemsdrop.service.validation;
 
-import com.jcrawleydev.gemsdrop.service.game.GridProps;
-import com.jcrawleydev.gemsdrop.service.game.gem.Gem;
-import com.jcrawleydev.gemsdrop.service.game.grid.GemGrid;
+import com.jcrawleydev.gemsdrop.game.GridProps;
+import com.jcrawleydev.gemsdrop.game.gem.Gem;
+import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 
 import java.util.Collections;
 import java.util.List;

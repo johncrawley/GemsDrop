@@ -5,6 +5,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import com.jcrawleydev.gemsdrop.game.score.Score;
+
 public class ScoreTest {
 
     private Score score;

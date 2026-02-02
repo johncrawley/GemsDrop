@@ -5,11 +5,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems;
-import com.jcrawleydev.gemsdrop.service.game.gem.GemUtils;
-import com.jcrawleydev.gemsdrop.service.game.GridProps;
-import com.jcrawleydev.gemsdrop.service.game.grid.GemGrid;
-import com.jcrawleydev.gemsdrop.service.game.utils.RotationChecker;
+import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
+import com.jcrawleydev.gemsdrop.game.gem.GemUtils;
+import com.jcrawleydev.gemsdrop.game.GridProps;
+import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
+import com.jcrawleydev.gemsdrop.game.utils.RotationChecker;
 
 import org.junit.Before;
 import org.junit.Test;

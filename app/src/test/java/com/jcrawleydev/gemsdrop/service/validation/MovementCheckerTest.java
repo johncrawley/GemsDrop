@@ -2,10 +2,10 @@ package com.jcrawleydev.gemsdrop.service.validation;
 
 import static org.junit.Assert.assertEquals;
 
-import com.jcrawleydev.gemsdrop.service.game.gem.DroppingGems;
-import com.jcrawleydev.gemsdrop.service.game.GridProps;
-import com.jcrawleydev.gemsdrop.service.game.grid.GemGrid;
-import com.jcrawleydev.gemsdrop.service.game.utils.MovementChecker;
+import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
+import com.jcrawleydev.gemsdrop.game.GridProps;
+import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
+import com.jcrawleydev.gemsdrop.game.utils.MovementChecker;
 
 import org.junit.Before;
 import org.junit.Test;
