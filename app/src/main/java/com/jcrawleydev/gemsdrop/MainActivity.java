@@ -46,7 +46,6 @@ import java.util.function.ToIntFunction;
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener, GameView {
 
     private MainViewModel viewModel;
-    private Game game;
     private SoundPlayer soundPlayer;
     private ScoreRecords scoreRecords;
     private GamePreferenceManager gamePreferenceManager;
@@ -58,18 +57,16 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         setContentView(R.layout.activity_main);
         setupViewModel();
         hideActionBar();
-        initGame();
         setupFragmentsIf(savedInstanceState == null);
     }
 
 
-    public void initGame() {
-        game = new Game(viewModel.gameModel);
-        game.setView(this);
-        soundPlayer = new SoundPlayer(getApplicationContext());
-        scoreRecords = new ScoreRecords(getApplicationContext());
-        game.init(soundPlayer, scoreRecords);
-        gamePreferenceManager = new GamePreferenceManager();
+    @NonNull
+    public MainViewModel getViewModel(){
+        if(viewModel == null){
+            setupViewModel();
+        }
+        return viewModel;
     }
 
 
@@ -212,19 +209,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     @Override
     public void onResume(){
         super.onResume();
-    }
-
-
-    /*public Optional<GameService> getGameService(){
-        return Optional.ofNullable(gameService);
-    }
-
-
-     */
-
-    @NonNull
-    public Game getGame(){
-        return game;
     }
 
 

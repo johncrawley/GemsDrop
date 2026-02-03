@@ -31,18 +31,25 @@ import androidx.fragment.app.Fragment;
 
 
 import com.jcrawleydev.gemsdrop.MainActivity;
+import com.jcrawleydev.gemsdrop.MainViewModel;
 import com.jcrawleydev.gemsdrop.R;
 import com.jcrawleydev.gemsdrop.game.Game;
+import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.game.gem.GemColor;
+import com.jcrawleydev.gemsdrop.service.GamePreferenceManager;
+import com.jcrawleydev.gemsdrop.service.audio.SoundPlayer;
+import com.jcrawleydev.gemsdrop.service.records.ScoreRecords;
+import com.jcrawleydev.gemsdrop.view.GameView;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
-public class GameFragment extends Fragment {
+public class GameFragment extends Fragment implements GameView {
 
     private ImageMap imageMap;
     private Map<Long, ViewGroup> itemsMap;
@@ -55,12 +62,18 @@ public class GameFragment extends Fragment {
     private int currentNumberOfGemsRemoved;
     private int numberOfGemsToRemove;
     private Game game;
+    private MainViewModel viewModel;
+    private SoundPlayer soundPlayer;
+    private ScoreRecords scoreRecords;
+    private GamePreferenceManager gamePreferenceManager;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View parentView = inflater.inflate(R.layout.fragment_game, container, false);
-        game = getGame();
+        initGame();
+        assignViewModel();
         itemsMap = new ConcurrentHashMap<>();
         imageMap = new ImageMap();
         gemContainer = parentView.findViewById(R.id.gemContainer);
@@ -74,6 +87,23 @@ public class GameFragment extends Fragment {
         return parentView;
     }
 
+
+    private void assignViewModel(){
+        var mainActivity = (MainActivity)getActivity();
+        if(mainActivity != null){
+            viewModel = mainActivity.getViewModel();
+        }
+    }
+
+
+    public void initGame() {
+        game = new Game(viewModel.gameModel);
+        game.setView(this);
+        soundPlayer = new SoundPlayer(getContext());
+        scoreRecords = new ScoreRecords(getContext());
+        game.init(soundPlayer, scoreRecords);
+        gamePreferenceManager = new GamePreferenceManager();
+    }
 
     private void assignLayoutDimensions(){
         ViewTreeObserver.OnGlobalLayoutListener listener = new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -94,7 +124,6 @@ public class GameFragment extends Fragment {
 
 
     private void notifyGameViewReady(){
-        var game = getGame();
         if(game != null){
             game.onGameViewReady();
         }
@@ -139,9 +168,8 @@ public class GameFragment extends Fragment {
 
 
     private void startGame(){
-        var mainActivity = (MainActivity) getActivity();
-        if(mainActivity != null){
-            mainActivity.getGame().startGame();
+        if(game != null) {
+            game.startGame();
         }
     }
 
@@ -206,6 +234,11 @@ public class GameFragment extends Fragment {
         doActionOnGemIdsFrom(bundle, gemLayout -> GemAnimator.animateRemovalOf(gemLayout, this::cleanupGem));
     }
 
+    private void removeGems(long [] markedGemIds){
+        stopWonderGemAnimation();
+        doActionOnGemIdsFrom(markedGemIds, gemLayout -> GemAnimator.animateRemovalOf(gemLayout, this::cleanupGem));
+    }
+
 
     private void stopWonderGemAnimation(){
         if(wonderGemAnimation != null && wonderGemAnimation.isRunning()){
@@ -220,7 +253,17 @@ public class GameFragment extends Fragment {
             return;
         }
         for(long gemId : gemIds){
-            ViewGroup gemLayout = itemsMap.get(gemId);
+            var gemLayout = itemsMap.get(gemId);
+            if(gemLayout != null){
+                consumer.accept(gemLayout);
+            }
+        }
+    }
+
+
+    private void doActionOnGemIdsFrom(long[] gemIds, Consumer<ViewGroup> consumer){
+        for(long gemId : gemIds){
+            var gemLayout = itemsMap.get(gemId);
             if(gemLayout != null){
                 consumer.accept(gemLayout);
             }
@@ -235,7 +278,6 @@ public class GameFragment extends Fragment {
 
     private void cleanupGem(ViewGroup gemLayout){
         long id = (long)gemLayout.getTag();
-        log("Entered cleanupGem() id: " + id);
         gemLayout.setVisibility(View.GONE);
         gemContainer.removeView(gemLayout);
         itemsMap.remove(id);
@@ -244,15 +286,9 @@ public class GameFragment extends Fragment {
             notifyGameOfGemRemovalCompletion();
         }
     }
-    
-    private Game getGame(){
-        var mainActivity = (MainActivity)getActivity();
-        return mainActivity == null ? null : mainActivity.getGame();
-    }
 
 
     private void notifyGameOfGemRemovalCompletion(){
-        var game = getGame();
         if(game != null){
             game.onGemRemovalAnimationDone();
         }
@@ -432,4 +468,45 @@ public class GameFragment extends Fragment {
 
     }
 
+    @Override
+    public void createGems(List<Gem> gems) {
+
+    }
+
+
+    @Override
+    public void updateGems(List<Gem> gems) {
+
+    }
+
+
+    @Override
+    public void updateGemsColors(List<Gem> gems) {
+
+    }
+
+
+    @Override
+    public void wipeOut(long[] markedGemIds) {
+        stopWonderGemAnimation();
+        doActionOnGemIdsFrom(markedGemIds, gemLayout -> GemAnimator.animateRemovalOf(gemLayout, this::cleanupGem));
+    }
+
+
+    @Override
+    public void updateScore(int score) {
+
+    }
+
+
+    @Override
+    public void showGameOverAnimation() {
+
+    }
+
+
+    @Override
+    public void showHighScores() {
+
+    }
 }
