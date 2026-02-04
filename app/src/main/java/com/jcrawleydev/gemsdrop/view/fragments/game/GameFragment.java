@@ -3,7 +3,6 @@ package com.jcrawleydev.gemsdrop.view.fragments.game;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.*;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.*;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getIntArrayFrom;
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getIntFrom;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getLongArray;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getLongArrayFrom;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.setListener;
@@ -40,7 +39,6 @@ import com.jcrawleydev.gemsdrop.service.GamePreferenceManager;
 import com.jcrawleydev.gemsdrop.service.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.service.records.ScoreRecords;
 import com.jcrawleydev.gemsdrop.view.GameView;
-import com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 
@@ -72,8 +70,9 @@ public class GameFragment extends Fragment implements GameView {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View parentView = inflater.inflate(R.layout.fragment_game, container, false);
-        initGame();
+
         assignViewModel();
+        initGame();
         itemsMap = new ConcurrentHashMap<>();
         imageMap = new ImageMap();
         gemContainer = parentView.findViewById(R.id.gemContainer);
@@ -168,7 +167,9 @@ public class GameFragment extends Fragment implements GameView {
 
 
     private void startGame(){
+        log("entered startGame()");
         if(game != null) {
+            log("game is not null: starting!");
             game.startGame();
         }
     }
@@ -190,30 +191,17 @@ public class GameFragment extends Fragment implements GameView {
 
 
     private void log(String msg){
-     //  System.out.println("^^^ GameFragment: " + msg);
+       System.out.println("^^^ GameFragment: " + msg);
     }
     
 
     private void setupListeners(){
-        setupListener(CREATE_GEMS, this::createGems);
-        setupListener(CREATE_WONDER_GEM, this::createGems);
-        setupListener(UPDATE_GEMS, this::updateGems);
-        setupListener(UPDATE_COLORS, this::updateGemsColors);
-        setupListener(REMOVE_GEMS, this::removeGems);
-        setupListener(UPDATE_SCORE, this::updateScore);
         setupListener(FREE_FALL_GEMS, this::freeFallGems);
-        setupListener(SHOW_GAME_OVER_MESSAGE, this::showGameOverMessage);
-        setupListener(SHOW_HIGH_SCORES, this::showHighScores);
     }
 
 
     private void setupListener(FragmentMessage message, Consumer<Bundle> consumer){
         setListener(this, message, consumer);
-    }
-
-
-    private void onServiceConnected(Bundle b){
-        startGame();
     }
 
 
@@ -227,12 +215,6 @@ public class GameFragment extends Fragment implements GameView {
         gemLayout.setY(updatedY);
     }
 
-
-    private void removeGems(Bundle bundle){
-        numberOfGemsToRemove = getLongArrayFrom(bundle, GEM_IDS).length;
-        stopWonderGemAnimation();
-        doActionOnGemIdsFrom(bundle, gemLayout -> GemAnimator.animateRemovalOf(gemLayout, this::cleanupGem));
-    }
 
     private void removeGems(long [] markedGemIds){
         stopWonderGemAnimation();
@@ -271,11 +253,6 @@ public class GameFragment extends Fragment implements GameView {
     }
 
 
-    private void showHighScores(Bundle bundle){
-        FragmentUtils.loadHighScores(this);
-    }
-
-
     private void cleanupGem(ViewGroup gemLayout){
         long id = (long)gemLayout.getTag();
         gemLayout.setVisibility(View.GONE);
@@ -295,25 +272,8 @@ public class GameFragment extends Fragment implements GameView {
     }
 
 
-    private void createGems(Bundle bundle){
-        long[] ids = getLongArrayFrom(bundle, GEM_IDS);
-        int[] positions = getIntArrayFrom(bundle, GEM_POSITIONS);
-        int[] columns = getIntArrayFrom(bundle, GEM_COLUMNS);
-        int[] colorIds = getIntArrayFrom(bundle, GEM_COLOR_IDS);
-
-        if(colorIds[0] == GemColor.WONDER.ordinal()){
-            createWonderGem(ids[0], positions[0], columns[0]);
-            return;
-        }
-
-        for(int i = 0; i < ids.length; i++){
-            createGem(ids[i], positions[i], columns[i], colorIds[i]);
-        }
-    }
-
-
     private void createWonderGem(long id, int position, int column){
-        ViewGroup wonderGemLayout = createGem(id, position, column);
+        var wonderGemLayout = createGem(id, position, column);
         startWonderGemAnimation(wonderGemLayout);
     }
 
@@ -323,27 +283,6 @@ public class GameFragment extends Fragment implements GameView {
         wonderGemView.setBackgroundResource(R.drawable.wonder_gem_animation);
         wonderGemAnimation = (AnimationDrawable) wonderGemView.getBackground();
         wonderGemAnimation.start();
-    }
-
-
-    private void updateGems(Bundle bundle){
-        long[] ids = getLongArrayFrom(bundle, GEM_IDS);
-        int[] positions = getIntArrayFrom(bundle, GEM_POSITIONS);
-        int[] columns = getIntArrayFrom(bundle, GEM_COLUMNS);
-
-        for(int i = 0; i < ids.length; i++){
-            updateGem(ids[i], positions[i], columns[i]);
-        }
-    }
-
-
-    private void updateGemsColors(Bundle bundle){
-        long[] ids = getLongArrayFrom(bundle, GEM_IDS);
-        int[] colorIds = getIntArrayFrom(bundle, GEM_COLOR_IDS);
-
-        for(int i = 0; i < ids.length; i++){
-            updateColorOf(ids[i], colorIds[i]);
-        }
     }
 
 
@@ -367,34 +306,17 @@ public class GameFragment extends Fragment implements GameView {
     }
 
 
-    private void showGameOverMessage(Bundle bundle){
-        gameOverTextLayout.setVisibility(View.VISIBLE);
-        AlphaAnimation animation1 = new AlphaAnimation(0.0f, 1.0f);
-        animation1.setDuration(300);
-        animation1.setFillAfter(true);
-        gameOverTextLayout.startAnimation(animation1);
-    }
-
-
     private void updateGem(long id, int position, int column){
         var gemView = itemsMap.computeIfAbsent(id, k -> createAndAddGemLayout(id, position, column));
         updateGemCoordinates(gemView, position, column);
     }
 
 
-    private void updateScore(Bundle bundle){
-        int score = getIntFrom(bundle, BundleTag.SCORE);
-        score++;
-        String scoreVal = String.valueOf(score);
-        scoreView.setText(scoreVal);
-    }
-
-
     private ViewGroup createAndAddGemLayout(long id, int position, int column){
         log("entered createAndAddGemView()");
-        LinearLayout gemLayout = new LinearLayout(getContext());
+        var gemLayout = new LinearLayout(getContext());
         gemLayout.setTag(id);
-        ImageView imageView = new ImageView(getContext());
+        var imageView = new ImageView(getContext());
         updateGemCoordinates(gemLayout, position, column);
         setGemViewDimensions(imageView);
        // imageView.getDrawable().setRem(new BlurMaskFilter(8, BlurMaskFilter.Blur.SOLID));
@@ -411,7 +333,6 @@ public class GameFragment extends Fragment implements GameView {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.weight = 1.0f;
         params.gravity = Gravity.TOP;
-        log("setLayoutParamsOn() about to set layout params, gravity is top, weight is 1.0f, linearLayout.LayoutParams");
         gemLayout.setLayoutParams(params);
     }
 
@@ -468,21 +389,38 @@ public class GameFragment extends Fragment implements GameView {
 
     }
 
+
     @Override
     public void createGems(List<Gem> gems) {
-
+        for(var gem : gems){
+            var id = gem.getId();
+            var position = gem.getContainerPosition();
+            var col = gem.getColumn();
+            if(gem.getColor() == GemColor.WONDER){
+                createWonderGem(id, position, col);
+                continue;
+            }
+            createGem(id, position, col);
+        }
     }
 
 
     @Override
     public void updateGems(List<Gem> gems) {
-
+        for(var gem: gems){
+            var id = gem.getId();
+            var position = gem.getContainerPosition();
+            var col = gem.getColumn();
+            updateGem(id, position, col);
+        }
     }
 
 
     @Override
     public void updateGemsColors(List<Gem> gems) {
-
+        for(var gem : gems){
+            updateColorOf(gem.getId(), gem.getColorId());
+        }
     }
 
 
@@ -495,18 +433,24 @@ public class GameFragment extends Fragment implements GameView {
 
     @Override
     public void updateScore(int score) {
-
+        score++;
+        var scoreVal = String.valueOf(score);
+        scoreView.setText(scoreVal);
     }
 
 
     @Override
     public void showGameOverAnimation() {
-
+        gameOverTextLayout.setVisibility(View.VISIBLE);
+        AlphaAnimation animation1 = new AlphaAnimation(0.0f, 1.0f);
+        animation1.setDuration(300);
+        animation1.setFillAfter(true);
+        gameOverTextLayout.startAnimation(animation1);
     }
 
 
     @Override
     public void showHighScores() {
-
+        FragmentUtils.loadHighScores(this);
     }
 }

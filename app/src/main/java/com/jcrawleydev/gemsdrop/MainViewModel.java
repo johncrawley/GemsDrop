@@ -7,6 +7,6 @@ import com.jcrawleydev.gemsdrop.game.GameModel;
 
 public class MainViewModel extends ViewModel {
 
-   public GameModel  gameModel = new GameModel();
+   public GameModel gameModel = new GameModel();
 
 }

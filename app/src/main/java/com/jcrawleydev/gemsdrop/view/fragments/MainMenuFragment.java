@@ -95,7 +95,7 @@ public class MainMenuFragment extends Fragment {
     private void playMenuButtonSound(){
         MainActivity mainActivity = (MainActivity) getActivity();
         if(mainActivity != null){
-            mainActivity.playSound(SoundEffect.MENU_BUTTON);
+          //  mainActivity.playSound(SoundEffect.MENU_BUTTON);
         }
     }
 
