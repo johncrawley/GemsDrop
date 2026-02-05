@@ -17,6 +17,8 @@ import com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setupInsets();
         setupViewModel();
         hideActionBar();
         setupFragmentsIf(savedInstanceState == null);
@@ -42,6 +45,15 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             setupViewModel();
         }
         return viewModel;
+    }
+
+
+    private void setupInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainLayout), (v, insets) -> {
+            var systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
     }
 
 

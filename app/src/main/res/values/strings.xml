@@ -17,9 +17,9 @@
     <string name="score_label">Score:</string>
 
     <!-- Main menu buttons -->
-    <string name="button_new_game">New Game</string>
-    <string name="button_options">Options</string>
-    <string name="button_about">About</string>
+    <string name="button_new_game">NEW GAME</string>
+    <string name="button_options">OPTIONS</string>
+    <string name="button_about">ABOUT</string>
 
 
     <!-- Settings strings -->
