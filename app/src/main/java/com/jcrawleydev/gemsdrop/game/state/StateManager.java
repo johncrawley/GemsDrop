@@ -47,6 +47,7 @@ public class StateManager {
        currentGameState.start();
     }
 
+
     public void performMovement(Consumer<AbstractGameState> consumer){
         if(currentGameState != null){
             consumer.accept(currentGameState);

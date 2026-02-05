@@ -59,25 +59,32 @@ public class GemMover {
 
 
     public void moveLeft(){
+
+
+        log("entered moveLeft()");
         syncUserMovement(Movement.LEFT);
     }
 
 
     public void moveRight(){
+        log("entered moveRight()");
         syncUserMovement(Movement.RIGHT);
     }
 
 
     public void dropGems(){
+        log("entered dropGems()");
         syncMovement(Movement.DOWN);
     }
 
 
+    private void log(String msg){
+        System.out.println("^^^ GemMover: " + msg);
+    }
+
+
     private void syncUserMovement(Movement movement){
-        if(droppingGems.areInInitialPosition()){
-            return;
-        }
-        if (isControlEnabled.get()) {
+        if(!droppingGems.areInInitialPosition() && isControlEnabled.get()){
             syncMovement(movement);
         }
     }

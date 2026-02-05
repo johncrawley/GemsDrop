@@ -120,6 +120,8 @@ public class Game {
 
 
     public void createGemsOnView(DroppingGems droppingGems){
+        boolean areDroppingGemsNull = droppingGems == null;
+        log("entered createGemsOnView() dropping gems are null: " + areDroppingGemsNull);
         gameView.createGems(droppingGems.get());
     }
 

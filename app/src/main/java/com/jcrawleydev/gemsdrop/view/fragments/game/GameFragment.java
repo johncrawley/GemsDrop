@@ -2,9 +2,7 @@ package com.jcrawleydev.gemsdrop.view.fragments.game;
 
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.*;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.*;
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getIntArrayFrom;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getLongArray;
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getLongArrayFrom;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.setListener;
 
 
@@ -27,7 +25,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
-
 
 import com.jcrawleydev.gemsdrop.MainActivity;
 import com.jcrawleydev.gemsdrop.MainViewModel;
@@ -82,7 +79,6 @@ public class GameFragment extends Fragment implements GameView {
         setupViews(parentView);
         setupListeners();
         setupCreateAndDestroyButtons(parentView);
-        startGame();
         return parentView;
     }
 
@@ -103,6 +99,7 @@ public class GameFragment extends Fragment implements GameView {
         game.init(soundPlayer, scoreRecords);
         gamePreferenceManager = new GamePreferenceManager();
     }
+
 
     private void assignLayoutDimensions(){
         ViewTreeObserver.OnGlobalLayoutListener listener = new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -319,10 +316,11 @@ public class GameFragment extends Fragment implements GameView {
         var imageView = new ImageView(getContext());
         updateGemCoordinates(gemLayout, position, column);
         setGemViewDimensions(imageView);
+        log("createAndAddGemLayout() gem dimensions set");
        // imageView.getDrawable().setRem(new BlurMaskFilter(8, BlurMaskFilter.Blur.SOLID));
         //imageView.setRenderEffect(RenderEffect.createBlurEffect(2.0f, 2.0f, Shader.TileMode.MIRROR));
         gemLayout.addView(imageView);
-        log("createAndAddGemLayout() about to setLayoutParams on gemLayout");
+        //log("createAndAddGemLayout() about to setLayoutParams on gemLayout");
         setLayoutParamsOn(gemLayout);
         gemContainer.addView(gemLayout);
         return gemLayout;
@@ -339,7 +337,7 @@ public class GameFragment extends Fragment implements GameView {
 
     private void setGemViewDimensions(View gemView){
         var layoutParams = new LinearLayout.LayoutParams((int)gemWidth, (int)gemWidth);
-        log("setGemViewDimensions(), about to setLayoutParams on gemView");
+        //log("setGemViewDimensions(), about to setLayoutParams on gemView");
         gemView.setLayoutParams(layoutParams);
     }
 
@@ -392,42 +390,51 @@ public class GameFragment extends Fragment implements GameView {
 
     @Override
     public void createGems(List<Gem> gems) {
-        for(var gem : gems){
-            var id = gem.getId();
-            var position = gem.getContainerPosition();
-            var col = gem.getColumn();
-            if(gem.getColor() == GemColor.WONDER){
-                createWonderGem(id, position, col);
-                continue;
-            }
-            createGem(id, position, col);
-        }
+        runOnUiThread(() -> {
+                    for (var gem : gems) {
+                        var id = gem.getId();
+                        var position = gem.getContainerPosition();
+                        var col = gem.getColumn();
+                        if (gem.getColor() == GemColor.WONDER) {
+                            createWonderGem(id, position, col);
+                            continue;
+                        }
+                        createGem(id, position, col);
+                    }
+                }
+        );
     }
 
 
     @Override
     public void updateGems(List<Gem> gems) {
-        for(var gem: gems){
-            var id = gem.getId();
-            var position = gem.getContainerPosition();
-            var col = gem.getColumn();
-            updateGem(id, position, col);
-        }
+        runOnUiThread(()->{
+            for(var gem: gems){
+                var id = gem.getId();
+                var position = gem.getContainerPosition();
+                var col = gem.getColumn();
+                updateGem(id, position, col);
+            }
+        });
     }
 
 
     @Override
     public void updateGemsColors(List<Gem> gems) {
-        for(var gem : gems){
-            updateColorOf(gem.getId(), gem.getColorId());
-        }
+        runOnUiThread(()->{
+            for(var gem : gems){
+                updateColorOf(gem.getId(), gem.getColorId());
+            }
+        });
     }
 
 
     @Override
     public void wipeOut(long[] markedGemIds) {
-        stopWonderGemAnimation();
-        doActionOnGemIdsFrom(markedGemIds, gemLayout -> GemAnimator.animateRemovalOf(gemLayout, this::cleanupGem));
+        runOnUiThread(()->{
+            stopWonderGemAnimation();
+            doActionOnGemIdsFrom(markedGemIds, gemLayout -> GemAnimator.animateRemovalOf(gemLayout, this::cleanupGem));
+        });
     }
 
 
@@ -435,17 +442,21 @@ public class GameFragment extends Fragment implements GameView {
     public void updateScore(int score) {
         score++;
         var scoreVal = String.valueOf(score);
-        scoreView.setText(scoreVal);
+        runOnUiThread(()->{
+            scoreView.setText(scoreVal);
+        });
     }
 
 
     @Override
     public void showGameOverAnimation() {
-        gameOverTextLayout.setVisibility(View.VISIBLE);
-        AlphaAnimation animation1 = new AlphaAnimation(0.0f, 1.0f);
-        animation1.setDuration(300);
-        animation1.setFillAfter(true);
-        gameOverTextLayout.startAnimation(animation1);
+        runOnUiThread(()->{
+            gameOverTextLayout.setVisibility(View.VISIBLE);
+            var animation = new AlphaAnimation(0.0f, 1.0f);
+            animation.setDuration(300);
+            animation.setFillAfter(true);
+            gameOverTextLayout.startAnimation(animation);
+        });
     }
 
 
@@ -453,4 +464,13 @@ public class GameFragment extends Fragment implements GameView {
     public void showHighScores() {
         FragmentUtils.loadHighScores(this);
     }
+
+
+    private void runOnUiThread(Runnable runnable){
+        var activity = getActivity();
+        if(activity != null){
+            activity.runOnUiThread(runnable);
+        }
+    }
+
 }
