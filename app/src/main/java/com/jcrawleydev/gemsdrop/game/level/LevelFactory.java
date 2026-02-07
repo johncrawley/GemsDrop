@@ -9,10 +9,11 @@ import java.util.Set;
 
 public class LevelFactory {
 
-    private GameLevel gameLevel1;
+    private GameLevel gameLevel1, tempLevel;
 
     public LevelFactory(){
         setupLevel1();
+        setupLevelTemp();
     }
 
 
@@ -22,14 +23,28 @@ public class LevelFactory {
 
 
     private void setupLevel1(){
-        var gemColors = Set.of(TEMP1, TEMP2, YELLOW, GREEN, PURPLE);
+        var possibleColorsOfFallingGems = Set.of(BLUE, RED, YELLOW, GREEN, PURPLE);
         var startingGrid = List.of("G Y G Y G Y G",  "B R B R B R B", "Y P Y P Y P Y");
         var specialGemConditions = new SpecialGemConditions(8, 25, 5);
         gameLevel1 = new GameLevel(1,
                 R.drawable.background_pattern_1,
                 150,
                 100,
-                gemColors,
+                possibleColorsOfFallingGems,
+                specialGemConditions,
+                startingGrid );
+    }
+
+
+    private void setupLevelTemp(){
+        var possibleColorsOfFallingGems = Set.of(BLUE, GREEN);
+        var startingGrid = List.of("B B G B B G B",  "G G B G G B G", "B G B G B G B");
+        var specialGemConditions = new SpecialGemConditions(8, 25, 5);
+        tempLevel = new GameLevel(1,
+                R.drawable.background_pattern_1,
+                150,
+                100,
+                possibleColorsOfFallingGems,
                 specialGemConditions,
                 startingGrid );
     }

@@ -24,25 +24,19 @@ public class LoadLevelState extends AbstractGameState {
         droppingGemsFactory = gameComponents.getDroppingGemsFactory();
     }
 
+
     @Override
     public void start() {
-        initLevel();
-    }
-
-    private void initLevel(){
+        game.resetDropCount();
         var level = levelFactory.getLevel(1);
         game.setCurrentGameLevel(level);
-        game.resetDropCount();
-        game.setCurrentDropRate(level.startingDropDuration());
-        droppingGemsFactory.setSpecialGemConditions(level.specialGemConditions());
-        droppingGemsFactory.setGemColors(level.gemColors());
+        droppingGemsFactory.setLevel(level);
         gridAdder.addTo(gemGrid, level.startingGrid());
-        log("initLevel() about to load gems drop state");
+
         executorService.schedule(()-> loadState(GEMS_DROP),
                 1000,
                 TimeUnit.MILLISECONDS);
     }
-
 
 
 }

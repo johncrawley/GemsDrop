@@ -2,6 +2,7 @@ package com.jcrawleydev.gemsdrop.game.gem;
 
 
 import com.jcrawleydev.gemsdrop.game.GridProps;
+import com.jcrawleydev.gemsdrop.game.level.GameLevel;
 import com.jcrawleydev.gemsdrop.game.level.SpecialGemConditions;
 
 import java.util.ArrayList;
@@ -26,6 +27,12 @@ public class DroppingGemsFactory {
 
     public void setGridProps(GridProps gridProps){
         this.gridProps = gridProps;
+    }
+
+
+    public void setLevel(GameLevel level){
+        setSpecialGemConditions(level.specialGemConditions());
+        setGemColors(level.gemColors());
     }
 
 

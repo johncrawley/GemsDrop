@@ -1,4 +1,4 @@
-package com.jcrawleydev.gemsdrop.view;
+package com.jcrawleydev.gemsdrop.view.fragments.game;
 
 
 

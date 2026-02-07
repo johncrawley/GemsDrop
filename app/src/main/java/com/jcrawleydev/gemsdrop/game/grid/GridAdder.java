@@ -23,13 +23,14 @@ public class GridAdder {
     public void addTo(GemGrid gemGrid, List<String> gemRows){
         for(var row : gemRows){
             gemGrid.addRow(parseGemsFrom(row));
-
         }
+        gemGrid.printColumnHeights();
     }
 
 
     private void populateGemColorMap(){
-        Arrays.stream(GemColor.values()).forEach( gc -> gemColorMap.put(gc.toString(), gc));
+        Arrays.stream(GemColor.values())
+                .forEach( gc -> gemColorMap.put(gc.toString(), gc));
     }
 
 

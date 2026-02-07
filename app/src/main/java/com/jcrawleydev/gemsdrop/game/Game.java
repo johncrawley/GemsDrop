@@ -11,7 +11,7 @@ import com.jcrawleydev.gemsdrop.game.state.AbstractGameState;
 import com.jcrawleydev.gemsdrop.game.state.GameStateName;
 import com.jcrawleydev.gemsdrop.game.state.StateManager;
 import com.jcrawleydev.gemsdrop.service.records.ScoreRecords;
-import com.jcrawleydev.gemsdrop.view.GameView;
+import com.jcrawleydev.gemsdrop.view.fragments.game.GameView;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -24,7 +24,7 @@ public class Game {
     private final StateManager stateManager = new StateManager();
     private final AtomicBoolean isStarted = new AtomicBoolean(false);
     private GameLevel currentGameLevel;
-    private AtomicBoolean hasQuitBeenInvoked = new AtomicBoolean(false);
+    private final AtomicBoolean hasQuitBeenInvoked = new AtomicBoolean(false);
     private final GameModel gameModel;
 
 
@@ -47,9 +47,12 @@ public class Game {
         return this.gameComponents;
     }
 
+
     public void setCurrentGameLevel(GameLevel level){
         this.currentGameLevel = level;
+        setCurrentDropRate(level.startingDropDuration());
     }
+
 
     public void resetDropCount(){
         gameModel.resetDropCount();
@@ -120,9 +123,9 @@ public class Game {
 
 
     public void createGemsOnView(DroppingGems droppingGems){
-        boolean areDroppingGemsNull = droppingGems == null;
-        log("entered createGemsOnView() dropping gems are null: " + areDroppingGemsNull);
-        gameView.createGems(droppingGems.get());
+        if(droppingGems != null){
+            gameView.createGems(droppingGems.get());
+        }
     }
 
 
