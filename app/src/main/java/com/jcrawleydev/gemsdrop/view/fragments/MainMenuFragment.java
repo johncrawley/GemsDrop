@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment;
 
 import com.jcrawleydev.gemsdrop.MainActivity;
 import com.jcrawleydev.gemsdrop.R;
-import com.jcrawleydev.gemsdrop.service.audio.SoundEffect;
 import com.jcrawleydev.gemsdrop.view.SettingsActivity;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 

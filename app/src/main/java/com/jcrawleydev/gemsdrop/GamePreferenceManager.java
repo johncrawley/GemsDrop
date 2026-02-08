@@ -1,4 +1,4 @@
-package com.jcrawleydev.gemsdrop.service;
+package com.jcrawleydev.gemsdrop;
 
 public class GamePreferenceManager {
 

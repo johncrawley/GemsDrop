@@ -33,12 +33,11 @@ import com.jcrawleydev.gemsdrop.R;
 import com.jcrawleydev.gemsdrop.game.Game;
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.game.gem.GemColor;
-import com.jcrawleydev.gemsdrop.service.GamePreferenceManager;
-import com.jcrawleydev.gemsdrop.service.audio.SoundPlayer;
-import com.jcrawleydev.gemsdrop.service.records.ScoreRecords;
+import com.jcrawleydev.gemsdrop.GamePreferenceManager;
+import com.jcrawleydev.gemsdrop.audio.SoundPlayer;
+import com.jcrawleydev.gemsdrop.game.score.ScoreRecords;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

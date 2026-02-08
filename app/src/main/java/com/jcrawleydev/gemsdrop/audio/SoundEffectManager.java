@@ -1,4 +1,4 @@
-package com.jcrawleydev.gemsdrop.service.audio;
+package com.jcrawleydev.gemsdrop.audio;
 
 import com.jcrawleydev.gemsdrop.game.score.Score;
 

@@ -3,14 +3,14 @@ package com.jcrawleydev.gemsdrop.game;
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.GAME_STARTED;
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.GEM_REMOVAL_ANIMATION_COMPLETE;
 
-import com.jcrawleydev.gemsdrop.service.audio.SoundPlayer;
+import com.jcrawleydev.gemsdrop.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.game.level.GameLevel;
+import com.jcrawleydev.gemsdrop.game.score.ScoreRecords;
 import com.jcrawleydev.gemsdrop.game.state.AbstractGameState;
 import com.jcrawleydev.gemsdrop.game.state.GameStateName;
 import com.jcrawleydev.gemsdrop.game.state.StateManager;
-import com.jcrawleydev.gemsdrop.service.records.ScoreRecords;
 import com.jcrawleydev.gemsdrop.view.fragments.game.GameView;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.jcrawleydev.gemsdrop.service.records;
+package com.jcrawleydev.gemsdrop.game.score;
 
 import android.content.Context;
 import android.content.SharedPreferences;

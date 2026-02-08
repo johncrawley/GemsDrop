@@ -1,12 +1,12 @@
 package com.jcrawleydev.gemsdrop.game;
 
-import com.jcrawleydev.gemsdrop.service.audio.SoundEffectManager;
-import com.jcrawleydev.gemsdrop.service.audio.SoundPlayer;
+import com.jcrawleydev.gemsdrop.audio.SoundEffectManager;
+import com.jcrawleydev.gemsdrop.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsEvaluator;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsFactory;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 import com.jcrawleydev.gemsdrop.game.score.Score;
-import com.jcrawleydev.gemsdrop.service.records.ScoreRecords;
+import com.jcrawleydev.gemsdrop.game.score.ScoreRecords;
 
 public class GameComponents {
 

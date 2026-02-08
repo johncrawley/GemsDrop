@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.jcrawleydev.gemsdrop.game.score.ScoreRecordsUtils;
+
 import org.junit.Test;
 
 import java.util.List;

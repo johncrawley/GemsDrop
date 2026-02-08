@@ -1,4 +1,4 @@
-package com.jcrawleydev.gemsdrop.service.audio;
+package com.jcrawleydev.gemsdrop.audio;
 
 import android.content.Context;
 import android.media.MediaPlayer;

@@ -1,4 +1,4 @@
-package com.jcrawleydev.gemsdrop.service.records;
+package com.jcrawleydev.gemsdrop.game.score;
 
 import java.util.HashSet;
 import java.util.List;

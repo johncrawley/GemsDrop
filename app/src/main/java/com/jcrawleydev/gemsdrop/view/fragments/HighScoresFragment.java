@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.jcrawleydev.gemsdrop.R;
-import com.jcrawleydev.gemsdrop.service.records.ScoreRecords;
+import com.jcrawleydev.gemsdrop.game.score.ScoreRecords;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 
 

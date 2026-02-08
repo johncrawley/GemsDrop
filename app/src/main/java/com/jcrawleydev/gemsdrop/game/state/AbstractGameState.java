@@ -1,6 +1,6 @@
 package com.jcrawleydev.gemsdrop.game.state;
 
-import com.jcrawleydev.gemsdrop.service.audio.SoundEffectManager;
+import com.jcrawleydev.gemsdrop.audio.SoundEffectManager;
 import com.jcrawleydev.gemsdrop.game.Game;
 import com.jcrawleydev.gemsdrop.game.GameComponents;
 import com.jcrawleydev.gemsdrop.game.GemMover;

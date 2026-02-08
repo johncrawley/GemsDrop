@@ -1,6 +1,6 @@
-package com.jcrawleydev.gemsdrop.service.audio;
+package com.jcrawleydev.gemsdrop.audio;
 
-import static com.jcrawleydev.gemsdrop.service.audio.SoundEffect.*;
+import static com.jcrawleydev.gemsdrop.audio.SoundEffect.*;
 
 import android.content.Context;
 import android.media.AudioAttributes;

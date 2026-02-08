@@ -1,10 +1,10 @@
 package com.jcrawleydev.gemsdrop.game.gem;
 
-import static com.jcrawleydev.gemsdrop.service.audio.SoundEffect.GEM_HITS_FLOOR;
+import static com.jcrawleydev.gemsdrop.audio.SoundEffect.GEM_HITS_FLOOR;
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.EVALUATE_GRID;
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.GEM_FREE_FALL;
 
-import com.jcrawleydev.gemsdrop.service.audio.SoundEffectManager;
+import com.jcrawleydev.gemsdrop.audio.SoundEffectManager;
 import com.jcrawleydev.gemsdrop.game.Game;
 import com.jcrawleydev.gemsdrop.game.GameComponents;
 import com.jcrawleydev.gemsdrop.game.GemMover;
