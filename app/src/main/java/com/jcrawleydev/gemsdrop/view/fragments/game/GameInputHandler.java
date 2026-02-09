@@ -3,12 +3,7 @@ package com.jcrawleydev.gemsdrop.view.fragments.game;
 import android.graphics.PointF;
 import android.view.ViewGroup;
 
-import androidx.fragment.app.Fragment;
-
 import com.jcrawleydev.gemsdrop.game.Game;
-import com.jcrawleydev.gemsdrop.service.GameService;
-
-import java.util.function.Consumer;
 
 public class GameInputHandler {
 
@@ -21,11 +16,11 @@ public class GameInputHandler {
         //log("handleInput(" + (int)x + "," +  (int)y + ")" + " gemContainer AbsoluteY: "+ gamePane.getY() + " height: " + gamePane.getMeasuredHeight());
         int height = gamePane.getMeasuredHeight();
         int width = gamePane.getMeasuredWidth();
-        if( p.y < height/4f){
+        if( p.y < height/12f){
             game.moveUp();
             return;
         }
-        if( p.y > (height / 3f) * 2){
+        if( p.y > (height / 8f) * 7){
             game.moveDown();
             return;
         }

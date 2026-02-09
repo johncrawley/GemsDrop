@@ -23,7 +23,6 @@ public class Game {
     private final GameComponents gameComponents = new GameComponents();
     private final StateManager stateManager = new StateManager();
     private final AtomicBoolean isStarted = new AtomicBoolean(false);
-    private GameLevel currentGameLevel;
     private final AtomicBoolean hasQuitBeenInvoked = new AtomicBoolean(false);
     private final GameModel gameModel;
 
@@ -49,7 +48,6 @@ public class Game {
 
 
     public void setCurrentGameLevel(GameLevel level){
-        this.currentGameLevel = level;
         setCurrentDropRate(level.startingDropDuration());
     }
 
@@ -104,13 +102,16 @@ public class Game {
         updateGemsOnView(droppingGems.getFreeGems());
     }
 
+
     public int getCurrentDropRate(){
         return gameModel.getDropRate();
     }
 
+
     public void incrementDropCount(){
         gameModel.incrementDropCount();
     }
+
 
     public int getDropCount(){
         return gameModel.getDropCount();

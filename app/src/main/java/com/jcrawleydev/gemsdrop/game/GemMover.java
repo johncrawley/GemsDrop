@@ -94,6 +94,7 @@ public class GemMover {
         movementQueue.clear();
     }
 
+
     public void disableMovement(){
         isMovementEnabled.set(false);
     }

@@ -25,24 +25,15 @@ public class GemsDropState extends AbstractGameState{
 
 
     private void createDrop(){
-        log("entered createDrop()");
-        createGems();
-        log("createDrop() gems created()");
-        score.resetMultiplier();
-        log("createDrop() multiplier reset");
-        game.createGemsOnView(droppingGems);
-        log("createDrop() gems created on view");
-        taskScheduler.schedule(()-> gemMover.dropGems(), game.getCurrentDropRate());
-    }
-
-
-    public void createGems(){
         droppingGems = droppingGemsFactory.createDroppingGems();
         game.setDroppingGems(droppingGems);
         game.incrementDropCount();
         game.updateDropInterval();
         gemMover.setDroppingGems(droppingGems);
         gemGrid.printColumnHeights();
+        score.resetMultiplier();
+        game.createGemsOnView(droppingGems);
+        taskScheduler.schedule(() -> gemMover.dropGems(), game.getCurrentDropRate());
     }
 
 
