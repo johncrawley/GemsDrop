@@ -15,10 +15,10 @@ public class GemMover {
 
     private MovementChecker movementChecker;
     private RotationChecker rotationChecker;
-
     private DroppingGems droppingGems;
     private final AtomicBoolean isControlEnabled = new AtomicBoolean(true);
     private final AtomicBoolean isMovementEnabled = new AtomicBoolean(true);
+    private final AtomicBoolean isFirstDrop = new AtomicBoolean(false);
     private DroppingGemsEvaluator droppingGemsEvaluator;
     private enum Movement { LEFT, RIGHT, ROTATE, DOWN }
     private final Queue<Movement> movementQueue = new ConcurrentLinkedQueue<>();
@@ -35,8 +35,9 @@ public class GemMover {
     public void setDroppingGems(DroppingGems droppingGems){
         this.droppingGems = droppingGems;
         movementQueue.clear();
-        enableControls();
+        disableControls();
         enableMovement();
+        isFirstDrop.set(true);
     }
 
 
@@ -50,41 +51,30 @@ public class GemMover {
     }
 
 
-    public void enableControls(){
-        isControlEnabled.set(true);
-    }
-
-
     public void rotateGems(){ syncUserMovement(Movement.ROTATE);}
 
 
     public void moveLeft(){
-
-
-        log("entered moveLeft()");
         syncUserMovement(Movement.LEFT);
     }
 
 
     public void moveRight(){
-        log("entered moveRight()");
         syncUserMovement(Movement.RIGHT);
     }
 
 
     public void dropGems(){
-        log("entered dropGems()");
         syncMovement(Movement.DOWN);
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ GemMover: " + msg);
+        if(isFirstDrop.get()){
+            isFirstDrop.set(false);
+            isControlEnabled.set(true);
+        }
     }
 
 
     private void syncUserMovement(Movement movement){
-        if(!droppingGems.areInInitialPosition() && isControlEnabled.get()){
+        if(isControlEnabled.get()){
             syncMovement(movement);
         }
     }

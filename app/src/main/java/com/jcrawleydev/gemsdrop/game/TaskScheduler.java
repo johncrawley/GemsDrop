@@ -18,12 +18,12 @@ public class TaskScheduler {
     }
 
 
-    public void schedule(Runnable runnable, long delay ){
-        schedule(runnable, 0, delay);
+    public void scheduleWithRepeats(Runnable runnable, long delay ){
+        scheduleWithRepeats(runnable, 0, delay);
     }
 
 
-    public void schedule(Runnable runnable, long initialDelay, long delay ){
+    public void scheduleWithRepeats(Runnable runnable, long initialDelay, long delay ){
         future = executor.scheduleWithFixedDelay(runnable, initialDelay, delay, TimeUnit.MILLISECONDS);
     }
 

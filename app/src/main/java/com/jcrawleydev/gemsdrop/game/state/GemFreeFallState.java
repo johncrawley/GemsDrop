@@ -20,7 +20,7 @@ public class GemFreeFallState extends AbstractGameState{
         cancelTask();
         gemMover.disableControls();
         droppingGems = game.getDroppingGems();
-        taskScheduler.schedule(this::freeFallRemainingGems, game.getGravityInterval());
+        taskScheduler.scheduleWithRepeats(this::freeFallRemainingGems, game.getGravityInterval());
     }
 
 

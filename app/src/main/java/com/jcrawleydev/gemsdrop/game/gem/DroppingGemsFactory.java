@@ -44,7 +44,8 @@ public class DroppingGemsFactory {
 
 
     public DroppingGems createDroppingGems(){
-        if((haveEnoughNormalGemsDropped() && isLucky()) || haveTooManyNormalGemsDropped()){
+        if((haveEnoughNormalGemsDropped() && isLucky())
+                || haveTooManyNormalGemsDropped()){
             numberOfNormalGemsDropped = 0;
             return new WonderDroppingGem(gridProps);
         }

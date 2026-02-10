@@ -14,6 +14,6 @@ public class GemQuickDropState extends AbstractGameState{
     public void start() {
         taskScheduler.cancelTask();
         gemMover.disableControls();
-        taskScheduler.schedule(()-> gemMover.dropGems(), 80);
+        taskScheduler.scheduleWithRepeats(()-> gemMover.dropGems(), 80);
     }
 }

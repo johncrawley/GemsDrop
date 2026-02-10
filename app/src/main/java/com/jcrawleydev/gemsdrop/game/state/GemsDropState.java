@@ -33,7 +33,7 @@ public class GemsDropState extends AbstractGameState{
         gemGrid.printColumnHeights();
         score.resetMultiplier();
         game.createGemsOnView(droppingGems);
-        taskScheduler.schedule(() -> gemMover.dropGems(), game.getCurrentDropRate());
+        taskScheduler.scheduleWithRepeats(() -> gemMover.dropGems(), game.getCurrentDropRate());
     }
 
 
@@ -55,8 +55,7 @@ public class GemsDropState extends AbstractGameState{
     public void down(){
         if(droppingGems == null
                 || gemMover.areControlsDisabled()
-                || droppingGems.areAllAddedToGrid()
-                || droppingGems.areInInitialPosition()){
+                || droppingGems.areAllAddedToGrid()){
             return;
         }
         loadState(GEM_QUICK_DROP);

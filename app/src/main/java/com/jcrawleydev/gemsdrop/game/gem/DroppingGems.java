@@ -70,11 +70,6 @@ public class DroppingGems {
     }
 
 
-    public boolean areInInitialPosition(){
-        return getCentreGem().getContainerPosition() > INITIAL_POSITION + 2;
-    }
-
-
     public int getLowestGemPosition(){
         return getBottomGem().getContainerPosition();
     }

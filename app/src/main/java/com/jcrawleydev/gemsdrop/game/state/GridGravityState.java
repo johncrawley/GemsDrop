@@ -14,7 +14,7 @@ public class GridGravityState extends AbstractGameState{
     @Override
     public void start() {
         cancelTask();
-        taskScheduler.schedule(this::applyGravity, game.getGravityInterval());
+        taskScheduler.scheduleWithRepeats(this::applyGravity, game.getGravityInterval());
     }
 
     private void applyGravity(){
