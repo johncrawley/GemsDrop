@@ -39,6 +39,11 @@ public class GameComponents {
     }
 
 
+    public void onDestroy(){
+        taskScheduler.cancelTask();
+    }
+
+
     public DroppingGemsFactory getDroppingGemsFactory(){
         return droppingGemsFactory;
     }

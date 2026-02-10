@@ -12,7 +12,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GemMover {
 
-
     private MovementChecker movementChecker;
     private RotationChecker rotationChecker;
     private DroppingGems droppingGems;
@@ -22,7 +21,6 @@ public class GemMover {
     private DroppingGemsEvaluator droppingGemsEvaluator;
     private enum Movement { LEFT, RIGHT, ROTATE, DOWN }
     private final Queue<Movement> movementQueue = new ConcurrentLinkedQueue<>();
-
 
     public void init(GemGrid gemGrid, GridProps gridProps, DroppingGemsEvaluator droppingGemsEvaluator){
         movementChecker = new MovementChecker(gemGrid, gridProps);
