@@ -8,24 +8,18 @@ import android.os.Looper;
 
 import com.jcrawleydev.gemsdrop.R;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-
 public class MusicPlayer {
 
     private MediaPlayer mediaPlayer;
     private final Context context;
-    private boolean isMusicEnabled;
-    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-    private ScheduledFuture<?> stopPlayerFuture;
+    private boolean isMusicEnabled = true;
     private VolumeShaper.Configuration volumeShaperConfig;
-    private VolumeShaper volumeShaper;
-
+    private final int fadeOutTime = 1500;
 
     public MusicPlayer(Context context){
         this.context = context;
         setupMediaPlayer();
+        initVolumeShaper();
     }
 
 
@@ -39,7 +33,6 @@ public class MusicPlayer {
         mediaPlayer.setOnCompletionListener(mp -> {
             mp.reset();
             mp.release();
-            mediaPlayer = MediaPlayer.create(context, R.raw.music_title_1);
         });
     }
 
@@ -47,8 +40,8 @@ public class MusicPlayer {
     private void initVolumeShaper(){
         volumeShaperConfig =
                 new VolumeShaper.Configuration.Builder()
-                        .setDuration(1000)
-                        .setCurve(new float[] {1.f, 1.f}, new float[] {1.f, 0.f})
+                        .setDuration(fadeOutTime)
+                        .setCurve(new float[] {0.f, 1.f}, new float[] {1.f, 0.f})
                         .setInterpolatorType(VolumeShaper.Configuration.INTERPOLATOR_TYPE_LINEAR)
                         .build();
 
@@ -56,23 +49,29 @@ public class MusicPlayer {
 
 
     public void play(){
+        setupMediaPlayer();
         mediaPlayer.start();
+
     }
+
+    private VolumeShaper volumeShaper;
 
 
     public void fadeOut(){
         if(isMusicEnabled){
-            try (var shaper = mediaPlayer.createVolumeShaper(volumeShaperConfig)) {
-                shaper.apply(VolumeShaper.Operation.PLAY);
-            }
+
+                volumeShaper = mediaPlayer.createVolumeShaper(volumeShaperConfig);
+                volumeShaper.apply(VolumeShaper.Operation.PLAY);
+
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                if (mediaPlayer.isPlaying()) {
+                    // volumeShaper.close();
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
+                }
+            }, fadeOutTime + 50);
+
         }
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            if (mediaPlayer.isPlaying()) {
-                mediaPlayer.stop();
-                // mediaPlayer.release(); // only if you're done with it
-            }
-            volumeShaper.close(); // important - free resources
-        }, durationMs + 50);
     }
 
 

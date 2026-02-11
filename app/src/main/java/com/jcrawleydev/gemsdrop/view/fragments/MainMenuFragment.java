@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.jcrawleydev.gemsdrop.MainActivity;
 import com.jcrawleydev.gemsdrop.R;
+import com.jcrawleydev.gemsdrop.audio.MusicPlayer;
 import com.jcrawleydev.gemsdrop.view.SettingsActivity;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 
@@ -20,6 +21,7 @@ public class MainMenuFragment extends Fragment {
 
     private final AtomicBoolean isGameStartInitiated = new AtomicBoolean(false);
     private TitleGemsAnimator titleGemsAnimator;
+    private MusicPlayer musicPlayer;
 
 
     public MainMenuFragment() {
@@ -34,6 +36,12 @@ public class MainMenuFragment extends Fragment {
     }
 
 
+    private void initMusicPlayer(){
+        musicPlayer = new MusicPlayer(getContext());
+        musicPlayer.play();
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -42,6 +50,7 @@ public class MainMenuFragment extends Fragment {
         setupButtons(parent);
         titleGemsAnimator = new TitleGemsAnimator(parent, getContext());
         titleGemsAnimator.start();
+        initMusicPlayer();
         return parent;
     }
 
@@ -76,6 +85,7 @@ public class MainMenuFragment extends Fragment {
             return;
         }
         isGameStartInitiated.set(true);
+        musicPlayer.fadeOut();
         FragmentUtils.loadGame(this);
     }
 
