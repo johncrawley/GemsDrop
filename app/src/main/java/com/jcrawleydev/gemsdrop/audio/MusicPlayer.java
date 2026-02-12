@@ -8,32 +8,70 @@ import android.os.Looper;
 
 import com.jcrawleydev.gemsdrop.R;
 
+import java.io.IOException;
+
 public class MusicPlayer {
 
     private MediaPlayer mediaPlayer;
-    private final Context context;
     private boolean isMusicEnabled = true;
     private VolumeShaper.Configuration volumeShaperConfig;
     private final int fadeOutTime = 1500;
+    private VolumeShaper volumeShaper;
 
-    public MusicPlayer(Context context){
-        this.context = context;
-        setupMediaPlayer();
+    public MusicPlayer(Context context, int sessionId){
+        if(context == null){
+            isMusicEnabled = false;
+            return;
+        }
+        initMediaPlayer(context, sessionId);
         initVolumeShaper();
     }
-
 
     public void setMusicEnabled(boolean isSoundEnabled){
         this.isMusicEnabled = isSoundEnabled;
     }
 
 
-    private void setupMediaPlayer(){
-        mediaPlayer = MediaPlayer.create(context, R.raw.music_title_1);
+    private void initMediaPlayer(Context context, int sessionId){
+        log("entered initMediaPlayer, session ID: " + sessionId);
+        if(sessionId == 0){
+            isMusicEnabled = false;
+            log("initMediaPlayer() sessionID is 0, cannot play");
+            return;
+        }
+        mediaPlayer = new MediaPlayer(context);
+        mediaPlayer.setAudioSessionId(sessionId);
+        setDataSource(context, R.raw.music_title_1);
         mediaPlayer.setOnCompletionListener(mp -> {
             mp.reset();
             mp.release();
         });
+        log("initMediaPlayer() isMediaPlayer playing: " +  mediaPlayer.isPlaying());
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ MusicPlayer: " + msg);
+    }
+
+
+    private void setDataSource(Context context, int resId){
+        var afd = context.getResources().openRawResourceFd(resId);
+        if (afd == null){
+            log("setDataSource() AudioFileDescriptor is null, cannot assign resource");
+            return;
+        }
+        try {
+            mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+            afd.close();
+        }catch (IOException e){
+            printError(e.getMessage());
+        }
+    }
+
+
+    private void printError(String msg){
+        System.out.print("^^^ ERROR: " + msg);
     }
 
 
@@ -49,28 +87,31 @@ public class MusicPlayer {
 
 
     public void play(){
-        setupMediaPlayer();
+        if(mediaPlayer.isPlaying()) {
+            log("play() returning because MediaPlayer instance is already playing");
+            return;
+        }
+        try{
+            mediaPlayer.prepare();
+        }catch (IOException e){
+            printError(e.getMessage());
+            return;
+        }
         mediaPlayer.start();
-
     }
-
-    private VolumeShaper volumeShaper;
 
 
     public void fadeOut(){
         if(isMusicEnabled){
-
-                volumeShaper = mediaPlayer.createVolumeShaper(volumeShaperConfig);
-                volumeShaper.apply(VolumeShaper.Operation.PLAY);
+            volumeShaper = mediaPlayer.createVolumeShaper(volumeShaperConfig);
+            volumeShaper.apply(VolumeShaper.Operation.PLAY);
 
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 if (mediaPlayer.isPlaying()) {
-                    // volumeShaper.close();
                     mediaPlayer.stop();
                     mediaPlayer.release();
                 }
             }, fadeOutTime + 50);
-
         }
     }
 

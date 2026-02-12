@@ -5,6 +5,8 @@ import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.create
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.sendMessage;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         setContentView(R.layout.activity_main);
         setupInsets();
         setupViewModel();
+        assignMusicAudioSessionId();
         hideActionBar();
         setupFragmentsIf(savedInstanceState == null);
     }
@@ -59,6 +62,17 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private void setupViewModel(){
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+    }
+
+
+    private void assignMusicAudioSessionId(){
+        if(viewModel.musicSessionId == 0){
+            var audioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+            int audioSessionId = audioManager.generateAudioSessionId();
+            if(audioSessionId != 0){
+                viewModel.musicSessionId = audioSessionId;
+            }
+        }
     }
 
 

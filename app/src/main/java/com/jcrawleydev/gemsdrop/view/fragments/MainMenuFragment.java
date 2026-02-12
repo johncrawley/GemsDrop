@@ -1,5 +1,6 @@
 package com.jcrawleydev.gemsdrop.view.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -37,8 +38,26 @@ public class MainMenuFragment extends Fragment {
 
 
     private void initMusicPlayer(){
-        musicPlayer = new MusicPlayer(getContext());
+        musicPlayer = new MusicPlayer(getApplicationContext(), getMusicSessionId());
         musicPlayer.play();
+    }
+
+
+    private int getMusicSessionId(){
+        var mainActivity = (MainActivity) getActivity();
+        if(mainActivity != null){
+            return mainActivity.getViewModel().musicSessionId;
+        }
+        return 0;
+    }
+
+
+    private Context getApplicationContext(){
+        var activity = getActivity();
+        if(activity == null){
+            return null;
+        }
+        return activity.getApplicationContext();
     }
 
 
