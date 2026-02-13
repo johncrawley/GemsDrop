@@ -1,6 +1,5 @@
 package com.jcrawleydev.gemsdrop.view.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import androidx.fragment.app.Fragment;
 
 import com.jcrawleydev.gemsdrop.MainActivity;
 import com.jcrawleydev.gemsdrop.R;
-import com.jcrawleydev.gemsdrop.audio.MusicPlayer;
 import com.jcrawleydev.gemsdrop.view.SettingsActivity;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 
@@ -22,7 +20,6 @@ public class MainMenuFragment extends Fragment {
 
     private final AtomicBoolean isGameStartInitiated = new AtomicBoolean(false);
     private TitleGemsAnimator titleGemsAnimator;
-    private MusicPlayer musicPlayer;
 
 
     public MainMenuFragment() {
@@ -37,27 +34,19 @@ public class MainMenuFragment extends Fragment {
     }
 
 
-    private void initMusicPlayer(){
-        musicPlayer = new MusicPlayer(getApplicationContext(), getMusicSessionId());
-        musicPlayer.play();
-    }
-
-
-    private int getMusicSessionId(){
-        var mainActivity = (MainActivity) getActivity();
+    private void startMusic(){
+        var mainActivity = (MainActivity)getActivity();
         if(mainActivity != null){
-            return mainActivity.getViewModel().musicSessionId;
+            mainActivity.startMusic();
         }
-        return 0;
     }
 
 
-    private Context getApplicationContext(){
-        var activity = getActivity();
-        if(activity == null){
-            return null;
+    private void stopMusic(){
+        var mainActivity = (MainActivity)getActivity();
+        if(mainActivity != null){
+            mainActivity.stopMusic();
         }
-        return activity.getApplicationContext();
     }
 
 
@@ -69,7 +58,7 @@ public class MainMenuFragment extends Fragment {
         setupButtons(parent);
         titleGemsAnimator = new TitleGemsAnimator(parent, getContext());
         titleGemsAnimator.start();
-        initMusicPlayer();
+        startMusic();
         return parent;
     }
 
@@ -104,7 +93,7 @@ public class MainMenuFragment extends Fragment {
             return;
         }
         isGameStartInitiated.set(true);
-        musicPlayer.fadeOut();
+        stopMusic();
         FragmentUtils.loadGame(this);
     }
 

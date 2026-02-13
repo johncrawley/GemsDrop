@@ -1,5 +1,6 @@
 package com.jcrawleydev.gemsdrop.audio;
 
+import android.app.Application;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.VolumeShaper;
@@ -9,6 +10,7 @@ import android.os.Looper;
 import com.jcrawleydev.gemsdrop.R;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MusicPlayer {
 
@@ -17,36 +19,36 @@ public class MusicPlayer {
     private VolumeShaper.Configuration volumeShaperConfig;
     private final int fadeOutTime = 1500;
     private VolumeShaper volumeShaper;
+    private boolean isInitialized;
 
-    public MusicPlayer(Context context, int sessionId){
+
+    public void init(Application application){
+        if(isInitialized){
+            return;
+        }
+        var context = application.getApplicationContext();
         if(context == null){
             isMusicEnabled = false;
             return;
         }
-        initMediaPlayer(context, sessionId);
+        initMediaPlayer(application);
         initVolumeShaper();
+        isInitialized = true;
     }
+
 
     public void setMusicEnabled(boolean isSoundEnabled){
         this.isMusicEnabled = isSoundEnabled;
     }
 
 
-    private void initMediaPlayer(Context context, int sessionId){
-        log("entered initMediaPlayer, session ID: " + sessionId);
-        if(sessionId == 0){
-            isMusicEnabled = false;
-            log("initMediaPlayer() sessionID is 0, cannot play");
-            return;
-        }
-        mediaPlayer = new MediaPlayer(context);
-        mediaPlayer.setAudioSessionId(sessionId);
-        setDataSource(context, R.raw.music_title_1);
+    private void initMediaPlayer(Context context){
+        mediaPlayer = MediaPlayer.create(context, R.raw.music_title_1);
+        //setDataSource(context, R.raw.music_title_1);
         mediaPlayer.setOnCompletionListener(mp -> {
             mp.reset();
             mp.release();
         });
-        log("initMediaPlayer() isMediaPlayer playing: " +  mediaPlayer.isPlaying());
     }
 
 
@@ -87,17 +89,9 @@ public class MusicPlayer {
 
 
     public void play(){
-        if(mediaPlayer.isPlaying()) {
-            log("play() returning because MediaPlayer instance is already playing");
-            return;
+        if(!mediaPlayer.isPlaying()) {
+            mediaPlayer.start();
         }
-        try{
-            mediaPlayer.prepare();
-        }catch (IOException e){
-            printError(e.getMessage());
-            return;
-        }
-        mediaPlayer.start();
     }
 
 
