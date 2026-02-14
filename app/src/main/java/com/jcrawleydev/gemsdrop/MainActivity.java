@@ -1,18 +1,11 @@
 package com.jcrawleydev.gemsdrop;
 
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentMessage.UPDATE_SCORE;
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.createBundleOf;
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.sendMessage;
-
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.jcrawleydev.gemsdrop.game.score.ScoreStatistics;
-
 import com.jcrawleydev.gemsdrop.view.fragments.MainMenuFragment;
-import com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -76,17 +69,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, mainMenuFragment)
                 .commit();
-    }
-
-
-    public void onGameOver(ScoreStatistics scoreStatistics){
-
-    }
-
-
-    public void setScore(int score){
-        Bundle bundle = createBundleOf(BundleTag.SCORE, score);
-        sendMessage(this, UPDATE_SCORE, bundle);
     }
 
 

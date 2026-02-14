@@ -1,9 +1,5 @@
 package com.jcrawleydev.gemsdrop.view.fragments.game;
 
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.BundleTag.*;
-import static com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils.getLongArray;
-
-
 import android.annotation.SuppressLint;
 import android.graphics.PointF;
 import android.graphics.RenderEffect;
@@ -274,20 +270,6 @@ public class GameFragment extends Fragment implements GameView {
     private void stopWonderGemAnimation(){
         if(wonderGemAnimation != null && wonderGemAnimation.isRunning()){
             wonderGemAnimation.stop();
-        }
-    }
-
-
-    private void doActionOnGemIdsFrom(Bundle bundle, Consumer<ViewGroup> consumer){
-        long[] gemIds = getLongArray(bundle, GEM_IDS);
-        if(gemIds == null){
-            return;
-        }
-        for(long gemId : gemIds){
-            var gemLayout = itemsMap.get(gemId);
-            if(gemLayout != null){
-                consumer.accept(gemLayout);
-            }
         }
     }
 
