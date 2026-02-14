@@ -10,7 +10,6 @@ import android.os.Looper;
 import com.jcrawleydev.gemsdrop.R;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MusicPlayer {
 
@@ -20,6 +19,8 @@ public class MusicPlayer {
     private final int fadeOutTime = 1500;
     private VolumeShaper volumeShaper;
     private boolean isInitialized;
+    private boolean isPlayingOrPaused = false;
+    private int currentPosition = 0;
 
 
     public void init(Application application){
@@ -44,6 +45,7 @@ public class MusicPlayer {
 
     private void initMediaPlayer(Context context){
         mediaPlayer = MediaPlayer.create(context, R.raw.music_title_1);
+        mediaPlayer.setLooping(true);
         //setDataSource(context, R.raw.music_title_1);
         mediaPlayer.setOnCompletionListener(mp -> {
             mp.reset();
@@ -91,12 +93,30 @@ public class MusicPlayer {
     public void play(){
         if(!mediaPlayer.isPlaying()) {
             mediaPlayer.start();
+            isPlayingOrPaused = true;
+        }
+    }
+
+
+    public void pause(){
+        if(mediaPlayer.isPlaying()) {
+            currentPosition = mediaPlayer.getCurrentPosition();
+            mediaPlayer.pause();
+        }
+    }
+
+
+    public void resume(){
+        if(isPlayingOrPaused) {
+            mediaPlayer.seekTo(currentPosition);
+            mediaPlayer.start();
         }
     }
 
 
     public void fadeOut(){
         if(isMusicEnabled){
+            isPlayingOrPaused = false;
             volumeShaper = mediaPlayer.createVolumeShaper(volumeShaperConfig);
             volumeShaper.apply(VolumeShaper.Operation.PLAY);
 

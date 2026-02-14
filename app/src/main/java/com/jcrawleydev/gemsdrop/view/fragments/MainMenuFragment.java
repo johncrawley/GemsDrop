@@ -1,5 +1,8 @@
 package com.jcrawleydev.gemsdrop.view.fragments;
 
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.MusicUtils.playTrack;
+import static com.jcrawleydev.gemsdrop.view.fragments.utils.MusicUtils.stopTrack;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -34,22 +37,6 @@ public class MainMenuFragment extends Fragment {
     }
 
 
-    private void startMusic(){
-        var mainActivity = (MainActivity)getActivity();
-        if(mainActivity != null){
-            mainActivity.startMusic();
-        }
-    }
-
-
-    private void stopMusic(){
-        var mainActivity = (MainActivity)getActivity();
-        if(mainActivity != null){
-            mainActivity.stopMusic();
-        }
-    }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -58,7 +45,7 @@ public class MainMenuFragment extends Fragment {
         setupButtons(parent);
         titleGemsAnimator = new TitleGemsAnimator(parent, getContext());
         titleGemsAnimator.start();
-        startMusic();
+        playTrack(this, R.raw.music_title_1);
         return parent;
     }
 
@@ -93,7 +80,7 @@ public class MainMenuFragment extends Fragment {
             return;
         }
         isGameStartInitiated.set(true);
-        stopMusic();
+        stopTrack(this);
         FragmentUtils.loadGame(this);
     }
 

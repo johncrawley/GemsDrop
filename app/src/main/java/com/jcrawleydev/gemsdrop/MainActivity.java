@@ -68,16 +68,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
 
-    public void startMusic(){
-        viewModel.musicPlayer.play();
-    }
-
-
-    public void stopMusic(){
-        viewModel.musicPlayer.fadeOut();
-    }
-
-
     private void setupFragmentsIf(boolean isSavedStateNull) {
         if(!isSavedStateNull){
             return;
@@ -110,14 +100,17 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     public void onPause(){
-
         super.onPause();
+        viewModel.musicPlayer.pause();
     }
 
 
     @Override
     public void onResume(){
         super.onResume();
+        if(viewModel != null){
+            viewModel.musicPlayer.resume();
+        }
     }
 
 
