@@ -61,17 +61,21 @@ public class Game {
         gameModel.setDropRate(dropRate);
     }
 
+
     public int getGravityInterval(){
         return gameModel.GRAVITY_INTERVAL;
     }
+
 
     public void setDroppingGems(DroppingGems droppingGems){
         this.droppingGems = droppingGems;
     }
 
+
     public void setStarted(){
         isStarted.set(true);
     }
+
 
     public boolean isStarted(){
         return isStarted.get();
@@ -82,19 +86,28 @@ public class Game {
         return stateManager;
     }
 
-    public void rotateGems(){ stateManager.performMovement(AbstractGameState::rotate);}
+
+    public void rotateGems(){
+        stateManager.getCurrentGameState().rotate();
+    }
+
 
     public void moveLeft(){
-        stateManager.performMovement(AbstractGameState::left);
+        stateManager.getCurrentGameState().left();
     }
 
     public void moveRight() {
-        stateManager.performMovement(AbstractGameState::right);
+        stateManager.getCurrentGameState().right();
     }
 
 
     public void moveUp(){
-      //  gemMover.moveUp();
+       // do nothing
+    }
+
+
+    public void moveDown(){
+        stateManager.getCurrentGameState().down();
     }
 
 
@@ -142,11 +155,6 @@ public class Game {
 
     public void startGame(){
         loadState(GAME_STARTED);
-    }
-
-
-    public void moveDown(){
-        stateManager.performMovement(AbstractGameState::down);
     }
 
 

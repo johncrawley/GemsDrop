@@ -71,15 +71,31 @@ public class GemMover {
     }
 
 
-    private void syncUserMovement(Movement movement){
-        if(isControlEnabled.get()){
+    private void syncUserMovement(Movement movement) {
+        if (isControlEnabled.get()) {
             syncMovement(movement);
         }
     }
 
-
     public void cancelQueuedMovements(){
         movementQueue.clear();
+    }
+
+
+    public void attemptNextQueuedMovement(){
+        if(!movementQueue.isEmpty()){
+            syncMovement(movementQueue.remove());
+        }
+    }
+
+
+    private synchronized void syncMovement(Movement movement){
+        if(!isMovementEnabled.get()){
+            movementQueue.add(movement);
+            return;
+        }
+        disableMovement();
+        droppingGemsEvaluator.evaluateTouchingGems(droppingGems, getMethodForMovement(movement));
     }
 
 
@@ -90,26 +106,6 @@ public class GemMover {
 
     public void enableMovement(){
         isMovementEnabled.set(true);
-    }
-
-
-    public void attemptNextQueuedMovement(){
-        if(movementQueue.isEmpty()){
-            return;
-        }
-        syncMovement(movementQueue.remove());
-    }
-
-
-    private synchronized void syncMovement(Movement movement){
-        if(!isMovementEnabled.get()){
-            movementQueue.add(movement);
-            if(movementQueue.size() < 4){
-                return;
-            }
-        }
-        disableMovement();
-        droppingGemsEvaluator.evaluateTouchingGems(droppingGems, getMethodForMovement(movement));
     }
 
 

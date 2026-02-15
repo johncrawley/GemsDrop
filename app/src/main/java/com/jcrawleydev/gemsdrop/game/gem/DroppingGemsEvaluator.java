@@ -53,23 +53,19 @@ public class DroppingGemsEvaluator {
 
 
     private void evaluateNormalGems(DroppingGems droppingGems, Runnable movementRunnable){
-        log("Entered evaluateNormalGems() ");
         droppingGems.addConnectingGemsTo(gemGrid);
 
         if(droppingGems.areAllAddedToGrid()){
             soundEffectManager.playSoundEffect(GEM_HITS_FLOOR);
             gemMover.disableControls();
-            log("evaluateNormalGems() all are added to the grid");
             loadState(EVALUATE_GRID);
         }
         else if(droppingGems.areAnyAddedToGrid()){
             soundEffectManager.playSoundEffect(GEM_HITS_FLOOR);
             gemMover.disableControls();
-            log("evaluateNormalGems() some are added to the grid");
             loadState(GEM_FREE_FALL);
         }
         else{
-            log("evaluateNormalGems() nothing added to the grid, running movement");
             runMovement(movementRunnable);
         }
     }
@@ -93,10 +89,7 @@ public class DroppingGemsEvaluator {
 
 
     private void loadState(GameStateName stateName){
-        log("entered loadState() about to cancel queued movements");
         gemMover.cancelQueuedMovements();
-        boolean isStateManagerNull = stateManager == null;
-        log("loadState() about to load state: " + stateName + " , is state manager null : " + isStateManagerNull);
         stateManager.load(stateName, this.getClass().getSimpleName());
     }
 

@@ -155,6 +155,7 @@ public class GameFragment extends Fragment implements GameView {
     @Override
     public void wipeOut(long[] markedGemIds) {
         numberOfGemsToRemove = markedGemIds.length;
+        currentNumberOfGemsRemoved = 0;
         runOnUiThread(()->{
             stopWonderGemAnimation();
             doActionOnGemIdsFrom(markedGemIds, gemLayout -> GemAnimator.animateRemovalOf(gemLayout, this::cleanupGem));

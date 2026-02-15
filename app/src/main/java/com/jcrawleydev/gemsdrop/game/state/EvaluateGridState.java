@@ -24,7 +24,6 @@ public class EvaluateGridState extends AbstractGameState{
 
 
     public void evaluateGemGrid(){
-        log("entered evaluateGemGrid()");
         cancelTask();
         long[] markedGemsIds = evaluator.evaluateGemGrid();
         int numberOfGemsToRemove = markedGemsIds.length;

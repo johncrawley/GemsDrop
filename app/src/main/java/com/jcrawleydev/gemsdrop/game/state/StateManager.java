@@ -2,8 +2,6 @@ package com.jcrawleydev.gemsdrop.game.state;
 
 import com.jcrawleydev.gemsdrop.game.Game;
 
-import java.util.function.Consumer;
-
 public class StateManager {
 
     private AbstractGameState currentGameState;
@@ -48,10 +46,8 @@ public class StateManager {
     }
 
 
-    public void performMovement(Consumer<AbstractGameState> consumer){
-        if(currentGameState != null){
-            consumer.accept(currentGameState);
-        }
+    public AbstractGameState getCurrentGameState(){
+        return currentGameState;
     }
 
 
