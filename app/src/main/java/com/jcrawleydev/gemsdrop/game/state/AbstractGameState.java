@@ -2,7 +2,6 @@ package com.jcrawleydev.gemsdrop.game.state;
 
 import com.jcrawleydev.gemsdrop.audio.SoundEffectManager;
 import com.jcrawleydev.gemsdrop.game.Game;
-import com.jcrawleydev.gemsdrop.game.GameComponents;
 import com.jcrawleydev.gemsdrop.game.GemMover;
 import com.jcrawleydev.gemsdrop.game.TaskScheduler;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
@@ -17,17 +16,15 @@ public abstract class AbstractGameState {
     protected TaskScheduler taskScheduler;
     protected SoundEffectManager soundEffectManager;
     protected Score score;
-    protected GameComponents gameComponents;
 
     public AbstractGameState(Game game){
         this.game = game;
-        this.gameComponents = game.getGameComponents();
         stateManager = game.getStateManager();
-        gemGrid = gameComponents.getGemGrid();
-        gemMover = gameComponents.getGemMover();
-        taskScheduler = gameComponents.getTaskScheduler();
-        soundEffectManager = gameComponents.getSoundEffectManager();
-        score = gameComponents.getScore();
+        gemGrid = game.getGemGrid();
+        gemMover = game.getGemMover();
+        taskScheduler = game.getTaskScheduler();
+        soundEffectManager = game.getSoundEffectManager();
+        score = game.getScore();
     }
 
 

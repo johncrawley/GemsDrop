@@ -20,7 +20,6 @@ public class GameOverAnimator {
     private Future<?> future;
     private final ScheduledExecutorService executorService;
     private final Game game;
-    private final GameComponents gameComponents;
     private final GemGrid gemGrid;
     private int currentRowIndex;
     private List<List<Gem>> gemRows;
@@ -29,9 +28,8 @@ public class GameOverAnimator {
 
     public GameOverAnimator(Game game, GemGrid gemGrid){
         this.game = game;
-        gameComponents = game.getGameComponents();
         this.gemGrid = gemGrid;
-        this.gridProps = gameComponents.getGridProps();
+        this.gridProps = game.getGameModel().getGridProps();
         executorService = Executors.newSingleThreadScheduledExecutor();
     }
 
@@ -68,7 +66,7 @@ public class GameOverAnimator {
             future.cancel(false);
             game.end();
         }
-        gameComponents.getSoundEffectManager().playSoundEffect(SoundEffect.GEMS_GREYED_OUT);
+        game.getSoundEffectManager().playSoundEffect(SoundEffect.GEMS_GREYED_OUT);
     }
 
     

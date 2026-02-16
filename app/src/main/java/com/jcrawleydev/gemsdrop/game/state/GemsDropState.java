@@ -3,18 +3,13 @@ package com.jcrawleydev.gemsdrop.game.state;
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.GEM_QUICK_DROP;
 
 import com.jcrawleydev.gemsdrop.game.Game;
-import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
-import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsFactory;
 
 
 public class GemsDropState extends AbstractGameState{
 
-    private DroppingGems droppingGems;
-    private final DroppingGemsFactory droppingGemsFactory;
 
     public GemsDropState(Game game){
         super(game);
-        droppingGemsFactory = gameComponents.getDroppingGemsFactory();
     }
 
 
@@ -25,14 +20,13 @@ public class GemsDropState extends AbstractGameState{
 
 
     private void createDrop(){
-        droppingGems = droppingGemsFactory.createDroppingGems();
-        game.setDroppingGems(droppingGems);
+        game.createDroppingGems();
         game.incrementDropCount();
         game.updateDropInterval();
-        gemMover.setDroppingGems(droppingGems);
+        gemMover.setDroppingGems(game.getDroppingGems());
         gemGrid.printColumnHeights();
         score.resetMultiplier();
-        game.createGemsOnView(droppingGems);
+        game.createGemsOnView(game.getDroppingGems());
         taskScheduler.scheduleWithRepeats(() -> gemMover.dropGems(), game.getCurrentDropRate());
     }
 
@@ -53,6 +47,7 @@ public class GemsDropState extends AbstractGameState{
 
 
     public void down(){
+        var droppingGems = game.getDroppingGems();
         if(droppingGems == null
                 || gemMover.areControlsDisabled()
                 || droppingGems.areAllAddedToGrid()){

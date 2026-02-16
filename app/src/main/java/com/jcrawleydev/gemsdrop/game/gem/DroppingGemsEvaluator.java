@@ -6,7 +6,6 @@ import static com.jcrawleydev.gemsdrop.game.state.GameStateName.GEM_FREE_FALL;
 
 import com.jcrawleydev.gemsdrop.audio.SoundEffectManager;
 import com.jcrawleydev.gemsdrop.game.Game;
-import com.jcrawleydev.gemsdrop.game.GameComponents;
 import com.jcrawleydev.gemsdrop.game.GemMover;
 import com.jcrawleydev.gemsdrop.game.TaskScheduler;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
@@ -24,12 +23,12 @@ public class DroppingGemsEvaluator {
     private final SoundEffectManager soundEffectManager;
     private final TaskScheduler taskScheduler;
 
-    public DroppingGemsEvaluator(Game game, GameComponents gameComponents){
+    public DroppingGemsEvaluator(Game game){
         this.game = game;
-        gemGrid = gameComponents.getGemGrid();
+        gemGrid = game.getGemGrid();
         stateManager = game.getStateManager();
-        soundEffectManager = gameComponents.getSoundEffectManager();
-        taskScheduler = gameComponents.getTaskScheduler();
+        soundEffectManager = game.getSoundEffectManager();
+        taskScheduler = game.getTaskScheduler();
     }
 
 

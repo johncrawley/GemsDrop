@@ -3,12 +3,16 @@ package com.jcrawleydev.gemsdrop.game;
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.GAME_STARTED;
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.GEM_REMOVAL_ANIMATION_COMPLETE;
 
+import com.jcrawleydev.gemsdrop.audio.SoundEffectManager;
 import com.jcrawleydev.gemsdrop.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
+import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsEvaluator;
+import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsFactory;
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
+import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 import com.jcrawleydev.gemsdrop.game.level.GameLevel;
+import com.jcrawleydev.gemsdrop.game.score.Score;
 import com.jcrawleydev.gemsdrop.game.score.ScoreRecords;
-import com.jcrawleydev.gemsdrop.game.state.AbstractGameState;
 import com.jcrawleydev.gemsdrop.game.state.GameStateName;
 import com.jcrawleydev.gemsdrop.game.state.StateManager;
 import com.jcrawleydev.gemsdrop.view.fragments.game.GameView;
@@ -18,13 +22,21 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Game {
 
-    private DroppingGems droppingGems;
     private GameView gameView;
-    private final GameComponents gameComponents = new GameComponents();
     private final StateManager stateManager = new StateManager();
     private final AtomicBoolean isStarted = new AtomicBoolean(false);
     private final AtomicBoolean hasQuitBeenInvoked = new AtomicBoolean(false);
     private final GameModel gameModel;
+
+    private final GemMover gemMover = new GemMover();
+    private final TaskScheduler taskScheduler = new TaskScheduler();
+    private final SoundEffectManager soundEffectManager = new SoundEffectManager();
+    private final DroppingGemsFactory droppingGemsFactory = new DroppingGemsFactory();
+    private ScoreRecords scoreRecords;
+    private GemGrid gemGrid;
+    private Score score;
+    private GridProps gridProps;
+    private DroppingGems droppingGems;
 
 
     public Game(GameModel gameModel){
@@ -32,7 +44,16 @@ public class Game {
     }
 
     public void init(SoundPlayer soundPlayer, ScoreRecords scoreRecords){
-        gameComponents.init(this, soundPlayer, scoreRecords);
+        this.scoreRecords = scoreRecords;
+        soundEffectManager.init(soundPlayer);
+        score.clear();
+        this.gemGrid = gameModel.getGemGrid();
+        this.score = gameModel.getScore();
+        this.gridProps = gameModel.getGridProps();
+        var droppingGemsEvaluator = new DroppingGemsEvaluator(this);
+        gemMover.init(gemGrid, gridProps, droppingGemsEvaluator);
+        soundEffectManager.setScore(score);
+        droppingGemsFactory.setGridProps(gridProps);
         stateManager.init(this);
     }
 
@@ -42,8 +63,8 @@ public class Game {
     }
 
 
-    public GameComponents getGameComponents(){
-        return this.gameComponents;
+    public void createDroppingGems(){
+        droppingGemsFactory.createDroppingGems();
     }
 
 
@@ -64,11 +85,6 @@ public class Game {
 
     public int getGravityInterval(){
         return gameModel.GRAVITY_INTERVAL;
-    }
-
-
-    public void setDroppingGems(DroppingGems droppingGems){
-        this.droppingGems = droppingGems;
     }
 
 
@@ -112,7 +128,9 @@ public class Game {
 
 
     public void updateDroppingGemsOnView(){
-        updateGemsOnView(droppingGems.getFreeGems());
+        if(droppingGems != null){
+            updateGemsOnView(droppingGems.getFreeGems());
+        }
     }
 
 
@@ -158,8 +176,53 @@ public class Game {
     }
 
 
+    public DroppingGemsFactory getDroppingGemsFactory(){
+        return droppingGemsFactory;
+    }
+
+
+    public GridProps getGridProps(){
+        return gridProps;
+    }
+
+
+    public SoundEffectManager getSoundEffectManager(){
+        return soundEffectManager;
+    }
+
+
+    public Score getScore(){
+        return score;
+    }
+
+
+    public void saveScore(){
+        scoreRecords.saveScore(score.get());
+    }
+
+
+    public TaskScheduler getTaskScheduler(){
+        return taskScheduler;
+    }
+
+
+    public GemMover getGemMover(){
+        return gemMover;
+    }
+
+
+    public GemGrid getGemGrid(){
+        return gemGrid;
+    }
+
+
+    public void clearScore(){
+        score.clear();
+    }
+
+
     public DroppingGems getDroppingGems(){
-        return droppingGems;
+        return gameModel.getDroppingGems();
     }
 
 
@@ -169,10 +232,7 @@ public class Game {
 
 
     public void onDestroy(){
-        var taskScheduler = gameComponents.getTaskScheduler();
-        if(taskScheduler != null){
-            taskScheduler.cancelTask();
-        }
+        taskScheduler.cancelTask();
         isStarted.set(false);
     }
 
@@ -188,7 +248,6 @@ public class Game {
 
 
     public void updateScore(int numberOfRemovedGems){
-        var score = gameComponents.getScore();
         if(score == null){
             return;
         }
@@ -203,7 +262,6 @@ public class Game {
 
 
     public void onGameOverAnimationComplete(){
-        var taskScheduler = gameComponents.getTaskScheduler();
         taskScheduler.cancelTask();
         taskScheduler.scheduleOnce(this::quit, 5000);
     }
@@ -234,7 +292,6 @@ public class Game {
 
 
     private void updateGridGemsOnView(){
-        var gemGrid = gameComponents.getGemGrid();
         if(gemGrid == null){
             return;
         }

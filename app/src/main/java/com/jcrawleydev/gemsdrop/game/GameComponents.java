@@ -2,6 +2,7 @@ package com.jcrawleydev.gemsdrop.game;
 
 import com.jcrawleydev.gemsdrop.audio.SoundEffectManager;
 import com.jcrawleydev.gemsdrop.audio.SoundPlayer;
+import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsEvaluator;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsFactory;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
@@ -18,24 +19,18 @@ public class GameComponents {
     private GemGrid gemGrid;
     private Score score;
     private GridProps gridProps;
+    private DroppingGems droppingGems;
 
 
-    public void init(Game game, SoundPlayer soundPlayer, ScoreRecords scoreRecords){
-        this.scoreRecords = scoreRecords;
-        soundEffectManager.init(soundPlayer);
-        setModelComponents(game, game.getGameModel());
-        score.clear();
+
+
+    public void createDroppingGems(){
+        droppingGems = droppingGemsFactory.createDroppingGems();
     }
 
 
-    public void setModelComponents(Game game, GameModel gameModel){
-        this.gemGrid = gameModel.getGemGrid();
-        this.score = gameModel.getScore();
-        this.gridProps = gameModel.getGridProps();
-        var droppingGemsEvaluator = new DroppingGemsEvaluator(game,this);
-        gemMover.init(gemGrid, gridProps, droppingGemsEvaluator);
-        soundEffectManager.setScore(score);
-        droppingGemsFactory.setGridProps(gridProps);
+    public DroppingGems getDroppingGems(){
+        return droppingGems;
     }
 
 
@@ -44,48 +39,5 @@ public class GameComponents {
     }
 
 
-    public DroppingGemsFactory getDroppingGemsFactory(){
-        return droppingGemsFactory;
-    }
-
-
-    public GridProps getGridProps(){
-        return gridProps;
-    }
-
-
-    public SoundEffectManager getSoundEffectManager(){
-        return soundEffectManager;
-    }
-
-
-    public Score getScore(){
-        return score;
-    }
-
-
-    public void saveScore(){
-        scoreRecords.saveScore(score.get());
-    }
-
-
-    public TaskScheduler getTaskScheduler(){
-        return taskScheduler;
-    }
-
-
-    public GemMover getGemMover(){
-        return gemMover;
-    }
-
-
-    public GemGrid getGemGrid(){
-        return gemGrid;
-    }
-
-
-    public void clearScore(){
-        score.clear();
-    }
 
 }

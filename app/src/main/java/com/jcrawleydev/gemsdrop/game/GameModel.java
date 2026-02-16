@@ -1,7 +1,9 @@
 package com.jcrawleydev.gemsdrop.game;
 
+import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 import com.jcrawleydev.gemsdrop.game.grid.GemGridImpl;
+import com.jcrawleydev.gemsdrop.game.level.GameLevel;
 import com.jcrawleydev.gemsdrop.game.score.Score;
 
 public class GameModel {
@@ -14,7 +16,45 @@ public class GameModel {
     private final GridProps gridProps = new GridProps(15, 7, 2);
     private final GemGrid gemGrid = new GemGridImpl(gridProps);
     private final Score score = new Score(50);
+    private DroppingGems droppingGems;
+    private int numberOfNormalGemsDropped;
+    private GameLevel gameLevel;
 
+
+    public void setGameLevel(GameLevel gameLevel){
+        this.gameLevel = gameLevel;
+    }
+
+
+    public GameLevel getGameLevel(){
+        return gameLevel;
+    }
+
+
+    public void setDroppingGems(DroppingGems droppingGems){
+       this.droppingGems = droppingGems;
+    }
+
+
+    public void incNumberOfNormalsGemsDropped(){
+        numberOfNormalGemsDropped++;
+    }
+
+
+    public int getNumberOfNormalGemsDropped(){
+        return numberOfNormalGemsDropped;
+    }
+
+
+    public void resetNumberOfNormalGemsDropped(){
+        numberOfNormalGemsDropped = 0;
+    }
+
+
+
+    public DroppingGems getDroppingGems(){
+        return droppingGems;
+    }
 
 
     public GemGrid getGemGrid(){

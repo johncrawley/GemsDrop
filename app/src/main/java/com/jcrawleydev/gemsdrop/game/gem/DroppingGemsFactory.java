@@ -1,27 +1,32 @@
 package com.jcrawleydev.gemsdrop.game.gem;
 
 
+import com.jcrawleydev.gemsdrop.game.GameModel;
 import com.jcrawleydev.gemsdrop.game.GridProps;
 import com.jcrawleydev.gemsdrop.game.level.GameLevel;
-import com.jcrawleydev.gemsdrop.game.level.SpecialGemConditions;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 public class DroppingGemsFactory {
 
     private GridProps gridProps;
-    private int numberOfNormalGemsDropped;
     private final Random random;
-    private int minNormalGemStreak = 8;
-    private int maxNormalGemStreak = 25;
-    private int specialGemOdds = 10;
+    private GameLevel gameLevel;
     private List<GemColor> gemColors;
+    private GameModel gameModel;
+
 
     public DroppingGemsFactory(){
         random = new Random(System.currentTimeMillis());
+    }
+
+
+    public void setGameModel(GameModel gameModel){
+        this.gameModel = gameModel;
+        setLevel(gameModel.getGameLevel());
+        setGridProps(gameModel.getGridProps());
     }
 
 
@@ -31,49 +36,42 @@ public class DroppingGemsFactory {
 
 
     public void setLevel(GameLevel level){
-        setSpecialGemConditions(level.specialGemConditions());
-        setGemColors(level.gemColors());
-    }
-
-
-    public void setSpecialGemConditions(SpecialGemConditions specialGemConditions){
-        minNormalGemStreak = specialGemConditions.minNormalGemStreak();
-        maxNormalGemStreak = specialGemConditions.maxNormalGemStreak();
-        specialGemOdds = specialGemConditions.specialGemOdds();
+        this.gameLevel = level;
+        this.gemColors = new ArrayList<>(level.gemColors());
     }
 
 
     public DroppingGems createDroppingGems(){
         if((haveEnoughNormalGemsDropped() && isLucky())
                 || haveTooManyNormalGemsDropped()){
-            numberOfNormalGemsDropped = 0;
+            gameModel.resetNumberOfNormalGemsDropped();
             return new WonderDroppingGem(gridProps);
         }
         return new DroppingGems(gridProps, getRandomGemColors());
     }
 
 
-    public void setGemColors(Set<GemColor> gemColors){
-        this.gemColors = new ArrayList<>(gemColors);
-    }
-
-
     public boolean haveEnoughNormalGemsDropped(){
-        return ++numberOfNormalGemsDropped >= minNormalGemStreak;
+        gameModel.incNumberOfNormalsGemsDropped();
+        return gameModel.getNumberOfNormalGemsDropped() >= gameLevel.specialGemConditions().minNormalGemStreak();
     }
+
 
     public boolean haveTooManyNormalGemsDropped(){
-        return numberOfNormalGemsDropped > maxNormalGemStreak;
+        return gameModel.getNumberOfNormalGemsDropped() > gameLevel.specialGemConditions().maxNormalGemStreak();
     }
 
 
     private boolean isLucky(){
-        return random.nextInt(specialGemOdds) == 1;
+        int odds = gameLevel.specialGemConditions().specialGemOdds();
+        return random.nextInt(odds) == 1;
     }
+
 
     public List<GemColor> getRandomGemColors(){
         return List.of(getRandomColor(), getRandomColor(), getRandomColor());
     }
+
 
     public GemColor getRandomColor(){
         int index = random.nextInt(gemColors.size());
