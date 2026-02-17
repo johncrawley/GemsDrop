@@ -27,7 +27,7 @@ public class LevelFactory {
         var startingGrid = List.of("G Y G Y G Y G",  "B R B R B R B", "Y P Y P Y P Y");
         var specialGemConditions = new SpecialGemConditions(8, 25, 5);
         gameLevel1 = new GameLevel(1,
-                R.drawable.background_pattern_1,
+                R.drawable.background_pattern_2,
                 150,
                 100,
                 possibleColorsOfFallingGems,

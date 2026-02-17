@@ -21,7 +21,7 @@ public class LoadLevelState extends AbstractGameState {
     public LoadLevelState(Game game){
         super(game);
         executorService = Executors.newSingleThreadScheduledExecutor();
-        droppingGemsFactory = gameComponents.getDroppingGemsFactory();
+        droppingGemsFactory = game.getDroppingGemsFactory();
     }
 
 

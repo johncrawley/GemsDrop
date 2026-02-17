@@ -13,7 +13,7 @@ public class EvaluateGridState extends AbstractGameState{
 
     public EvaluateGridState(Game game){
         super(game);
-        evaluator = new GridEvaluator(gemGrid.getGemColumns(), gameComponents.getGridProps().numberOfRows());
+        evaluator = new GridEvaluator(gemGrid.getGemColumns(), game.getGridProps().numberOfRows());
     }
 
 
