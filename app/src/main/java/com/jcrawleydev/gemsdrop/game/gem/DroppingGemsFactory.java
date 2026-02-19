@@ -25,7 +25,7 @@ public class DroppingGemsFactory {
 
     public void setGameModel(GameModel gameModel){
         this.gameModel = gameModel;
-        setLevel(gameModel.getGameLevel());
+        //setLevel(gameModel.getGameLevel());
         setGridProps(gameModel.getGridProps());
     }
 
@@ -41,13 +41,20 @@ public class DroppingGemsFactory {
     }
 
 
+
     public DroppingGems createDroppingGems(){
-        if((haveEnoughNormalGemsDropped() && isLucky())
-                || haveTooManyNormalGemsDropped()){
+        var isLevelNull = gameLevel == null;
+        if(shouldCreateWonderGem()){
             gameModel.resetNumberOfNormalGemsDropped();
             return new WonderDroppingGem(gridProps);
         }
         return new DroppingGems(gridProps, getRandomGemColors());
+    }
+
+
+    private boolean shouldCreateWonderGem(){
+        return (haveEnoughNormalGemsDropped() && isLucky())
+                || haveTooManyNormalGemsDropped();
     }
 
 
@@ -58,7 +65,7 @@ public class DroppingGemsFactory {
 
 
     public boolean haveTooManyNormalGemsDropped(){
-        return gameModel.getNumberOfNormalGemsDropped() > gameLevel.specialGemConditions().maxNormalGemStreak();
+       return gameModel.getNumberOfNormalGemsDropped() > gameLevel.specialGemConditions().maxNormalGemStreak();
     }
 
 

@@ -46,6 +46,7 @@ public class DroppingGemsEvaluator {
        }
     }
 
+
     private void log(String msg){
         System.out.println("^^^ DroppingGemsEvaluator: " + msg);
     }

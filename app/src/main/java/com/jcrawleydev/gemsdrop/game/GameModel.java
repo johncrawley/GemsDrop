@@ -31,8 +31,15 @@ public class GameModel {
     }
 
 
+    private void log(String msg){
+        System.out.println("^^^ GameModel : " + msg);
+    }
+
+
     public void setDroppingGems(DroppingGems droppingGems){
-       this.droppingGems = droppingGems;
+        var isNull = droppingGems == null;
+        log("Entered setDroppingGems() gems are null: " + isNull);
+        this.droppingGems = droppingGems;
     }
 
 
@@ -51,8 +58,9 @@ public class GameModel {
     }
 
 
-
     public DroppingGems getDroppingGems(){
+        var isNull = droppingGems == null;
+        log("entered getDroppingGems() isNull:" + isNull);
         return droppingGems;
     }
 

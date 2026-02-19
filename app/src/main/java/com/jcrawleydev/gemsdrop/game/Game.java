@@ -33,27 +33,23 @@ public class Game {
     private final SoundEffectManager soundEffectManager = new SoundEffectManager();
     private final DroppingGemsFactory droppingGemsFactory = new DroppingGemsFactory();
     private ScoreRecords scoreRecords;
-    private GemGrid gemGrid;
-    private Score score;
     private GridProps gridProps;
-    private DroppingGems droppingGems;
 
 
     public Game(GameModel gameModel){
         this.gameModel = gameModel;
     }
 
+
     public void init(SoundPlayer soundPlayer, ScoreRecords scoreRecords){
         this.scoreRecords = scoreRecords;
         soundEffectManager.init(soundPlayer);
-        score.clear();
-        this.gemGrid = gameModel.getGemGrid();
-        this.score = gameModel.getScore();
         this.gridProps = gameModel.getGridProps();
         var droppingGemsEvaluator = new DroppingGemsEvaluator(this);
-        gemMover.init(gemGrid, gridProps, droppingGemsEvaluator);
-        soundEffectManager.setScore(score);
+        gemMover.init(gameModel.getGemGrid(), gridProps, droppingGemsEvaluator);
+        soundEffectManager.setScore(gameModel.getScore());
         droppingGemsFactory.setGridProps(gridProps);
+        droppingGemsFactory.setGameModel(gameModel);
         stateManager.init(this);
     }
 
@@ -64,11 +60,19 @@ public class Game {
 
 
     public void createDroppingGems(){
-        droppingGemsFactory.createDroppingGems();
+        var isFactoryNull = droppingGemsFactory == null;
+        log("entered createDroppingGems() is factory null: " + isFactoryNull);
+        var droppingGems = droppingGemsFactory.createDroppingGems();
+        if(droppingGems == null){
+            log("createDroppingGems() gems are null!");
+        }
+        gameModel.setDroppingGems(droppingGemsFactory.createDroppingGems());
     }
 
 
     public void setCurrentGameLevel(GameLevel level){
+        gameModel.setGameLevel(level);
+        droppingGemsFactory.setLevel(level);
         setCurrentDropRate(level.startingDropDuration());
     }
 
@@ -128,6 +132,7 @@ public class Game {
 
 
     public void updateDroppingGemsOnView(){
+        var droppingGems = gameModel.getDroppingGems();
         if(droppingGems != null){
             updateGemsOnView(droppingGems.getFreeGems());
         }
@@ -192,12 +197,12 @@ public class Game {
 
 
     public Score getScore(){
-        return score;
+        return gameModel.getScore();
     }
 
 
     public void saveScore(){
-        scoreRecords.saveScore(score.get());
+        scoreRecords.saveScore(gameModel.getScore().get());
     }
 
 
@@ -212,12 +217,12 @@ public class Game {
 
 
     public GemGrid getGemGrid(){
-        return gemGrid;
+        return gameModel.getGemGrid();
     }
 
 
     public void clearScore(){
-        score.clear();
+        gameModel.getScore().clear();
     }
 
 
@@ -248,11 +253,8 @@ public class Game {
 
 
     public void updateScore(int numberOfRemovedGems){
-        if(score == null){
-            return;
-        }
-        score.addPointsFor(numberOfRemovedGems);
-        gameView.updateScore(score.get());
+        gameModel.getScore().addPointsFor(numberOfRemovedGems);
+        gameView.updateScore(gameModel.getScore().get());
     }
 
 
@@ -292,6 +294,7 @@ public class Game {
 
 
     private void updateGridGemsOnView(){
+        var gemGrid = gameModel.getGemGrid();
         if(gemGrid == null){
             return;
         }

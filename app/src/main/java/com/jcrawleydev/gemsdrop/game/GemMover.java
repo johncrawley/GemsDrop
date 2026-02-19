@@ -71,11 +71,17 @@ public class GemMover {
     }
 
 
-    private void syncUserMovement(Movement movement) {
-        if (isControlEnabled.get()) {
+    private void log(String msg){
+        System.out.println("^^^ GemMover: " + msg);
+    }
+
+
+    private void syncUserMovement(Movement movement){
+        if(isControlEnabled.get()){
             syncMovement(movement);
         }
     }
+
 
     public void cancelQueuedMovements(){
         movementQueue.clear();
@@ -90,9 +96,13 @@ public class GemMover {
 
 
     private synchronized void syncMovement(Movement movement){
-        if(!isMovementEnabled.get()){
-            movementQueue.add(movement);
+        if(droppingGems == null){
+            log("dropping gems are null! Won't proceed with attempted movement!");
             return;
+        }
+        if(!isMovementEnabled.get()){
+            log("entered syncMovement() control is disabled, adding to queue");
+            movementQueue.add(movement);
         }
         disableMovement();
         droppingGemsEvaluator.evaluateTouchingGems(droppingGems, getMethodForMovement(movement));
@@ -107,6 +117,7 @@ public class GemMover {
     public void enableMovement(){
         isMovementEnabled.set(true);
     }
+
 
 
     private Runnable getMethodForMovement(Movement movement){

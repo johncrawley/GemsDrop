@@ -15,11 +15,13 @@ public class GemsDropState extends AbstractGameState{
 
     @Override
     public void start() {
+        log("Entered start()");
         createDrop();
     }
 
 
     private void createDrop(){
+        log("Entered createDrop()");
         game.createDroppingGems();
         game.incrementDropCount();
         game.updateDropInterval();
