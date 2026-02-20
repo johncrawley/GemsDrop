@@ -9,7 +9,6 @@ import android.os.Looper;
 
 import com.jcrawleydev.gemsdrop.R;
 
-import java.io.IOException;
 
 public class MusicPlayer {
 
@@ -19,8 +18,9 @@ public class MusicPlayer {
     private final int fadeOutTime = 1500;
     private VolumeShaper volumeShaper;
     private boolean isInitialized;
-    private boolean isPlayingOrPaused = false;
     private int currentPosition = 0;
+    private enum MusicState { STOPPED, PLAYING, PAUSED}
+    private MusicState musicState = MusicState.STOPPED;
 
 
     public void init(Application application){
@@ -46,36 +46,11 @@ public class MusicPlayer {
     private void initMediaPlayer(Context context){
         mediaPlayer = MediaPlayer.create(context, R.raw.music_title_1);
         mediaPlayer.setLooping(true);
-        //setDataSource(context, R.raw.music_title_1);
         mediaPlayer.setOnCompletionListener(mp -> {
             mp.reset();
             mp.release();
+            musicState = MusicState.STOPPED;
         });
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ MusicPlayer: " + msg);
-    }
-
-
-    private void setDataSource(Context context, int resId){
-        var afd = context.getResources().openRawResourceFd(resId);
-        if (afd == null){
-            log("setDataSource() AudioFileDescriptor is null, cannot assign resource");
-            return;
-        }
-        try {
-            mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-            afd.close();
-        }catch (IOException e){
-            printError(e.getMessage());
-        }
-    }
-
-
-    private void printError(String msg){
-        System.out.print("^^^ ERROR: " + msg);
     }
 
 
@@ -91,32 +66,33 @@ public class MusicPlayer {
 
 
     public void play(){
-        if(!mediaPlayer.isPlaying()) {
+        if(musicState == MusicState.STOPPED) {
             mediaPlayer.start();
-            isPlayingOrPaused = true;
+            musicState = MusicState.PLAYING;
         }
     }
 
 
     public void pause(){
-        if(mediaPlayer.isPlaying()) {
+        if(musicState == MusicState.PLAYING) {
             currentPosition = mediaPlayer.getCurrentPosition();
             mediaPlayer.pause();
+            musicState = MusicState.PAUSED;
         }
     }
 
 
     public void resume(){
-        if(isPlayingOrPaused) {
+        if(musicState == MusicState.PAUSED) {
             mediaPlayer.seekTo(currentPosition);
             mediaPlayer.start();
+            musicState = MusicState.PLAYING;
         }
     }
 
 
     public void fadeOut(){
         if(isMusicEnabled){
-            isPlayingOrPaused = false;
             volumeShaper = mediaPlayer.createVolumeShaper(volumeShaperConfig);
             volumeShaper.apply(VolumeShaper.Operation.PLAY);
 
@@ -124,13 +100,11 @@ public class MusicPlayer {
                 if (mediaPlayer.isPlaying()) {
                     mediaPlayer.stop();
                     mediaPlayer.release();
+                    musicState = MusicState.STOPPED;
                 }
             }, fadeOutTime + 50);
         }
     }
-
-
-
 
 
 }
