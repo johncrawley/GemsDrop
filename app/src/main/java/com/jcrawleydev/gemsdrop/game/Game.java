@@ -31,7 +31,6 @@ public class Game {
     private final GemMover gemMover = new GemMover();
     private final TaskScheduler taskScheduler = new TaskScheduler();
     private final SoundEffectManager soundEffectManager = new SoundEffectManager();
-    private final DroppingGemsFactory droppingGemsFactory = new DroppingGemsFactory();
     private ScoreRecords scoreRecords;
     private GridProps gridProps;
 
@@ -48,8 +47,6 @@ public class Game {
         var droppingGemsEvaluator = new DroppingGemsEvaluator(this);
         gemMover.init(gameModel.getGemGrid(), gridProps, droppingGemsEvaluator);
         soundEffectManager.setScore(gameModel.getScore());
-        droppingGemsFactory.setGridProps(gridProps);
-        droppingGemsFactory.setGameModel(gameModel);
         stateManager.init(this);
     }
 
@@ -60,30 +57,17 @@ public class Game {
 
 
     public void createDroppingGems(){
-        var isFactoryNull = droppingGemsFactory == null;
-        log("entered createDroppingGems() is factory null: " + isFactoryNull);
-        var droppingGems = droppingGemsFactory.createDroppingGems();
-        if(droppingGems == null){
-            log("createDroppingGems() gems are null!");
-        }
-        gameModel.setDroppingGems(droppingGemsFactory.createDroppingGems());
+        gameModel.createDroppingGems();
     }
 
 
     public void setCurrentGameLevel(GameLevel level){
         gameModel.setGameLevel(level);
-        droppingGemsFactory.setLevel(level);
-        setCurrentDropRate(level.startingDropDuration());
     }
 
 
     public void resetDropCount(){
         gameModel.resetDropCount();
-    }
-
-
-    public void setCurrentDropRate(int dropRate){
-        gameModel.setDropRate(dropRate);
     }
 
 
@@ -182,7 +166,7 @@ public class Game {
 
 
     public DroppingGemsFactory getDroppingGemsFactory(){
-        return droppingGemsFactory;
+        return gameModel.getDroppingGemsFactory();
     }
 
 

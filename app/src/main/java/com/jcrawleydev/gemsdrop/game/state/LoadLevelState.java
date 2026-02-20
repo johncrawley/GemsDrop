@@ -3,7 +3,6 @@ package com.jcrawleydev.gemsdrop.game.state;
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.GEMS_DROP;
 
 import com.jcrawleydev.gemsdrop.game.Game;
-import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsFactory;
 import com.jcrawleydev.gemsdrop.game.grid.GridAdder;
 import com.jcrawleydev.gemsdrop.game.level.LevelFactory;
 
@@ -16,12 +15,10 @@ public class LoadLevelState extends AbstractGameState {
     private final ScheduledExecutorService executorService;
     private final GridAdder gridAdder = new GridAdder();
     private final LevelFactory levelFactory = new LevelFactory();
-    private final DroppingGemsFactory droppingGemsFactory;
 
     public LoadLevelState(Game game){
         super(game);
         executorService = Executors.newSingleThreadScheduledExecutor();
-        droppingGemsFactory = game.getDroppingGemsFactory();
     }
 
 
@@ -30,7 +27,7 @@ public class LoadLevelState extends AbstractGameState {
         game.resetDropCount();
         var level = levelFactory.getLevel(1);
         game.setCurrentGameLevel(level);
-        droppingGemsFactory.setLevel(level);
+        game.getDroppingGemsFactory().setLevel(level);
         gridAdder.addTo(gemGrid, level.startingGrid());
 
         executorService.schedule(()-> loadState(GEMS_DROP),

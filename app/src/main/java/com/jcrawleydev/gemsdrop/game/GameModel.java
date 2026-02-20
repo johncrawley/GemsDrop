@@ -1,9 +1,11 @@
 package com.jcrawleydev.gemsdrop.game;
 
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
+import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsFactory;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 import com.jcrawleydev.gemsdrop.game.grid.GemGridImpl;
 import com.jcrawleydev.gemsdrop.game.level.GameLevel;
+import com.jcrawleydev.gemsdrop.game.level.LevelFactory;
 import com.jcrawleydev.gemsdrop.game.score.Score;
 
 public class GameModel {
@@ -16,51 +18,35 @@ public class GameModel {
     private final GridProps gridProps = new GridProps(15, 7, 2);
     private final GemGrid gemGrid = new GemGridImpl(gridProps);
     private final Score score = new Score(50);
+    private final DroppingGemsFactory droppingGemsFactory = new DroppingGemsFactory();
     private DroppingGems droppingGems;
-    private int numberOfNormalGemsDropped;
-    private GameLevel gameLevel;
+    private GameLevel gameLevel = new LevelFactory().getLevel(1);
 
 
-    public void setGameLevel(GameLevel gameLevel){
-        this.gameLevel = gameLevel;
+    public GameModel(){
+        droppingGemsFactory.setGridProps(gridProps);
+        droppingGemsFactory.setLevel(gameLevel);
     }
 
 
-    public GameLevel getGameLevel(){
-        return gameLevel;
+    public void setGameLevel(GameLevel level){
+        this.gameLevel = level;
+        droppingGemsFactory.setLevel(level);
+        setDropRate(level.startingDropDuration());
     }
 
 
-    private void log(String msg){
-        System.out.println("^^^ GameModel : " + msg);
+    public DroppingGemsFactory getDroppingGemsFactory(){
+        return droppingGemsFactory;
     }
 
 
-    public void setDroppingGems(DroppingGems droppingGems){
-        var isNull = droppingGems == null;
-        log("Entered setDroppingGems() gems are null: " + isNull);
-        this.droppingGems = droppingGems;
-    }
-
-
-    public void incNumberOfNormalsGemsDropped(){
-        numberOfNormalGemsDropped++;
-    }
-
-
-    public int getNumberOfNormalGemsDropped(){
-        return numberOfNormalGemsDropped;
-    }
-
-
-    public void resetNumberOfNormalGemsDropped(){
-        numberOfNormalGemsDropped = 0;
+    public void createDroppingGems(){
+        droppingGems = droppingGemsFactory.createDroppingGems();
     }
 
 
     public DroppingGems getDroppingGems(){
-        var isNull = droppingGems == null;
-        log("entered getDroppingGems() isNull:" + isNull);
         return droppingGems;
     }
 
