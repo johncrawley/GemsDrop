@@ -47,7 +47,7 @@ public class Game {
         var droppingGemsEvaluator = new DroppingGemsEvaluator(this);
         gemMover.init(gameModel.getGemGrid(), gridProps, droppingGemsEvaluator);
         soundEffectManager.setScore(gameModel.getScore());
-        stateManager.init(this);
+        stateManager.init(this, gameModel.getGameStateName());
     }
 
 

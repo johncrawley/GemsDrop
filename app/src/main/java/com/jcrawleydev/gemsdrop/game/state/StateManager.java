@@ -5,7 +5,9 @@ import com.jcrawleydev.gemsdrop.game.Game;
 public class StateManager {
 
     private AbstractGameState currentGameState;
-    private AbstractGameState gameStartedState,
+
+    private AbstractGameState awaitingGameStartedState,
+            gameStartedState,
             evaluateGridState,
             gridGravityState,
             gemRemovalCompletedState,
@@ -16,7 +18,8 @@ public class StateManager {
             loadLevelState;
 
 
-    public void init(Game game){
+    public void init(Game game, GameStateName existingStateName){
+        awaitingGameStartedState = new AwaitingGameStartState(game);
         gameStartedState = new GameStartedState(game);
         evaluateGridState = new EvaluateGridState(game);
         gemRemovalCompletedState = new GemRemovalAnimationDoneState(game);
@@ -26,12 +29,14 @@ public class StateManager {
         gemQuickDropState = new GemQuickDropState(game);
         gemsDropState = new GemsDropState(game);
         loadLevelState = new LoadLevelState(game);
+        load(existingStateName, "StateManager.init()");
     }
 
 
     public void load(GameStateName gameStateName, String caller){
         log("Entered load: state name: " + gameStateName);
        currentGameState = switch(gameStateName){
+           case AWAITING_GAME_START -> awaitingGameStartedState;
            case GAME_STARTED -> gameStartedState;
            case EVALUATE_GRID -> evaluateGridState;
            case GEM_REMOVAL_ANIMATION_COMPLETE -> gemRemovalCompletedState;
@@ -41,6 +46,7 @@ public class StateManager {
            case GEM_QUICK_DROP -> gemQuickDropState;
            case GEMS_DROP -> gemsDropState;
            case LOAD_LEVEL -> loadLevelState;
+
        };
        currentGameState.start();
     }

@@ -7,6 +7,7 @@ import com.jcrawleydev.gemsdrop.game.grid.GemGridImpl;
 import com.jcrawleydev.gemsdrop.game.level.GameLevel;
 import com.jcrawleydev.gemsdrop.game.level.LevelFactory;
 import com.jcrawleydev.gemsdrop.game.score.Score;
+import com.jcrawleydev.gemsdrop.game.state.GameStateName;
 
 public class GameModel {
 
@@ -21,6 +22,7 @@ public class GameModel {
     private final DroppingGemsFactory droppingGemsFactory = new DroppingGemsFactory();
     private DroppingGems droppingGems;
     private GameLevel gameLevel = new LevelFactory().getLevel(1);
+    private GameStateName gameStateName = GameStateName.AWAITING_GAME_START;
 
 
     public GameModel(){
@@ -28,6 +30,15 @@ public class GameModel {
         droppingGemsFactory.setLevel(gameLevel);
     }
 
+
+    public GameStateName getGameStateName(){
+        return gameStateName;
+    }
+
+
+    public void setGameStateName(GameStateName gameStateName){
+        this.gameStateName = gameStateName;
+    }
 
     public void setGameLevel(GameLevel level){
         this.gameLevel = level;

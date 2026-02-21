@@ -1,6 +1,7 @@
 package com.jcrawleydev.gemsdrop.game.state;
 
 public enum GameStateName {
+    AWAITING_GAME_START,
     GAME_STARTED,
     LOAD_LEVEL,
     GEMS_DROP,
