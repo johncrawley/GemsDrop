@@ -238,7 +238,7 @@ public class GameFragment extends Fragment implements GameView {
         log("entered startGame()");
         if(game != null) {
             log("game is not null: starting!");
-            game.startGame();
+            game.onViewCreated();
         }
     }
 

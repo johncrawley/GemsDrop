@@ -1,5 +1,6 @@
 package com.jcrawleydev.gemsdrop.game;
 
+import static com.jcrawleydev.gemsdrop.game.state.GameStateName.AWAITING_GAME_START;
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.GAME_STARTED;
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.GEM_REMOVAL_ANIMATION_COMPLETE;
 
@@ -160,8 +161,17 @@ public class Game {
     }
 
 
-    public void startGame(){
-        loadState(GAME_STARTED);
+    public void onViewCreated(){
+        if(gameModel.getGameStateName() == AWAITING_GAME_START){
+            loadState(GAME_STARTED);
+        }
+        else{
+            updateGemsOnView(gameModel.getGemGrid().getGems());
+            var droppingGems = gameModel.getDroppingGems();
+            if(droppingGems != null){
+                updateGemsOnView(droppingGems.get());
+            }
+        }
     }
 
 

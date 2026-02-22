@@ -1,6 +1,8 @@
 package com.jcrawleydev.gemsdrop.game.state;
 
-import static com.jcrawleydev.gemsdrop.game.state.GameStateName.LOAD_LEVEL;
+
+import android.os.Handler;
+import android.os.Looper;
 
 import com.jcrawleydev.gemsdrop.game.Game;
 
@@ -14,7 +16,8 @@ public class AwaitingGameStartState extends AbstractGameState{
 
     @Override
     public void start() {
-      //do nothing
+      // var handler = new Handler(Looper.getMainLooper());
+      // handler.postDelayed(()->loadState(GameStateName.GAME_STARTED), 800);
     }
 
 }
