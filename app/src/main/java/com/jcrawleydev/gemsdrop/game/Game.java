@@ -166,7 +166,7 @@ public class Game {
             loadState(GAME_STARTED);
         }
         else{
-            updateGemsOnView(gameModel.getGemGrid().getGems());
+            updateGridGemsOnView();
             var droppingGems = gameModel.getDroppingGems();
             if(droppingGems != null){
                 updateGemsOnView(droppingGems.get());
@@ -279,11 +279,6 @@ public class Game {
 
     public void setView(GameView gameView){
         this.gameView = gameView;
-    }
-
-
-    public void onGameViewReady(){
-        updateGridGemsOnView();
     }
 
 

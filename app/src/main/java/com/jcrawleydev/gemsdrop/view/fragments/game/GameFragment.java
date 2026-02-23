@@ -65,14 +65,17 @@ public class GameFragment extends Fragment implements GameView {
 
         assignViewModel();
         initGame();
+        initViewMaps();
+        setupViews(parentView);
+        assignLayoutDimensions();
+        setupTouchListener(parentView);
+        return parentView;
+    }
+
+
+    private void initViewMaps(){
         itemsMap = new ConcurrentHashMap<>();
         imageMap = new ImageMap();
-        gemContainer = parentView.findViewById(R.id.gemContainer);
-        gamePane = parentView.findViewById(R.id.game_pane);
-        gameOverTextLayout = parentView.findViewById(R.id.gameOverTextLayout);
-        assignLayoutDimensions();
-        setupViews(parentView);
-        return parentView;
     }
 
 
@@ -93,6 +96,12 @@ public class GameFragment extends Fragment implements GameView {
         gamePreferenceManager = new GamePreferenceManager();
     }
 
+    @Override
+    public void onDestroy(){
+        game.onDestroy();
+        super.onDestroy();
+    }
+
 
     private void assignLayoutDimensions(){
         ViewTreeObserver.OnGlobalLayoutListener listener = new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -100,10 +109,7 @@ public class GameFragment extends Fragment implements GameView {
             public void onGlobalLayout() {
                 assignGemContainerDimensions();
                 assignWidthToExistingGems();
-                log("assignLayoutDimensions() about to invoke startGame()");
-                startGame();
-                notifyGameViewReady();
-                log("assignLayoutDimensions() exited startGame()");
+                notifyGameOfViewCreated();
                 gamePane.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                // createWonderGem(1000000L, 5,5);
             }
@@ -191,13 +197,6 @@ public class GameFragment extends Fragment implements GameView {
     }
 
 
-    private void notifyGameViewReady(){
-        if(game != null){
-            game.onGameViewReady();
-        }
-    }
-
-
     private void assignGemContainerDimensions(){
         if(gemContainer == null) {
             return;
@@ -234,17 +233,23 @@ public class GameFragment extends Fragment implements GameView {
     }
 
 
-    private void startGame(){
-        log("entered startGame()");
+    private void notifyGameOfViewCreated(){
         if(game != null) {
-            log("game is not null: starting!");
             game.onViewCreated();
         }
     }
 
 
-    @SuppressLint("ClickableViewAccessibility")
     private void setupViews(View parentView){
+        gemContainer = parentView.findViewById(R.id.gemContainer);
+        gamePane = parentView.findViewById(R.id.game_pane);
+        gameOverTextLayout = parentView.findViewById(R.id.gameOverTextLayout);
+        scoreView = parentView.findViewById(R.id.scoreView);
+    }
+
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void setupTouchListener(View parentView){
         ViewGroup gamePane = parentView.findViewById(R.id.game_pane);
         gamePane.setOnTouchListener((view, motionEvent) -> {
             if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
@@ -253,7 +258,6 @@ public class GameFragment extends Fragment implements GameView {
             }
             return false;
         });
-        scoreView = parentView.findViewById(R.id.scoreView);
     }
 
 
