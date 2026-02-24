@@ -22,10 +22,14 @@ public class GemMover {
     private enum Movement { LEFT, RIGHT, ROTATE, DOWN }
     private final Queue<Movement> movementQueue = new ConcurrentLinkedQueue<>();
 
-    public void init(GemGrid gemGrid, GridProps gridProps, DroppingGemsEvaluator droppingGemsEvaluator){
+    public void init(GemGrid gemGrid, GridProps gridProps){
         movementChecker = new MovementChecker(gemGrid, gridProps);
         rotationChecker = new RotationChecker(gemGrid, gridProps);
-        this.droppingGemsEvaluator = droppingGemsEvaluator;
+    }
+
+
+    public void setDroppingGemsEvaluator(DroppingGemsEvaluator evaluator){
+        this.droppingGemsEvaluator = evaluator;
         droppingGemsEvaluator.setGemMover(this);
     }
 

@@ -14,6 +14,7 @@ public class StateManager {
             gameOverState,
             gemFreeFallState,
             gemQuickDropState,
+            createDroppingGemsState,
             gemsDropState,
             loadLevelState;
 
@@ -27,6 +28,7 @@ public class StateManager {
         gameOverState = new GameEndingState(game);
         gemFreeFallState = new GemFreeFallState(game);
         gemQuickDropState = new GemQuickDropState(game);
+        createDroppingGemsState = new CreateDroppingGemsState(game);
         gemsDropState = new GemsDropState(game);
         loadLevelState = new LoadLevelState(game);
         load(existingStateName, "StateManager.init()");
@@ -44,6 +46,7 @@ public class StateManager {
            case GAME_OVER -> gameOverState;
            case GEM_FREE_FALL -> gemFreeFallState;
            case GEM_QUICK_DROP -> gemQuickDropState;
+           case CREATE_GEMS -> createDroppingGemsState;
            case GEMS_DROP -> gemsDropState;
            case LOAD_LEVEL -> loadLevelState;
 

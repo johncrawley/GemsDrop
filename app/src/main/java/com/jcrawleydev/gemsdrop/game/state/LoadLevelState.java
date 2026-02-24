@@ -1,6 +1,6 @@
 package com.jcrawleydev.gemsdrop.game.state;
 
-import static com.jcrawleydev.gemsdrop.game.state.GameStateName.GEMS_DROP;
+import static com.jcrawleydev.gemsdrop.game.state.GameStateName.CREATE_GEMS;
 
 import com.jcrawleydev.gemsdrop.game.Game;
 import com.jcrawleydev.gemsdrop.game.grid.GridAdder;
@@ -29,8 +29,9 @@ public class LoadLevelState extends AbstractGameState {
         game.setCurrentGameLevel(level);
         game.getDroppingGemsFactory().setLevel(level);
         gridAdder.addTo(gemGrid, level.startingGrid());
+        game.updateGridGemsOnView();
 
-        executorService.schedule(()-> loadState(GEMS_DROP),
+        executorService.schedule(()-> loadState(CREATE_GEMS),
                 1000,
                 TimeUnit.MILLISECONDS);
     }

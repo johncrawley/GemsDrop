@@ -1,7 +1,7 @@
 package com.jcrawleydev.gemsdrop.game.state;
 
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.GAME_OVER;
-import static com.jcrawleydev.gemsdrop.game.state.GameStateName.GEMS_DROP;
+import static com.jcrawleydev.gemsdrop.game.state.GameStateName.CREATE_GEMS;
 
 import com.jcrawleydev.gemsdrop.game.Game;
 import com.jcrawleydev.gemsdrop.game.grid.GridEvaluator;
@@ -38,7 +38,7 @@ public class EvaluateGridState extends AbstractGameState{
             }
             else{
                 log("evaluateGemGrid() grid doesn't exceed max height, so loading gems drop state");
-                loadState(GEMS_DROP);
+                loadState(CREATE_GEMS);
             }
         }
     }

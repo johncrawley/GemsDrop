@@ -1,6 +1,7 @@
 package com.jcrawleydev.gemsdrop.game;
 
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
+import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsEvaluator;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsFactory;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 import com.jcrawleydev.gemsdrop.game.grid.GemGridImpl;
@@ -23,11 +24,17 @@ public class GameModel {
     private DroppingGems droppingGems;
     private GameLevel gameLevel = new LevelFactory().getLevel(1);
     private GameStateName gameStateName = GameStateName.AWAITING_GAME_START;
+    private final GemMover gemMover = new GemMover();
 
 
     public GameModel(){
         droppingGemsFactory.setGridProps(gridProps);
         droppingGemsFactory.setLevel(gameLevel);
+        gemMover.init(gemGrid, gridProps);
+    }
+
+    public void setDroppingGemsEvaluator(DroppingGemsEvaluator evaluator){
+        gemMover.setDroppingGemsEvaluator(evaluator);
     }
 
 
@@ -54,6 +61,14 @@ public class GameModel {
 
     public void createDroppingGems(){
         droppingGems = droppingGemsFactory.createDroppingGems();
+        gemMover.setDroppingGems(droppingGems);
+        dropCount++;
+        updateDropInterval();
+    }
+
+
+    public GemMover getGemMover(){
+        return gemMover;
     }
 
 

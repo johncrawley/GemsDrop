@@ -29,7 +29,6 @@ public class Game {
     private final AtomicBoolean hasQuitBeenInvoked = new AtomicBoolean(false);
     private final GameModel gameModel;
 
-    private final GemMover gemMover = new GemMover();
     private final TaskScheduler taskScheduler = new TaskScheduler();
     private final SoundEffectManager soundEffectManager = new SoundEffectManager();
     private ScoreRecords scoreRecords;
@@ -45,9 +44,9 @@ public class Game {
         this.scoreRecords = scoreRecords;
         soundEffectManager.init(soundPlayer);
         this.gridProps = gameModel.getGridProps();
-        var droppingGemsEvaluator = new DroppingGemsEvaluator(this);
-        gemMover.init(gameModel.getGemGrid(), gridProps, droppingGemsEvaluator);
         soundEffectManager.setScore(gameModel.getScore());
+        var droppingGemsEvaluator = new DroppingGemsEvaluator(this);
+        gameModel.setDroppingGemsEvaluator(droppingGemsEvaluator);
         stateManager.init(this, gameModel.getGameStateName());
     }
 
@@ -59,11 +58,17 @@ public class Game {
 
     public void createDroppingGems(){
         gameModel.createDroppingGems();
+        createGemsOnView(gameModel.getDroppingGems());
     }
 
 
     public void setCurrentGameLevel(GameLevel level){
         gameModel.setGameLevel(level);
+    }
+
+
+    public GemMover getGemMover(){
+        return gameModel.getGemMover();
     }
 
 
@@ -205,11 +210,6 @@ public class Game {
     }
 
 
-    public GemMover getGemMover(){
-        return gemMover;
-    }
-
-
     public GemGrid getGemGrid(){
         return gameModel.getGemGrid();
     }
@@ -282,7 +282,7 @@ public class Game {
     }
 
 
-    private void updateGridGemsOnView(){
+    public void updateGridGemsOnView(){
         var gemGrid = gameModel.getGemGrid();
         if(gemGrid == null){
             return;

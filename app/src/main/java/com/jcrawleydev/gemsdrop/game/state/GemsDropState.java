@@ -4,9 +4,12 @@ import static com.jcrawleydev.gemsdrop.game.state.GameStateName.GEM_QUICK_DROP;
 
 import com.jcrawleydev.gemsdrop.game.Game;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 
 public class GemsDropState extends AbstractGameState{
 
+    private final AtomicBoolean isStarted = new AtomicBoolean(false);
 
     public GemsDropState(Game game){
         super(game);
@@ -15,36 +18,29 @@ public class GemsDropState extends AbstractGameState{
 
     @Override
     public void start() {
-        log("Entered start()");
-        createDrop();
-    }
-
-
-    private void createDrop(){
-        log("Entered createDrop()");
-        game.createDroppingGems();
-        game.incrementDropCount();
-        game.updateDropInterval();
-        gemMover.setDroppingGems(game.getDroppingGems());
-        gemGrid.printColumnHeights();
-        score.resetMultiplier();
-        game.createGemsOnView(game.getDroppingGems());
         taskScheduler.scheduleWithRepeats(() -> gemMover.dropGems(), game.getCurrentDropRate());
+        isStarted.set(true);
     }
 
 
     public void rotate(){
-        gemMover.rotateGems();
+        if(!isStarted.get()){
+            gemMover.rotateGems();
+        }
     }
 
 
     public void left(){
-        gemMover.moveLeft();
+        if(isStarted.get()){
+            gemMover.moveLeft();
+        }
     }
 
 
     public void right(){
-        gemMover.moveRight();
+        if(isStarted.get()){
+            gemMover.moveRight();
+        }
     }
 
 
@@ -52,7 +48,8 @@ public class GemsDropState extends AbstractGameState{
         var droppingGems = game.getDroppingGems();
         if(droppingGems == null
                 || gemMover.areControlsDisabled()
-                || droppingGems.areAllAddedToGrid()){
+                || droppingGems.areAllAddedToGrid()
+                || !isStarted.get()){
             return;
         }
         loadState(GEM_QUICK_DROP);
