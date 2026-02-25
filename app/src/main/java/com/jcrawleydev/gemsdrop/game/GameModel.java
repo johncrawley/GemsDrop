@@ -3,12 +3,15 @@ package com.jcrawleydev.gemsdrop.game;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsEvaluator;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsFactory;
+import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 import com.jcrawleydev.gemsdrop.game.grid.GemGridImpl;
 import com.jcrawleydev.gemsdrop.game.level.GameLevel;
 import com.jcrawleydev.gemsdrop.game.level.LevelFactory;
 import com.jcrawleydev.gemsdrop.game.score.Score;
 import com.jcrawleydev.gemsdrop.game.state.GameStateName;
+
+import java.util.List;
 
 public class GameModel {
 
@@ -79,6 +82,11 @@ public class GameModel {
 
     public GemGrid getGemGrid(){
         return gemGrid;
+    }
+
+
+    public List<Gem> getGridGems(){
+        return gemGrid.getGems();
     }
 
 

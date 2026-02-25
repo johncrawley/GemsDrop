@@ -283,13 +283,6 @@ public class Game {
 
 
     public void updateGridGemsOnView(){
-        var gemGrid = gameModel.getGemGrid();
-        if(gemGrid == null){
-            return;
-        }
-        var gridGems = gemGrid.getGems();
-        if(!gridGems.isEmpty()){
-            gameView.createGems(gridGems);
-        }
+        gameView.createGems(gameModel.getGridGems());
     }
 }

@@ -24,7 +24,7 @@ public class GemsDropState extends AbstractGameState{
 
 
     public void rotate(){
-        if(!isStarted.get()){
+        if(isStarted.get()){
             gemMover.rotateGems();
         }
     }

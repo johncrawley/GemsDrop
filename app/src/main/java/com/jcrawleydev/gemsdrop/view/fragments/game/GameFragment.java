@@ -120,6 +120,9 @@ public class GameFragment extends Fragment implements GameView {
 
     @Override
     public void createGems(List<Gem> gems) {
+        if(gems.isEmpty()){
+            return;
+        }
         runOnUiThread(() -> {
             for(var gem : gems) {
                 var id = gem.getId();
@@ -323,6 +326,9 @@ public class GameFragment extends Fragment implements GameView {
 
 
     private void createGem(long id, int position, int column, int colorId){
+        if(itemsMap.containsKey(id)){
+            return;
+        }
         var gemLayout = createGem(id, position, column);
         updateGemColor(gemLayout, colorId);
     }
