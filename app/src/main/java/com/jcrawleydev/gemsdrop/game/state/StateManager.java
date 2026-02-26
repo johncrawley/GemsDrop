@@ -1,10 +1,12 @@
 package com.jcrawleydev.gemsdrop.game.state;
 
 import com.jcrawleydev.gemsdrop.game.Game;
+import com.jcrawleydev.gemsdrop.game.GameModel;
 
 public class StateManager {
 
     private AbstractGameState currentGameState;
+    private GameModel gameModel;
 
     private AbstractGameState awaitingGameStartedState,
             gameStartedState,
@@ -19,7 +21,8 @@ public class StateManager {
             loadLevelState;
 
 
-    public void init(Game game, GameStateName existingStateName){
+    public void init(Game game){
+        this.gameModel = game.getGameModel();
         awaitingGameStartedState = new AwaitingGameStartState(game);
         gameStartedState = new GameStartedState(game);
         evaluateGridState = new EvaluateGridState(game);
@@ -31,7 +34,7 @@ public class StateManager {
         createDroppingGemsState = new CreateDroppingGemsState(game);
         gemsDropState = new GemsDropState(game);
         loadLevelState = new LoadLevelState(game);
-        load(existingStateName, "StateManager.init()");
+        load(gameModel.getGameStateName(), "StateManager.init()");
     }
 
 
@@ -51,6 +54,7 @@ public class StateManager {
            case LOAD_LEVEL -> loadLevelState;
 
        };
+       gameModel.setGameStateName(gameStateName);
        currentGameState.start();
     }
 

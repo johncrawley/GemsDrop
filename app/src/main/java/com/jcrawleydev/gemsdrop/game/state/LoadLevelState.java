@@ -29,7 +29,8 @@ public class LoadLevelState extends AbstractGameState {
         game.setCurrentGameLevel(level);
         game.getDroppingGemsFactory().setLevel(level);
         gridAdder.addTo(gemGrid, level.startingGrid());
-        game.updateGridGemsOnView();
+        log("start() level loaded");
+        game.createGridGemsOnView();
 
         executorService.schedule(()-> loadState(CREATE_GEMS),
                 1000,

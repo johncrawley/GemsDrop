@@ -47,7 +47,7 @@ public class Game {
         soundEffectManager.setScore(gameModel.getScore());
         var droppingGemsEvaluator = new DroppingGemsEvaluator(this);
         gameModel.setDroppingGemsEvaluator(droppingGemsEvaluator);
-        stateManager.init(this, gameModel.getGameStateName());
+        stateManager.init(this);
     }
 
 
@@ -171,7 +171,7 @@ public class Game {
             loadState(GAME_STARTED);
         }
         else{
-            updateGridGemsOnView();
+            createGridGemsOnView();
             var droppingGems = gameModel.getDroppingGems();
             if(droppingGems != null){
                 updateGemsOnView(droppingGems.get());
@@ -282,7 +282,7 @@ public class Game {
     }
 
 
-    public void updateGridGemsOnView(){
+    public void createGridGemsOnView(){
         gameView.createGems(gameModel.getGridGems());
     }
 }
