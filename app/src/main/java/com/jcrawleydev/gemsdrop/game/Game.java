@@ -35,8 +35,9 @@ public class Game {
     private GridProps gridProps;
 
 
-    public Game(GameModel gameModel){
+    public Game(GameModel gameModel, GameView gameView){
         this.gameModel = gameModel;
+        this.gameView = gameView;
     }
 
 
@@ -48,6 +49,7 @@ public class Game {
         var droppingGemsEvaluator = new DroppingGemsEvaluator(this);
         gameModel.setDroppingGemsEvaluator(droppingGemsEvaluator);
         stateManager.init(this);
+        createGemsOnView(gameModel.getDroppingGems());
     }
 
 
@@ -151,7 +153,7 @@ public class Game {
 
     public void createGemsOnView(DroppingGems droppingGems){
         if(droppingGems != null){
-            gameView.createGems(droppingGems.get());
+            gameView.createGems(droppingGems.getFreeGems());
         }
     }
 
@@ -274,11 +276,6 @@ public class Game {
 
     public void removeGemsFromView(long[] markedGemsIds){
         gameView.wipeOut(markedGemsIds);
-    }
-
-
-    public void setView(GameView gameView){
-        this.gameView = gameView;
     }
 
 

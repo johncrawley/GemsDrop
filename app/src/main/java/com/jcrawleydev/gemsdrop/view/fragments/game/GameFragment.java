@@ -41,8 +41,8 @@ import java.util.function.Consumer;
 
 public class GameFragment extends Fragment implements GameView {
 
-    private ImageMap imageMap;
-    private Map<Long, ViewGroup> itemsMap;
+    private ImageMap imageMap = new ImageMap();
+    private Map<Long, ViewGroup> itemsMap = new ConcurrentHashMap<>();
     private int containerWidth;
     private int containerHeight;
     private ViewGroup gemContainer, gamePane, gameOverTextLayout;
@@ -53,8 +53,6 @@ public class GameFragment extends Fragment implements GameView {
     private int numberOfGemsToRemove;
     private Game game;
     private MainViewModel viewModel;
-    private SoundPlayer soundPlayer;
-    private ScoreRecords scoreRecords;
     private GamePreferenceManager gamePreferenceManager;
 
 
@@ -64,18 +62,11 @@ public class GameFragment extends Fragment implements GameView {
         View parentView = inflater.inflate(R.layout.fragment_game, container, false);
 
         assignViewModel();
-        initGame();
-        initViewMaps();
         setupViews(parentView);
+        createGame();
         assignLayoutDimensions();
         setupTouchListener(parentView);
         return parentView;
-    }
-
-
-    private void initViewMaps(){
-        itemsMap = new ConcurrentHashMap<>();
-        imageMap = new ImageMap();
     }
 
 
@@ -87,14 +78,18 @@ public class GameFragment extends Fragment implements GameView {
     }
 
 
-    public void initGame() {
-        game = new Game(viewModel.gameModel);
-        game.setView(this);
-        soundPlayer = new SoundPlayer(getContext());
-        scoreRecords = new ScoreRecords(getContext());
+    private void createGame(){
+        game = new Game(viewModel.gameModel, this);
+    }
+
+
+    private void initGame() {
+        var soundPlayer = new SoundPlayer(getContext());
+        var scoreRecords = new ScoreRecords(getContext());
         game.init(soundPlayer, scoreRecords);
         gamePreferenceManager = new GamePreferenceManager();
     }
+
 
     @Override
     public void onDestroy(){
@@ -111,7 +106,7 @@ public class GameFragment extends Fragment implements GameView {
                 assignWidthToExistingGems();
                 notifyGameOfViewCreated();
                 gamePane.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-               // createWonderGem(1000000L, 5,5);
+                initGame();
             }
         };
         gamePane.getViewTreeObserver().addOnGlobalLayoutListener(listener);
