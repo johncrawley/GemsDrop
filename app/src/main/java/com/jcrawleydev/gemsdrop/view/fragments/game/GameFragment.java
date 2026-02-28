@@ -104,9 +104,9 @@ public class GameFragment extends Fragment implements GameView {
             public void onGlobalLayout() {
                 assignGemContainerDimensions();
                 assignWidthToExistingGems();
-                notifyGameOfViewCreated();
-                gamePane.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 initGame();
+                gamePane.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
             }
         };
         gamePane.getViewTreeObserver().addOnGlobalLayoutListener(listener);
@@ -227,13 +227,6 @@ public class GameFragment extends Fragment implements GameView {
     private void assignWidthToExistingGems(){
         for(View gemView : itemsMap.values()){
             setGemViewDimensions(gemView);
-        }
-    }
-
-
-    private void notifyGameOfViewCreated(){
-        if(game != null) {
-            game.onViewCreated();
         }
     }
 

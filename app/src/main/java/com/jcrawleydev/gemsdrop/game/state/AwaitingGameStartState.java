@@ -16,8 +16,8 @@ public class AwaitingGameStartState extends AbstractGameState{
 
     @Override
     public void start() {
-      // var handler = new Handler(Looper.getMainLooper());
-      // handler.postDelayed(()->loadState(GameStateName.GAME_STARTED), 800);
+      new Handler(Looper.getMainLooper())
+              .postDelayed(()->loadState(GameStateName.GAME_STARTED), 800);
     }
 
 }

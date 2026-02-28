@@ -1,7 +1,6 @@
 package com.jcrawleydev.gemsdrop.game;
 
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.AWAITING_GAME_START;
-import static com.jcrawleydev.gemsdrop.game.state.GameStateName.GAME_STARTED;
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.GEM_REMOVAL_ANIMATION_COMPLETE;
 
 import com.jcrawleydev.gemsdrop.audio.SoundEffectManager;
@@ -23,7 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Game {
 
-    private GameView gameView;
+    private final GameView gameView;
     private final StateManager stateManager = new StateManager();
     private final AtomicBoolean isStarted = new AtomicBoolean(false);
     private final AtomicBoolean hasQuitBeenInvoked = new AtomicBoolean(false);
@@ -49,7 +48,7 @@ public class Game {
         var droppingGemsEvaluator = new DroppingGemsEvaluator(this);
         gameModel.setDroppingGemsEvaluator(droppingGemsEvaluator);
         stateManager.init(this);
-        createGemsOnView(gameModel.getDroppingGems());
+        addExistingGemViews();
     }
 
 
@@ -168,16 +167,10 @@ public class Game {
     }
 
 
-    public void onViewCreated(){
-        if(gameModel.getGameStateName() == AWAITING_GAME_START){
-            loadState(GAME_STARTED);
-        }
-        else{
+    public void addExistingGemViews(){
+        if(gameModel.getGameStateName() != AWAITING_GAME_START){
             createGridGemsOnView();
-            var droppingGems = gameModel.getDroppingGems();
-            if(droppingGems != null){
-                updateGemsOnView(droppingGems.get());
-            }
+            createGemsOnView(gameModel.getDroppingGems());
         }
     }
 
@@ -224,11 +217,6 @@ public class Game {
 
     public DroppingGems getDroppingGems(){
         return gameModel.getDroppingGems();
-    }
-
-
-    private void log(String msg){
-       System.out.println("^^^ Game: " + msg);
     }
 
 

@@ -38,8 +38,9 @@ public class GemGridImpl implements GemGrid {
 
     private void initColumns(){
         gemColumns = new ArrayList<>(gridProps.numberOfColumns());
-        for(int i=0; i< gridProps.numberOfColumns(); i++){
-            gemColumns.add(new ArrayList<>(gridProps.numberOfRows()));
+        for(int i = 0; i < gridProps.numberOfColumns(); i++){
+            var column = new ArrayList<Gem>(gridProps.numberOfRows());
+            gemColumns.add(column);
         }
     }
 
