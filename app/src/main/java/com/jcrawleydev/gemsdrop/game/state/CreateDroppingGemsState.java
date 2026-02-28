@@ -13,6 +13,7 @@ public class CreateDroppingGemsState  extends AbstractGameState {
     @Override
     public void start() {
         game.createDroppingGems();
+        score.resetMultiplier();
         loadState(GameStateName.GEMS_DROP);
     }
 
