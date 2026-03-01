@@ -32,6 +32,7 @@ public class Game {
     private final SoundEffectManager soundEffectManager = new SoundEffectManager();
     private ScoreRecords scoreRecords;
     private GridProps gridProps;
+    private int numberOfRowsAlreadyDone;
 
 
     public Game(GameModel gameModel, GameView gameView){
@@ -49,6 +50,13 @@ public class Game {
         gameModel.setDroppingGemsEvaluator(droppingGemsEvaluator);
         stateManager.init(this);
         addExistingGemViews();
+        updateScoreOnView();
+    }
+
+
+    public void startGame(){
+        gameModel.resetNumberOfGreyedOutRows();
+        gameModel.resetDropCount();
     }
 
 
@@ -238,7 +246,14 @@ public class Game {
 
     public void updateScore(int numberOfRemovedGems){
         gameModel.getScore().addPointsFor(numberOfRemovedGems);
-        gameView.updateScore(gameModel.getScore().get());
+        updateScoreOnView();
+    }
+
+
+    private void updateScoreOnView(){
+        var score = gameModel.getScore().get();
+        var displayedScore = score < 2 ? 0 : score;
+        gameView.updateScore(displayedScore);
     }
 
 

@@ -20,17 +20,21 @@ public class GameOverAnimator {
     private Future<?> future;
     private final ScheduledExecutorService executorService;
     private final Game game;
+    private final GameModel gameModel;
     private final GemGrid gemGrid;
     private int currentRowIndex;
     private List<List<Gem>> gemRows;
     private final GridProps gridProps;
+    private int numberOfRowsAlreadyGreyedOut;
 
 
     public GameOverAnimator(Game game, GemGrid gemGrid){
         this.game = game;
+        this.gameModel = game.getGameModel();
         this.gemGrid = gemGrid;
         this.gridProps = game.getGameModel().getGridProps();
         executorService = Executors.newSingleThreadScheduledExecutor();
+        numberOfRowsAlreadyGreyedOut = gameModel.getNumberOfRowsAlreadyGreyedOut();
     }
 
 
@@ -53,7 +57,7 @@ public class GameOverAnimator {
 
     private void populateGemRows(){
         gemRows = getGemRows();
-        currentRowIndex = gemRows.size() - 1;
+        currentRowIndex = gemRows.size() - (1 + numberOfRowsAlreadyGreyedOut);
     }
 
 
@@ -67,9 +71,9 @@ public class GameOverAnimator {
             game.end();
         }
         game.getSoundEffectManager().playSoundEffect(SoundEffect.GEMS_GREYED_OUT);
+        gameModel.incNumberOfGreyedOutRows();
     }
 
-    
 
     private void updateColorsOnView(List<Gem> gems){
         game.updateGemsColorsOnView(gems);

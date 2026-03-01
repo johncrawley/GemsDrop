@@ -28,6 +28,7 @@ public class GameModel {
     private GameLevel gameLevel = new LevelFactory().getLevel(1);
     private GameStateName gameStateName = GameStateName.AWAITING_GAME_START;
     private final GemMover gemMover = new GemMover();
+    private int numberOfRowsAlreadyGreyedOut = 0;
 
 
     public GameModel(){
@@ -56,6 +57,20 @@ public class GameModel {
         setDropRate(level.startingDropDuration());
     }
 
+
+    public void incNumberOfGreyedOutRows(){
+        numberOfRowsAlreadyGreyedOut++;
+    }
+
+
+    public void resetNumberOfGreyedOutRows(){
+        numberOfRowsAlreadyGreyedOut = 0;
+    }
+
+
+    public int getNumberOfRowsAlreadyGreyedOut(){
+        return numberOfRowsAlreadyGreyedOut;
+    }
 
     public DroppingGemsFactory getDroppingGemsFactory(){
         return droppingGemsFactory;
