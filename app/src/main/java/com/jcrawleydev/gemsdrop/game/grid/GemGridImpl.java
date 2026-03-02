@@ -19,7 +19,7 @@ public class GemGridImpl implements GemGrid {
 
     public GemGridImpl(GridProps gridProps){
         this.gridProps = gridProps;
-        initColumns();
+        init();
     }
 
     @Override
@@ -36,7 +36,7 @@ public class GemGridImpl implements GemGrid {
     }
 
 
-    private void initColumns(){
+    public void init(){
         gemColumns = new ArrayList<>(gridProps.numberOfColumns());
         for(int i = 0; i < gridProps.numberOfColumns(); i++){
             var column = new ArrayList<Gem>(gridProps.numberOfRows());

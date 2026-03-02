@@ -25,7 +25,7 @@ public class GameOverAnimator {
     private int currentRowIndex;
     private List<List<Gem>> gemRows;
     private final GridProps gridProps;
-    private int numberOfRowsAlreadyGreyedOut;
+    private final int numberOfRowsAlreadyGreyedOut;
 
 
     public GameOverAnimator(Game game, GemGrid gemGrid){
@@ -90,10 +90,11 @@ public class GameOverAnimator {
 
 
     private List<Gem> getGemRow(int index){
-        List<Gem> row = new ArrayList<>(gridProps.numberOfColumns());
+        var row = new ArrayList<Gem>(gridProps.numberOfColumns());
         for(var column : gemGrid.getGemColumns()){
             if(index < column.size()){
-                row.add(column.get(index));
+                var gem = column.get(index);
+                row.add(gem);
             }
         }
         return row;

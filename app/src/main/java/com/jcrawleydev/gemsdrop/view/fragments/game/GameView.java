@@ -15,4 +15,5 @@ public interface GameView {
     void updateScore(int score);
     void showGameOverAnimation();
     void showHighScores();
+    void loadGameOver();
 }

@@ -18,7 +18,6 @@ public class GameStartedState extends AbstractGameState{
             return;
         }
         game.setStarted();
-        game.clearScore();
         loadState(LOAD_LEVEL);
     }
 

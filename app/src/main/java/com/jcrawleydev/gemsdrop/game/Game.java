@@ -49,14 +49,17 @@ public class Game {
         var droppingGemsEvaluator = new DroppingGemsEvaluator(this);
         gameModel.setDroppingGemsEvaluator(droppingGemsEvaluator);
         stateManager.init(this);
-        addExistingGemViews();
         updateScoreOnView();
+        addExistingGemViews();
     }
 
 
     public void startGame(){
+        isStarted.set(false);
         gameModel.resetNumberOfGreyedOutRows();
         gameModel.resetDropCount();
+        gameModel.getGemGrid().init();
+        clearScore();
     }
 
 
@@ -258,7 +261,7 @@ public class Game {
 
 
     public void end(){
-        gameView.showGameOverAnimation();
+        gameView.loadGameOver();
     }
 
 

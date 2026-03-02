@@ -238,6 +238,10 @@ public class GameFragment extends Fragment implements GameView {
         scoreView = parentView.findViewById(R.id.scoreView);
     }
 
+    @Override
+    public void loadGameOver(){
+        FragmentUtils.loadGameOver(this);
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     private void setupTouchListener(View parentView){

@@ -7,6 +7,7 @@ import java.util.Set;
 
 public interface GemGrid {
 
+    void init();
     int getColumnHeightAt(int columnIndex);
     List<List<Gem>> getGemColumns();
     List<Gem> getGems();
