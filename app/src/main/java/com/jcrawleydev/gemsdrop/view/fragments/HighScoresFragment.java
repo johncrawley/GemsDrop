@@ -41,10 +41,8 @@ public class HighScoresFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View parent = inflater.inflate(R.layout.fragment_high_scores, container, false);
-        titleGemsAnimator = new TitleGemsAnimator(parent, getContext());
-        titleGemsAnimator.start();
-        return parent;
+       return inflater.inflate(R.layout.fragment_high_scores, container, false);
+
     }
 
 
