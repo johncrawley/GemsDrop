@@ -26,7 +26,7 @@ public class GameOverFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View parent = inflater.inflate(R.layout.game_over, container, false);
-        playTrack(this, R.raw.music_title_1);
+       // playTrack(this, R.raw.music_title_1);
         parent.setOnClickListener(this::loadHighScores);
         return parent;
     }

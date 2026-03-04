@@ -16,9 +16,6 @@ import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 
 public class HighScoresFragment extends Fragment {
 
-    private TitleGemsAnimator titleGemsAnimator;
-
-
     public HighScoresFragment() {
         // Required empty public constructor
     }
@@ -32,37 +29,42 @@ public class HighScoresFragment extends Fragment {
             return;
         }
         setupHighScores(parentView);
-        parentView.setOnClickListener((v)->{
-            FragmentUtils.loadMainMenu(this);
-        });
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-       return inflater.inflate(R.layout.fragment_high_scores, container, false);
+       View parent = inflater.inflate(R.layout.fragment_high_scores, container, false);
+
+       parent.setOnClickListener((v)-> FragmentUtils.loadMainMenu(this));
+       return parent;
 
     }
 
 
     private void setupHighScores(View parentView){
         var scoreRecords = new ScoreRecords(getContext());
+        ViewGroup highScoresLayout = parentView.findViewById(R.id.highScoresLayout);
+
+        for(int i = 0; i < scoreRecords.getOrderedHighScores().size(); i++){
+            highlightUserHighScore(highScoresLayout, i, scoreRecords);
+        }
+    }
+
+
+    private void highlightUserHighScore(ViewGroup parent, int index, ScoreRecords scoreRecords){
         var highScores = scoreRecords.getOrderedHighScores();
         var mostRecentScore = scoreRecords.getMostRecentScore();
 
-        ViewGroup highScoresLayout = parentView.findViewById(R.id.highScoresLayout);
-
-        for(int i = 0; i < highScores.size(); i++){
-            if(i >= highScoresLayout.getChildCount()){
-                return;
-            }
-            TextView textView = (TextView) highScoresLayout.getChildAt(i);
-            int highScore = highScores.get(i);
-            textView.setText(highScore);
-            if(highScore == mostRecentScore){
-                textView.setTextColor(Color.YELLOW);
-            }
+        if(index >= parent.getChildCount()){
+            return;
+        }
+        TextView textView = (TextView) parent.getChildAt(index);
+        int highScore = highScores.get(index);
+        textView.setText(highScore);
+        if(highScore == mostRecentScore){
+            textView.setTextColor(Color.YELLOW);
         }
     }
 
@@ -70,7 +72,7 @@ public class HighScoresFragment extends Fragment {
     @Override
     public void onDestroy(){
         super.onDestroy();
-        titleGemsAnimator.stop();
+        //titleGemsAnimator.stop();
     }
 
 
