@@ -81,7 +81,17 @@ public class MainMenuFragment extends Fragment {
         }
         isGameStartInitiated.set(true);
         stopTrack(this);
+        setGameStateToStarted();
         FragmentUtils.loadGame(this);
+    }
+
+
+    private void setGameStateToStarted(){
+        var main = (MainActivity)getActivity();
+        if(main != null){
+            var viewModel = main.getViewModel();
+            viewModel.gameModel.startNewGame();
+        }
     }
 
 

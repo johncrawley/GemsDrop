@@ -42,6 +42,11 @@ public class GameModel {
     }
 
 
+    public void startNewGame(){
+        gameStateName = GameStateName.AWAITING_GAME_START;
+    }
+
+
     public GameStateName getGameStateName(){
         return gameStateName;
     }

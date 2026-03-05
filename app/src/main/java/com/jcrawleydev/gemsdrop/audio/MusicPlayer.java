@@ -32,7 +32,7 @@ public class MusicPlayer {
             isMusicEnabled = false;
             return;
         }
-        initMediaPlayer(application);
+        initMediaPlayer(application, R.raw.music_title_1);
         initVolumeShaper();
         isInitialized = true;
     }
@@ -43,8 +43,8 @@ public class MusicPlayer {
     }
 
 
-    private void initMediaPlayer(Context context){
-        mediaPlayer = MediaPlayer.create(context, R.raw.music_title_1);
+    private void initMediaPlayer(Context context, int resId){
+        mediaPlayer = MediaPlayer.create(context, resId);
         mediaPlayer.setLooping(true);
         mediaPlayer.setOnCompletionListener(mp -> {
             mp.reset();
@@ -61,12 +61,12 @@ public class MusicPlayer {
                         .setCurve(new float[] {0.f, 1.f}, new float[] {1.f, 0.f})
                         .setInterpolatorType(VolumeShaper.Configuration.INTERPOLATOR_TYPE_LINEAR)
                         .build();
-
     }
 
 
-    public void play(){
+    public void play(Context context, int resId){
         if(musicState == MusicState.STOPPED) {
+            initMediaPlayer(context, resId);
             mediaPlayer.start();
             musicState = MusicState.PLAYING;
         }

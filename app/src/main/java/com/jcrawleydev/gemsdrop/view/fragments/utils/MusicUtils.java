@@ -10,7 +10,7 @@ public class MusicUtils {
     public static void playTrack(Fragment fragment, int resId){
         var musicPlayer = getMusicPlayer(fragment);
         if(musicPlayer != null){
-            musicPlayer.play();
+            musicPlayer.play(fragment.getContext(), resId);
         }
     }
 
@@ -27,9 +27,7 @@ public class MusicUtils {
         var mainActivity = (MainActivity)fragment.getActivity();
         if(mainActivity != null){
             var viewModel = mainActivity.getViewModel();
-            if(viewModel != null){
-                return viewModel.musicPlayer;
-            }
+            return viewModel.musicPlayer;
         }
         return null;
     }
