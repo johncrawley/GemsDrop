@@ -37,6 +37,7 @@ public class GameModel {
         gemMover.init(gemGrid, gridProps);
     }
 
+
     public void setDroppingGemsEvaluator(DroppingGemsEvaluator evaluator){
         gemMover.setDroppingGemsEvaluator(evaluator);
     }
@@ -128,6 +129,7 @@ public class GameModel {
         this.dropRate = rate;
     }
 
+
     public void incrementDropCount(){
         dropCount++;
     }
@@ -136,6 +138,7 @@ public class GameModel {
     public int getDropCount(){
         return dropCount;
     }
+
 
     public void resetDropCount(){
         dropCount = 0;
@@ -150,5 +153,10 @@ public class GameModel {
             dropRate = Math.max(minimumInterval, dropRate - intervalDecrement);
             dropIntervalCounter = 0;
         }
+    }
+
+
+    public void invalidateDroppingGems(){
+        droppingGems = null;
     }
 }

@@ -280,6 +280,16 @@ public class Game {
     }
 
 
+    public void terminate(){
+        if(hasQuitBeenInvoked.get()){
+            return;
+        }
+        hasQuitBeenInvoked.set(true);
+        taskScheduler.cancelTask();
+        gameModel.invalidateDroppingGems();
+    }
+
+
     public void removeGemsFromView(long[] markedGemsIds){
         gameView.wipeOut(markedGemsIds);
     }

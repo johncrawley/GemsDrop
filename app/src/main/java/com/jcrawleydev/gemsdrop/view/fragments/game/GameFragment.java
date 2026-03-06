@@ -66,6 +66,7 @@ public class GameFragment extends Fragment implements GameView {
         createGame();
         assignLayoutDimensions();
         setupTouchListener(parentView);
+        FragmentUtils.loadMainMenuOnBackButtonPressed(this, this::quitGame);
         return parentView;
     }
 
@@ -80,6 +81,11 @@ public class GameFragment extends Fragment implements GameView {
 
     private void createGame(){
         game = new Game(viewModel.gameModel, this);
+    }
+
+
+    private void quitGame(){
+        game.terminate();
     }
 
 

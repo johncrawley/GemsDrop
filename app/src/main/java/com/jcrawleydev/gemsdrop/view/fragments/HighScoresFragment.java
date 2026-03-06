@@ -21,16 +21,6 @@ public class HighScoresFragment extends Fragment {
     }
 
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        View parentView = getView();
-        if(parentView == null){
-            return;
-        }
-        setupHighScores(parentView);
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,6 +28,8 @@ public class HighScoresFragment extends Fragment {
        View parent = inflater.inflate(R.layout.fragment_high_scores, container, false);
 
        parent.setOnClickListener((v)-> FragmentUtils.loadMainMenu(this));
+       // setupHighScores(parent);
+        FragmentUtils.loadMainMenuOnBackButtonPressed(this);
        return parent;
 
     }

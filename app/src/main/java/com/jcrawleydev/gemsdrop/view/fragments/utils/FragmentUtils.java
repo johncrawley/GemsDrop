@@ -33,7 +33,6 @@ public class FragmentUtils {
     }
 
 
-
     public static void loadHighScores(Fragment parentFragment){
         loadFragment(parentFragment, new HighScoresFragment(), "game_fragment");
     }
@@ -59,9 +58,22 @@ public class FragmentUtils {
     }
 
 
+    public static void loadMainMenuOnBackButtonPressed(Fragment parentFragment){
+        onBackButtonPressed(parentFragment, () -> loadMainMenu(parentFragment));
+    }
+
+
+    public static void loadMainMenuOnBackButtonPressed(Fragment parentFragment, Runnable runnable){
+        onBackButtonPressed(parentFragment, () -> {
+            runnable.run();
+            loadMainMenu(parentFragment);
+        });
+    }
+
+
     public static void loadFragment(Fragment parentFragment, Fragment fragment, String tag, Bundle bundle){
-        FragmentManager fragmentManager = parentFragment.getParentFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        var fragmentManager = parentFragment.getParentFragmentManager();
+        var fragmentTransaction = fragmentManager.beginTransaction();
         removePreviousFragmentTransaction(fragmentManager, tag, fragmentTransaction);
         fragment.setArguments(bundle);
         fragmentManager.beginTransaction()
@@ -89,7 +101,7 @@ public class FragmentUtils {
 
 
     private static void removePreviousFragmentTransaction(FragmentManager fragmentManager, String tag, FragmentTransaction fragmentTransaction){
-        Fragment prev = fragmentManager.findFragmentByTag(tag);
+        var prev = fragmentManager.findFragmentByTag(tag);
         if (prev != null) {
             fragmentTransaction.remove(prev);
         }

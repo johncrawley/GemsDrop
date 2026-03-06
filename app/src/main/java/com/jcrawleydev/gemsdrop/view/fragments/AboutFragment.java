@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 
 import com.jcrawleydev.gemsdrop.R;
+import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 
 
 public class AboutFragment extends Fragment {
@@ -29,6 +30,7 @@ public class AboutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View parent = inflater.inflate(R.layout.fragment_about, container, false);
+        FragmentUtils.loadMainMenuOnBackButtonPressed(this);
         return parent;
     }
 
