@@ -32,7 +32,6 @@ public class Game {
     private final SoundEffectManager soundEffectManager = new SoundEffectManager();
     private ScoreRecords scoreRecords;
     private GridProps gridProps;
-    private int numberOfRowsAlreadyDone;
 
 
     public Game(GameModel gameModel, GameView gameView){

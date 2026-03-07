@@ -28,7 +28,7 @@ public class HighScoresFragment extends Fragment {
        View parent = inflater.inflate(R.layout.fragment_high_scores, container, false);
 
        parent.setOnClickListener((v)-> FragmentUtils.loadMainMenu(this));
-       // setupHighScores(parent);
+        setupHighScores(parent);
         FragmentUtils.loadMainMenuOnBackButtonPressed(this);
        return parent;
 
@@ -54,7 +54,7 @@ public class HighScoresFragment extends Fragment {
         }
         TextView textView = (TextView) parent.getChildAt(index);
         int highScore = highScores.get(index);
-        textView.setText(highScore);
+        textView.setText(String.valueOf(highScore));
         if(highScore == mostRecentScore){
             textView.setTextColor(Color.YELLOW);
         }
