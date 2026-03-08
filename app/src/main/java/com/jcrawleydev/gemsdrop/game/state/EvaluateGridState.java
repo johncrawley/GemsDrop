@@ -29,7 +29,6 @@ public class EvaluateGridState extends AbstractGameState{
         int numberOfGemsToRemove = markedGemsIds.length;
         if(numberOfGemsToRemove > 0){
             game.removeGemsFromView(markedGemsIds);
-            game.updateScore(numberOfGemsToRemove);
             soundEffectManager.playGemsRemovedSound();
         }
         else{

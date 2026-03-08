@@ -40,9 +40,14 @@ public class Score {
 
 
     public void addPointsFor(int numberOfGems){
+        int oldScore = currentScore;
         currentScore += basePoints * numberOfGems * multiplier;
+        log("addPointsFor() old score: " + oldScore + ", current score after addition: " + currentScore);
         incMultiplier();
     }
 
+    private void log(String msg){
+        System.out.print("^^^ Score: "  + msg);
+    }
 
 }

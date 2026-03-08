@@ -79,7 +79,6 @@ public class DroppingGemsEvaluator {
             taskScheduler.cancelTask();
             long [] ids = getArrayFrom(markedGemIds);
             game.removeGemsFromView(ids);
-            game.updateScore(numberOfMarkedGems);
             soundEffectManager.playWonderGemRemovedSound(numberOfMarkedGems);
         }
         else{

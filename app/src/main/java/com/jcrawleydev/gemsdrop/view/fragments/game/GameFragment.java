@@ -41,8 +41,8 @@ import java.util.function.Consumer;
 
 public class GameFragment extends Fragment implements GameView {
 
-    private ImageMap imageMap = new ImageMap();
-    private Map<Long, ViewGroup> itemsMap = new ConcurrentHashMap<>();
+    private final ImageMap imageMap = new ImageMap();
+    private final Map<Long, ViewGroup> itemsMap = new ConcurrentHashMap<>();
     private int containerWidth;
     private int containerHeight;
     private ViewGroup gemContainer, gamePane, gameOverTextLayout;
@@ -175,11 +175,8 @@ public class GameFragment extends Fragment implements GameView {
 
     @Override
     public void updateScore(int score) {
-        score++;
         var scoreVal = String.valueOf(score);
-        runOnUiThread(()->{
-            scoreView.setText(scoreVal);
-        });
+        runOnUiThread(()-> scoreView.setText(scoreVal));
     }
 
 
