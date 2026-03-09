@@ -65,6 +65,7 @@ public class SoundPlayer {
         loadSound(R.raw.disappear_7, GEMS_DISAPPEAR_CHAIN_REACTION_6);
         loadSound(R.raw.disappear_wonder, WONDER_GEM_GEMS_DISAPPEAR);
         loadSound(R.raw.gems_greyed_out_1, SoundEffect.GEMS_GREYED_OUT);
+        loadSound(R.raw.ground_hit_1, GEM_HITS_FLOOR);
     }
 
 
