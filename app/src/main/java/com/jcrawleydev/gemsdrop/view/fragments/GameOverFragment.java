@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.jcrawleydev.gemsdrop.MainActivity;
 import com.jcrawleydev.gemsdrop.R;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 
@@ -29,7 +31,24 @@ public class GameOverFragment extends Fragment {
        // playTrack(this, R.raw.music_title_1);
         parent.setOnClickListener(this::loadHighScores);
         FragmentUtils.loadMainMenuOnBackButtonPressed(this);
+        setupScoreView(parent);
         return parent;
+    }
+
+    private void setupScoreView(View parent){
+        TextView scoreView = parent.findViewById(R.id.scoreText);
+        scoreView.setText(getFinalScoreString());
+    }
+
+
+    private String getFinalScoreString(){
+        var mainActivity = (MainActivity)getActivity();
+        if(mainActivity != null){
+            var viewModel = mainActivity.getViewModel();
+            var gameModel = viewModel.gameModel;
+            return gameModel.getScore().getText();
+        }
+        return "";
     }
 
 

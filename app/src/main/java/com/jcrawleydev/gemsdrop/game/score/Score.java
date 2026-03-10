@@ -19,6 +19,11 @@ public class Score {
     }
 
 
+    public String getText(){
+        return String.valueOf(currentScore);
+    }
+
+
     public void clear(){
         currentScore = 0;
     }
