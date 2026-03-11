@@ -31,7 +31,7 @@ import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.game.gem.GemColor;
 import com.jcrawleydev.gemsdrop.GamePreferenceManager;
 import com.jcrawleydev.gemsdrop.audio.SoundPlayer;
-import com.jcrawleydev.gemsdrop.game.score.ScoreRecords;
+import com.jcrawleydev.gemsdrop.game.score.HighScores;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 
 import java.util.List;
@@ -91,7 +91,7 @@ public class GameFragment extends Fragment implements GameView {
 
     private void initGame() {
         var soundPlayer = new SoundPlayer(getContext());
-        var scoreRecords = new ScoreRecords(getContext());
+        var scoreRecords = new HighScores(getContext());
         game.init(soundPlayer, scoreRecords);
         gamePreferenceManager = new GamePreferenceManager();
     }

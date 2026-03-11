@@ -12,7 +12,7 @@ import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 import com.jcrawleydev.gemsdrop.game.level.GameLevel;
 import com.jcrawleydev.gemsdrop.game.score.Score;
-import com.jcrawleydev.gemsdrop.game.score.ScoreRecords;
+import com.jcrawleydev.gemsdrop.game.score.HighScores;
 import com.jcrawleydev.gemsdrop.game.state.GameStateName;
 import com.jcrawleydev.gemsdrop.game.state.StateManager;
 import com.jcrawleydev.gemsdrop.view.fragments.game.GameView;
@@ -30,7 +30,7 @@ public class Game {
 
     private final TaskScheduler taskScheduler = new TaskScheduler();
     private final SoundEffectManager soundEffectManager = new SoundEffectManager();
-    private ScoreRecords scoreRecords;
+    private HighScores highScores;
     private GridProps gridProps;
 
 
@@ -40,8 +40,8 @@ public class Game {
     }
 
 
-    public void init(SoundPlayer soundPlayer, ScoreRecords scoreRecords){
-        this.scoreRecords = scoreRecords;
+    public void init(SoundPlayer soundPlayer, HighScores highScores){
+        this.highScores = highScores;
         soundEffectManager.init(soundPlayer);
         this.gridProps = gameModel.getGridProps();
         soundEffectManager.setScore(gameModel.getScore());
@@ -206,7 +206,7 @@ public class Game {
 
 
     public void saveScore(){
-        scoreRecords.saveScore(gameModel.getScore().get());
+        highScores.saveScore(gameModel.getScore().get());
     }
 
 

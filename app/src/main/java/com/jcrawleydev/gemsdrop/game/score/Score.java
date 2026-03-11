@@ -19,7 +19,7 @@ public class Score {
     }
 
 
-    public String getText(){
+    public String getStr(){
         return String.valueOf(currentScore);
     }
 

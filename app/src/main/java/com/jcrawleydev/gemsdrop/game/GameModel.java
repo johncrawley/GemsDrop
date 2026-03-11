@@ -120,6 +120,9 @@ public class GameModel {
         return score;
     }
 
+    public List<String> getHighScores(){
+
+    }
 
     public int getDropRate(){
         return dropRate;

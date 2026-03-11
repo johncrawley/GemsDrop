@@ -11,7 +11,7 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Set;
 
-public class ScoreRecordsUtilsTest {
+public class HighScoresUtilsTest {
 
     @Test
     public void highScoreCanBeMerged(){

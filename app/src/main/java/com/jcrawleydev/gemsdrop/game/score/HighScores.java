@@ -7,13 +7,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public class ScoreRecords {
+public class HighScores {
 
     private final Context context;
     private enum PrefName { PREVIOUS_SCORE, HIGH_SCORES }
 
 
-    public ScoreRecords(Context context){
+    public HighScores(Context context){
         this.context = context;
         saveDefaultHighScores();
     }
@@ -45,7 +45,14 @@ public class ScoreRecords {
     public void saveDefaultHighScores(){
         var existingHighScores = getHighScores();
         if(existingHighScores.isEmpty()){
-            saveHighScores(Set.of("1000000", "800000", "5000000", "200000", "100000", "80000", "70000", "50000"));
+            saveHighScores(Set.of("1000000",
+                    "800000",
+                    "5000000",
+                    "200000",
+                    "100000",
+                    "80000",
+                    "70000",
+                    "50000"));
         }
     }
 
