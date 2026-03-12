@@ -3,19 +3,21 @@ package com.jcrawleydev.gemsdrop.game.score;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class HighScores {
 
-    private final Context context;
+    private Context context;
     private enum PrefName { PREVIOUS_SCORE, HIGH_SCORES }
 
-
-    public HighScores(Context context){
+    public void init(Context context){
         this.context = context;
-        saveDefaultHighScores();
+        initHighScores();
+        reset();
     }
 
 
@@ -25,15 +27,24 @@ public class HighScores {
 
 
     public void saveScore(int score){
+        log("entered saveScore()");
         saveInt(PrefName.PREVIOUS_SCORE, score);
         var highScoreSet = getHighScores();
+        log("saveScore() : highScoreSet retrieved");
         var amendedHighScores = ScoreRecordsUtils.mergeHighScores(score, highScoreSet);
+        log("about to saveHighScores()");
         saveHighScores(amendedHighScores);
+        log("saveScore() highScore saved!");
     }
 
 
-    public List<Integer> getOrderedHighScores(){
-        return ScoreRecordsUtils.getOrderedHighScores(getHighScores());
+    private void log(String msg){
+        System.out.println("^^^ HighScores: " + msg);
+    }
+
+
+    public List<String> getOrderedHighScores(){
+        return ScoreRecordsUtils.getOrderedHighScoreStrings(getHighScores());
     }
 
 
@@ -42,18 +53,21 @@ public class HighScores {
     }
 
 
-    public void saveDefaultHighScores(){
+    public void initHighScores(){
         var existingHighScores = getHighScores();
         if(existingHighScores.isEmpty()){
-            saveHighScores(Set.of("1000000",
-                    "800000",
-                    "5000000",
-                    "200000",
-                    "100000",
-                    "80000",
-                    "70000",
-                    "50000"));
+            reset();
         }
+    }
+
+
+    public void reset(){
+           // var scoreStr = "1000000, 800000, 500000, 200000, 100000, 80000, 70000, 50000";
+            var scoreStr = "10000, 8000, 5000, 2000, 1000, 800, 700, 500";
+            var scoreArray= scoreStr.split(",");
+            var scoreList = Arrays.asList(scoreArray);
+            var scoreSet = new HashSet<>(scoreList);
+            saveHighScores(scoreSet);
     }
 
 

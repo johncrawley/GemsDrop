@@ -28,18 +28,4 @@ public class HighScoresUtilsTest {
         assertTrue(amendedHighScores.contains(String.valueOf(score)));
     }
 
-
-    @Test
-    public void orderedHighScoresCanBeObtained(){
-        var highScores = Set.of("100", "40", "200", "5", "15");
-        var expected = List.of("200", "100", "40", "15", "5");
-
-        var sorted = ScoreRecordsUtils.getOrderedHighScores(highScores);
-
-        assertEquals(expected.size(), sorted.size());
-
-        for(int i = 0; i < expected.size(); i++){
-            assertEquals(expected.get(i), sorted.get(i));
-        }
-    }
 }

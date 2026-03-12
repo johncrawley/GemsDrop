@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.jcrawleydev.gemsdrop.R;
-import com.jcrawleydev.gemsdrop.game.score.HighScores;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.GameUtils;
 
@@ -36,31 +35,33 @@ public class HighScoresFragment extends Fragment {
 
 
     private void setupHighScores(View parentView){
-        var finalHighScoreStr = GameUtils.getFinalScoreString(this);
-        var highScores = new HighScores(getContext());
-        ViewGroup highScoresLayout = parentView.findViewById(R.id.highScoresLayout);
+        var highScores = GameUtils.getHighScores(this);
 
-        for(int i = 0; i < highScores.getOrderedHighScores().size(); i++){
-            highlightUserHighScore(highScoresLayout, i, highScores);
+        ViewGroup highScoresLayout = parentView.findViewById(R.id.highScoresLayout);
+        var finalScore = GameUtils.getFinalScoreString(this);
+
+        log("setupHighScore() number of high scores: " + highScores.size());
+        for(int i = 0; i < highScores.size(); i++){
+            var textView = (TextView) highScoresLayout.getChildAt(i);
+            assignScoreTo(textView, highScores.get(i), finalScore);
         }
     }
 
 
-    private void highlightUserHighScore(ViewGroup parent, int index, HighScores highScores){
-        var orderedHighScores = highScores.getOrderedHighScores();
-        var mostRecentScore = highScores.getMostRecentScore();
-
-        if(index >= parent.getChildCount()){
+    private void assignScoreTo(TextView textView, String highScore, String finalScore){
+        if(textView == null){
+            log("assignScoreTo() text view is null");
             return;
         }
-        TextView textView = (TextView) parent.getChildAt(index);
-        int highScore = orderedHighScores.get(index);
-        textView.setText(String.valueOf(highScore));
-        if(highScore == mostRecentScore){
+        textView.setText(finalScore);
+        if(highScore.equals(finalScore)){
             textView.setTextColor(Color.YELLOW);
         }
     }
 
+    private void log(String msg){
+        System.out.println("^^^ HighScoresFragment: " + msg);
+    }
 
     @Override
     public void onDestroy(){

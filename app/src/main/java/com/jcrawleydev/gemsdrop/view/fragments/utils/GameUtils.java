@@ -19,12 +19,12 @@ public class GameUtils {
         return "";
     }
 
+
     public static List<String> getHighScores(Fragment fragment){
         var mainActivity = (MainActivity)fragment.getActivity();
         if(mainActivity != null){
             var viewModel = mainActivity.getViewModel();
-            var gameModel = viewModel.gameModel;
-            return gameModel.getHighScores();
+            return viewModel.highScores.getOrderedHighScores();
         }
         return Collections.emptyList();
     }

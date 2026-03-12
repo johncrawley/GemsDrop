@@ -8,6 +8,7 @@ import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 import com.jcrawleydev.gemsdrop.game.grid.GemGridImpl;
 import com.jcrawleydev.gemsdrop.game.level.GameLevel;
 import com.jcrawleydev.gemsdrop.game.level.LevelFactory;
+import com.jcrawleydev.gemsdrop.game.score.HighScores;
 import com.jcrawleydev.gemsdrop.game.score.Score;
 import com.jcrawleydev.gemsdrop.game.state.GameStateName;
 
@@ -29,14 +30,31 @@ public class GameModel {
     private GameStateName gameStateName = GameStateName.AWAITING_GAME_START;
     private final GemMover gemMover = new GemMover();
     private int numberOfRowsAlreadyGreyedOut = 0;
+    private final HighScores highScores;
 
 
-    public GameModel(){
+    public GameModel(HighScores highScores){
         droppingGemsFactory.setGridProps(gridProps);
         droppingGemsFactory.setLevel(gameLevel);
         gemMover.init(gemGrid, gridProps);
+        this.highScores = highScores;
     }
 
+
+    public HighScores getHighScores(){
+        return highScores;
+    }
+
+
+    public void saveScore(){
+        log("entered saveScore");
+        highScores.saveScore(score.get());
+        log("saveScore() score saved");
+    }
+
+    private void log(String msg){
+        System.out.println("^^^ GameModel: " + msg);
+    }
 
     public void setDroppingGemsEvaluator(DroppingGemsEvaluator evaluator){
         gemMover.setDroppingGemsEvaluator(evaluator);
@@ -120,9 +138,6 @@ public class GameModel {
         return score;
     }
 
-    public List<String> getHighScores(){
-
-    }
 
     public int getDropRate(){
         return dropRate;

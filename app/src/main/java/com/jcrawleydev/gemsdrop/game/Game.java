@@ -30,7 +30,6 @@ public class Game {
 
     private final TaskScheduler taskScheduler = new TaskScheduler();
     private final SoundEffectManager soundEffectManager = new SoundEffectManager();
-    private HighScores highScores;
     private GridProps gridProps;
 
 
@@ -40,8 +39,7 @@ public class Game {
     }
 
 
-    public void init(SoundPlayer soundPlayer, HighScores highScores){
-        this.highScores = highScores;
+    public void init(SoundPlayer soundPlayer){
         soundEffectManager.init(soundPlayer);
         this.gridProps = gameModel.getGridProps();
         soundEffectManager.setScore(gameModel.getScore());
@@ -206,9 +204,13 @@ public class Game {
 
 
     public void saveScore(){
-        highScores.saveScore(gameModel.getScore().get());
+        log("Entered saveScore()");
+        gameModel.saveScore();
     }
 
+    private void log(String msg){
+        System.out.println("^^^ Game: " + msg);
+    }
 
     public TaskScheduler getTaskScheduler(){
         return taskScheduler;

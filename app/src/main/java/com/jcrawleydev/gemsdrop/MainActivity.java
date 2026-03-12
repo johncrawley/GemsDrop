@@ -1,9 +1,6 @@
 package com.jcrawleydev.gemsdrop;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.MotionEvent;
-import android.view.View;
 
 import com.jcrawleydev.gemsdrop.view.fragments.MainMenuFragment;
 
@@ -16,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
+public class MainActivity extends AppCompatActivity{
 
     private MainViewModel viewModel;
 
@@ -27,7 +24,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         setContentView(R.layout.activity_main);
         setupInsets();
         setupViewModel();
-        initMusicPlayer();
         hideActionBar();
         setupFragmentsIf(savedInstanceState == null);
     }
@@ -53,11 +49,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private void setupViewModel(){
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-    }
-
-
-    private void initMusicPlayer(){
         viewModel.musicPlayer.init(getApplication());
+        viewModel.highScores.init(getApplication());
     }
 
 
@@ -93,18 +86,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         if(viewModel != null){
             viewModel.musicPlayer.resume();
         }
-    }
-
-
-    @SuppressLint("ClickableViewAccessibility")
-    public boolean onTouch(View v, MotionEvent e){
-        if(e.getAction() != MotionEvent.ACTION_DOWN){
-            return true;
-        }
-        int x = (int)e.getX();
-        int y = (int)e.getY();
-        //game.click(x, y);
-        return true;
     }
 
 }

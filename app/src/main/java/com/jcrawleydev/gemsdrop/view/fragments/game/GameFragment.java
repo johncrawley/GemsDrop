@@ -91,8 +91,7 @@ public class GameFragment extends Fragment implements GameView {
 
     private void initGame() {
         var soundPlayer = new SoundPlayer(getContext());
-        var scoreRecords = new HighScores(getContext());
-        game.init(soundPlayer, scoreRecords);
+        game.init(soundPlayer);
         gamePreferenceManager = new GamePreferenceManager();
     }
 
