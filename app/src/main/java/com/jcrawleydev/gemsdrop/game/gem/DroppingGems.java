@@ -18,7 +18,7 @@ public class DroppingGems {
     private final GridProps gridProps;
     List<Gem> gems;
     Gem gemC, gemB, gemA;
-    enum Orientation { NORTH, EAST, SOUTH, WEST }
+    public enum Orientation { NORTH, EAST, SOUTH, WEST }
     private Orientation orientation = NORTH;
     private final int middleColumnIndex;
     private final int INITIAL_POSITION;

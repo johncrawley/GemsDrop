@@ -10,10 +10,12 @@ import java.util.stream.Collectors;
 public class ScoreRecordsUtils {
 
 
-    public static Set<String> mergeHighScores(int score, Set<String> highScoreSet){
-        var highScores = new HashSet<>(highScoreSet);
+    public static List<String> mergeHighScores(int score, Set<String> highScoreSet){
+        var highScores = new ArrayList<>(highScoreSet);
         var scoreStr = String.valueOf(score);
         highScores.add(scoreStr);
+        Collections.sort(highScores);
+        highScores.remove(highScores.size()-1);
         return highScores;
     }
 
@@ -34,4 +36,14 @@ public class ScoreRecordsUtils {
         return list;
     }
 
+
+    public static String createPropStrFrom(List<String> scores){
+        var str = new StringBuilder();
+        for(var score : scores){
+            str.append(score);
+            str.append(",");
+        }
+        var output = str.toString();
+        return output.substring(0, output.length()-1);
+    }
 }

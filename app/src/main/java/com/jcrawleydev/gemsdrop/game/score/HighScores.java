@@ -1,5 +1,7 @@
 package com.jcrawleydev.gemsdrop.game.score;
 
+import static com.jcrawleydev.gemsdrop.game.score.ScoreRecordsUtils.createPropStrFrom;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -13,6 +15,7 @@ public class HighScores {
 
     private Context context;
     private enum PrefName { PREVIOUS_SCORE, HIGH_SCORES }
+    private enum ScorePrefName { SCORE_1, SCORE_2, SCORE_3, SCORE_4, SCORE_5, SCORE_6, SCORE_7, SCORE_8}
 
     public void init(Context context){
         this.context = context;
@@ -66,17 +69,18 @@ public class HighScores {
             var scoreStr = "10000, 8000, 5000, 2000, 1000, 800, 700, 500";
             var scoreArray= scoreStr.split(",");
             var scoreList = Arrays.asList(scoreArray);
-            var scoreSet = new HashSet<>(scoreList);
-            saveHighScores(scoreSet);
+            saveHighScores(scoreList);
     }
 
 
-    private void saveHighScores(Set<String> scores){
-        getPrefs()
-                .edit()
-                .putStringSet(PrefName.HIGH_SCORES.name(), scores)
+    private void saveHighScores(List<String> scores){
+        var scoresStr = createPropStrFrom(scores);
+        getPrefs().edit()
+            .putString(PrefName.HIGH_SCORES.name(), scoresStr)
                 .apply();
     }
+
+
 
 
     private Set<String> getHighScores(){
