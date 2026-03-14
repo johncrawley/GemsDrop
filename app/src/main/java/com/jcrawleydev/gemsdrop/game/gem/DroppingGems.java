@@ -159,7 +159,7 @@ public class DroppingGems {
     }
 
 
-    protected void create(List<GemColor> gemColors){
+    public void create(List<GemColor> gemColors){
         gemA = createGem(TOP, 3, gemColors.get(0));
         gemB = createGem(CENTRE, 2, gemColors.get(1));
         gemC = createGem(BOTTOM, 1, gemColors.get(2));

@@ -28,4 +28,14 @@ public class HighScoresUtilsTest {
         assertTrue(amendedHighScores.contains(String.valueOf(score)));
     }
 
+
+    @Test
+    public void canCreateStringFromScores(){
+
+        var highScores = List.of("100", "100", "40", "30");
+        var output = ScoreRecordsUtils.createPropStrFrom(highScores);
+        var expected = "100,100,40,30";
+        assertEquals(expected, output);
+    }
+
 }

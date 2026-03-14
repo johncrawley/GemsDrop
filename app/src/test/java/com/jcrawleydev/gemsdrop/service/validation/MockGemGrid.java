@@ -18,6 +18,9 @@ public class MockGemGrid implements GemGrid {
         this.columnHeights = columnHeights;
     }
 
+    public void init(){
+
+    }
 
     @Override
     public int getColumnHeightAt(int columnIndex){

@@ -31,7 +31,6 @@ public class RotationCheckerTest {
         maxColumnIndex = numberOfColumns -1;
         rotationChecker = new RotationChecker(gemGrid, gridProps);
         droppingGems = new DroppingGems(gridProps);
-        droppingGems.create();
     }
 
 

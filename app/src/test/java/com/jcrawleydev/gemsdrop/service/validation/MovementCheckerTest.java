@@ -4,9 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
 import com.jcrawleydev.gemsdrop.game.GridProps;
+import com.jcrawleydev.gemsdrop.game.gem.GemColor;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 import com.jcrawleydev.gemsdrop.game.utils.MovementChecker;
-
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,8 +22,8 @@ public class MovementCheckerTest {
     public void init(){
         gemGrid = new MockGemGrid(gridProps, 0,0,0,9,0,0,0);
         movementChecker = new MovementChecker(gemGrid, gridProps);
-        droppingGems = new DroppingGems(gridProps);
-        droppingGems.create();
+
+        droppingGems = new DroppingGems(gridProps, List.of(GemColor.GREEN, GemColor.BLUE, GemColor.YELLOW));
     }
 
 

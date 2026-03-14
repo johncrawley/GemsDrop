@@ -16,7 +16,7 @@ public class WonderDroppingGem extends DroppingGems{
     }
 
     @Override
-    protected void create(List<GemColor> gemColors){
+    public void create(List<GemColor> gemColors){
         gemB = createGem(CENTRE, 1, GemColor.WONDER);
         gems = List.of(gemB);
     }
