@@ -8,6 +8,7 @@ import com.jcrawleydev.gemsdrop.game.score.ScoreRecordsUtils;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
