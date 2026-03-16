@@ -2,12 +2,10 @@ package com.jcrawleydev.gemsdrop.game.score;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-public class ScoreRecordsUtils {
+public class ScoreUtils {
 
 
     public static List<String> mergeHighScores(int score, Set<String> highScoreSet){
@@ -17,6 +15,19 @@ public class ScoreRecordsUtils {
         Collections.sort(highScores);
         highScores.remove(highScores.size()-1);
         return highScores;
+    }
+
+
+    public static List<String> addToHighScores(int score, List<String> highScoreList){
+        var highScores = new ArrayList<>(highScoreList);
+        var scoreStr = String.valueOf(score);
+        highScores.add(scoreStr);
+        return highScores.stream()
+                .map(Integer::valueOf)
+                .sorted((f1, f2) -> Integer.compare(f2, f1))
+                .map(String::valueOf)
+                .limit(highScoreList.size())
+                .toList();
     }
 
 /*

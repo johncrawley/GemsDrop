@@ -1,13 +1,12 @@
 package com.jcrawleydev.gemsdrop.game.score;
 
-import static com.jcrawleydev.gemsdrop.game.score.ScoreRecordsUtils.createPropStrFrom;
+import static com.jcrawleydev.gemsdrop.game.score.ScoreUtils.createPropStrFrom;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -32,9 +31,7 @@ public class HighScores {
     public void saveScore(int score){
         log("entered saveScore()");
         saveInt(PrefName.PREVIOUS_SCORE, score);
-        var highScoreSet = getHighScores();
-        log("saveScore() : highScoreSet retrieved");
-        var amendedHighScores = ScoreRecordsUtils.mergeHighScores(score, highScoreSet);
+        var amendedHighScores = ScoreUtils.addToHighScores(score, getHighScoresList());
         log("about to saveHighScores()");
         saveHighScores(amendedHighScores);
         log("saveScore() highScore saved!");
@@ -47,7 +44,7 @@ public class HighScores {
 
 
     public List<String> getOrderedHighScores(){
-        return ScoreRecordsUtils.getOrderedHighScoreStrings(getHighScores());
+        return ScoreUtils.getOrderedHighScoreStrings(getHighScores());
     }
 
 
@@ -81,10 +78,19 @@ public class HighScores {
     }
 
 
-
-
     private Set<String> getHighScores(){
         return getPrefs().getStringSet(PrefName.HIGH_SCORES.name(), Collections.emptySet());
+    }
+
+
+    private String getHighScoresStr(){
+        return getPrefs().getString(PrefName.HIGH_SCORES.name(), "");
+    }
+
+
+    private List<String> getHighScoresList(){
+        var highScoresStr = getHighScoresStr();
+        return Arrays.asList(highScoresStr.split(","));
     }
 
 
