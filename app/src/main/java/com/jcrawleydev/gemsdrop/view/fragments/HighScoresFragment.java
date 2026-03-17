@@ -13,6 +13,8 @@ import com.jcrawleydev.gemsdrop.R;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.GameUtils;
 
+import java.util.List;
+
 
 public class HighScoresFragment extends Fragment {
 
@@ -36,6 +38,7 @@ public class HighScoresFragment extends Fragment {
 
     private void setupHighScores(View parentView){
         var highScores = GameUtils.getHighScores(this);
+        printHighScores(highScores);
 
         ViewGroup highScoresLayout = parentView.findViewById(R.id.highScoresLayout);
         var finalScore = GameUtils.getFinalScoreString(this);
@@ -48,12 +51,21 @@ public class HighScoresFragment extends Fragment {
     }
 
 
+    private void printHighScores(List<String> highScores){
+        log("******************* entered printHighScores()");
+        for(var score : highScores){
+            log(" ----> "  + score);
+        }
+        log("****************************");
+    }
+
+
     private void assignScoreTo(TextView textView, String highScore, String finalScore){
         if(textView == null){
             log("assignScoreTo() text view is null");
             return;
         }
-        textView.setText(finalScore);
+        textView.setText(highScore);
         if(highScore.equals(finalScore)){
             textView.setTextColor(Color.YELLOW);
         }

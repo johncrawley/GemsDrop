@@ -22,11 +22,26 @@ public class ScoreUtils {
         var highScores = new ArrayList<>(highScoreList);
         var scoreStr = String.valueOf(score);
         highScores.add(scoreStr);
+        /*
         return highScores.stream()
                 .map(Integer::valueOf)
                 .sorted((f1, f2) -> Integer.compare(f2, f1))
                 .map(String::valueOf)
                 .limit(highScoreList.size())
+                .toList();
+
+         */
+
+        var output = reverseNumericalOrderOf(highScores);
+        return output.subList(0, highScoreList.size() -1);
+    }
+
+
+    public static List<String> reverseNumericalOrderOf(List<String> list){
+        return list.stream()
+                .map(Integer::valueOf)
+                .sorted((f1, f2) -> Integer.compare(f2, f1))
+                .map(String::valueOf)
                 .toList();
     }
 
@@ -41,10 +56,9 @@ public class ScoreUtils {
  */
 
 
-    public static List<String> getOrderedHighScoreStrings(Set<String> highScores){
-        var list = new ArrayList<>(highScores);
-        Collections.sort(list);
-        return list;
+    public static List<String> getOrderedHighScoreStrings(String highScoresStr){
+        var list = new ArrayList<>(List.of(highScoresStr.split(",")));
+        return reverseNumericalOrderOf(list);
     }
 
 
