@@ -16,9 +16,13 @@ public class DroppingGemsFactory {
     private List<GemColor> gemColors;
     private int numberOfNormalGemsDropped;
 
-
     public DroppingGemsFactory(){
         random = new Random(System.currentTimeMillis());
+    }
+
+
+    public void onGameStart(){
+        numberOfNormalGemsDropped = 0;
     }
 
 
@@ -38,6 +42,7 @@ public class DroppingGemsFactory {
             numberOfNormalGemsDropped = 0;
             return new WonderDroppingGem(gridProps);
         }
+        numberOfNormalGemsDropped++;
         return new DroppingGems(gridProps, getRandomGemColors());
     }
 
@@ -49,7 +54,6 @@ public class DroppingGemsFactory {
 
 
     public boolean haveEnoughNormalGemsDropped(){
-        numberOfNormalGemsDropped++;
         return numberOfNormalGemsDropped >= gameLevel.specialGemConditions().minNormalGemStreak();
     }
 

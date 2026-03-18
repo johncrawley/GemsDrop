@@ -16,7 +16,7 @@ import java.util.List;
 
 public class GameModel {
 
-    public final int GRAVITY_INTERVAL = 70;
+    public final int GRAVITY_INTERVAL = 58;
     private int dropRate = 500;
     private int dropCount = 0;
     private int dropIntervalCounter;
@@ -41,20 +41,10 @@ public class GameModel {
     }
 
 
-    public HighScores getHighScores(){
-        return highScores;
-    }
-
-
     public void saveScore(){
-        log("entered saveScore");
         highScores.saveScore(score.get());
-        log("saveScore() score saved");
     }
 
-    private void log(String msg){
-        System.out.println("^^^ GameModel: " + msg);
-    }
 
     public void setDroppingGemsEvaluator(DroppingGemsEvaluator evaluator){
         gemMover.setDroppingGemsEvaluator(evaluator);
@@ -63,6 +53,7 @@ public class GameModel {
 
     public void startNewGame(){
         gameStateName = GameStateName.AWAITING_GAME_START;
+        droppingGemsFactory.onGameStart();
     }
 
 
@@ -74,6 +65,7 @@ public class GameModel {
     public void setGameStateName(GameStateName gameStateName){
         this.gameStateName = gameStateName;
     }
+
 
     public void setGameLevel(GameLevel level){
         this.gameLevel = level;

@@ -18,7 +18,6 @@ public class HighScores {
     public void init(Context context){
         this.context = context;
         initHighScores();
-        reset();
     }
 
 
