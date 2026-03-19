@@ -15,6 +15,7 @@ public class DroppingGemsFactory {
     private GameLevel gameLevel;
     private List<GemColor> gemColors;
     private int numberOfNormalGemsDropped;
+    private int totalDropsPerLevel = 0;
 
     public DroppingGemsFactory(){
         random = new Random(System.currentTimeMillis());
@@ -34,10 +35,12 @@ public class DroppingGemsFactory {
     public void setLevel(GameLevel level){
         this.gameLevel = level;
         this.gemColors = new ArrayList<>(level.gemColors());
+        totalDropsPerLevel = 0;
     }
 
 
     public DroppingGems createDroppingGems(){
+        totalDropsPerLevel++;
         if(shouldCreateWonderGem()){
             numberOfNormalGemsDropped = 0;
             return new WonderDroppingGem(gridProps);
@@ -48,8 +51,15 @@ public class DroppingGemsFactory {
 
 
     private boolean shouldCreateWonderGem(){
-        return (haveEnoughNormalGemsDropped() && isLucky())
-                || haveTooManyNormalGemsDropped();
+        return hasExceededInitialGemThreshold() && (
+                (isLucky() && haveEnoughNormalGemsDropped())
+                || haveTooManyNormalGemsDropped());
+    }
+
+
+    private boolean hasExceededInitialGemThreshold(){
+        int minimumInitialDropsBeforeWonderGem = 10;
+        return minimumInitialDropsBeforeWonderGem < totalDropsPerLevel;
     }
 
 
@@ -65,8 +75,9 @@ public class DroppingGemsFactory {
 
     private boolean isLucky(){
         int odds = gameLevel.specialGemConditions().specialGemOdds();
-        return random.nextInt(odds) == 1;
+        return  random.nextInt(odds) == 1;
     }
+
 
 
     public List<GemColor> getRandomGemColors(){
