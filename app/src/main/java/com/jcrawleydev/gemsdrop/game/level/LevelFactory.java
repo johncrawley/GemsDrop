@@ -23,7 +23,7 @@ public class LevelFactory {
 
 
     private void setupLevel1(){
-        var possibleColorsOfFallingGems = Set.of(BLUE, RED, YELLOW, GREEN, PURPLE);
+        var possibleColorsOfFallingGems = Set.of(BLUE, RED, YELLOW, GREEN, PURPLE, DEEP_BLUE);
         var startingGrid = List.of("G Y G Y G Y G",  "B R B R B R B", "Y P Y P Y P Y");
         var specialGemConditions = new SpecialGemConditions(5, 25, 15);
         gameLevel1 = new GameLevel(1,
