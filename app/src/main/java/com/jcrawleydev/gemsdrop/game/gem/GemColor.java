@@ -10,7 +10,7 @@ public enum GemColor {
     GREEN("G", R.drawable.jewel_green),
     YELLOW("Y", R.drawable.jewel_yellow),
     PURPLE("P", R.drawable.jewel_purple),
-    DEEP_BLUE("N", R.drawable.jewel_wonder_5),
+    DEEP_BLUE("N", R.drawable.jewel_deep_blue),
     GREY("x", R.drawable.jewel_grey),
     WONDER("W", R.drawable.jewel_wonder_1),
     TEMP1("P", R.drawable.jewel_wonder_3),
