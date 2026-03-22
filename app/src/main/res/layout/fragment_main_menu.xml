@@ -101,21 +101,24 @@
             android:layout_height="wrap_content"
             android:minWidth="@dimen/menu_button_min_width"
             android:text="@string/button_new_game"
-            android:id="@+id/newGameButton" />
+            android:id="@+id/newGameButton"
+            style="?attr/menu_button_style"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="@dimen/menu_button_min_width"
             android:text="@string/button_options"
-            android:id="@+id/optionsButton" />
+            android:id="@+id/optionsButton"
+            style="?attr/menu_button_style" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="@dimen/menu_button_min_width"
             android:text="@string/button_about"
-            android:id="@+id/aboutButton" />
+            android:id="@+id/aboutButton"
+            style="?attr/menu_button_style" />
 
 
     </LinearLayout>

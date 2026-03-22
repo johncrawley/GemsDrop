@@ -9,7 +9,7 @@
         <attr name="cardColor" format="integer"/>
 
         <attr name="gridBorderColor" format="color"/>
+        <attr name="main_menu_background" format="reference"/>
+        <attr name="menu_button_style" format="reference" />
     </declare-styleable>
-
-    <attr name="main_menu_background"/>
 </resources>

@@ -8,4 +8,17 @@
         <item name="gridBorderColor">@color/grid_border_color</item>
     </style>
 
+    <style name="menuButtonStyle" parent="ShapeAppearanceOverlay.Material3.Button">
+        <item name="android:textColor">@color/menu_button_text</item>
+        <item name="cornerRadius">15dp</item>
+        <item name="strokeWidth">3dp</item>
+        <item name="backgroundColor">@color/input_button_accent</item>
+        <item name="strokeColor">@color/menu_button_outline</item>
+        <item name="android:textSize">@dimen/input_button_text_size</item>
+        <item name="backgroundTint">@color/menu_button_tint</item>
+        <item name="android:layout_marginHorizontal">4dp</item>
+        <item name="android:layout_marginVertical">4dp</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
 </resources>

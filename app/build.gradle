@@ -5,7 +5,7 @@ android {
 
     defaultConfig {
         applicationId "com.jcrawleydev.gemsdrop"
-        minSdkVersion 24
+        minSdkVersion 26
         targetSdkVersion 36
         versionCode 1
         versionName "1.0"
