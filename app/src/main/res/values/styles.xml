@@ -6,6 +6,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="gridBorderColor">@color/grid_border_color</item>
+        <item name="menu_button_style">@style/menuButtonStyle</item>
     </style>
 
     <style name="menuButtonStyle" parent="ShapeAppearanceOverlay.Material3.Button">
