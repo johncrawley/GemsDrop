@@ -42,7 +42,14 @@ public class GameModel {
 
 
     public void saveScore(){
-        highScores.saveScore(score.get());
+        int scoreVal = score.get();
+        log("entered saveScore() value: " + scoreVal);
+        highScores.saveScore(scoreVal);
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ GameModel: " + msg);
     }
 
 

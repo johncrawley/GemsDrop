@@ -27,9 +27,26 @@ public class HighScores {
 
 
     public void saveScore(int score){
+        log("entered saveScore(" + score + ")");
+        print(getHighScoresList());
         var amendedHighScores = ScoreUtils.addToHighScores(score, getHighScoresList());
+        print(amendedHighScores);
+        log("saveScore() created amendedHighScores");
         save(amendedHighScores);
+        log("saved amendedHighScores");
     }
+
+
+    private void print(List<String> list){
+        System.out.print("^^^ list ---> ");
+        list.forEach(x -> System.out.print(x + " "));
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ HighScores: " + msg);
+    }
+
 
 
     public List<String> getOrderedHighScores(){
@@ -51,7 +68,9 @@ public class HighScores {
 
 
     private void save(List<String> highScores){
+        log("entered save()");
         var scoresStr = createPropStrFrom(highScores);
+        log("save() scoreStr: " + scoresStr);
         save(scoresStr);
     }
 

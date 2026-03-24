@@ -17,10 +17,10 @@
     <color name="score_label">#aaa</color>
 
 
-    <color name="menu_button_tint">#6A39A8</color>
+    <color name="menu_button_tint">#11194B</color>
     <color name="menu_button_pressed">#3C0B78</color>
-    <color name="menu_button_text">#F3BB89</color>
-    <color name="menu_button_outline">#2B180A</color>
+    <color name="menu_button_text">#FFA000</color>
+    <color name="menu_button_outline">#1976D2</color>
 
     <color name="input_button_accent">#B39DDB</color>
     <color name="input_button_outline">#00716843</color>

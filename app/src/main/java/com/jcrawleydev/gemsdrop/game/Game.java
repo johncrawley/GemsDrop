@@ -12,7 +12,6 @@ import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 import com.jcrawleydev.gemsdrop.game.level.GameLevel;
 import com.jcrawleydev.gemsdrop.game.score.Score;
-import com.jcrawleydev.gemsdrop.game.score.HighScores;
 import com.jcrawleydev.gemsdrop.game.state.GameStateName;
 import com.jcrawleydev.gemsdrop.game.state.StateManager;
 import com.jcrawleydev.gemsdrop.view.fragments.game.GameView;
@@ -232,7 +231,7 @@ public class Game {
     }
 
 
-    public void onDestroy(){
+    public void onGameFragmentDestroy(){
         taskScheduler.cancelTask();
         isStarted.set(false);
     }

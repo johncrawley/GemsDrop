@@ -69,6 +69,9 @@ public class ScoreUtils {
             str.append(",");
         }
         var output = str.toString();
+        if(output.isBlank()){
+            return "";
+        }
         return output.substring(0, output.length()-1);
     }
 }

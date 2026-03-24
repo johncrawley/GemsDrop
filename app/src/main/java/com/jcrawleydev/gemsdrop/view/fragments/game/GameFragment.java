@@ -31,7 +31,6 @@ import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.game.gem.GemColor;
 import com.jcrawleydev.gemsdrop.GamePreferenceManager;
 import com.jcrawleydev.gemsdrop.audio.SoundPlayer;
-import com.jcrawleydev.gemsdrop.game.score.HighScores;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 
 import java.util.List;
@@ -98,7 +97,9 @@ public class GameFragment extends Fragment implements GameView {
 
     @Override
     public void onDestroy(){
-        game.onDestroy();
+        if(game != null){
+            game.onGameFragmentDestroy();
+        }
         super.onDestroy();
     }
 
