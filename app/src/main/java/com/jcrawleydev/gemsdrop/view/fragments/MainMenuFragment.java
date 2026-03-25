@@ -101,8 +101,10 @@ public class MainMenuFragment extends Fragment {
 
 
     private void startSettingsActivity(){
-        Intent intent = new Intent(getContext(), SettingsActivity.class);
-        startActivity(intent);
+        //var intent = new Intent(getContext(), SettingsActivity.class);
+       // startActivity(intent);
+
+        FragmentUtils.loadHighScores(this);
     }
 
 

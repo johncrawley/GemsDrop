@@ -29,34 +29,26 @@ public class HighScoresFragment extends Fragment {
        View parent = inflater.inflate(R.layout.fragment_high_scores, container, false);
 
        parent.setOnClickListener((v)-> FragmentUtils.loadMainMenu(this));
-        setupHighScores(parent);
+        setupHighScores((ViewGroup)parent);
         FragmentUtils.loadMainMenuOnBackButtonPressed(this);
        return parent;
 
     }
 
 
-    private void setupHighScores(View parentView){
+    private void setupHighScores(ViewGroup parent){
         var highScores = GameUtils.getHighScores(this);
-        printHighScores(highScores);
-
-        ViewGroup highScoresLayout = parentView.findViewById(R.id.highScoresLayout);
         var finalScore = GameUtils.getFinalScoreString(this);
 
-        log("setupHighScore() number of high scores: " + highScores.size());
         for(int i = 0; i < highScores.size(); i++){
-            var textView = (TextView) highScoresLayout.getChildAt(i);
-            assignScoreTo(textView, highScores.get(i), finalScore);
+            assignScoreTo(getTextViewFrom(parent, i), highScores.get(i), finalScore);
         }
     }
 
 
-    private void printHighScores(List<String> highScores){
-        log("******************* entered printHighScores()");
-        for(var score : highScores){
-            log(" ----> "  + score);
-        }
-        log("****************************");
+    private TextView getTextViewFrom(ViewGroup parent, int index ){
+        int textViewIndex = index + 1; //NB starting from second child because first child is the title
+        return (TextView) parent.getChildAt(textViewIndex);
     }
 
 
@@ -70,6 +62,7 @@ public class HighScoresFragment extends Fragment {
             textView.setTextColor(Color.YELLOW);
         }
     }
+
 
     private void log(String msg){
         System.out.println("^^^ HighScoresFragment: " + msg);
