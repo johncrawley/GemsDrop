@@ -3,13 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="12dp"
 
     android:background="@color/high_score_background">
 
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/titleGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.10" />
+
     <TextView
         android:id="@+id/highScoresTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@android:color/transparent"
         android:shadowColor="@color/colorPrimaryDark"
         android:shadowDx="1"
@@ -18,25 +27,24 @@
         android:gravity="center"
         android:text="@string/high_scores_title"
         android:textColor="@color/high_score_title_text"
-        android:textSize="@dimen/high_score_title_text_size"
-        android:layout_margin="12dp"
         android:textStyle="bold"
         android:maxLines="1"
         app:autoSizeTextType="uniform"
         app:autoSizeMinTextSize="24sp"
-        app:autoSizeMaxTextSize="46sp"
-        app:autoSizeStepGranularity="1sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:autoSizeMaxTextSize="42sp"
+        app:autoSizeStepGranularity="2sp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.10" />
+        app:layout_constraintBottom_toTopOf="@id/titleGuideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
             android:id="@+id/highScore1"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:gravity="center"
-            android:layout_marginVertical="@dimen/high_score_margin_vertical"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="@dimen/high_score_margin_vertical"
             android:background="@android:color/transparent"
             android:shadowColor="@color/colorPrimaryDark"
             android:shadowDx="@integer/high_score_shadow_dx"
@@ -52,7 +60,7 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/highScoresTitle"
+            app:layout_constraintTop_toBottomOf="@id/titleGuideline"
             app:layout_constraintBottom_toTopOf="@id/highScore2"/>
 
         <TextView

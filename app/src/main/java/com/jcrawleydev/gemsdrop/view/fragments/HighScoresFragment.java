@@ -47,7 +47,7 @@ public class HighScoresFragment extends Fragment {
 
 
     private TextView getTextViewFrom(ViewGroup parent, int index ){
-        int textViewIndex = index + 1; //NB starting from second child because first child is the title
+        int textViewIndex = index + 2; //NB starting from second child because first child is the guidline and second is the title
         return (TextView) parent.getChildAt(textViewIndex);
     }
 
