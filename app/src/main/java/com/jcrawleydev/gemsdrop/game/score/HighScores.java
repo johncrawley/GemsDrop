@@ -12,7 +12,7 @@ public class HighScores {
 
     private Context context;
     private enum PrefName { HIGH_SCORES_STR}
-    public static final String DEFAULT_SCORES = "30000,20000,10000,8000,5000,2000,1000,800";
+    public static final String DEFAULT_SCORES = "1000000,80000,50000,30000,20000,10000,8000,5000";
 
 
     public void init(Context context){
