@@ -11,6 +11,6 @@ public record GameLevel(int number,
                         int endingDropDuration,
                         Set<GemColor> gemColors,
                         SpecialGemConditions specialGemConditions,
-                        List<String> startingGrid){
+                        List<List<GemColor>> startingGrid){
 
 }

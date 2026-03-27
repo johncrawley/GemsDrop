@@ -3,11 +3,11 @@ package com.jcrawleydev.gemsdrop.game.grid;
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.game.gem.GemColor;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /*
     Adds gems to the grid before a level starts
@@ -20,9 +20,13 @@ public class GridAdder {
         populateGemColorMap();
     }
 
-    public void addTo(GemGrid gemGrid, List<String> gemRows){
-        for(var row : gemRows){
-            gemGrid.addRow(parseGemsFrom(row));
+
+    public void addTo(GemGrid gemGrid, List<List<GemColor>> grid){
+        for(var rowOfColors : grid){
+            var gemRow = rowOfColors.stream()
+                    .map(Gem::new)
+                    .collect(Collectors.toList()); //ignore warning, requires min API34
+            gemGrid.addRow(gemRow);
         }
         gemGrid.printColumnHeights();
     }
@@ -33,14 +37,4 @@ public class GridAdder {
                 .forEach( gc -> gemColorMap.put(gc.toString(), gc));
     }
 
-
-    public List<Gem> parseGemsFrom(String gemRowStr){
-        var gemRow = new ArrayList<Gem>();
-        var gemStrings = gemRowStr.split(" ");
-        for(var str : gemStrings){
-           var gemColor = gemColorMap.getOrDefault(str, GemColor.BLUE);
-           gemRow.add(new Gem(gemColor));
-        }
-        return gemRow;
-    }
 }

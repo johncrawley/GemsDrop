@@ -3,7 +3,10 @@ package com.jcrawleydev.gemsdrop.game.level;
 import static com.jcrawleydev.gemsdrop.game.gem.GemColor.*;
 
 import com.jcrawleydev.gemsdrop.R;
+import com.jcrawleydev.gemsdrop.game.gem.GemColor;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -13,7 +16,6 @@ public class LevelFactory {
 
     public LevelFactory(){
         setupLevel1();
-        setupLevelTemp();
     }
 
 
@@ -24,7 +26,14 @@ public class LevelFactory {
 
     private void setupLevel1(){
         var possibleColorsOfFallingGems = Set.of(BLUE, RED, YELLOW, GREEN, PURPLE, DEEP_BLUE);
-        var startingGrid = List.of("G Y G Y G Y G",  "B R B R B R B", "Y P Y P Y P Y");
+        var startingGrid = new ArrayList<List<GemColor>>();
+        addToGrid(startingGrid, GREEN, DEEP_BLUE, GREEN, DEEP_BLUE, GREEN, DEEP_BLUE, GREEN);
+        addToGrid(startingGrid, BLUE, RED, BLUE, RED, BLUE, RED, BLUE);
+        addToGrid(startingGrid, PURPLE, YELLOW, PURPLE, YELLOW, PURPLE, YELLOW, PURPLE);
+        addToGrid(startingGrid, GREEN, RED, BLUE, GREEN, RED, BLUE, GREEN);
+
+
+
         var specialGemConditions = new SpecialGemConditions(5, 25, 15);
         gameLevel1 = new GameLevel(1,
                 R.drawable.background_pattern_2,
@@ -36,17 +45,9 @@ public class LevelFactory {
     }
 
 
-    private void setupLevelTemp(){
-        var possibleColorsOfFallingGems = Set.of(BLUE, GREEN);
-        var startingGrid = List.of("B B G B B G B",  "G G B G G B G", "B G B G B G B");
-        var specialGemConditions = new SpecialGemConditions(8, 25, 5);
-        tempLevel = new GameLevel(1,
-                R.drawable.background_pattern_1,
-                150,
-                100,
-                possibleColorsOfFallingGems,
-                specialGemConditions,
-                startingGrid );
+    private void addToGrid(List<List<GemColor>> grid, GemColor... gemColors){
+        grid.add(Arrays.asList(gemColors));
     }
+
 
 }
