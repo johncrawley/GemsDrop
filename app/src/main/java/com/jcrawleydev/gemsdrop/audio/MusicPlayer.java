@@ -13,7 +13,7 @@ import com.jcrawleydev.gemsdrop.R;
 public class MusicPlayer {
 
     private MediaPlayer mediaPlayer;
-    private boolean isMusicEnabled = true;
+    private boolean isMusicEnabled = false;
     private VolumeShaper.Configuration volumeShaperConfig;
     private final int fadeOutTime = 1500;
     private VolumeShaper volumeShaper;
@@ -65,6 +65,9 @@ public class MusicPlayer {
 
 
     public void play(Context context, int resId){
+        if(!isMusicEnabled){
+            return;
+        }
         if(musicState == MusicState.STOPPED) {
             initMediaPlayer(context, resId);
             mediaPlayer.start();

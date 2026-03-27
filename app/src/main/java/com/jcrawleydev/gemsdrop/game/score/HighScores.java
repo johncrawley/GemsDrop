@@ -12,7 +12,7 @@ public class HighScores {
 
     private Context context;
     private enum PrefName { HIGH_SCORES_STR}
-    public static final String DEFAULT_SCORES = "30000,20000,10000,8000,5000,2000,1000,800,700,500";
+    public static final String DEFAULT_SCORES = "30000,20000,10000,8000,5000,2000,1000,800";
 
 
     public void init(Context context){
@@ -27,13 +27,10 @@ public class HighScores {
 
 
     public void saveScore(int score){
-        log("entered saveScore(" + score + ")");
         print(getHighScoresList());
         var amendedHighScores = ScoreUtils.addToHighScores(score, getHighScoresList());
         print(amendedHighScores);
-        log("saveScore() created amendedHighScores");
         save(amendedHighScores);
-        log("saved amendedHighScores");
     }
 
 
@@ -69,6 +66,7 @@ public class HighScores {
 
     private void save(List<String> highScores){
         log("entered save()");
+        print(highScores);
         var scoresStr = createPropStrFrom(highScores);
         log("save() scoreStr: " + scoresStr);
         save(scoresStr);
@@ -83,6 +81,8 @@ public class HighScores {
 
 
     private String getHighScoresStr(){
+        var highScoresStr =  getPrefs().getString(PrefName.HIGH_SCORES_STR.name(), "");
+        log("getHighScoresStr() : retrieved scores: " + highScoresStr);
         return getPrefs().getString(PrefName.HIGH_SCORES_STR.name(), "");
     }
 

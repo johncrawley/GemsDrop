@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ScoreUtils {
 
@@ -22,42 +23,23 @@ public class ScoreUtils {
         var highScores = new ArrayList<>(highScoreList);
         var scoreStr = String.valueOf(score);
         highScores.add(scoreStr);
-        /*
-        return highScores.stream()
-                .map(Integer::valueOf)
-                .sorted((f1, f2) -> Integer.compare(f2, f1))
-                .map(String::valueOf)
-                .limit(highScoreList.size())
-                .toList();
-
-         */
-
         var output = reverseNumericalOrderOf(highScores);
-        return output.subList(0, highScoreList.size() -1);
+        return output.subList(0, highScoreList.size());
     }
 
 
-    public static List<String> reverseNumericalOrderOf(List<String> list){
+    public static List<String> reverseNumericalOrderOf(List<String> list) {
         return list.stream()
                 .map(Integer::valueOf)
                 .sorted((f1, f2) -> Integer.compare(f2, f1))
                 .map(String::valueOf)
-                .toList();
-    }
-
-/*
-    public static List<Integer> getOrderedHighScores(Set<String> highScores){
-        return highScores.stream()
-                .map(Integer::valueOf)
-                .sorted((o1, o2) -> o2 - o1)
                 .collect(Collectors.toList());
     }
-
- */
 
 
     public static List<String> getOrderedHighScoreStrings(String highScoresStr){
         var list = new ArrayList<>(List.of(highScoresStr.split(",")));
+        System.out.println("^^^ ScoreUtils getOrderedHighScoreStrings() number of highScores: " + list.size());
         return reverseNumericalOrderOf(list);
     }
 

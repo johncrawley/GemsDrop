@@ -40,14 +40,16 @@ public class HighScoresFragment extends Fragment {
         var highScores = GameUtils.getHighScores(this);
         var finalScore = GameUtils.getFinalScoreString(this);
 
-        for(int i = 0; i < highScores.size(); i++){
+        for(int i = 0; i <= parent.getChildCount() && i < highScores.size(); i++){
+            var childViewIndex = i + 2;
+            log("about to assign high score "  + highScores.get(i) + " to view child: " + childViewIndex);
             assignScoreTo(getTextViewFrom(parent, i), highScores.get(i), finalScore);
         }
     }
 
 
     private TextView getTextViewFrom(ViewGroup parent, int index ){
-        int textViewIndex = index + 2; //NB starting from second child because first child is the guidline and second is the title
+        int textViewIndex = index + 2; //NB starting from second child because first child is the guideline and second is the title
         return (TextView) parent.getChildAt(textViewIndex);
     }
 
