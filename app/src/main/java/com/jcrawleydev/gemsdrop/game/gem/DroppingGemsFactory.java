@@ -4,7 +4,6 @@ package com.jcrawleydev.gemsdrop.game.gem;
 import com.jcrawleydev.gemsdrop.game.GridProps;
 import com.jcrawleydev.gemsdrop.game.level.GameLevel;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -13,9 +12,9 @@ public class DroppingGemsFactory {
     private GridProps gridProps;
     private final Random random;
     private GameLevel gameLevel;
-    private List<GemColor> gemColors;
     private int numberOfNormalGemsDropped;
     private int totalDropsPerLevel = 0;
+    private final GemColorStore gemColorStore = new GemColorStore();
 
     public DroppingGemsFactory(){
         random = new Random(System.currentTimeMillis());
@@ -34,19 +33,33 @@ public class DroppingGemsFactory {
 
     public void setLevel(GameLevel level){
         this.gameLevel = level;
-        this.gemColors = new ArrayList<>(level.gemColors());
+        assignGemColorsFrom(level);
         totalDropsPerLevel = 0;
     }
 
 
+    private void assignGemColorsFrom(GameLevel level){
+        var gemOccurrences = level.gemColors();
+        gemColorStore.clear();
+        gemColorStore.assign(gemOccurrences);
+    }
+
+
     public DroppingGems createDroppingGems(){
-        totalDropsPerLevel++;
+        updateDropCount();
         if(shouldCreateWonderGem()){
             numberOfNormalGemsDropped = 0;
             return new WonderDroppingGem(gridProps);
         }
         numberOfNormalGemsDropped++;
         return new DroppingGems(gridProps, getRandomGemColors());
+    }
+
+
+    private void updateDropCount(){
+        totalDropsPerLevel++;
+        gemColorStore.updateDropCount();
+
     }
 
 
@@ -86,6 +99,7 @@ public class DroppingGemsFactory {
 
 
     public GemColor getRandomColor(){
+        var gemColors = gemColorStore.getCurrentGemColors();
         int index = random.nextInt(gemColors.size());
         return gemColors.get(index);
     }

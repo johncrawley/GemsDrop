@@ -25,7 +25,16 @@ public class LevelFactory {
 
 
     private void setupLevel1(){
-        var possibleColorsOfFallingGems = Set.of(BLUE, RED, YELLOW, GREEN, PURPLE, DEEP_BLUE);
+        var possibleColorsOfFallingGems = Set.of(
+                new GemOccurrence(BLUE,0),
+                new GemOccurrence(RED, 0),
+                new GemOccurrence(YELLOW, 0),
+                new GemOccurrence(GREEN, 0),
+                new GemOccurrence(PURPLE, 0),
+                new GemOccurrence(DEEP_BLUE, 20),
+                new GemOccurrence(DARK_RED, 50),
+                new GemOccurrence(LIGHT_PINK, 80));
+
         var startingGrid = new ArrayList<List<GemColor>>();
         addToGrid(startingGrid, GREEN, DEEP_BLUE, GREEN, DEEP_BLUE, GREEN, DEEP_BLUE, GREEN);
         addToGrid(startingGrid, BLUE, RED, BLUE, RED, BLUE, RED, BLUE);
