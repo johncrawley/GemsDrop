@@ -69,6 +69,10 @@ public class Game {
         createGemsOnView(gameModel.getDroppingGems());
     }
 
+    private void setRandomBackgroundForView(){
+
+    }
+
 
     public void setCurrentGameLevel(GameLevel level){
         gameModel.setGameLevel(level);

@@ -24,6 +24,7 @@ public class LoadLevelState extends AbstractGameState {
 
     @Override
     public void start() {
+        game.setRandomBackgroundOnView();
         game.resetDropCount();
         var level = levelFactory.getLevel(1);
         game.setCurrentGameLevel(level);
