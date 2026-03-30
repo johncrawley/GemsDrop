@@ -59,6 +59,11 @@ public class Game {
     }
 
 
+    public void setRandomBackgroundOnView(){
+
+    }
+
+
     public GameModel getGameModel(){
         return gameModel;
     }
@@ -70,7 +75,7 @@ public class Game {
     }
 
     private void setRandomBackgroundForView(){
-
+        gameView.setBackgroundFrom(gameModel.getRandomBackgroundIndex());
     }
 
 

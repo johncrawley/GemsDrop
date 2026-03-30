@@ -60,6 +60,8 @@ public class GameFragment extends Fragment implements GameView {
                              Bundle savedInstanceState) {
         View parentView = inflater.inflate(R.layout.fragment_game, container, false);
 
+        ViewGroup gameLayout = parentView.findViewById(R.id.game_layout);
+        gameLayout.setBackgroundResource(R.drawable.background_3);
         assignViewModel();
         setupViews(parentView);
         createGame();

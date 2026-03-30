@@ -31,6 +31,7 @@ public class GameModel {
     private final GemMover gemMover = new GemMover();
     private int numberOfRowsAlreadyGreyedOut = 0;
     private final HighScores highScores;
+    private RandomBackgroundPicker randomBackgroundPicker;
 
 
     public GameModel(HighScores highScores){
@@ -59,8 +60,15 @@ public class GameModel {
 
 
     public void startNewGame(){
+        randomBackgroundPicker = new RandomBackgroundPicker();
+        randomBackgroundPicker.pickRandomBackgroundIndex();
         gameStateName = GameStateName.AWAITING_GAME_START;
         droppingGemsFactory.onGameStart();
+    }
+
+
+    public int getRandomBackgroundIndex(){
+        return randomBackgroundPicker.getCurrentBackgroundIndex();
     }
 
 
