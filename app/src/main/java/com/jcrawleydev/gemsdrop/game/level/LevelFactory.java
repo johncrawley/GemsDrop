@@ -45,7 +45,7 @@ public class LevelFactory {
 
         var specialGemConditions = new SpecialGemConditions(5, 25, 15);
         gameLevel1 = new GameLevel(1,
-                R.drawable.background_pattern_2,
+                R.drawable.background_pattern_1,
                 350,
                 100,
                 possibleColorsOfFallingGems,

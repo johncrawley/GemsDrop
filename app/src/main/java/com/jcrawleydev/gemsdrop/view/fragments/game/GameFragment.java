@@ -58,18 +58,39 @@ public class GameFragment extends Fragment implements GameView {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View parentView = inflater.inflate(R.layout.fragment_game, container, false);
-
-        ViewGroup gameLayout = parentView.findViewById(R.id.game_layout);
-        gameLayout.setBackgroundResource(R.drawable.background_3);
+        View parent = inflater.inflate(R.layout.fragment_game, container, false);
         assignViewModel();
-        setupViews(parentView);
+        setupViews(parent);
         createGame();
         assignLayoutDimensions();
-        setupTouchListener(parentView);
+        setBackground(parent);
+        setupTouchListener(parent);
         FragmentUtils.loadMainMenuOnBackButtonPressed(this, this::quitGame);
-        return parentView;
+        return parent;
     }
+
+
+    public void setBackgroundFrom(int index){
+
+    }
+
+
+    private void setBackground(View parent){
+        int backgroundIndex = viewModel.gameModel.getRandomBackgroundIndex();
+        ViewGroup gameLayout = parent.findViewById(R.id.game_layout);
+
+
+        int backgroundResId = switch(backgroundIndex){
+            case 0 -> R.drawable.background_1;
+            case 2 -> R.drawable.background_2;
+            case 3 -> R.drawable.background_3;
+            case 4 -> R.drawable.background_4;
+            default -> R.drawable.background_5;
+        };
+
+        gameLayout.setBackgroundResource(backgroundResId);
+    }
+
 
 
     private void assignViewModel(){
