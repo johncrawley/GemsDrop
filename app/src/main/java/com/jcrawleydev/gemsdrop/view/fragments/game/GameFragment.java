@@ -76,19 +76,21 @@ public class GameFragment extends Fragment implements GameView {
 
 
     private void setBackground(View parent){
-        int backgroundIndex = viewModel.gameModel.getRandomBackgroundIndex();
         ViewGroup gameLayout = parent.findViewById(R.id.game_layout);
 
+        var ids = List.of(
+                 R.drawable.background_1,
+        R.drawable.background_2,
+        R.drawable.background_3,
+        R.drawable.background_4,
+        R.drawable.background_5,
+        R.drawable.background_6);
 
-        int backgroundResId = switch(backgroundIndex){
-            case 0 -> R.drawable.background_1;
-            case 2 -> R.drawable.background_2;
-            case 3 -> R.drawable.background_3;
-            case 4 -> R.drawable.background_4;
-            default -> R.drawable.background_5;
-        };
+        int randomIndex = viewModel.gameModel.getRandomBackgroundIndex();
+        log("setBackground() random index: " + randomIndex);
+        int backgroundIndex = Math.min(randomIndex, ids.size()-1);
 
-        gameLayout.setBackgroundResource(backgroundResId);
+        gameLayout.setBackgroundResource(ids.get(backgroundIndex));
     }
 
 

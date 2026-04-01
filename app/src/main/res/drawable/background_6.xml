@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bitmap xmlns:android="http://schemas.android.com/apk/res/android"
+    android:src="@drawable/background_pattern_6"
+    android:tileMode="mirror"
+    android:tileModeX="repeat"
+    android:tileModeY="repeat"
+    android:gravity="fill" />

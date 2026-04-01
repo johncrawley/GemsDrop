@@ -14,6 +14,11 @@
     <color name="high_score_item_text">#958F74</color>
     <color name="high_score_background">#1D1C1C</color>
     <color name="grid_border_color">#561A06</color>
+    <color name="grid_border_color_2">#561A06</color>
+    <color name="grid_border_color_3">#561A06</color>
+    <color name="grid_border_color_4">#561A06</color>
+    <color name="grid_border_color_5">#561A06</color>
+    <color name="grid_border_color_6">#561A06</color>
     <color name="score_label">#aaa</color>
 
 

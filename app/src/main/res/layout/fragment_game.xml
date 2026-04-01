@@ -37,7 +37,7 @@
             android:text="@string/score_label"
             android:textColor="@color/score_label"
             android:paddingHorizontal="8dp"
-            android:id="@+id/scoreLAbelView"/>
+            android:id="@+id/scoreLabelView"/>
 
         <TextView
             android:layout_width="wrap_content"

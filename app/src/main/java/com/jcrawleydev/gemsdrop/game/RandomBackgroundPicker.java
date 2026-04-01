@@ -14,7 +14,7 @@ public class RandomBackgroundPicker {
 
 
     public void pickRandomBackgroundIndex(){
-        int numberOfBackgrounds = 5;
+        int numberOfBackgrounds = 6;
         currentBackgroundIndex = random.nextInt(numberOfBackgrounds);
     }
 
