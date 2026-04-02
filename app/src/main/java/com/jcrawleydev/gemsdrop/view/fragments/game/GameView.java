@@ -16,5 +16,4 @@ public interface GameView {
     void showGameOverAnimation();
     void showHighScores();
     void loadGameOver();
-    void setBackgroundFrom(int index);
 }

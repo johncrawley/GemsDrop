@@ -35,14 +35,6 @@ public class LevelFactory {
                 new GemOccurrence(DARK_RED, 50),
                 new GemOccurrence(LIGHT_PINK, 80));
 
-        var startingGrid = new ArrayList<List<GemColor>>();
-        addToGrid(startingGrid, GREEN, DEEP_BLUE, GREEN, DEEP_BLUE, GREEN, DEEP_BLUE, GREEN);
-        addToGrid(startingGrid, BLUE, RED, BLUE, RED, BLUE, RED, BLUE);
-        addToGrid(startingGrid, PURPLE, YELLOW, PURPLE, YELLOW, PURPLE, YELLOW, PURPLE);
-        addToGrid(startingGrid, GREEN, RED, BLUE, GREEN, RED, BLUE, GREEN);
-
-
-
         var specialGemConditions = new SpecialGemConditions(5, 25, 15);
         gameLevel1 = new GameLevel(1,
                 R.drawable.background_pattern_1,
@@ -50,7 +42,17 @@ public class LevelFactory {
                 100,
                 possibleColorsOfFallingGems,
                 specialGemConditions,
-                startingGrid );
+                generateStartingGrid() );
+    }
+
+
+    private List<List<GemColor>> generateStartingGrid(){
+        var startingGrid = new ArrayList<List<GemColor>>();
+        addToGrid(startingGrid, GREEN, DEEP_BLUE, GREEN, DEEP_BLUE, GREEN, DEEP_BLUE, GREEN);
+        addToGrid(startingGrid, BLUE, RED, BLUE, RED, BLUE, RED, BLUE);
+        addToGrid(startingGrid, PURPLE, YELLOW, PURPLE, YELLOW, PURPLE, YELLOW, PURPLE);
+        addToGrid(startingGrid, GREEN, RED, BLUE, GREEN, RED, BLUE, GREEN);
+        return startingGrid;
     }
 
 

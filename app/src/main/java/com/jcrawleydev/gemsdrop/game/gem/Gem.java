@@ -126,6 +126,12 @@ public class Gem {
         return color;
     }
 
+
+    public boolean isWonderGem(){
+        return color == GemColor.WONDER;
+    }
+
+
     public int getColorId(){
         return color.ordinal();
     }

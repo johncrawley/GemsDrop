@@ -74,10 +74,6 @@ public class Game {
         createGemsOnView(gameModel.getDroppingGems());
     }
 
-    private void setRandomBackgroundForView(){
-        gameView.setBackgroundFrom(gameModel.getRandomBackgroundIndex());
-    }
-
 
     public void setCurrentGameLevel(GameLevel level){
         gameModel.setGameLevel(level);
