@@ -26,6 +26,7 @@ public class Game {
     private final AtomicBoolean isStarted = new AtomicBoolean(false);
     private final AtomicBoolean hasQuitBeenInvoked = new AtomicBoolean(false);
     private final GameModel gameModel;
+    private GemMover gemMover;
 
     private final TaskScheduler taskScheduler = new TaskScheduler();
     private final SoundEffectManager soundEffectManager = new SoundEffectManager();
@@ -43,7 +44,8 @@ public class Game {
         this.gridProps = gameModel.getGridProps();
         soundEffectManager.setScore(gameModel.getScore());
         var droppingGemsEvaluator = new DroppingGemsEvaluator(this);
-        gameModel.setDroppingGemsEvaluator(droppingGemsEvaluator);
+        gemMover = new GemMover(this, droppingGemsEvaluator);
+        gemMover.init(gameModel.getGemGrid(), gameModel.getGridProps());
         stateManager.init(this);
         updateScoreOnView();
         addExistingGemViews();
@@ -70,8 +72,9 @@ public class Game {
 
 
     public void createDroppingGems(){
-        gameModel.createDroppingGems();
-        createGemsOnView(gameModel.getDroppingGems());
+        var droppingGems = gameModel.createDroppingGems();
+        gemMover.setDroppingGems(droppingGems);
+        createGemsOnView(droppingGems);
     }
 
 
@@ -81,7 +84,7 @@ public class Game {
 
 
     public GemMover getGemMover(){
-        return gameModel.getGemMover();
+        return gemMover;
     }
 
 
@@ -121,11 +124,6 @@ public class Game {
 
     public void moveRight() {
         stateManager.getCurrentGameState().right();
-    }
-
-
-    public void moveUp(){
-       // do nothing
     }
 
 

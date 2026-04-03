@@ -1,7 +1,6 @@
 package com.jcrawleydev.gemsdrop.game;
 
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
-import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsEvaluator;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsFactory;
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
@@ -28,7 +27,6 @@ public class GameModel {
     private DroppingGems droppingGems;
     private GameLevel gameLevel = new LevelFactory().getLevel(1);
     private GameStateName gameStateName = GameStateName.AWAITING_GAME_START;
-    private final GemMover gemMover = new GemMover();
     private int numberOfRowsAlreadyGreyedOut = 0;
     private final HighScores highScores;
     private RandomBackgroundPicker randomBackgroundPicker;
@@ -37,7 +35,6 @@ public class GameModel {
     public GameModel(HighScores highScores){
         droppingGemsFactory.setGridProps(gridProps);
         droppingGemsFactory.setLevel(gameLevel);
-        gemMover.init(gemGrid, gridProps);
         this.highScores = highScores;
     }
 
@@ -51,11 +48,6 @@ public class GameModel {
 
     private void log(String msg){
         System.out.println("^^^ GameModel: " + msg);
-    }
-
-
-    public void setDroppingGemsEvaluator(DroppingGemsEvaluator evaluator){
-        gemMover.setDroppingGemsEvaluator(evaluator);
     }
 
 
@@ -108,16 +100,11 @@ public class GameModel {
     }
 
 
-    public void createDroppingGems(){
+    public DroppingGems createDroppingGems(){
         droppingGems = droppingGemsFactory.createDroppingGems();
-        gemMover.setDroppingGems(droppingGems);
         dropCount++;
         updateDropInterval();
-    }
-
-
-    public GemMover getGemMover(){
-        return gemMover;
+        return droppingGems;
     }
 
 

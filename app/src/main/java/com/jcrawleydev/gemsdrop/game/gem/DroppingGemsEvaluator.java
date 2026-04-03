@@ -37,41 +37,37 @@ public class DroppingGemsEvaluator {
     }
 
 
-    public void evaluateTouchingGems(DroppingGems droppingGems, Runnable movementRunnable){
-       if(droppingGems instanceof WonderDroppingGem){
-           evaluateWonderGem(droppingGems, movementRunnable);
-       }
-       else{
-           evaluateNormalGems(droppingGems, movementRunnable);
-       }
+
+    public boolean evaluate(DroppingGems droppingGems){
+        if(droppingGems instanceof WonderDroppingGem){
+            return evaluateWonderGem(droppingGems);
+        }
+        else{
+            return evaluateNormalGems(droppingGems);
+        }
     }
 
 
-    private void log(String msg){
-        System.out.println("^^^ DroppingGemsEvaluator: " + msg);
-    }
-
-
-    private void evaluateNormalGems(DroppingGems droppingGems, Runnable movementRunnable){
+    private boolean evaluateNormalGems(DroppingGems droppingGems){
         droppingGems.addConnectingGemsTo(gemGrid);
 
         if(droppingGems.areAllAddedToGrid()){
             soundEffectManager.playSoundEffect(GEM_HITS_FLOOR);
             gemMover.disableControls();
             loadState(EVALUATE_GRID);
+            return true;
         }
         else if(droppingGems.areAnyAddedToGrid()){
             soundEffectManager.playSoundEffect(GEM_HITS_FLOOR);
             gemMover.disableControls();
             loadState(GEM_FREE_FALL);
+            return true;
         }
-        else{
-            runMovement(movementRunnable);
-        }
+        return false;
     }
 
 
-    private void evaluateWonderGem(DroppingGems droppingGems, Runnable movementRunnable){
+    private boolean evaluateWonderGem(DroppingGems droppingGems){
         var markedGemIds = droppingGems.addConnectingGemsTo(gemGrid);
         var numberOfMarkedGems = markedGemIds.size();
 
@@ -80,24 +76,15 @@ public class DroppingGemsEvaluator {
             long [] ids = getArrayFrom(markedGemIds);
             game.removeGemsFromView(ids);
             soundEffectManager.playWonderGemRemovedSound(numberOfMarkedGems);
+            return true;
         }
-        else{
-            runMovement(movementRunnable);
-        }
+        return false;
     }
 
 
     private void loadState(GameStateName stateName){
         gemMover.cancelQueuedMovements();
         stateManager.load(stateName, this.getClass().getSimpleName());
-    }
-
-
-    private void runMovement(Runnable movementRunnable){
-        movementRunnable.run();
-        game.updateDroppingGemsOnView();
-        gemMover.enableMovement();
-        gemMover.attemptNextQueuedMovement();
     }
 
 

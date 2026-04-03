@@ -18,19 +18,21 @@ public class GemMover {
     private final AtomicBoolean isControlEnabled = new AtomicBoolean(true);
     private final AtomicBoolean isMovementEnabled = new AtomicBoolean(true);
     private final AtomicBoolean isFirstDrop = new AtomicBoolean(false);
-    private DroppingGemsEvaluator droppingGemsEvaluator;
-    private enum Movement { LEFT, RIGHT, ROTATE, DOWN }
+    private final DroppingGemsEvaluator droppingGemsEvaluator;
+    public enum Movement { LEFT, RIGHT, ROTATE, DOWN }
     private final Queue<Movement> movementQueue = new ConcurrentLinkedQueue<>();
+    private final Game game;
+
+
+    public GemMover(Game game, DroppingGemsEvaluator droppingGemsEvaluator){
+        this.game = game;
+        this.droppingGemsEvaluator = droppingGemsEvaluator;
+        droppingGemsEvaluator.setGemMover(this);
+    }
 
     public void init(GemGrid gemGrid, GridProps gridProps){
         movementChecker = new MovementChecker(gemGrid, gridProps);
         rotationChecker = new RotationChecker(gemGrid, gridProps);
-    }
-
-
-    public void setDroppingGemsEvaluator(DroppingGemsEvaluator evaluator){
-        this.droppingGemsEvaluator = evaluator;
-        droppingGemsEvaluator.setGemMover(this);
     }
 
 
@@ -53,21 +55,39 @@ public class GemMover {
     }
 
 
-    public void rotateGems(){ syncUserMovement(Movement.ROTATE);}
-
-
-    public void moveLeft(){
-        syncUserMovement(Movement.LEFT);
+    public synchronized void rotateGems(){
+       boolean canMove = evaluateDroppingGemsBefore(Movement.ROTATE);
+        if(canMove){
+            rotate();
+            afterUserMovement();
+        }
     }
 
 
-    public void moveRight(){
-        syncUserMovement(Movement.RIGHT);
+    public synchronized void moveLeft(){
+        boolean canMove = evaluateDroppingGemsBefore(Movement.LEFT);
+        if(canMove){
+            left();
+            afterUserMovement();
+        }
     }
 
 
-    public void dropGems(){
-        syncMovement(Movement.DOWN);
+    public synchronized void moveRight(){
+        boolean canMove = evaluateDroppingGemsBefore(Movement.RIGHT);
+        if(canMove){
+            right();
+            afterUserMovement();
+        }
+    }
+
+
+    public synchronized void dropGems(){
+        boolean canMove = evaluateDroppingGemsBefore(Movement.DOWN);
+        if(canMove){
+            down();
+            afterUserMovement();
+        }
         if(isFirstDrop.get()){
             isFirstDrop.set(false);
             isControlEnabled.set(true);
@@ -75,15 +95,38 @@ public class GemMover {
     }
 
 
-    private void log(String msg){
-        System.out.println("^^^ GemMover: " + msg);
+    private boolean evaluateDroppingGemsBefore(Movement movement){
+        if(droppingGems == null){
+            return false;
+        }
+        if(!isMovementEnabled.get()){
+            queue(movement);
+            return false;
+        }
+        disableMovement();
+        var haveGemsBeenAdded = droppingGemsEvaluator.evaluate(droppingGems);
+        return !haveGemsBeenAdded;
     }
 
 
-    private void syncUserMovement(Movement movement){
-        if(isControlEnabled.get()){
-            syncMovement(movement);
+    void afterUserMovement(){
+        game.updateDroppingGemsOnView();
+        enableMovement();
+        attemptNextQueuedMovement();
+    }
+
+
+    private void queue(Movement movement){
+        if(movementQueue.size() > 5){
+            movementQueue.remove();
         }
+        movementQueue.add(movement);
+    }
+
+
+
+    private void log(String msg){
+        System.out.println("^^^ GemMover: " + msg);
     }
 
 
@@ -94,22 +137,17 @@ public class GemMover {
 
     public void attemptNextQueuedMovement(){
         if(!movementQueue.isEmpty()){
-            syncMovement(movementQueue.remove());
+            var movement = movementQueue.remove();
+            if(movement == Movement.LEFT){
+                moveLeft();
+            } else if (movement == Movement.RIGHT) {
+                moveRight();
+            }else if (movement == Movement.DOWN) {
+                dropGems();
+            }else{
+                rotate();
+            }
         }
-    }
-
-
-    private synchronized void syncMovement(Movement movement){
-        if(droppingGems == null){
-            log("dropping gems are null! Won't proceed with attempted movement!");
-            return;
-        }
-        if(!isMovementEnabled.get()){
-            log("entered syncMovement() control is disabled, adding to queue");
-            movementQueue.add(movement);
-        }
-        disableMovement();
-        droppingGemsEvaluator.evaluateTouchingGems(droppingGems, getMethodForMovement(movement));
     }
 
 
@@ -120,17 +158,6 @@ public class GemMover {
 
     public void enableMovement(){
         isMovementEnabled.set(true);
-    }
-
-
-
-    private Runnable getMethodForMovement(Movement movement){
-        return switch (movement){
-            case ROTATE -> this::rotate;
-            case LEFT -> this::left;
-            case RIGHT -> this::right;
-            case DOWN -> this::down;
-        };
     }
 
 

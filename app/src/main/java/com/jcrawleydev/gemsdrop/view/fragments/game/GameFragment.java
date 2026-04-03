@@ -11,7 +11,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -39,7 +38,7 @@ public class GameFragment extends Fragment implements GameView {
     private final Map<Long, ViewGroup> itemsMap = new ConcurrentHashMap<>();
     private int containerWidth;
     private int containerHeight;
-    private ViewGroup gemContainer, gamePane, gameOverTextLayout;
+    private ViewGroup gemContainer, gamePane;
     private float gemWidth = 10f;
     private TextView scoreView;
     private AnimationDrawable wonderGemAnimation;
@@ -197,18 +196,6 @@ public class GameFragment extends Fragment implements GameView {
 
 
     @Override
-    public void showGameOverAnimation() {
-        runOnUiThread(()->{
-            gameOverTextLayout.setVisibility(View.VISIBLE);
-            var animation = new AlphaAnimation(0.0f, 1.0f);
-            animation.setDuration(300);
-            animation.setFillAfter(true);
-            gameOverTextLayout.startAnimation(animation);
-        });
-    }
-
-
-    @Override
     public void showHighScores() {
         FragmentUtils.loadHighScores(this);
     }
@@ -253,14 +240,15 @@ public class GameFragment extends Fragment implements GameView {
     private void setupViews(View parentView){
         gemContainer = parentView.findViewById(R.id.gemContainer);
         gamePane = parentView.findViewById(R.id.game_pane);
-        gameOverTextLayout = parentView.findViewById(R.id.gameOverTextLayout);
         scoreView = parentView.findViewById(R.id.scoreView);
     }
+
 
     @Override
     public void loadGameOver(){
         FragmentUtils.loadGameOver(this);
     }
+
 
     @SuppressLint("ClickableViewAccessibility")
     private void setupTouchListener(View parentView){

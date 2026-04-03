@@ -13,13 +13,8 @@ public class GameInputHandler {
         if(game == null){
             return;
         }
-        //log("handleInput(" + (int)x + "," +  (int)y + ")" + " gemContainer AbsoluteY: "+ gamePane.getY() + " height: " + gamePane.getMeasuredHeight());
         int height = gamePane.getMeasuredHeight();
         int width = gamePane.getMeasuredWidth();
-        if( p.y < height/12f){
-            game.moveUp();
-            return;
-        }
         if( p.y > (height / 8f) * 7){
             game.moveDown();
             return;
