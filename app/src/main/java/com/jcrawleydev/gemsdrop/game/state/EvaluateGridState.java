@@ -3,6 +3,7 @@ package com.jcrawleydev.gemsdrop.game.state;
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.GAME_OVER;
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.CREATE_GEMS;
 
+import com.jcrawleydev.gemsdrop.audio.SoundEffect;
 import com.jcrawleydev.gemsdrop.game.Game;
 import com.jcrawleydev.gemsdrop.game.grid.GridEvaluator;
 
@@ -37,6 +38,7 @@ public class EvaluateGridState extends AbstractGameState{
             }
             else{
                 log("evaluateGemGrid() grid doesn't exceed max height, so loading gems drop state");
+                soundEffectManager.playSoundEffect(SoundEffect.GEM_HITS_FLOOR);
                 loadState(CREATE_GEMS);
             }
         }

@@ -52,7 +52,6 @@ public class DroppingGemsEvaluator {
         droppingGems.addConnectingGemsTo(gemGrid);
 
         if(droppingGems.areAllAddedToGrid()){
-            soundEffectManager.playSoundEffect(GEM_HITS_FLOOR);
             gemMover.disableControls();
             loadState(EVALUATE_GRID);
             return true;

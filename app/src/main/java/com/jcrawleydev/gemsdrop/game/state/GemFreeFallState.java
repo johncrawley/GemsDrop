@@ -27,7 +27,8 @@ public class GemFreeFallState extends AbstractGameState{
     private void freeFallRemainingGems(){
         droppingGems.moveDown();
         game.updateDroppingGemsOnView();
-        droppingGems.addConnectingGemsTo(gemGrid);
+        var droppingGemIds = droppingGems.addConnectingGemsTo(gemGrid);
+
         if(droppingGems.areAllAddedToGrid()){
             loadState(EVALUATE_GRID);
         }
