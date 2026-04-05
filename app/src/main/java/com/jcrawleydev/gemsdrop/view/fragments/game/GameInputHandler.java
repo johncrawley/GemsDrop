@@ -9,21 +9,21 @@ public class GameInputHandler {
 
     private GameInputHandler(){}
 
-    public static void handleInput(PointF p, ViewGroup gamePane, Game game){
+    public static void handleInput(float x, float y, ViewGroup gamePane, Game game){
         if(game == null){
             return;
         }
         int height = gamePane.getMeasuredHeight();
         int width = gamePane.getMeasuredWidth();
-        if( p.y > (height / 8f) * 7){
+        if( y > (height / 8f) * 7){
             game.moveDown();
             return;
         }
-        if(p.x < width / 3f){
+        if(x < width / 3f){
             game.moveLeft();
             return;
         }
-        if(p.x < width / 1.5f ){
+        if(x < width / 1.5f ){
            game.rotateGems();
             return;
         }

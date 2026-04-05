@@ -14,14 +14,15 @@ import com.jcrawleydev.gemsdrop.game.state.StateManager;
 
 import java.util.Set;
 
+
 public class DroppingGemsEvaluator {
 
-    private final Game game;
     private GemMover gemMover;
     private final GemGrid gemGrid;
     private final StateManager stateManager;
     private final SoundEffectManager soundEffectManager;
     private final TaskScheduler taskScheduler;
+    private final Game game;
 
     public DroppingGemsEvaluator(Game game){
         this.game = game;
@@ -40,7 +41,7 @@ public class DroppingGemsEvaluator {
 
     public boolean evaluate(DroppingGems droppingGems){
         if(droppingGems instanceof WonderDroppingGem){
-            return evaluateWonderGem(droppingGems);
+            return evaluateWonderGem((WonderDroppingGem) droppingGems);
         }
         else{
             return evaluateNormalGems(droppingGems);
@@ -66,10 +67,9 @@ public class DroppingGemsEvaluator {
     }
 
 
-    private boolean evaluateWonderGem(DroppingGems droppingGems){
-        var markedGemIds = droppingGems.addConnectingGemsTo(gemGrid);
+    private boolean evaluateWonderGem(WonderDroppingGem wonderDroppingGem){
+        var markedGemIds = wonderDroppingGem.addConnectingGemsTo(gemGrid);
         var numberOfMarkedGems = markedGemIds.size();
-
         if(numberOfMarkedGems > 0){
             taskScheduler.cancelTask();
             long [] ids = getArrayFrom(markedGemIds);

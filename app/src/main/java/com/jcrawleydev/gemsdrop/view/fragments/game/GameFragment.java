@@ -57,7 +57,6 @@ public class GameFragment extends Fragment implements GameView {
         createGame();
         assignLayoutDimensions();
         setBackground(parent);
-        setupTouchListener(parent);
         FragmentUtils.loadMainMenuOnBackButtonPressed(this, this::quitGame);
         return parent;
     }
@@ -240,6 +239,7 @@ public class GameFragment extends Fragment implements GameView {
     private void setupViews(View parentView){
         gemContainer = parentView.findViewById(R.id.gemContainer);
         gamePane = parentView.findViewById(R.id.game_pane);
+        setupTouchListener();
         scoreView = parentView.findViewById(R.id.scoreView);
     }
 
@@ -251,14 +251,12 @@ public class GameFragment extends Fragment implements GameView {
 
 
     @SuppressLint("ClickableViewAccessibility")
-    private void setupTouchListener(View parentView){
-        ViewGroup gamePane = parentView.findViewById(R.id.game_pane);
-        gamePane.setOnTouchListener((view, motionEvent) -> {
-            if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
-                var point = new PointF(motionEvent.getX(), motionEvent.getY());
-                GameInputHandler.handleInput(point, gamePane, game);
+    private void setupTouchListener(){
+        gamePane.setOnTouchListener((view, event) -> {
+            if(event.getAction() == MotionEvent.ACTION_UP){
+                GameInputHandler.handleInput(event.getX(), event.getY(), gamePane, game);
             }
-            return false;
+            return true;
         });
     }
 
