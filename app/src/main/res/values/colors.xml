@@ -30,4 +30,7 @@
     <color name="input_button_accent">#B39DDB</color>
     <color name="input_button_outline">#00716843</color>
     <color name="input_button_text">#B1A883</color>
+
+
+    <color name="heading_text_background">#AA1A1918</color>
 </resources>
