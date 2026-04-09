@@ -9,18 +9,6 @@
     android:tileMode="mirror"
     android:layout_height="match_parent">
 
-    <!--
-
-    <com.jcrawleydev.gemsdrop.view.TransparentView
-        android:id="@+id/gameOverBackgroundView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
- -->
 
     <TextView
         android:id="@+id/gameOverTextView"
@@ -42,44 +30,52 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.30" />
 
-    <TextView
-        android:id="@+id/yourScoreText"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/game_over_score_text"
-        android:textAlignment="center"
-        android:textSize="@dimen/game_over_score_text_size"
-        android:textColor="@color/score_text_top"
-        android:shadowColor="@color/colorPrimaryDark"
-        android:shadowDx="1"
-        android:shadowDy="15"
-        android:shadowRadius="2"
+        android:background="@drawable/background_final_score"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gameOverTextView"
-        app:layout_constraintVertical_bias="0.32" />
+        app:layout_constraintTop_toBottomOf="@+id/gameOverTextView">
 
-    <TextView
-        android:id="@+id/scoreText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:shadowColor="@color/colorPrimaryDark"
-        android:shadowDx="1"
-        android:shadowDy="15"
-        android:shadowRadius="2"
-        android:text="@string/score_placeholder_text"
-        android:textAlignment="center"
-        android:textColor="@color/score_text_top"
-        android:textSize="@dimen/game_over_score_text_size"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/yourScoreText"
-        app:layout_constraintVertical_bias="0.108" />
+
+        <TextView
+            android:id="@+id/yourScoreTitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/game_over_score_text"
+            android:textAlignment="center"
+            android:layout_margin="8dp"
+            android:textSize="@dimen/game_over_score_text_size"
+            android:textColor="@color/score_text_top"
+            android:shadowColor="@color/colorPrimaryDark"
+            android:shadowDx="1"
+            android:shadowDy="15"
+            android:shadowRadius="2"
+            app:layout_constraintVertical_bias="0.32" />
+
+        <TextView
+            android:id="@+id/scoreText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="8dp"
+            android:shadowColor="@color/colorPrimaryDark"
+            android:shadowDx="1"
+            android:shadowDy="15"
+            android:shadowRadius="2"
+            android:text="@string/score_placeholder_text"
+            android:textAlignment="center"
+            android:textColor="@color/score_text_top"
+            android:textSize="@dimen/game_over_score_text_size"/>
+
+    </LinearLayout>
+
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

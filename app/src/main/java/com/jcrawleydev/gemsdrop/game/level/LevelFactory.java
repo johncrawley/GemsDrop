@@ -56,6 +56,27 @@ public class LevelFactory {
     }
 
 
+
+    private List<List<GemColor>> generateStartingGrid2(){
+        var startingGrid = new ArrayList<List<GemColor>>();
+        addToGrid(startingGrid, YELLOW, GREEN, RED, BLUE, RED, GREEN, YELLOW);
+        addToGrid(startingGrid, BLUE, PURPLE, YELLOW, GREEN, YELLOW, PURPLE, BLUE);
+        addToGrid(startingGrid, RED, YELLOW, PURPLE, YELLOW, PURPLE, YELLOW, RED);
+        addToGrid(startingGrid, GREEN, RED, BLUE, GREEN, RED, BLUE, GREEN);
+        return startingGrid;
+    }
+
+
+    private GemColor[] createGemPalindrome(GemColor ... gemColors){
+        var gemRow = new ArrayList<>(Arrays.asList(gemColors));
+        for(int i = gemColors.length -1 ; i > 0; i--){
+            gemRow.add(gemColors[i]);
+        }
+        return gemRow.toArray(new GemColor[]{});
+    }
+
+
+
     private void addToGrid(List<List<GemColor>> grid, GemColor... gemColors){
         grid.add(Arrays.asList(gemColors));
     }
