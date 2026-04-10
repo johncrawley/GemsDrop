@@ -27,6 +27,7 @@ public class Game {
     private final AtomicBoolean hasQuitBeenInvoked = new AtomicBoolean(false);
     private final GameModel gameModel;
     private GemMover gemMover;
+    private DroppingGemsEvaluator droppingGemsEvaluator;
 
     private final TaskScheduler taskScheduler = new TaskScheduler();
     private final SoundEffectManager soundEffectManager = new SoundEffectManager();
@@ -43,12 +44,17 @@ public class Game {
         soundEffectManager.init(soundPlayer);
         this.gridProps = gameModel.getGridProps();
         soundEffectManager.setScore(gameModel.getScore());
-        var droppingGemsEvaluator = new DroppingGemsEvaluator(this);
+        droppingGemsEvaluator = new DroppingGemsEvaluator(this);
         gemMover = new GemMover(this, droppingGemsEvaluator);
         gemMover.init(gameModel.getGemGrid(), gameModel.getGridProps());
         stateManager.init(this);
         updateScoreOnView();
         addExistingGemViews();
+    }
+
+
+    public DroppingGemsEvaluator getDroppingGemsEvaluator(){
+        return droppingGemsEvaluator;
     }
 
 

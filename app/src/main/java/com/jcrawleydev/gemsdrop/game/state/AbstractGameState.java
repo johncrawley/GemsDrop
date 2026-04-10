@@ -39,6 +39,7 @@ public abstract class AbstractGameState {
 
 
     protected void loadState(GameStateName gameStateName){
+        taskScheduler.cancelTask();
         stateManager.load(gameStateName, this.getClass().getSimpleName());
     }
 

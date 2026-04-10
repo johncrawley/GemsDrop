@@ -65,6 +65,11 @@ public class DroppingGems {
     }
 
 
+    public int countConnectingToGrid(){
+        return (int)gems.stream().filter(Gem::isAlreadyAddedToTheGrid).count();
+    }
+
+
     public boolean areAllAddedToGrid(){
         return gems.stream().allMatch(Gem::isAlreadyAddedToTheGrid);
     }

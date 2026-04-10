@@ -38,7 +38,6 @@ public class DroppingGemsEvaluator {
     }
 
 
-
     public boolean evaluate(DroppingGems droppingGems){
         if(droppingGems instanceof WonderDroppingGem){
             return evaluateWonderGem((WonderDroppingGem) droppingGems);
@@ -58,8 +57,8 @@ public class DroppingGemsEvaluator {
             return true;
         }
         else if(droppingGems.areAnyAddedToGrid()){
-            soundEffectManager.playSoundEffect(GEM_HITS_FLOOR);
             gemMover.disableControls();
+            soundEffectManager.playSoundEffect(GEM_HITS_FLOOR);
             loadState(GEM_FREE_FALL);
             return true;
         }

@@ -3,8 +3,6 @@ package com.jcrawleydev.gemsdrop.game.state;
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.GEM_QUICK_DROP;
 
 import com.jcrawleydev.gemsdrop.game.Game;
-import com.jcrawleydev.gemsdrop.game.GemMover;
-
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
