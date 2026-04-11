@@ -21,7 +21,7 @@ public class SoundEffectManager {
     }
 
 
-    public void playSoundEffect(SoundEffect soundEffect){
+    public void play(SoundEffect soundEffect){
         if(soundPlayer != null){
             soundPlayer.playSound(soundEffect);
         }

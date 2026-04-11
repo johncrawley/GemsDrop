@@ -27,11 +27,12 @@ public class GridEvaluator {
 
 
     public long[] evaluateGemGrid(){
-        log("Entered evalAndDelete()");
         markedGemIds.clear();
         evaluate();
         updateSetOfMarkedGemIds();
-        return markedGemIds.stream().mapToLong(x -> x).toArray();
+        return markedGemIds.stream().
+                mapToLong(x -> x)
+                .toArray();
     }
 
 

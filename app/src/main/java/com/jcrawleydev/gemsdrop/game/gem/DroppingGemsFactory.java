@@ -92,7 +92,6 @@ public class DroppingGemsFactory {
     }
 
 
-
     public List<GemColor> getRandomGemColors(){
         return List.of(getRandomColor(), getRandomColor(), getRandomColor());
     }

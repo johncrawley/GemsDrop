@@ -70,7 +70,7 @@ public class GameOverAnimator {
             future.cancel(false);
             game.end();
         }
-        game.getSoundEffectManager().playSoundEffect(SoundEffect.GEMS_GREYED_OUT);
+        game.getSoundEffectManager().play(SoundEffect.GEMS_GREYED_OUT);
         gameModel.incNumberOfGreyedOutRows();
     }
 

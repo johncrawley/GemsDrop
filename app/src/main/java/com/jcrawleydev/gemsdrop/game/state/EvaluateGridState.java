@@ -1,9 +1,9 @@
 package com.jcrawleydev.gemsdrop.game.state;
 
+import static com.jcrawleydev.gemsdrop.audio.SoundEffect.GEM_HITS_FLOOR;
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.GAME_OVER;
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.CREATE_GEMS;
 
-import com.jcrawleydev.gemsdrop.audio.SoundEffect;
 import com.jcrawleydev.gemsdrop.game.Game;
 import com.jcrawleydev.gemsdrop.game.grid.GridEvaluator;
 
@@ -26,22 +26,31 @@ public class EvaluateGridState extends AbstractGameState{
 
     public void evaluateGemGrid(){
         cancelTask();
-        long[] markedGemsIds = evaluator.evaluateGemGrid();
-        int numberOfGemsToRemove = markedGemsIds.length;
-        if(numberOfGemsToRemove > 0){
+        var markedGemsIds = evaluator.evaluateGemGrid();
+        if(doAnyExist(markedGemsIds)){
             game.removeGemsFromView(markedGemsIds);
             soundEffectManager.playGemsRemovedSound();
         }
         else{
-            if(gemGrid.exceedsMaxHeight()){
-                loadState(GAME_OVER);
-            }
-            else{
-                log("evaluateGemGrid() grid doesn't exceed max height, so loading gems drop state");
-                soundEffectManager.playSoundEffect(SoundEffect.GEM_HITS_FLOOR);
-                loadState(CREATE_GEMS);
-            }
+            onNoGemsToBeRemoved();
         }
+    }
+
+
+    private void onNoGemsToBeRemoved(){
+        log("entered no gems to be removed!");
+        if(gemGrid.exceedsMaxHeight()){
+            loadState(GAME_OVER);
+        }
+        else{
+            soundEffectManager.play(GEM_HITS_FLOOR);
+            loadState(CREATE_GEMS);
+        }
+    }
+
+
+    private boolean doAnyExist(long[] markedGemIds){
+        return markedGemIds.length > 0;
     }
 
 }

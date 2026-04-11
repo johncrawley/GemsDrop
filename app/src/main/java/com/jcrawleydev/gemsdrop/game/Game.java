@@ -27,7 +27,6 @@ public class Game {
     private final AtomicBoolean hasQuitBeenInvoked = new AtomicBoolean(false);
     private final GameModel gameModel;
     private GemMover gemMover;
-    private DroppingGemsEvaluator droppingGemsEvaluator;
 
     private final TaskScheduler taskScheduler = new TaskScheduler();
     private final SoundEffectManager soundEffectManager = new SoundEffectManager();
@@ -44,17 +43,12 @@ public class Game {
         soundEffectManager.init(soundPlayer);
         this.gridProps = gameModel.getGridProps();
         soundEffectManager.setScore(gameModel.getScore());
-        droppingGemsEvaluator = new DroppingGemsEvaluator(this);
+        var droppingGemsEvaluator = new DroppingGemsEvaluator(this);
         gemMover = new GemMover(this, droppingGemsEvaluator);
         gemMover.init(gameModel.getGemGrid(), gameModel.getGridProps());
         stateManager.init(this);
         updateScoreOnView();
         addExistingGemViews();
-    }
-
-
-    public DroppingGemsEvaluator getDroppingGemsEvaluator(){
-        return droppingGemsEvaluator;
     }
 
 
@@ -64,11 +58,6 @@ public class Game {
         gameModel.resetDropCount();
         gameModel.getGemGrid().init();
         clearScore();
-    }
-
-
-    public void setRandomBackgroundOnView(){
-
     }
 
 
@@ -151,21 +140,6 @@ public class Game {
     }
 
 
-    public void incrementDropCount(){
-        gameModel.incrementDropCount();
-    }
-
-
-    public int getDropCount(){
-        return gameModel.getDropCount();
-    }
-
-
-    public void updateDropInterval(){
-       gameModel.updateDropInterval();
-    }
-
-
     public void createGemsOnView(DroppingGems droppingGems){
         if(droppingGems != null){
             gameView.createGems(droppingGems.getFreeGems());
@@ -212,13 +186,9 @@ public class Game {
 
 
     public void saveScore(){
-        log("Entered saveScore()");
         gameModel.saveScore();
     }
 
-    private void log(String msg){
-        System.out.println("^^^ Game: " + msg);
-    }
 
     public TaskScheduler getTaskScheduler(){
         return taskScheduler;
@@ -271,21 +241,6 @@ public class Game {
 
     public void end(){
         gameView.loadGameOver();
-    }
-
-
-    public void onGameOverAnimationComplete(){
-        taskScheduler.cancelTask();
-        taskScheduler.scheduleOnce(this::quit, 5000);
-    }
-
-
-    public void quit(){
-        if(hasQuitBeenInvoked.get()){
-            return;
-        }
-        hasQuitBeenInvoked.set(true);
-        gameView.showHighScores();
     }
 
 

@@ -58,7 +58,7 @@ public class DroppingGemsEvaluator {
         }
         else if(droppingGems.areAnyAddedToGrid()){
             gemMover.disableControls();
-            soundEffectManager.playSoundEffect(GEM_HITS_FLOOR);
+            soundEffectManager.play(GEM_HITS_FLOOR);
             loadState(GEM_FREE_FALL);
             return true;
         }

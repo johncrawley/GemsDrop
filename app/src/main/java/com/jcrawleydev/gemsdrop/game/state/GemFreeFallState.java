@@ -2,7 +2,6 @@ package com.jcrawleydev.gemsdrop.game.state;
 
 import static com.jcrawleydev.gemsdrop.audio.SoundEffect.GEM_HITS_FLOOR;
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.EVALUATE_GRID;
-import static com.jcrawleydev.gemsdrop.game.state.GameStateName.GEM_FREE_FALL;
 
 import com.jcrawleydev.gemsdrop.game.Game;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
@@ -37,7 +36,7 @@ public class GemFreeFallState extends AbstractGameState{
             return;
         }
         if(droppingGems.countConnectingToGrid() > alreadyConnecting){
-            soundEffectManager.playSoundEffect(GEM_HITS_FLOOR);
+            soundEffectManager.play(GEM_HITS_FLOOR);
         }
     }
 
