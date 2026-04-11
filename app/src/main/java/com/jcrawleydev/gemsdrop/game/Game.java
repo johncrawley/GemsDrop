@@ -6,7 +6,6 @@ import static com.jcrawleydev.gemsdrop.game.state.GameStateName.GEM_REMOVAL_ANIM
 import com.jcrawleydev.gemsdrop.audio.SoundEffectManager;
 import com.jcrawleydev.gemsdrop.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
-import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsEvaluator;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsFactory;
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
@@ -43,12 +42,16 @@ public class Game {
         soundEffectManager.init(soundPlayer);
         this.gridProps = gameModel.getGridProps();
         soundEffectManager.setScore(gameModel.getScore());
-        var droppingGemsEvaluator = new DroppingGemsEvaluator(this);
-        gemMover = new GemMover(this, droppingGemsEvaluator);
-        gemMover.init(gameModel.getGemGrid(), gameModel.getGridProps());
+        initGemMover();
         stateManager.init(this);
         updateScoreOnView();
         addExistingGemViews();
+    }
+
+
+    private void initGemMover(){
+        gemMover = new GemMover(this, gameModel.getGemGrid(), gameModel.getGridProps());
+        gemMover.setDroppingGems(gameModel.getDroppingGems());
     }
 
 

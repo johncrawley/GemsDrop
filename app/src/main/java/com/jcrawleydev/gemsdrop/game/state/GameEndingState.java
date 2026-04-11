@@ -18,6 +18,4 @@ public class GameEndingState extends AbstractGameState{
         gameOverAnimator.startGameOverSequence();
     }
 
-
-
 }

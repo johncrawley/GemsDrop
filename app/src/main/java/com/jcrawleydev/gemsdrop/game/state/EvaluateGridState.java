@@ -10,11 +10,8 @@ import com.jcrawleydev.gemsdrop.game.grid.GridEvaluator;
 
 public class EvaluateGridState extends AbstractGameState{
 
-    private final GridEvaluator evaluator;
-
     public EvaluateGridState(Game game){
         super(game);
-        evaluator = new GridEvaluator(gemGrid.getGemColumns(), game.getGridProps().numberOfRows());
     }
 
 
@@ -26,6 +23,7 @@ public class EvaluateGridState extends AbstractGameState{
 
     public void evaluateGemGrid(){
         cancelTask();
+        var evaluator = new GridEvaluator(gemGrid.getGemColumns(), game.getGridProps().numberOfRows());
         var markedGemsIds = evaluator.evaluateGemGrid();
         if(doAnyExist(markedGemsIds)){
             game.removeGemsFromView(markedGemsIds);
@@ -38,7 +36,6 @@ public class EvaluateGridState extends AbstractGameState{
 
 
     private void onNoGemsToBeRemoved(){
-        log("entered no gems to be removed!");
         if(gemGrid.exceedsMaxHeight()){
             loadState(GAME_OVER);
         }

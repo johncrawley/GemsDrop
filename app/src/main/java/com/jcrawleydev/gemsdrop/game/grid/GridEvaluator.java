@@ -36,11 +36,6 @@ public class GridEvaluator {
     }
 
 
-    private void log(String msg){
-        System.out.println("GridEvaluator: " + msg);
-    }
-
-
     private void updateSetOfMarkedGemIds(){
        for(var column : gemColumns){
            for(var gem: column){
@@ -53,7 +48,6 @@ public class GridEvaluator {
 
 
     private void evaluate(){
-        log("Entered evaluate");
         evaluateRows();
         evaluateColumns();
         evaluateDiagonals();
@@ -75,7 +69,7 @@ public class GridEvaluator {
 
 
     private void evaluateDiagonals(){
-        List<List<Gem>> diagonals = new ArrayList<>();
+        var diagonals = new ArrayList<List<Gem>>();
         addLowerHalfDiagonalsTo(diagonals);
         addUpperHalfDiagonalsTo(diagonals);
         addLowerHalfReverseDiagonalsTo(diagonals);
@@ -154,7 +148,7 @@ public class GridEvaluator {
 
 
     private void evaluateRow(int i){
-        List<Gem> filledOutRow = constructRow(i);
+        var filledOutRow = constructRow(i);
         sectionEvaluator.evaluateGemsIn(filledOutRow);
     }
 
@@ -167,7 +161,7 @@ public class GridEvaluator {
 
 
     private List<Gem> getLowerHalfReverseDiagonalStartingFromColumn(int columnIndex){
-        List<Gem> diagonal = new ArrayList<>();
+        var diagonal = new ArrayList<Gem>();
         for(int column = columnIndex, row = 0; column >= 0; column--, row++){
             diagonal.add(getLowerHalfReverseDiagonalGem(row, column));
         }

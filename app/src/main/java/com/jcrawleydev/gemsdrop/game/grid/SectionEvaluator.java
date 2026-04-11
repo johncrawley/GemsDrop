@@ -21,8 +21,9 @@ public class SectionEvaluator {
         }
     }
 
+
     private int evaluateSection(List<Gem> section, int currentIndex){
-        Gem currentGem = section.get(currentIndex);
+        var currentGem = section.get(currentIndex);
         int nextIndex = currentIndex + 1;
         if(currentGem instanceof NullGem){
             return nextIndex;

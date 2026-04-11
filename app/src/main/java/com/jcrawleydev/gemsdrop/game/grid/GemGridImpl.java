@@ -22,6 +22,7 @@ public class GemGridImpl implements GemGrid {
         init();
     }
 
+
     @Override
     public List<List<Gem>> getGemColumns(){
         return this.gemColumns;
@@ -64,6 +65,7 @@ public class GemGridImpl implements GemGrid {
         gem.setContainerPosition(containerPosition);
     }
 
+
     @Override
     public List<Gem> gravityDropGemsOnePosition(){
         List<Gem> freeFallGems= new ArrayList<>();
@@ -101,6 +103,7 @@ public class GemGridImpl implements GemGrid {
         }
     }
 
+
     @Override
     public Set<Long> getMarkedGemIdsFromTouching(Gem wonderGem){
         var column = getColumnBeneath(wonderGem);
@@ -129,6 +132,7 @@ public class GemGridImpl implements GemGrid {
         gem.setMarkedForDeletion();
     }
 
+    
     private GemColor getColorOfNextGemIn(List<Gem> column){
         if(column.isEmpty()){
             return GemColor.NULL;

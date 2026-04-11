@@ -7,12 +7,12 @@ public class AwaitingGameStartState extends AbstractGameState{
 
     public AwaitingGameStartState(Game game){
         super(game);
-        game.startGame();
     }
 
 
     @Override
     public void start() {
+        game.startGame();
         loadState(GameStateName.LOAD_LEVEL);
     }
 

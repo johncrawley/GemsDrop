@@ -12,8 +12,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GemMover {
 
-    private MovementChecker movementChecker;
-    private RotationChecker rotationChecker;
+    private final MovementChecker movementChecker;
+    private final RotationChecker rotationChecker;
     private DroppingGems droppingGems;
     private final AtomicBoolean isControlEnabled = new AtomicBoolean(true);
     private final AtomicBoolean isMovementEnabled = new AtomicBoolean(true);
@@ -24,15 +24,12 @@ public class GemMover {
     private final Game game;
 
 
-    public GemMover(Game game, DroppingGemsEvaluator droppingGemsEvaluator){
+    public GemMover(Game game, GemGrid gemGrid, GridProps gridProps){
         this.game = game;
-        this.droppingGemsEvaluator = droppingGemsEvaluator;
-        droppingGemsEvaluator.setGemMover(this);
-    }
-
-    public void init(GemGrid gemGrid, GridProps gridProps){
         movementChecker = new MovementChecker(gemGrid, gridProps);
         rotationChecker = new RotationChecker(gemGrid, gridProps);
+        this.droppingGemsEvaluator = new DroppingGemsEvaluator(game);
+        droppingGemsEvaluator.setGemMover(this);
     }
 
 

@@ -27,10 +27,4 @@ public class TaskScheduler {
         future = executor.scheduleWithFixedDelay(runnable, initialDelay, delay, TimeUnit.MILLISECONDS);
     }
 
-
-    public void scheduleOnce(Runnable runnable, long delay){
-        executor.schedule(runnable, delay, TimeUnit.MILLISECONDS);
-    }
-
-
 }
