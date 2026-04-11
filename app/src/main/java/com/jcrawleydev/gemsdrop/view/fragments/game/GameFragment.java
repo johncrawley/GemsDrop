@@ -1,7 +1,6 @@
 package com.jcrawleydev.gemsdrop.view.fragments.game;
 
 import android.annotation.SuppressLint;
-import android.graphics.PointF;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -28,14 +27,10 @@ import com.jcrawleydev.gemsdrop.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
 
 public class GameFragment extends Fragment implements GameView {
 
     private final ImageMap imageMap = new ImageMap();
-    private final Map<Long, ViewGroup> itemsMap = new ConcurrentHashMap<>();
     private int containerWidth;
     private int containerHeight;
     private ViewGroup gemContainer, gamePane;
@@ -114,7 +109,7 @@ public class GameFragment extends Fragment implements GameView {
 
 
     private void assignLayoutDimensions(){
-        ViewTreeObserver.OnGlobalLayoutListener listener = new ViewTreeObserver.OnGlobalLayoutListener() {
+        var listener = new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 assignGemContainerDimensions();
@@ -182,7 +177,12 @@ public class GameFragment extends Fragment implements GameView {
         currentNumberOfGemsRemoved = 0;
         runOnUiThread(()->{
             stopWonderGemAnimation();
-            doActionOnGemIdsFrom(markedGemIds, gemLayout -> GemAnimator.animateRemovalOf(gemLayout, this::cleanupGemView));
+            for(var markedId : markedGemIds){
+                var gemLayout = (ViewGroup) gemContainer.findViewWithTag(markedId);
+                if(gemLayout != null){
+                    GemAnimator.animateRemovalOf(gemLayout, this::cleanupGemView);
+                }
+            }
         });
     }
 
@@ -230,8 +230,11 @@ public class GameFragment extends Fragment implements GameView {
 
 
     private void assignWidthToExistingGems(){
-        for(View gemView : itemsMap.values()){
-            setGemViewDimensions(gemView);
+        for(int i = 0; i < gemContainer.getChildCount(); i++){
+            var gemLayout = gemContainer.getChildAt(i);
+            if(gemLayout.getTag() != null){
+                setGemViewDimensions(gemLayout);
+            }
         }
     }
 
@@ -273,21 +276,10 @@ public class GameFragment extends Fragment implements GameView {
     }
 
 
-    private void doActionOnGemIdsFrom(long[] gemIds, Consumer<ViewGroup> consumer){
-        for(long gemId : gemIds){
-            var gemLayout = itemsMap.get(gemId);
-            if(gemLayout != null){
-                consumer.accept(gemLayout);
-            }
-        }
-    }
-
 
     private void cleanupGemView(ViewGroup gemLayout){
-        long id = (long)gemLayout.getTag();
         gemLayout.setVisibility(View.GONE);
         gemContainer.removeView(gemLayout);
-        itemsMap.remove(id);
         currentNumberOfGemsRemoved++;
         if(currentNumberOfGemsRemoved >= numberOfGemsToRemove){
             game.onGemRemovalAnimationDone();
@@ -310,37 +302,49 @@ public class GameFragment extends Fragment implements GameView {
 
 
     private void updateColorOf(long id, int colorId){
-        if(itemsMap.containsKey(id)){
-            updateGemColor(itemsMap.get(id), colorId);
+        ViewGroup gemLayout = gemContainer.findViewWithTag(id);
+        if(gemLayout != null){
+            updateGemColor(gemLayout, colorId);
         }
     }
 
 
+
     private void createGemView(long id, int position, int column, int colorId){
-        if(itemsMap.containsKey(id)){
-            return;
+        var existingGemLayout = gemContainer.findViewWithTag(id);
+        if(existingGemLayout == null){
+            var gemLayout = createGemView(id, position, column);
+            updateGemColor(gemLayout, colorId);
         }
-        var gemLayout = createGemView(id, position, column);
-        updateGemColor(gemLayout, colorId);
     }
 
 
     private ViewGroup createGemView(long id, int position, int column){
         var gemLayout = createAndAddGemLayout(id, position, column);
-        itemsMap.put(id, gemLayout);
+        if(gemLayout == null){
+            return null;
+        }
         return gemLayout;
     }
 
 
     private void updateGem(long id, int position, int column){
-        var gemView = itemsMap.computeIfAbsent(id, k -> createAndAddGemLayout(id, position, column));
-        updateGemCoordinates(gemView, position, column);
+        var gemLayout = (ViewGroup) gemContainer.findViewWithTag(id);
+        if(gemLayout == null){
+            gemLayout = createAndAddGemLayout(id, position, column);
+        }
+        if(gemLayout != null){
+            updateGemCoordinates(gemLayout, position, column);
+        }
     }
 
 
-
     private ViewGroup createAndAddGemLayout(long id, int position, int column){
-        var gemLayout = new LinearLayout(getContext());
+        var context = getContext();
+        if(context == null){
+            return null;
+        }
+        var gemLayout = new LinearLayout(context);
         gemLayout.setTag(id);
         var imageView = new ImageView(getContext());
         updateGemCoordinates(gemLayout, position, column);
