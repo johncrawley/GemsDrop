@@ -24,7 +24,7 @@ public class GameModel {
     private final GemGrid gemGrid = new GemGridImpl(gridProps);
     private final Score score = new Score(50);
     private final DroppingGemsFactory droppingGemsFactory = new DroppingGemsFactory();
-    private DroppingGems droppingGems;
+    private DroppingGems droppingGems, nextDroppingGems;
     private GameLevel gameLevel = new LevelFactory().getLevel(1);
     private GameStateName gameStateName = GameStateName.AWAITING_GAME_START;
     private int numberOfRowsAlreadyGreyedOut = 0;
@@ -101,10 +101,24 @@ public class GameModel {
 
 
     public DroppingGems createDroppingGems(){
-        droppingGems = droppingGemsFactory.createDroppingGems();
+        if(nextDroppingGems == null){
+            createNextGems();
+        }
+        droppingGems = nextDroppingGems;
         dropCount++;
         updateDropInterval();
+        createNextGems();
         return droppingGems;
+    }
+
+
+    public DroppingGems getNextGems(){
+        return nextDroppingGems;
+    }
+
+
+    private void createNextGems(){
+        nextDroppingGems = droppingGemsFactory.createDroppingGems();
     }
 
 

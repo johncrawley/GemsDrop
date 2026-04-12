@@ -73,6 +73,7 @@ public class Game {
         var droppingGems = gameModel.createDroppingGems();
         gemMover.setDroppingGems(droppingGems);
         createGemsOnView(droppingGems);
+        updateNextGemsOnView(gameModel.getNextGems());
     }
 
 
@@ -146,6 +147,13 @@ public class Game {
     public void createGemsOnView(DroppingGems droppingGems){
         if(droppingGems != null){
             gameView.createGems(droppingGems.getFreeGems());
+        }
+    }
+
+
+    public void updateNextGemsOnView(DroppingGems droppingGems){
+        if(droppingGems != null){
+            gameView.updateGemsPreview(droppingGems.getFreeGems());
         }
     }
 

@@ -136,6 +136,12 @@ public class GameFragment extends Fragment implements GameView {
     }
 
 
+    @Override
+    public void updateGemsPreview(List<Gem> gems) {
+        //TODO add gems to views
+    }
+
+
     private void createGemView(Gem gem){
         var id = gem.getId();
         var position = gem.getContainerPosition();
