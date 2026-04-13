@@ -8,6 +8,7 @@ import com.jcrawleydev.gemsdrop.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsFactory;
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
+import com.jcrawleydev.gemsdrop.game.gem.GemColor;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 import com.jcrawleydev.gemsdrop.game.level.GameLevel;
 import com.jcrawleydev.gemsdrop.game.score.Score;
@@ -15,6 +16,7 @@ import com.jcrawleydev.gemsdrop.game.state.GameStateName;
 import com.jcrawleydev.gemsdrop.game.state.StateManager;
 import com.jcrawleydev.gemsdrop.view.fragments.game.GameView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -153,7 +155,11 @@ public class Game {
 
     public void updateNextGemsOnView(DroppingGems droppingGems){
         if(droppingGems != null){
-            gameView.updateGemsPreview(droppingGems.getFreeGems());
+            var gemColors = new ArrayList<GemColor>();
+            for(var gem : droppingGems.get()){
+                gemColors.add(gem.getColor());
+            }
+            gameView.updateGemsPreview(gemColors);
         }
     }
 

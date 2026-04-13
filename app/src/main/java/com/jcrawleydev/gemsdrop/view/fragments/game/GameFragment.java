@@ -24,6 +24,7 @@ import com.jcrawleydev.gemsdrop.R;
 import com.jcrawleydev.gemsdrop.game.Game;
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.audio.SoundPlayer;
+import com.jcrawleydev.gemsdrop.game.gem.GemColor;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 
 import java.util.List;
@@ -137,8 +138,12 @@ public class GameFragment extends Fragment implements GameView {
 
 
     @Override
-    public void updateGemsPreview(List<Gem> gems) {
-        //TODO add gems to views
+    public void updateGemsPreview(List<GemColor> gemColors) {
+        if(gemColors.size() == 1 && gemColors.get(0) == GemColor.WONDER){
+
+        }else{
+
+        }
     }
 
 

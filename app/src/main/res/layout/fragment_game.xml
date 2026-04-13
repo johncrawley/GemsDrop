@@ -20,34 +20,15 @@
     android:weightSum="1"
     android:tileMode="mirror">
 
-
-    <LinearLayout
-        android:background="@color/colorPrimaryDark"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="horizontal"
-        android:id="@+id/statsLayout"
-        android:layout_weight=".1">
+        android:id="@+id/topPanel">
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/score_text_size"
-            android:text="@string/score_label"
-            android:textColor="@color/score_label"
-            android:paddingHorizontal="8dp"
-            android:id="@+id/scoreLabelView"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/score_text_size"
-            android:text="@string/default_score_value"
-            android:textColor="@color/colorAccent"
-            android:id="@+id/scoreView"/>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <LinearLayout

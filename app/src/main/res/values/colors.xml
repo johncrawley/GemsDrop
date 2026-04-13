@@ -35,4 +35,7 @@
     <color name="heading_text_background">#AA1A1918</color>
     <color name="final_score_background">#DD11194B</color>
     <color name="final_score_border">#1976D2</color>
+
+
+    <color name="game_score_background">#0B0B0B</color>
 </resources>
