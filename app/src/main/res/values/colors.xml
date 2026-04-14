@@ -37,5 +37,6 @@
     <color name="final_score_border">#1976D2</color>
 
 
-    <color name="game_score_background">#0B0B0B</color>
+    <color name="game_panel_background">#0B0B0B</color>
+    <color name="game_panel_border">#6B6B6B</color>
 </resources>

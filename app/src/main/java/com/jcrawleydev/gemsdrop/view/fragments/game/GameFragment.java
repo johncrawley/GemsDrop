@@ -1,21 +1,15 @@
 package com.jcrawleydev.gemsdrop.view.fragments.game;
 
 import android.annotation.SuppressLint;
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 import com.jcrawleydev.gemsdrop.MainActivity;
@@ -31,17 +25,13 @@ import java.util.List;
 
 public class GameFragment extends Fragment implements GameView {
 
-    private final ImageMap imageMap = new ImageMap();
-    private int containerWidth;
-    private int containerHeight;
-    private ViewGroup gemContainer, gamePane;
-    private float gemWidth = 10f;
+    private ViewGroup gemContainer, gamePane, previewLayout;
     private TextView scoreView;
-    private AnimationDrawable wonderGemAnimation;
     private int currentNumberOfGemsRemoved;
     private int numberOfGemsToRemove;
     private Game game;
     private MainViewModel viewModel;
+    private GemViewManager gemViewManager;
 
 
     @Override
@@ -50,12 +40,14 @@ public class GameFragment extends Fragment implements GameView {
         View parent = inflater.inflate(R.layout.fragment_game, container, false);
         assignViewModel();
         setupViews(parent);
+        gemViewManager = new GemViewManager();
         createGame();
         assignLayoutDimensions();
         setBackground(parent);
         FragmentUtils.loadMainMenuOnBackButtonPressed(this, this::quitGame);
         return parent;
     }
+
 
 
     private void setBackground(View parent){
@@ -70,7 +62,7 @@ public class GameFragment extends Fragment implements GameView {
         R.drawable.background_6);
 
         int randomIndex = viewModel.gameModel.getRandomBackgroundIndex();
-        int backgroundIndex = Math.min(randomIndex, ids.size()-1);
+        int backgroundIndex = Math.min(randomIndex, ids.size() - 1);
 
         gameLayout.setBackgroundResource(ids.get(backgroundIndex));
     }
@@ -114,7 +106,8 @@ public class GameFragment extends Fragment implements GameView {
             @Override
             public void onGlobalLayout() {
                 assignGemContainerDimensions();
-                assignWidthToExistingGems();
+                gemViewManager.assignWidthToExistingGems(gemContainer);
+                gemViewManager.setupGemPreviews(previewLayout);
                 initGame();
                 gamePane.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
@@ -131,7 +124,7 @@ public class GameFragment extends Fragment implements GameView {
         }
         runOnUiThread(() -> {
             for(var gem : gems) {
-                createGemView(gem);
+                gemViewManager.createGemView(gemContainer, getContext(), gem);
             }
         });
     }
@@ -147,18 +140,6 @@ public class GameFragment extends Fragment implements GameView {
     }
 
 
-    private void createGemView(Gem gem){
-        var id = gem.getId();
-        var position = gem.getContainerPosition();
-        var col = gem.getColumn();
-        if (gem.isWonderGem()) {
-            createWonderGemView(id, position, col);
-        }
-        else{
-            createGemView(id, position, col, gem.getColorId());
-        }
-    }
-
     @Override
     public void updateGems(List<Gem> gems) {
         runOnUiThread(()->{
@@ -166,7 +147,7 @@ public class GameFragment extends Fragment implements GameView {
                 var id = gem.getId();
                 var position = gem.getContainerPosition();
                 var col = gem.getColumn();
-                updateGem(id, position, col);
+                gemViewManager.updateGem(gemContainer, getContext(), id, position, col);
             }
         });
     }
@@ -176,7 +157,7 @@ public class GameFragment extends Fragment implements GameView {
     public void updateGemsColors(List<Gem> gems) {
         runOnUiThread(()->{
             for(var gem : gems){
-                updateColorOf(gem.getId(), gem.getColorId());
+               gemViewManager.updateColorOf(gemContainer, getContext(), gem.getId(), gem.getColorId());
             }
         });
     }
@@ -187,7 +168,7 @@ public class GameFragment extends Fragment implements GameView {
         numberOfGemsToRemove = markedGemIds.length;
         currentNumberOfGemsRemoved = 0;
         runOnUiThread(()->{
-            stopWonderGemAnimation();
+            gemViewManager.stopWonderGemAnimation();
             for(var markedId : markedGemIds){
                 var gemLayout = (ViewGroup) gemContainer.findViewWithTag(markedId);
                 if(gemLayout != null){
@@ -212,42 +193,13 @@ public class GameFragment extends Fragment implements GameView {
 
 
     private void assignGemContainerDimensions(){
-        if(gemContainer == null) {
+        if(gemContainer == null)  {
             return;
         }
-        reduceGemContainerHeightAndWidth();
-        assignGemContainerLayoutParams();
+        gemViewManager.reduceGemContainerHeightAndWidth(gamePane);
+        gemViewManager.assignGemContainerLayoutParams(gemContainer);
     }
 
-
-    private void reduceGemContainerHeightAndWidth(){
-        int availableHeight = gamePane.getMeasuredHeight();
-        int minimumBorder = 50;
-        containerWidth = gamePane.getMeasuredWidth() - minimumBorder;
-        containerHeight = Integer.MAX_VALUE;
-        int numberOfRows = 15;
-        while(containerHeight > (availableHeight - minimumBorder)){
-            containerWidth -= 2;
-            gemWidth = containerWidth / 7f;
-            containerHeight = (int)(gemWidth * numberOfRows);
-        }
-    }
-
-
-    private void assignGemContainerLayoutParams(){
-        var params = new LinearLayout.LayoutParams(containerWidth, containerHeight);
-        gemContainer.setLayoutParams(params);
-    }
-
-
-    private void assignWidthToExistingGems(){
-        for(int i = 0; i < gemContainer.getChildCount(); i++){
-            var gemLayout = gemContainer.getChildAt(i);
-            if(gemLayout.getTag() != null){
-                setGemViewDimensions(gemLayout);
-            }
-        }
-    }
 
 
     private void setupViews(View parentView){
@@ -255,6 +207,7 @@ public class GameFragment extends Fragment implements GameView {
         gamePane = parentView.findViewById(R.id.game_pane);
         setupTouchListener();
         scoreView = parentView.findViewById(R.id.scoreView);
+        previewLayout = parentView.findViewById(R.id.gemsPreviewLayout);
     }
 
 
@@ -280,13 +233,6 @@ public class GameFragment extends Fragment implements GameView {
     }
 
 
-    private void stopWonderGemAnimation(){
-        if(wonderGemAnimation != null && wonderGemAnimation.isRunning()){
-            wonderGemAnimation.stop();
-        }
-    }
-
-
 
     private void cleanupGemView(ViewGroup gemLayout){
         gemLayout.setVisibility(View.GONE);
@@ -298,129 +244,9 @@ public class GameFragment extends Fragment implements GameView {
     }
 
 
-    private void createWonderGemView(long id, int position, int column){
-        var wonderGemLayout = createGemView(id, position, column);
-        startWonderGemAnimation(wonderGemLayout);
-    }
-
-
-    private void startWonderGemAnimation(ViewGroup gemLayout){
-        ImageView wonderGemView = (ImageView) gemLayout.getChildAt(0);
-        wonderGemView.setBackgroundResource(R.drawable.wonder_gem_animation);
-        wonderGemAnimation = (AnimationDrawable) wonderGemView.getBackground();
-        wonderGemAnimation.start();
-    }
-
-
-    private void updateColorOf(long id, int colorId){
-        ViewGroup gemLayout = gemContainer.findViewWithTag(id);
-        if(gemLayout != null){
-            updateGemColor(gemLayout, colorId);
-        }
-    }
 
 
 
-    private void createGemView(long id, int position, int column, int colorId){
-        var existingGemLayout = gemContainer.findViewWithTag(id);
-        if(existingGemLayout == null){
-            var gemLayout = createGemView(id, position, column);
-            updateGemColor(gemLayout, colorId);
-        }
-    }
-
-
-    private ViewGroup createGemView(long id, int position, int column){
-        var gemLayout = createAndAddGemLayout(id, position, column);
-        if(gemLayout == null){
-            return null;
-        }
-        return gemLayout;
-    }
-
-
-    private void updateGem(long id, int position, int column){
-        var gemLayout = (ViewGroup) gemContainer.findViewWithTag(id);
-        if(gemLayout == null){
-            gemLayout = createAndAddGemLayout(id, position, column);
-        }
-        if(gemLayout != null){
-            updateGemCoordinates(gemLayout, position, column);
-        }
-    }
-
-
-    private ViewGroup createAndAddGemLayout(long id, int position, int column){
-        var context = getContext();
-        if(context == null){
-            return null;
-        }
-        var gemLayout = new LinearLayout(context);
-        gemLayout.setTag(id);
-        var imageView = new ImageView(getContext());
-        updateGemCoordinates(gemLayout, position, column);
-        setGemViewDimensions(imageView);
-        gemLayout.addView(imageView);
-        setLayoutParamsOn(gemLayout);
-        gemContainer.addView(gemLayout);
-        return gemLayout;
-    }
-
-
-    private void setLayoutParamsOn(ViewGroup gemLayout){
-        var params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        params.weight = 1.0f;
-        params.gravity = Gravity.TOP;
-        gemLayout.setLayoutParams(params);
-    }
-
-
-    private void setGemViewDimensions(View gemView){
-        var layoutParams = new LinearLayout.LayoutParams((int)gemWidth, (int)gemWidth);
-        gemView.setLayoutParams(layoutParams);
-    }
-
-
-    private void setGemDrawable(ImageView gem, int colorId){
-        var id = imageMap.getDrawableIdFor(colorId);
-        var drawable = getDrawableFor(id);
-        gem.setImageDrawable(drawable);
-    }
-
-
-    private Drawable getDrawableFor(int id){
-        return ResourcesCompat.getDrawable(getResources(), id, null);
-    }
-
-
-    private void updateGemCoordinates(ViewGroup gemLayout, int position, int column){
-        gemLayout.setX(getXForColumn(column));
-        gemLayout.setY(getYForPosition(position));
-    }
-
-
-    private void updateGemColor(ViewGroup gemLayout, int colorId){
-        var gemImageView = getGemViewFrom(gemLayout);
-        setGemDrawable(gemImageView, colorId);
-    }
-
-
-    private ImageView getGemViewFrom(ViewGroup gemLayout){
-        return (ImageView) gemLayout.getChildAt(0);
-    }
-
-
-    private int getYForPosition(int position){
-        float containerBottom = gemContainer.getY() + containerHeight;
-        return (int)containerBottom
-                - ((int)gemWidth + (position * (int)(gemWidth / 2f)));
-    }
-
-
-    private int getXForColumn(int column){
-        return column * (int) gemWidth;
-    }
 
 
     private void runOnUiThread(Runnable runnable){
