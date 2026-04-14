@@ -13,6 +13,10 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.jcrawleydev.gemsdrop.R;
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
+import com.jcrawleydev.gemsdrop.game.gem.GemColor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GemViewManager {
 
@@ -21,7 +25,8 @@ public class GemViewManager {
     private final ImageMap imageMap = new ImageMap();
     private float gemWidth = 10f;
     private int containerWidth, containerHeight;
-    private View gemPreview1, gemPreview2, gemPreview3;
+    private ImageView gemPreview1, gemPreview2, gemPreview3;
+    private AnimationHelper animationHelper;
 
 
     public void createGemView(ViewGroup gemContainer, Context context, Gem gem){
@@ -124,11 +129,7 @@ public class GemViewManager {
 
 
     private ViewGroup createGemView(ViewGroup gemContainer, Context context, long id, int position, int column){
-        var gemLayout = createAndAddGemLayout(gemContainer, context, id, position, column);
-        if(gemLayout == null){
-            return null;
-        }
-        return gemLayout;
+        return createAndAddGemLayout(gemContainer, context, id, position, column);
     }
 
 
@@ -148,14 +149,12 @@ public class GemViewManager {
     }
 
 
-
     public void updateColorOf(ViewGroup gemContainer, Context context, long id, int colorId){
         ViewGroup gemLayout = gemContainer.findViewWithTag(id);
         if(gemLayout != null){
             updateGemColor(gemLayout, context, colorId);
         }
     }
-
 
 
     private void setGemViewDimensions(View gemView){
@@ -194,7 +193,6 @@ public class GemViewManager {
     }
 
 
-
     private void startWonderGemAnimation(ViewGroup gemLayout){
         ImageView wonderGemView = (ImageView) gemLayout.getChildAt(0);
         wonderGemView.setBackgroundResource(R.drawable.wonder_gem_animation);
@@ -203,16 +201,36 @@ public class GemViewManager {
     }
 
 
-    public void setupGemPreviews(View parentView) {
-        gemPreview1 = setupGemPreview(parentView, 0);
-        gemPreview2 = setupGemPreview(parentView, 1);
-        gemPreview3 = setupGemPreview(parentView, 2);
+    public void updateGemsPreview(List<GemColor> gemColors, Context context){
+        var updates = new ArrayList<GemPreviewUpdate>();
+        var imageViews = List.of(gemPreview1, gemPreview2, gemPreview3);
+
+        for(int i = 0; i < imageViews.size(); i++){
+            var imageView = imageViews.get(i);
+            var drawable = getDrawableFor(gemColors.get(i), context);
+            updates.add(new GemPreviewUpdate(imageView, drawable ));
+        }
+        animationHelper.animatePreviewChangeFor(updates);
     }
 
 
-    private View setupGemPreview(View parentView, int index){
+    private Drawable getDrawableFor(GemColor gemColor, Context context){
+        var id = imageMap.getDrawableIdFor(gemColor.ordinal());
+        return getDrawableFor(context, id);
+    }
+
+
+    public void setupGemPreviews(View parentView) {
         ViewGroup previewLayout = parentView.findViewById(R.id.gemsPreviewLayout);
-        View gemPreview = previewLayout.getChildAt(index);
+        animationHelper = new AnimationHelper(previewLayout);
+        gemPreview1 = setupGemPreview(previewLayout, 0);
+        gemPreview2 = setupGemPreview(previewLayout, 1);
+        gemPreview3 = setupGemPreview(previewLayout, 2);
+    }
+
+
+    private ImageView setupGemPreview(ViewGroup previewLayout, int index){
+        ImageView gemPreview = (ImageView) previewLayout.getChildAt(index);
         setPreviewGemDimensions(gemPreview);
         return gemPreview;
     }

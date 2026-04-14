@@ -132,11 +132,7 @@ public class GameFragment extends Fragment implements GameView {
 
     @Override
     public void updateGemsPreview(List<GemColor> gemColors) {
-        if(gemColors.size() == 1 && gemColors.get(0) == GemColor.WONDER){
-
-        }else{
-
-        }
+        runOnUiThread(()-> gemViewManager.updateGemsPreview(gemColors, getContext()));
     }
 
 
@@ -201,7 +197,6 @@ public class GameFragment extends Fragment implements GameView {
     }
 
 
-
     private void setupViews(View parentView){
         gemContainer = parentView.findViewById(R.id.gemContainer);
         gamePane = parentView.findViewById(R.id.game_pane);
@@ -233,7 +228,6 @@ public class GameFragment extends Fragment implements GameView {
     }
 
 
-
     private void cleanupGemView(ViewGroup gemLayout){
         gemLayout.setVisibility(View.GONE);
         gemContainer.removeView(gemLayout);
@@ -242,11 +236,6 @@ public class GameFragment extends Fragment implements GameView {
             game.onGemRemovalAnimationDone();
         }
     }
-
-
-
-
-
 
 
     private void runOnUiThread(Runnable runnable){

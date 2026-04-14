@@ -24,8 +24,8 @@ public class ImageMap {
 
 
     public int getDrawableIdFor(int gemColorId){
-        Integer id = map.get(gemColorId);
-        return id == null ? R.drawable.jewel_blue : id;
+        var id = map.get(gemColorId);
+        return id == null ? R.drawable.jewel_green : id;
     }
 
 }

@@ -154,10 +154,18 @@ public class Game {
 
 
     public void updateNextGemsOnView(DroppingGems droppingGems){
+
         if(droppingGems != null){
             var gemColors = new ArrayList<GemColor>();
-            for(var gem : droppingGems.get()){
-                gemColors.add(gem.getColor());
+            if(droppingGems.get().get(0).isWonderGem()){
+                gemColors.add(GemColor.EMPTY);
+                gemColors.add(GemColor.WONDER);
+                gemColors.add(GemColor.EMPTY);
+            }
+            else {
+                for (var gem : droppingGems.get()) {
+                    gemColors.add(gem.getColor());
+                }
             }
             gameView.updateGemsPreview(gemColors);
         }
