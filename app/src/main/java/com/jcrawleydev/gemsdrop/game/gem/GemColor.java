@@ -6,7 +6,7 @@ import com.jcrawleydev.gemsdrop.R;
 
 public enum GemColor {
     BLUE("B", R.drawable.jewel_blue),
-    RED("R", R.drawable.jewel_red),
+    RED("R", R.drawable.jewel_red_2),
     GREEN("G", R.drawable.jewel_green),
     YELLOW("Y", R.drawable.jewel_yellow),
     PURPLE("P", R.drawable.jewel_purple),
