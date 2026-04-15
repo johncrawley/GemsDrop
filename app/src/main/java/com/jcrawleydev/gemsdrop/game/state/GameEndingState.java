@@ -5,17 +5,15 @@ import com.jcrawleydev.gemsdrop.game.GameOverAnimator;
 
 public class GameEndingState extends AbstractGameState{
 
-    private final GameOverAnimator gameOverAnimator;
-
     public GameEndingState(Game game){
         super(game);
-        gameOverAnimator = new GameOverAnimator(game, gemGrid);
     }
 
     @Override
     public void start() {
         game.saveScore();
-        gameOverAnimator.startGameOverSequence();
+        game.getSoundEffectManager().playGameOverSound();
+        new GameOverAnimator(game, gemGrid).startGameOverSequence();
     }
 
 }

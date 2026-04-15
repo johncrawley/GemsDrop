@@ -3,6 +3,9 @@ package com.jcrawleydev.gemsdrop.game;
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.AWAITING_GAME_START;
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.GEM_REMOVAL_ANIMATION_COMPLETE;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import com.jcrawleydev.gemsdrop.audio.SoundEffectManager;
 import com.jcrawleydev.gemsdrop.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
@@ -30,7 +33,7 @@ public class Game {
     private GemMover gemMover;
 
     private final TaskScheduler taskScheduler = new TaskScheduler();
-    private final SoundEffectManager soundEffectManager = new SoundEffectManager();
+    private SoundEffectManager soundEffectManager;
     private GridProps gridProps;
 
 
@@ -41,13 +44,19 @@ public class Game {
 
 
     public void init(SoundPlayer soundPlayer){
-        soundEffectManager.init(soundPlayer);
         this.gridProps = gameModel.getGridProps();
-        soundEffectManager.setScore(gameModel.getScore());
+        initSoundEffectsManager(soundPlayer);
         initGemMover();
         stateManager.init(this);
         updateScoreOnView();
         addExistingGemViews();
+    }
+
+
+    private void initSoundEffectsManager(SoundPlayer soundPlayer){
+        soundEffectManager = new SoundEffectManager(gridProps.numberOfRows());
+        soundEffectManager.init(soundPlayer);
+        soundEffectManager.setScore(gameModel.getScore());
     }
 
 
@@ -75,7 +84,7 @@ public class Game {
         var droppingGems = gameModel.createDroppingGems();
         gemMover.setDroppingGems(droppingGems);
         createGemsOnView(droppingGems);
-        updateNextGemsOnView(gameModel.getNextGems());
+        updatePreviewOnView(gameModel.getNextGems());
     }
 
 
@@ -153,22 +162,22 @@ public class Game {
     }
 
 
-    public void updateNextGemsOnView(DroppingGems droppingGems){
-
-        if(droppingGems != null){
-            var gemColors = new ArrayList<GemColor>();
-            if(droppingGems.get().get(0).isWonderGem()){
-                gemColors.add(GemColor.EMPTY);
-                gemColors.add(GemColor.WONDER);
-                gemColors.add(GemColor.EMPTY);
-            }
-            else {
-                for (var gem : droppingGems.get()) {
-                    gemColors.add(gem.getColor());
-                }
-            }
-            gameView.updateGemsPreview(gemColors);
+    public void updatePreviewOnView(DroppingGems droppingGems){
+        if(droppingGems == null) {
+            return;
         }
+        var gemColors = new ArrayList<GemColor>();
+        if(droppingGems.get().get(0).isWonderGem()){
+            gemColors.add(GemColor.EMPTY);
+            gemColors.add(GemColor.WONDER);
+            gemColors.add(GemColor.EMPTY);
+        }
+        else {
+            for (var gem : droppingGems.get()) {
+                gemColors.add(gem.getColor());
+            }
+        }
+        gameView.updateGemsPreview(gemColors);
     }
 
 
@@ -265,7 +274,7 @@ public class Game {
 
 
     public void end(){
-        gameView.loadGameOver();
+        new Handler(Looper.getMainLooper()).postDelayed(gameView::loadGameOver, 700);
     }
 
 

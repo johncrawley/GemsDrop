@@ -6,8 +6,10 @@ public class SoundEffectManager {
 
     private SoundPlayer soundPlayer;
     private Score score;
+    private final int numberOfRows;
 
-    public SoundEffectManager(){
+    public SoundEffectManager(int numberOfRows){
+        this.numberOfRows = numberOfRows;
     }
 
 
@@ -25,6 +27,10 @@ public class SoundEffectManager {
         if(soundPlayer != null){
             soundPlayer.playSound(soundEffect);
         }
+    }
+
+    public void playGameOverSound(){
+        soundPlayer.playSound(SoundEffect.GAME_OVER);
     }
 
 

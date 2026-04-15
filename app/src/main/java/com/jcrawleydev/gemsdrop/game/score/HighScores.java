@@ -77,6 +77,7 @@ public class HighScores {
         getPrefs().edit()
                 .putString(PrefName.HIGH_SCORES_STR.name(), highScoresStr)
                 .apply();
+        log("exiting save()");
     }
 
 

@@ -15,4 +15,5 @@ public enum SoundEffect {
     GEM_HITS_FLOOR,
     GEM_HITS_GEM,
     GEMS_GREYED_OUT,
+    GAME_OVER,
     MENU_BUTTON }

@@ -1,7 +1,5 @@
 package com.jcrawleydev.gemsdrop.game;
 
-import com.jcrawleydev.gemsdrop.audio.SoundEffect;
-import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 
@@ -40,14 +38,14 @@ public class GameOverAnimator {
 
     public void startGameOverSequence(){
         populateGemRows();
-        int delay = 100;
+        int delay = 60;
         turnDroppingGemsGrey();
         future = executorService.scheduleWithFixedDelay(this::turnNextRowGrey, delay, delay, TimeUnit.MILLISECONDS);
     }
 
 
     private void turnDroppingGemsGrey(){
-        DroppingGems droppingGems = game.getDroppingGems();
+        var droppingGems = game.getDroppingGems();
         if(droppingGems != null){
             droppingGems.setGrey();
             updateColorsOnView(droppingGems.get());
@@ -70,7 +68,6 @@ public class GameOverAnimator {
             future.cancel(false);
             game.end();
         }
-        game.getSoundEffectManager().play(SoundEffect.GEMS_GREYED_OUT);
         gameModel.incNumberOfGreyedOutRows();
     }
 
@@ -80,7 +77,7 @@ public class GameOverAnimator {
     }
 
 
-    public List<List<Gem>> getGemRows(){
+    private List<List<Gem>> getGemRows(){
         List<List<Gem>> gemRows = new ArrayList<>(gridProps.numberOfRows());
         for(int i = 0 ; i < gridProps.numberOfRows(); i++){
             gemRows.add(getGemRow(i));
