@@ -30,7 +30,6 @@ public class Gem {
         this.containerPosition = initialContainerPosition;
         this.column = 3;
         this.id = currentUUID.addAndGet(1L);
-        log("created Gem, id: " + id);
     }
 
 
@@ -42,10 +41,6 @@ public class Gem {
         this.id = -100L;
     }
 
-
-    private void log(String msg){
-        System.out.println("Gem: " + msg);
-    }
 
     public void markAsAddedToGrid(){
         isAddedToGrid = true;

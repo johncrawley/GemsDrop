@@ -70,7 +70,7 @@ public class SoundPlayer {
         loadSound(R.raw.disappear_7, GEMS_DISAPPEAR_CHAIN_REACTION_6);
         loadSound(R.raw.disappear_wonder, WONDER_GEM_GEMS_DISAPPEAR);
         loadSound(R.raw.game_over_1, GAME_OVER);
-        loadSound(R.raw.ground_hit_1, GEM_HITS_FLOOR);
+        loadSound(R.raw.ground_hit_2, GEM_HITS_FLOOR);
     }
 
 
