@@ -4,18 +4,17 @@
     <string name="title">GEM DROP</string>
     <string name="created_by">Created by: John Crawley, gem design by Ruairi Crawley</string>
     <string name="tap_to_start">Tap to Play</string>
-    <string name="score">Score:</string>
-    <string name="high_scores_title">HIGH SCORES</string>
+    <string name="high_scores_title"><u>HIGH SCORES</u></string>
     <string name="empty_score">10000</string>
     <string name="game_over_text">GAME OVER</string>
     <string name="title_gem_image_content_description">A rotating gem</string>
     <string name="gem_preview_image_content_description">Preview of the next gem</string>
-    <string name="game_over_score_text">Your Score:</string>
+    <string name="game_over_score_text">YOUR SCORE</string>
     <string name="score_placeholder_text">9999999</string>
     <string name="settings_switch_enable_sound">Enable Sound FX</string>
 
-    <string name="default_score_value">0</string>
-    <string name="score_label">Score:</string>
+    <string name="default_score_value">12345678</string>
+    <string name="score_label">SCORE</string>
 
     <!-- Main menu buttons -->
     <string name="button_new_game">NEW GAME</string>

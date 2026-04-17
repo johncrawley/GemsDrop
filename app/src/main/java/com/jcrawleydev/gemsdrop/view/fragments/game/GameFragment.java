@@ -1,6 +1,7 @@
 package com.jcrawleydev.gemsdrop.view.fragments.game;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -20,6 +21,7 @@ import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.game.gem.GemColor;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
+import com.jcrawleydev.gemsdrop.view.fragments.utils.GraphicUtils;
 
 import java.util.List;
 
@@ -105,12 +107,12 @@ public class GameFragment extends Fragment implements GameView {
         var listener = new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
+                gamePane.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 assignGemContainerDimensions();
                 gemViewManager.assignWidthToExistingGems(gemContainer);
                 gemViewManager.setupGemPreviews(previewLayout);
                 initGame();
-                gamePane.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
+                GraphicUtils.assignGradient(scoreView, getResources(), R.color.score, R.color.score_gradient);
             }
         };
         gamePane.getViewTreeObserver().addOnGlobalLayoutListener(listener);
@@ -201,8 +203,15 @@ public class GameFragment extends Fragment implements GameView {
         gemContainer = parentView.findViewById(R.id.gemContainer);
         gamePane = parentView.findViewById(R.id.game_pane);
         setupTouchListener();
-        scoreView = parentView.findViewById(R.id.scoreView);
+        setupScoreView(parentView);
         previewLayout = parentView.findViewById(R.id.gemsPreviewLayout);
+    }
+
+
+    private void setupScoreView(View parentView){
+        scoreView = parentView.findViewById(R.id.scoreView);
+        //scoreView.setColors(Color.RED, Color.BLUE);
+        //GraphicUtils.assignGradient(scoreView, getResources(), R.color.score, R.color.score_gradient);
     }
 
 

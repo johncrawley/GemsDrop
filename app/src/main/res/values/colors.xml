@@ -11,7 +11,7 @@
 
     <color name="main_menu_background">#2E2626</color>
     <color name="high_score_title_text">#D7C974</color>
-    <color name="high_score_item_text">#958F74</color>
+    <color name="high_score_item_text">#C3AF4E</color>
     <color name="high_score_background">#1D1C1C</color>
     <color name="grid_border_color">#561A06</color>
     <color name="grid_border_color_2">#561A06</color>
@@ -20,6 +20,9 @@
     <color name="grid_border_color_5">#561A06</color>
     <color name="grid_border_color_6">#561A06</color>
     <color name="score_label">#aaa</color>
+
+    <color name="score">#E6D4D4</color>
+    <color name="score_gradient">#EFB015</color>
 
 
     <color name="menu_button_tint">#DD11194B</color>
@@ -39,4 +42,8 @@
 
     <color name="game_panel_background">#0B0B0B</color>
     <color name="game_panel_border">#6B6B6B</color>
+
+
+    <color name="background_high_scores_start">#0A1037</color>
+    <color name="background_high_scores_end">#18248E</color>
 </resources>
