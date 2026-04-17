@@ -27,23 +27,19 @@ public class HighScores {
 
 
     public void saveScore(int score){
-        print(getHighScoresList());
-        var amendedHighScores = ScoreUtils.addToHighScores(score, getHighScoresList());
-        print(amendedHighScores);
-        save(amendedHighScores);
+        var existingScores =  getHighScoresList();
+        if(isHigherThanAnyOf(score, existingScores)){
+            var amendedHighScores = ScoreUtils.addToHighScores(score, getHighScoresList());
+            save(amendedHighScores);
+        }
     }
 
 
-    private void print(List<String> list){
-        System.out.print("^^^ list ---> ");
-        list.forEach(x -> System.out.print(x + " "));
+    private boolean isHigherThanAnyOf(int score, List<String> existingScores){
+       return existingScores.stream()
+                .map(Integer::parseInt)
+                .anyMatch(x -> x < score);
     }
-
-
-    private void log(String msg){
-        System.out.println("^^^ HighScores: " + msg);
-    }
-
 
 
     public List<String> getOrderedHighScores(){
@@ -60,15 +56,12 @@ public class HighScores {
 
 
     public void reset(){
-            save(DEFAULT_SCORES);
+        save(DEFAULT_SCORES);
     }
 
 
-    private void save(List<String> highScores){
-        log("entered save()");
-        print(highScores);
-        var scoresStr = createPropStrFrom(highScores);
-        log("save() scoreStr: " + scoresStr);
+    private void save(List<String> scoresList){
+        var scoresStr = createPropStrFrom(scoresList);
         save(scoresStr);
     }
 
@@ -77,20 +70,18 @@ public class HighScores {
         getPrefs().edit()
                 .putString(PrefName.HIGH_SCORES_STR.name(), highScoresStr)
                 .apply();
-        log("exiting save()");
     }
 
 
     private String getHighScoresStr(){
-        var highScoresStr =  getPrefs().getString(PrefName.HIGH_SCORES_STR.name(), "");
-        log("getHighScoresStr() : retrieved scores: " + highScoresStr);
         return getPrefs().getString(PrefName.HIGH_SCORES_STR.name(), "");
     }
 
 
     private List<String> getHighScoresList(){
-        var highScoresStr = getHighScoresStr();
-        return Arrays.asList(highScoresStr.split(","));
+        var str = getPrefs().getString(PrefName.HIGH_SCORES_STR.name(), "");
+        return Arrays.asList(str.split(","));
     }
+
 
 }
