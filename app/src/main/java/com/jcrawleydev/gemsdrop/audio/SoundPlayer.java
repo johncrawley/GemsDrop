@@ -50,12 +50,16 @@ public class SoundPlayer {
 
 
     public void playSound(SoundEffect soundEffect, int repeats){
+        playSound(soundEffect, repeats, 88);
+    }
+
+    public void playSound(SoundEffect soundEffect, int repeats, int volume){
         if(!isSoundEnabled){
             return;
         }
         Integer soundId = soundsMap.get(soundEffect);
         if(soundId != null){
-            soundPool.play(soundId, 100, 100, 1, repeats, 1);
+            soundPool.play(soundId, volume, volume, 1, repeats, 1);
         }
     }
 
@@ -71,6 +75,7 @@ public class SoundPlayer {
         loadSound(R.raw.disappear_wonder, WONDER_GEM_GEMS_DISAPPEAR);
         loadSound(R.raw.game_over_1, GAME_OVER);
         loadSound(R.raw.ground_hit_2, GEM_HITS_FLOOR);
+        playSound(GEM_HITS_FLOOR, 0, 1);
     }
 
 
