@@ -1,7 +1,6 @@
 package com.jcrawleydev.gemsdrop.view.fragments.game;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -29,8 +28,6 @@ public class GameFragment extends Fragment implements GameView {
 
     private ViewGroup gemContainer, gamePane, previewLayout;
     private TextView scoreView;
-    private int currentNumberOfGemsRemoved;
-    private int numberOfGemsToRemove;
     private Game game;
     private MainViewModel viewModel;
     private GemViewManager gemViewManager;
@@ -163,17 +160,7 @@ public class GameFragment extends Fragment implements GameView {
 
     @Override
     public void wipeOut(long[] markedGemIds) {
-        numberOfGemsToRemove = markedGemIds.length;
-        currentNumberOfGemsRemoved = 0;
-        runOnUiThread(()->{
-            gemViewManager.stopWonderGemAnimation();
-            for(var markedId : markedGemIds){
-                var gemLayout = (ViewGroup) gemContainer.findViewWithTag(markedId);
-                if(gemLayout != null){
-                    GemAnimator.animateRemovalOf(gemLayout, this::cleanupGemView);
-                }
-            }
-        });
+        runOnUiThread(()-> gemViewManager.wipeOut(markedGemIds, gemContainer, game));
     }
 
 
@@ -210,8 +197,6 @@ public class GameFragment extends Fragment implements GameView {
 
     private void setupScoreView(View parentView){
         scoreView = parentView.findViewById(R.id.scoreView);
-        //scoreView.setColors(Color.RED, Color.BLUE);
-        //GraphicUtils.assignGradient(scoreView, getResources(), R.color.score, R.color.score_gradient);
     }
 
 
@@ -229,21 +214,6 @@ public class GameFragment extends Fragment implements GameView {
             }
             return true;
         });
-    }
-
-
-    private void log(String msg){
-       System.out.println("^^^ GameFragment: " + msg);
-    }
-
-
-    private void cleanupGemView(ViewGroup gemLayout){
-        gemLayout.setVisibility(View.GONE);
-        gemContainer.removeView(gemLayout);
-        currentNumberOfGemsRemoved++;
-        if(currentNumberOfGemsRemoved >= numberOfGemsToRemove){
-            game.onGemRemovalAnimationDone();
-        }
     }
 
 

@@ -1,7 +1,6 @@
 package com.jcrawleydev.gemsdrop.view.fragments.game;
 
 import android.content.Context;
-import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.view.View;
@@ -12,21 +11,23 @@ import android.widget.LinearLayout;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.jcrawleydev.gemsdrop.R;
+import com.jcrawleydev.gemsdrop.game.Game;
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.game.gem.GemColor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GemViewManager {
 
-
-    private AnimationDrawable wonderGemAnimation;
     private final ImageMap imageMap = new ImageMap();
     private float gemWidth = 10f;
     private int containerWidth, containerHeight;
     private ImageView gemPreview1, gemPreview2, gemPreview3;
     private AnimationHelper animationHelper;
+    private final WonderGemAnimator wonderGemAnimator = new WonderGemAnimator();
+    private final AtomicInteger currentNumberOfGemsRemoved = new AtomicInteger();
 
 
     public void createGemView(ViewGroup gemContainer, Context context, Gem gem){
@@ -73,7 +74,7 @@ public class GemViewManager {
     private void createGemView(ViewGroup gemContainer, Context context, long id, int position, int column, int colorId){
         var existingGemLayout = gemContainer.findViewWithTag(id);
         if(existingGemLayout == null){
-            var gemLayout = createGemView(gemContainer, context, id, position, column);
+            var gemLayout = createAndAddGemLayout(gemContainer, context, id, position, column);
             updateGemColor(gemLayout, context,  colorId);
         }
     }
@@ -128,11 +129,6 @@ public class GemViewManager {
     }
 
 
-    private ViewGroup createGemView(ViewGroup gemContainer, Context context, long id, int position, int column){
-        return createAndAddGemLayout(gemContainer, context, id, position, column);
-    }
-
-
     private ViewGroup createAndAddGemLayout(ViewGroup gemContainer, Context context, long id, int position, int column){
         if(context == null){
             return null;
@@ -170,17 +166,36 @@ public class GemViewManager {
 
 
     private void createWonderGemView(ViewGroup gemContainer, Context context, long id, int position, int column){
-        var wonderGemLayout = createGemView(gemContainer, context, id, position, column);
+        var wonderGemLayout = createAndAddGemLayout(gemContainer, context, id, position, column);
         if(wonderGemLayout != null){
-            startWonderGemAnimation(wonderGemLayout);
+            wonderGemAnimator.startAnimation(wonderGemLayout);
         }
     }
 
 
-    public void stopWonderGemAnimation(){
-        if(wonderGemAnimation != null && wonderGemAnimation.isRunning()){
-            wonderGemAnimation.stop();
+    public void wipeOut(long[] markedGemIds, ViewGroup gemContainer, Game game){
+        currentNumberOfGemsRemoved.set(0);
+        wonderGemAnimator.stopAnimation();
+        for(var markedId : markedGemIds){
+            var gemLayout = (ViewGroup) gemContainer.findViewWithTag(markedId);
+            if(gemLayout == null) {
+                continue;
+            }
+            GemAnimator.animateRemovalOf(gemLayout, (gl)-> {
+                boolean isFinished = cleanupGemView(gl, markedGemIds.length, gemContainer);
+                if(isFinished){
+                    game.onGemRemovalAnimationDone();
+                }
+            });
         }
+    }
+
+
+    private boolean cleanupGemView(ViewGroup gemLayout, int numberOfGemsToRemove, ViewGroup gemContainer){
+        gemLayout.setVisibility(View.GONE);
+        gemContainer.removeView(gemLayout);
+        currentNumberOfGemsRemoved.incrementAndGet();
+        return currentNumberOfGemsRemoved.get() >= numberOfGemsToRemove; // if true, all cleanup is finished
     }
 
 
@@ -190,14 +205,6 @@ public class GemViewManager {
         params.weight = 1.0f;
         params.gravity = Gravity.TOP;
         gemLayout.setLayoutParams(params);
-    }
-
-
-    private void startWonderGemAnimation(ViewGroup gemLayout){
-        ImageView wonderGemView = (ImageView) gemLayout.getChildAt(0);
-        wonderGemView.setBackgroundResource(R.drawable.wonder_gem_animation);
-        wonderGemAnimation = (AnimationDrawable) wonderGemView.getBackground();
-        wonderGemAnimation.start();
     }
 
 
