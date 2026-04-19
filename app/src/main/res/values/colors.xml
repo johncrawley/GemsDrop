@@ -7,18 +7,15 @@
     <color name="scoreboard_bottom">#2E2E1C</color>
     <color name="score_text_top">#FFA000</color>
     <color name="score_text_bottom">#E68E1E</color>
-    <color name="game_over_text">#BF360C</color>
+    <color name="game_over_text">#FF8509</color>
+    <color name="game_over_text_2">#E0A466</color>
+    <color name="game_over_text_3">#A62703</color>
 
     <color name="main_menu_background">#2E2626</color>
     <color name="high_score_title_text">#D7C974</color>
     <color name="high_score_item_text">#C3AF4E</color>
     <color name="high_score_background">#1D1C1C</color>
     <color name="grid_border_color">#561A06</color>
-    <color name="grid_border_color_2">#561A06</color>
-    <color name="grid_border_color_3">#561A06</color>
-    <color name="grid_border_color_4">#561A06</color>
-    <color name="grid_border_color_5">#561A06</color>
-    <color name="grid_border_color_6">#561A06</color>
     <color name="score_label">#aaa</color>
 
     <color name="score">#E6D4D4</color>

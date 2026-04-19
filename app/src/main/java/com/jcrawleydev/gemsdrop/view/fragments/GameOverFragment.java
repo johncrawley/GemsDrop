@@ -8,10 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.jcrawleydev.gemsdrop.R;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
+import com.jcrawleydev.gemsdrop.view.fragments.utils.GraphicUtils;
 
 public class GameOverFragment extends Fragment {
 
@@ -30,6 +32,13 @@ public class GameOverFragment extends Fragment {
         FragmentUtils.loadMainMenuOnBackButtonPressed(this);
         setupScoreView(parent);
         return parent;
+    }
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
+        TextView gameOverText = view.findViewById(R.id.gameOverTextView);
+        GraphicUtils.assignGradient(gameOverText, getResources(), R.color.game_over_text, R.color.game_over_text_2, R.color.game_over_text_3);
     }
 
 

@@ -8,14 +8,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.jcrawleydev.gemsdrop.MainActivity;
 import com.jcrawleydev.gemsdrop.R;
 import com.jcrawleydev.gemsdrop.view.SettingsActivity;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
+import com.jcrawleydev.gemsdrop.view.fragments.utils.GraphicUtils;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -45,8 +49,28 @@ public class MainMenuFragment extends Fragment {
         setupButtons(parent);
         titleGemsAnimator = new TitleGemsAnimator(parent, getContext());
         titleGemsAnimator.start();
+        assignLayoutDimensions(parent);
         playTrack(this, R.raw.music_title_1);
         return parent;
+    }
+
+
+    private void assignLayoutDimensions(View parentView){
+        var listener = new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                parentView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                TextView gameOverText = parentView.findViewById(R.id.titleTextView);
+                GraphicUtils.assignGradient(gameOverText, getResources(), R.color.game_over_text, R.color.game_over_text_2, R.color.game_over_text_3);
+            }
+        };
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(listener);
+    }
+
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
     }
 
 

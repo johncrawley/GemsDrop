@@ -19,7 +19,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/titleTextView"
+        android:id="@+id/titleTextShadowView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
@@ -27,6 +27,23 @@
         android:shadowDx="1"
         android:shadowDy="15"
         android:shadowRadius="2"
+        android:layout_marginBottom="@dimen/main_menu_title_margin_bottom"
+        android:text="@string/title"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/title_text_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.20" />
+
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
         android:layout_marginBottom="@dimen/main_menu_title_margin_bottom"
         android:text="@string/title"
         android:textColor="@color/main_menu_background"
