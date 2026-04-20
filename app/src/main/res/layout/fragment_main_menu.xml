@@ -2,54 +2,59 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background_1"
+    android:gravity="center"
+    android:tileMode="mirror">
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/background_1"
-        android:gravity="center"
-        android:tileMode="mirror"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/titleGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.40" />
 
     <TextView
         android:id="@+id/titleTextShadowView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@android:color/transparent"
         android:shadowColor="@color/colorPrimaryDark"
         android:shadowDx="1"
         android:shadowDy="15"
         android:shadowRadius="2"
+        android:gravity="center"
         android:layout_marginBottom="@dimen/main_menu_title_margin_bottom"
         android:text="@string/title"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/title_text_size"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:maxLines="2"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="32sp"
+        app:autoSizeMaxTextSize="72sp"
+        app:autoSizeStepGranularity="2sp"
+        app:layout_constraintBottom_toTopOf="@id/titleGuideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.20" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
 
     <TextView
         android:id="@+id/titleTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@android:color/transparent"
         android:layout_marginBottom="@dimen/main_menu_title_margin_bottom"
         android:text="@string/title"
         android:textColor="@color/main_menu_background"
-        android:textSize="@dimen/title_text_size"
+        android:gravity="center"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="32sp"
+        android:maxLines="2"
+        app:autoSizeMaxTextSize="72sp"
+        app:autoSizeStepGranularity="2sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/titleGuideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -66,8 +71,7 @@
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleTextView"
-        app:layout_constraintBottom_toTopOf="@+id/main_menu_buttons_include">
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView">
 
         <ImageView
             android:id="@+id/titleJewel4"
@@ -113,28 +117,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleGemsLayout"
         />
-
-    <TextView
-        android:id="@+id/tapToPlayTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingVertical="@dimen/tap_to_play_text_vertical_padding"
-        android:visibility="gone"
-        android:shadowColor="@color/colorPrimaryDark"
-        android:shadowDx="1"
-        android:shadowDy="15"
-        android:shadowRadius="2"
-        android:text="@string/tap_to_start"
-        android:textAlignment="center"
-        android:textColor="@color/score_text_top"
-        android:textSize="@dimen/tap_to_play_text_size"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleGemsLayout"
-        app:layout_constraintVertical_bias="0.32" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

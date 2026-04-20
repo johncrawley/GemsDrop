@@ -3,7 +3,6 @@ package com.jcrawleydev.gemsdrop.view.fragments;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.MusicUtils.playTrack;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.MusicUtils.stopTrack;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,6 @@ import androidx.fragment.app.Fragment;
 
 import com.jcrawleydev.gemsdrop.MainActivity;
 import com.jcrawleydev.gemsdrop.R;
-import com.jcrawleydev.gemsdrop.view.SettingsActivity;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.GraphicUtils;
 
@@ -49,19 +47,19 @@ public class MainMenuFragment extends Fragment {
         setupButtons(parent);
         titleGemsAnimator = new TitleGemsAnimator(parent, getContext());
         titleGemsAnimator.start();
-        assignLayoutDimensions(parent);
+        assignTextGradients(parent);
         playTrack(this, R.raw.music_title_1);
         return parent;
     }
 
 
-    private void assignLayoutDimensions(View parentView){
+    private void assignTextGradients(View parentView){
         var listener = new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 parentView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 TextView gameOverText = parentView.findViewById(R.id.titleTextView);
-                GraphicUtils.assignGradient(gameOverText, getResources(), R.color.game_over_text, R.color.game_over_text_2, R.color.game_over_text_3);
+                GraphicUtils.assignGradient(gameOverText, getResources(), R.color.title_text, R.color.title_text_2, R.color.title_text_3);
             }
         };
         parentView.getViewTreeObserver().addOnGlobalLayoutListener(listener);
