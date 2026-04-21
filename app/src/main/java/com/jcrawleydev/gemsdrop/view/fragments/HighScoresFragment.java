@@ -13,8 +13,6 @@ import com.jcrawleydev.gemsdrop.R;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.GameUtils;
 
-import java.util.List;
-
 
 public class HighScoresFragment extends Fragment {
 
@@ -41,9 +39,11 @@ public class HighScoresFragment extends Fragment {
         var finalScore = GameUtils.getFinalScoreString(this);
 
         for(int i = 0; i <= parent.getChildCount() && i < highScores.size(); i++){
-            var childViewIndex = i + 2;
-            log("about to assign high score "  + highScores.get(i) + " to view child: " + childViewIndex);
-            assignScoreTo(getTextViewFrom(parent, i), highScores.get(i), finalScore);
+            if(i == 1){
+                assignTempHighScoreTo(getTextViewFrom(parent, i), highScores.get(i));
+            }else{
+                assignScoreTo(getTextViewFrom(parent, i), highScores.get(i), finalScore);
+            }
         }
     }
 
@@ -54,21 +54,21 @@ public class HighScoresFragment extends Fragment {
     }
 
 
-    private void assignScoreTo(TextView textView, String highScore, String finalScore){
-        if(textView == null){
-            log("assignScoreTo() text view is null");
-            return;
-        }
+    private void  assignTempHighScoreTo(TextView textView, String highScore){
         textView.setText(highScore);
-        if(highScore.equals(finalScore)){
-            textView.setTextColor(Color.YELLOW);
+        textView.setBackgroundResource(R.drawable.background_recent_high_score_text);
+    }
+
+
+    private void assignScoreTo(TextView textView, String highScore, String finalScore){
+        if(textView != null){
+            textView.setText(highScore);
+            if(highScore.equals(finalScore)){
+                textView.setTextColor(Color.YELLOW);
+            }
         }
     }
 
-
-    private void log(String msg){
-        System.out.println("^^^ HighScoresFragment: " + msg);
-    }
 
     @Override
     public void onDestroy(){

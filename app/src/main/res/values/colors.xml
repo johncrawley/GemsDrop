@@ -41,6 +41,10 @@
     <color name="final_score_border">#1976D2</color>
 
 
+    <color name="recent_high_score_background_start">#00FFFFFF</color>
+    <color name="recent_high_score_background_middle">#33FFAE00</color>
+    <color name="recent_high_score_background_end">#00FFFFFF</color>
+
     <color name="game_panel_background">#0B0B0B</color>
     <color name="game_panel_border">#6B6B6B</color>
 

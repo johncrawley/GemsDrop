@@ -48,7 +48,6 @@ public class GameFragment extends Fragment implements GameView {
     }
 
 
-
     private void setBackground(View parent){
         ViewGroup gameLayout = parent.findViewById(R.id.game_layout);
 
