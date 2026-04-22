@@ -18,8 +18,10 @@
     <color name="background_title_start">#4D050505</color>
     <color name="background_title_end">#00EEFFFF</color>
 
-    <color name="high_score_title_text">#D7C974</color>
-    <color name="high_score_item_text">#C3AF4E</color>
+    <color name="high_score_title_text">#F5BA17</color>
+    <color name="high_score_item_text">#F5BA17</color>
+    <color name="high_score_recent_item_text">#FBD267</color>
+    <color name="high_score_recent_item_background">#4DE9DCAD</color>
     <color name="high_score_background">#1D1C1C</color>
     <color name="grid_border_color">#561A06</color>
     <color name="score_label">#aaa</color>

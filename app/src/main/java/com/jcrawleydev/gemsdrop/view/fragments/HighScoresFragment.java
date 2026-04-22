@@ -56,7 +56,7 @@ public class HighScoresFragment extends Fragment {
 
     private void  assignTempHighScoreTo(TextView textView, String highScore){
         textView.setText(highScore);
-        textView.setBackgroundResource(R.drawable.background_recent_high_score_text);
+        textView.setBackgroundResource(R.drawable.background_recent_high_score);
     }
 
 
@@ -64,7 +64,9 @@ public class HighScoresFragment extends Fragment {
         if(textView != null){
             textView.setText(highScore);
             if(highScore.equals(finalScore)){
-                textView.setTextColor(Color.YELLOW);
+                int color = getResources().getColor(R.color.high_score_recent_item_text, null);
+                textView.setTextColor(color);
+                textView.setBackgroundResource(R.drawable.background_recent_high_score_text);
             }
         }
     }
