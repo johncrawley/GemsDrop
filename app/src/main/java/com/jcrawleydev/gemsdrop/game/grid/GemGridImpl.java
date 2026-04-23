@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class GemGridImpl implements GemGrid {
     private List<List<Gem>> gemColumns;
@@ -30,10 +31,38 @@ public class GemGridImpl implements GemGrid {
 
 
     @Override
+    public void clear(){
+        init();
+    }
+
+
+    @Override
     public List<Gem> getGems(){
         return gemColumns.stream()
                 .flatMap(List::stream)
-                .toList();
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public void addGemAt(int columnIndex, Gem gem){
+        if(columnIndex >= gemColumns.size() || columnIndex < 0){
+            return;
+        }
+        var col = gemColumns.get(columnIndex);
+        col.add(gem);
+    }
+
+
+    @Override
+    public void removeTopGemFrom(int columnIndex){
+        if(columnIndex >= gemColumns.size() || columnIndex < 0){
+            return;
+        }
+        var col = gemColumns.get(columnIndex);
+        if(!col.isEmpty()){
+            col.remove(col.size()-1);
+        }
     }
 
 

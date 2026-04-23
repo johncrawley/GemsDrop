@@ -19,5 +19,8 @@ public interface GemGrid {
     void printColumnHeights();
     boolean exceedsMaxHeight();
     void addRow(List<Gem> gems);
+    void addGemAt(int columnIndex, Gem gem);
+    void removeTopGemFrom(int columnIndex);
+    void clear();
 
 }

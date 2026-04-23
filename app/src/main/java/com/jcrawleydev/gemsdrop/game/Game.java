@@ -103,6 +103,11 @@ public class Game {
     }
 
 
+    public GameLevel getLevel(){
+        return gameModel.getLevelFactory().getLevel(1);
+    }
+
+
     public int getGravityInterval(){
         return gameModel.GRAVITY_INTERVAL;
     }

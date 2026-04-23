@@ -2,31 +2,44 @@ package com.jcrawleydev.gemsdrop.game.level;
 
 import static com.jcrawleydev.gemsdrop.game.gem.GemColor.*;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+
 import com.jcrawleydev.gemsdrop.R;
 import com.jcrawleydev.gemsdrop.game.gem.GemColor;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class LevelFactory {
 
-    private GameLevel gameLevel1, tempLevel;
+    private GameLevel gameLevel1;
+    private final Context context;
 
-    public LevelFactory(){
+    public LevelFactory(Context context) {
+        this.context = context;
+        initGridList();
         setupLevel1();
     }
 
 
-    public GameLevel getLevel(int levelNumber){
+    public GameLevel getLevel(int levelNumber) {
+        setupLevel1();
         return gameLevel1;
     }
 
 
-    private void setupLevel1(){
+    private void setupLevel1() {
         var possibleColorsOfFallingGems = Set.of(
-                new GemOccurrence(BLUE,0),
+                new GemOccurrence(BLUE, 0),
                 new GemOccurrence(RED, 0),
                 new GemOccurrence(YELLOW, 0),
                 new GemOccurrence(GREEN, 0),
@@ -36,50 +49,75 @@ public class LevelFactory {
                 new GemOccurrence(LIGHT_PINK, 80));
 
         var specialGemConditions = new SpecialGemConditions(5, 25, 15);
+        List<GemColor> startingColors = List.of(BLUE, GREEN, RED, YELLOW, PURPLE);
+
         gameLevel1 = new GameLevel(1,
                 R.drawable.background_pattern_1,
                 350,
                 110,
                 possibleColorsOfFallingGems,
                 specialGemConditions,
-                generateStartingGrid() );
+                generateRandomGridRows(startingColors));
     }
 
 
-    private List<List<GemColor>> generateStartingGrid(){
-        var startingGrid = new ArrayList<List<GemColor>>();
-        addToGrid(startingGrid, GREEN, DEEP_BLUE, GREEN, DEEP_BLUE, GREEN, DEEP_BLUE, GREEN);
-        addToGrid(startingGrid, BLUE, RED, BLUE, RED, BLUE, RED, BLUE);
-        addToGrid(startingGrid, PURPLE, YELLOW, PURPLE, YELLOW, PURPLE, YELLOW, PURPLE);
-        addToGrid(startingGrid, GREEN, RED, BLUE, GREEN, RED, BLUE, GREEN);
-        return startingGrid;
-    }
+    private final List<List<Integer>> gridIndexes = new ArrayList<>();
 
 
+    @SuppressLint("NewApi")
+    private void initGridList() {
+        var gridList = getListFromResource(context, R.raw.gem_grid_patterns);
 
-    private List<List<GemColor>> generateStartingGrid2(){
-        var startingGrid = new ArrayList<List<GemColor>>();
-        addToGrid(startingGrid, YELLOW, GREEN, RED, BLUE, RED, GREEN, YELLOW);
-        addToGrid(startingGrid, BLUE, PURPLE, YELLOW, GREEN, YELLOW, PURPLE, BLUE);
-        addToGrid(startingGrid, RED, YELLOW, PURPLE, YELLOW, PURPLE, YELLOW, RED);
-        addToGrid(startingGrid, GREEN, RED, BLUE, GREEN, RED, BLUE, GREEN);
-        return startingGrid;
-    }
-
-
-    private GemColor[] createGemPalindrome(GemColor ... gemColors){
-        var gemRow = new ArrayList<>(Arrays.asList(gemColors));
-        for(int i = gemColors.length -1 ; i > 0; i--){
-            gemRow.add(gemColors[i]);
+        for (var str : gridList) {
+            var list = Arrays.stream(str.split(""))
+                    .map(Integer::parseInt).collect(Collectors.toList());
+            gridIndexes.add(list);
         }
-        return gemRow.toArray(new GemColor[]{});
     }
 
 
+    private List<List<GemColor>> generateRandomGridRows(List<GemColor> startingColors) {
+        List<List<GemColor>> gemColors = new ArrayList<>();
+        int numberOfGemsPerRow = 7;
+        var gridIndexes = getRandomGridIndexes();
+        var possibleColors = new ArrayList<>(startingColors);
+        Collections.shuffle(possibleColors);
 
-    private void addToGrid(List<List<GemColor>> grid, GemColor... gemColors){
-        grid.add(Arrays.asList(gemColors));
+        var row = new ArrayList<GemColor>();
+        for (var index : gridIndexes) {
+            row.add(possibleColors.get(index));
+            if (row.size() == numberOfGemsPerRow) {
+                gemColors.add(row);
+                row = new ArrayList<>();
+            }
+        }
+        return gemColors;
     }
 
+
+    private List<Integer> getRandomGridIndexes() {
+        var random = new Random(System.nanoTime());
+        int randomIndex = random.nextInt(gridIndexes.size());
+        return gridIndexes.get(randomIndex);
+    }
+
+
+    public List<String> getListFromResource(Context context, int rawResId) {
+        List<String> lines = new ArrayList<>();
+
+        try (var is = context.getResources().openRawResource(rawResId);
+             var reader = new BufferedReader(new InputStreamReader(is))) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line.trim());
+            }
+        } catch (IOException e) {
+            var msg = e.getMessage();
+            System.out.println("IOException opening list from resource: " + msg);
+        }
+
+        return lines;
+    }
 
 }

@@ -2,6 +2,7 @@ package com.jcrawleydev.gemsdrop;
 
 import android.os.Bundle;
 
+import com.jcrawleydev.gemsdrop.game.GameModel;
 import com.jcrawleydev.gemsdrop.view.fragments.MainMenuFragment;
 
 import androidx.annotation.NonNull;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity{
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         viewModel.musicPlayer.init(getApplication());
         viewModel.highScores.init(getApplication());
+        viewModel.gameModel = new GameModel(getApplicationContext(), viewModel.highScores);
     }
 
 

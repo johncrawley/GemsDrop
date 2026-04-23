@@ -30,6 +30,7 @@ public class GridEvaluator {
         markedGemIds.clear();
         evaluate();
         updateSetOfMarkedGemIds();
+        System.out.println("GridEvaluator.evaluateGemGrid() number of markedGemsIds: " + markedGemIds.size());
         return markedGemIds.stream().
                 mapToLong(x -> x)
                 .toArray();

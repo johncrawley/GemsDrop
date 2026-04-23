@@ -10,6 +10,6 @@ import com.jcrawleydev.gemsdrop.game.score.HighScores;
 
 public class MainViewModel extends ViewModel {
     public HighScores highScores = new HighScores();
-    public GameModel gameModel = new GameModel(highScores);
+    public GameModel gameModel;
     public MusicPlayer musicPlayer = new MusicPlayer();
 }

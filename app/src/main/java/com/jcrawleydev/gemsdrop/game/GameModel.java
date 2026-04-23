@@ -1,5 +1,7 @@
 package com.jcrawleydev.gemsdrop.game;
 
+import android.content.Context;
+
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsFactory;
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
@@ -25,17 +27,24 @@ public class GameModel {
     private final Score score = new Score(50);
     private final DroppingGemsFactory droppingGemsFactory = new DroppingGemsFactory();
     private DroppingGems droppingGems, nextDroppingGems;
-    private GameLevel gameLevel = new LevelFactory().getLevel(1);
+    private LevelFactory levelFactory;
+    private GameLevel gameLevel;
     private GameStateName gameStateName = GameStateName.AWAITING_GAME_START;
     private int numberOfRowsAlreadyGreyedOut = 0;
     private final HighScores highScores;
     private RandomBackgroundPicker randomBackgroundPicker;
 
 
-    public GameModel(HighScores highScores){
+    public GameModel(Context context, HighScores highScores){
+        levelFactory = new LevelFactory(context);
+        gameLevel = levelFactory.getLevel(1);
         droppingGemsFactory.setGridProps(gridProps);
         droppingGemsFactory.setLevel(gameLevel);
         this.highScores = highScores;
+    }
+
+    public LevelFactory getLevelFactory(){
+        return levelFactory;
     }
 
 
