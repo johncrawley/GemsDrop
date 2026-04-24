@@ -11,6 +11,7 @@ import com.jcrawleydev.gemsdrop.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class TitleGemsAnimator {
 
@@ -22,6 +23,7 @@ public class TitleGemsAnimator {
 
     public TitleGemsAnimator(View parentView, Context context){
         this.parentView = parentView;
+        random = new Random(System.nanoTime());
         rotateAnimation =  AnimationUtils.loadAnimation(context, R.anim.rotate_infinite);
         TextView titleTextView = parentView.findViewById(R.id.titleTextView);
         int topColor = context.getColor(R.color.score_text_top);
@@ -35,6 +37,22 @@ public class TitleGemsAnimator {
         addGemView(R.id.titleJewel4);
         addGemView(R.id.titleJewel5);
         addGemView(R.id.titleJewel6);
+    }
+
+    private Random random;
+
+
+    private void setRandomGemColor(ImageView gemView){
+        var colors = List.of(R.drawable.jewel_blue,
+                R.drawable.jewel_red_2,
+                R.drawable.jewel_yellow,
+                R.drawable.jewel_green,
+                R.drawable.jewel_orange,
+                R.drawable.jewel_purple,
+                R.drawable.jewel_deep_blue,
+                R.drawable.jewel_turquoise);
+
+
     }
 
 
