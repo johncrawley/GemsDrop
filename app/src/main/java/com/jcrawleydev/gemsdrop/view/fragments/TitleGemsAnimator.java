@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.jcrawleydev.gemsdrop.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -19,6 +21,7 @@ public class TitleGemsAnimator {
     private List<ImageView> titleGems;
     private final Animation rotateAnimation;
     private final View parentView;
+    private Random random;
 
 
     public TitleGemsAnimator(View parentView, Context context){
@@ -34,15 +37,21 @@ public class TitleGemsAnimator {
 
     private void setupTitleGems(){
         titleGems = new ArrayList<>();
-        addGemView(R.id.titleJewel4);
-        addGemView(R.id.titleJewel5);
-        addGemView(R.id.titleJewel6);
+        var randomGemResources = getRandomGemColors();
+        addGemView(R.id.titleJewel4, randomGemResources.get(0));
+        addGemView(R.id.titleJewel5, randomGemResources.get(1));
+        addGemView(R.id.titleJewel6, randomGemResources.get(2));
     }
 
-    private Random random;
+
+    private void addGemView(int id, int resId){
+        var gemView = (ImageView)parentView.findViewById(id);
+        gemView.setImageResource(resId);
+        titleGems.add(parentView.findViewById(id));
+    }
 
 
-    private void setRandomGemColor(ImageView gemView){
+    private List<Integer> getRandomGemColors(){
         var colors = List.of(R.drawable.jewel_blue,
                 R.drawable.jewel_red_2,
                 R.drawable.jewel_yellow,
@@ -51,13 +60,9 @@ public class TitleGemsAnimator {
                 R.drawable.jewel_purple,
                 R.drawable.jewel_deep_blue,
                 R.drawable.jewel_turquoise);
-
-
-    }
-
-
-    private void addGemView(int id){
-        titleGems.add(parentView.findViewById(id));
+        var list = new ArrayList<>(colors);
+        Collections.shuffle(list);
+        return list;
     }
 
 
