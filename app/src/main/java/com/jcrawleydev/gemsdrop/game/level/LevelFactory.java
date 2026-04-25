@@ -44,10 +44,10 @@ public class LevelFactory {
                 new GemOccurrence(YELLOW, 0),
                 new GemOccurrence(GREEN, 0),
                 new GemOccurrence(PURPLE, 0),
-                new GemOccurrence(DEEP_BLUE, 25),
-                new GemOccurrence(ORANGE, 60),
-                new GemOccurrence(TURQUOISE, 70),
-                new GemOccurrence(LIGHT_PINK, 80));
+                new GemOccurrence(DEEP_BLUE, 30),
+                new GemOccurrence(ORANGE, 55),
+                new GemOccurrence(TURQUOISE, 80),
+                new GemOccurrence(LIGHT_PINK, 110));
 
         var specialGemConditions = new SpecialGemConditions(5, 25, 15);
         List<GemColor> startingColors = List.of(BLUE, GREEN, RED, YELLOW, PURPLE);

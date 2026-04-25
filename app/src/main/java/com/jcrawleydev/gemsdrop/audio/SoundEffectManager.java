@@ -25,9 +25,18 @@ public class SoundEffectManager {
 
     public void play(SoundEffect soundEffect){
         if(soundPlayer != null){
+            log("play() about to play sound: " + soundEffect.name());
             soundPlayer.playSound(soundEffect);
         }
+        else{
+            log("play() soundPlayer is null!");
+        }
     }
+
+    private void log(String msg){
+        System.out.println("^^^ SoundEffectManager: " + msg);
+    }
+
 
     public void playGameOverSound(){
         soundPlayer.playSound(SoundEffect.GAME_OVER);

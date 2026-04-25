@@ -17,8 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+
 public class GemPatternGenerator {
 
+    private final GridEvaluator gridEvaluator = new GridEvaluator();
     private Random random = new Random(System.nanoTime());
     private record NumberGem(int index, GemColor gemColor) {}
     private record GemRowsAndStr(List<List<Gem>> gemCols, String str){}
@@ -28,7 +30,7 @@ public class GemPatternGenerator {
         random = new Random(System.nanoTime());
         var gridProps = new GridProps(20, 7, 2);
         var gemGrid = new GemGridImpl(gridProps);
-        var gridEvaluator = new GridEvaluator(gemGrid.getGemColumns(), gridProps.numberOfRows());
+        gridEvaluator.init(gemGrid.getGemColumns(), gridProps.numberOfRows());
         var list = new ArrayList<GemRowsAndStr>();
         int goodCount = 0;
 
@@ -43,8 +45,8 @@ public class GemPatternGenerator {
             for(var gemCol : item.gemCols()){
                 gemGrid.addRow(gemCol);
             }
-            var markedGems = new GridEvaluator(gemGrid.getGemColumns(), 7)
-                    .evaluateGemGrid();
+            gridEvaluator.init(gemGrid.getGemColumns(), 7);
+            var markedGems = gridEvaluator.evaluateGemGrid();
             if(markedGems.length == 0){
                 goodCount++;
                 System.out.println("^^^ goodResult:  " + item.str());

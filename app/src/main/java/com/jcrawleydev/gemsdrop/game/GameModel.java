@@ -165,16 +165,6 @@ public class GameModel {
     }
 
 
-    public void incrementDropCount(){
-        dropCount++;
-    }
-
-
-    public int getDropCount(){
-        return dropCount;
-    }
-
-
     public void resetDropCount(){
         dropCount = 0;
     }
@@ -183,8 +173,9 @@ public class GameModel {
     public void updateDropInterval(){
         int minimumInterval = 120;
         int intervalDecrement = 20;
+        int numberOfDropsToIncreaseSpeed = 14;
         dropIntervalCounter++;
-        if(dropIntervalCounter > 9){
+        if(dropIntervalCounter > numberOfDropsToIncreaseSpeed){
             dropRate = Math.max(minimumInterval, dropRate - intervalDecrement);
             dropIntervalCounter = 0;
         }

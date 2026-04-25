@@ -22,6 +22,65 @@ public class SectionEvaluator {
     }
 
 
+    public void evaluate(List<GridEvaluator.GemCoordinates> section, List<List<Gem>> columns){
+        int currentIndex = 0;
+        while( currentIndex < section.size() - (MINIMUM_MATCH_NUMBER - 1)){
+            currentIndex = evaluateSection(section, columns, currentIndex);
+        }
+    }
+
+
+    private int evaluateSection(List<GridEvaluator.GemCoordinates> section, List<List<Gem>> columns, int currentIndex){
+        var currentGemCoordinates = section.get(currentIndex);
+        int nextIndex = currentIndex + 1;
+        if(currentGemCoordinates.column() < 0){
+            return nextIndex;
+        }
+        var currentGem = columns.get(currentGemCoordinates.column()).get(currentGemCoordinates.row());
+        markGem(currentGem);
+        int matchingGemsCount = 1;
+
+        for(int comparisonIndex = nextIndex; comparisonIndex < section.size(); comparisonIndex++){
+            int colIndex = section.get(comparisonIndex).column();
+            int rowIndex = section.get(comparisonIndex).row();
+            Gem comparisonGem = columns.get(colIndex).get(rowIndex);
+            if(comparisonGem.isNotSameColorAs(currentGem)){
+                if(matchingGemsCount >= MINIMUM_MATCH_NUMBER){
+                    markAllCandidatesForDeletionInRange(section, currentIndex, comparisonIndex, columns);
+                    return comparisonIndex;
+                }
+                unmarkAllGemsInRange(section, currentIndex, comparisonIndex, columns);
+                return nextIndex;
+            }
+            matchingGemsCount++;
+            markGem(comparisonGem);
+        }
+
+        markAllCandidatesForDeletionInRange(section, currentIndex,section.size()-1, columns);
+        return section.size();
+    }
+
+
+    private void unmarkAllGemsInRange(List<GridEvaluator.GemCoordinates> section, int startIndex, int endIndex, List<List<Gem>> columns){
+        for(int i = startIndex; i <= endIndex; i++){
+            var coordinates =  section.get(i);
+            if(coordinates.column() >= 0){
+                columns.get(coordinates.column()).get(coordinates.row()).resetDeleteCandidateFlag();
+            }
+        }
+    }
+
+
+    private void markAllCandidatesForDeletionInRange(List<GridEvaluator.GemCoordinates> section, int startIndex, int endIndex, List<List<Gem>> columns){
+        for(int i = startIndex; i <= endIndex; i++){
+            var coordinates =  section.get(i);
+            if(coordinates.column() >= 0){
+                columns.get(coordinates.column()).get(coordinates.row()).setMarkedForDeletion();
+            }
+        }
+    }
+
+
     private int evaluateSection(List<Gem> section, int currentIndex){
         var currentGem = section.get(currentIndex);
         int nextIndex = currentIndex + 1;

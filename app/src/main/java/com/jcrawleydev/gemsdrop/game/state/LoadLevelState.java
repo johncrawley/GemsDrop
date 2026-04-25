@@ -2,6 +2,7 @@ package com.jcrawleydev.gemsdrop.game.state;
 
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.CREATE_GEMS;
 
+import com.jcrawleydev.gemsdrop.audio.SoundEffect;
 import com.jcrawleydev.gemsdrop.game.Game;
 import com.jcrawleydev.gemsdrop.game.grid.GridAdder;
 import java.util.concurrent.Executors;
@@ -28,6 +29,7 @@ public class LoadLevelState extends AbstractGameState {
         gridAdder.addTo(gemGrid, level.startingGrid());
         game.createGridGemsOnView();
 
+        soundEffectManager.play(SoundEffect.SILENCE); //workaround for delay in first sound effect played
         executorService.schedule(()-> loadState(CREATE_GEMS),
                 1000,
                 TimeUnit.MILLISECONDS);
