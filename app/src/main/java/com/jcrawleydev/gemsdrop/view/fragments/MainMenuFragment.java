@@ -11,6 +11,7 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
@@ -25,6 +26,7 @@ public class MainMenuFragment extends Fragment {
 
     private final AtomicBoolean isGameStartInitiated = new AtomicBoolean(false);
     private TitleGemsAnimator titleGemsAnimator;
+    private OnBackPressedCallback backPressedCallback;
 
 
     public MainMenuFragment() {
@@ -53,6 +55,16 @@ public class MainMenuFragment extends Fragment {
     }
 
 
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (backPressedCallback != null) {
+            backPressedCallback.remove();
+        }
+    }
+
+
     private void assignTextGradients(View parentView){
         var listener = new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -68,6 +80,20 @@ public class MainMenuFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
+        super.onViewCreated(view, savedInstanceState);
+        setupBackButton();
+    }
+
+
+    private void setupBackButton(){
+        backPressedCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                requireActivity().moveTaskToBack(true);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher()
+                .addCallback(getViewLifecycleOwner(), backPressedCallback);
     }
 
 
