@@ -2,6 +2,7 @@ package com.jcrawleydev.gemsdrop;
 
 import android.os.Bundle;
 
+import com.jcrawleydev.gemsdrop.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.game.GameModel;
 import com.jcrawleydev.gemsdrop.view.fragments.MainMenuFragment;
 
@@ -52,7 +53,8 @@ public class MainActivity extends AppCompatActivity{
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         viewModel.musicPlayer.init(getApplication());
         viewModel.highScores.init(getApplication());
-        viewModel.gameModel = new GameModel(getApplicationContext(), viewModel.highScores);
+        viewModel.soundPlayer = new SoundPlayer(getApplicationContext());
+        viewModel.gameModel = new GameModel(getApplicationContext(), viewModel.highScores, viewModel.soundPlayer);
     }
 
 
@@ -60,7 +62,7 @@ public class MainActivity extends AppCompatActivity{
         if(!isSavedStateNull){
             return;
         }
-        Fragment mainMenuFragment = new MainMenuFragment();
+        var mainMenuFragment = new MainMenuFragment();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, mainMenuFragment)
                 .commit();

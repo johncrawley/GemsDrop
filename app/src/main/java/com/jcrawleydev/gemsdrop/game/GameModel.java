@@ -2,6 +2,7 @@ package com.jcrawleydev.gemsdrop.game;
 
 import android.content.Context;
 
+import com.jcrawleydev.gemsdrop.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsFactory;
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
@@ -33,18 +34,24 @@ public class GameModel {
     private int numberOfRowsAlreadyGreyedOut = 0;
     private final HighScores highScores;
     private RandomBackgroundPicker randomBackgroundPicker;
+    private SoundPlayer soundPlayer;
 
 
-    public GameModel(Context context, HighScores highScores){
+    public GameModel(Context context, HighScores highScores, SoundPlayer soundPlayer){
         levelFactory = new LevelFactory(context);
         gameLevel = levelFactory.getLevel(1);
         droppingGemsFactory.setGridProps(gridProps);
         droppingGemsFactory.setLevel(gameLevel);
         this.highScores = highScores;
+        this.soundPlayer = soundPlayer;
     }
 
     public LevelFactory getLevelFactory(){
         return levelFactory;
+    }
+
+    public SoundPlayer getSoundPlayer(){
+        return soundPlayer;
     }
 
 

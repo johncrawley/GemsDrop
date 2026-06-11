@@ -17,7 +17,6 @@ import com.jcrawleydev.gemsdrop.MainViewModel;
 import com.jcrawleydev.gemsdrop.R;
 import com.jcrawleydev.gemsdrop.game.Game;
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
-import com.jcrawleydev.gemsdrop.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.game.gem.GemColor;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.GraphicUtils;
@@ -85,8 +84,7 @@ public class GameFragment extends Fragment implements GameView {
 
 
     private void initGame() {
-        var soundPlayer = new SoundPlayer(getContext());
-        game.init(soundPlayer);
+        game.init();
     }
 
 

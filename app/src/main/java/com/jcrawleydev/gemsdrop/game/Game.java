@@ -43,9 +43,9 @@ public class Game {
     }
 
 
-    public void init(SoundPlayer soundPlayer){
+    public void init(){
         this.gridProps = gameModel.getGridProps();
-        initSoundEffectsManager(soundPlayer);
+        initSoundEffectsManager();
         initGemMover();
         stateManager.init(this);
         updateScoreOnView();
@@ -53,9 +53,9 @@ public class Game {
     }
 
 
-    private void initSoundEffectsManager(SoundPlayer soundPlayer){
+    private void initSoundEffectsManager(){
         soundEffectManager = new SoundEffectManager(gridProps.numberOfRows());
-        soundEffectManager.init(soundPlayer);
+        soundEffectManager.init(gameModel.getSoundPlayer());
         soundEffectManager.setScore(gameModel.getScore());
     }
 

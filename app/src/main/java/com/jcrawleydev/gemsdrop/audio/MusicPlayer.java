@@ -33,7 +33,7 @@ public class MusicPlayer {
             return;
         }
         initMediaPlayer(application, R.raw.music_title_1);
-        initVolumeShaper();
+        initVolumeShaperConfig();
         isInitialized = true;
     }
 
@@ -54,7 +54,7 @@ public class MusicPlayer {
     }
 
 
-    private void initVolumeShaper(){
+    private void initVolumeShaperConfig(){
         volumeShaperConfig =
                 new VolumeShaper.Configuration.Builder()
                         .setDuration(fadeOutTime)
