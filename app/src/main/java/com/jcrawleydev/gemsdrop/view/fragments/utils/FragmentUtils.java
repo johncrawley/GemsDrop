@@ -58,17 +58,18 @@ public class FragmentUtils {
     }
 
 
-    public static void loadMainMenuOnBackButtonPressed(Fragment parentFragment){
-        onBackButtonPressed(parentFragment, () -> loadMainMenu(parentFragment));
+    public static OnBackPressedCallback loadMainMenuOnBackButtonPressed(Fragment parentFragment){
+       return handleBackButtonPress(parentFragment, () -> loadMainMenu(parentFragment));
     }
 
 
-    public static void loadMainMenuOnBackButtonPressed(Fragment parentFragment, Runnable runnable){
-        onBackButtonPressed(parentFragment, () -> {
+    public static OnBackPressedCallback loadMainMenuOnBackButtonPressed(Fragment parentFragment, Runnable runnable){
+        return handleBackButtonPress(parentFragment, () -> {
             runnable.run();
             loadMainMenu(parentFragment);
         });
     }
+
 
 
     public static void loadFragment(Fragment parentFragment, Fragment fragment, String tag, Bundle bundle){
@@ -85,13 +86,30 @@ public class FragmentUtils {
 
 
     public static void onBackButtonPressed(Fragment parentFragment, Runnable action){
-        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+        var callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 action.run();
             }
         };
-        parentFragment.requireActivity().getOnBackPressedDispatcher().addCallback(parentFragment.getViewLifecycleOwner(), callback);
+        parentFragment.requireActivity()
+                .getOnBackPressedDispatcher()
+                .addCallback(parentFragment.getViewLifecycleOwner(), callback);
+    }
+
+
+
+    public static OnBackPressedCallback handleBackButtonPress(Fragment parentFragment, Runnable action){
+        var callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                action.run();
+            }
+        };
+        parentFragment.requireActivity()
+                .getOnBackPressedDispatcher()
+                .addCallback(parentFragment.getViewLifecycleOwner(), callback);
+        return callback;
     }
 
 

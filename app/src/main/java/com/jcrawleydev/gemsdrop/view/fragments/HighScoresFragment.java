@@ -1,12 +1,13 @@
 package com.jcrawleydev.gemsdrop.view.fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.jcrawleydev.gemsdrop.R;
@@ -15,6 +16,9 @@ import com.jcrawleydev.gemsdrop.view.fragments.utils.GameUtils;
 
 
 public class HighScoresFragment extends Fragment {
+
+
+    private OnBackPressedCallback backPressedCallback;
 
     public HighScoresFragment() {
         // Required empty public constructor
@@ -28,9 +32,18 @@ public class HighScoresFragment extends Fragment {
 
        parent.setOnClickListener((v)-> FragmentUtils.loadMainMenu(this));
         setupHighScores((ViewGroup)parent);
-        FragmentUtils.loadMainMenuOnBackButtonPressed(this);
+       backPressedCallback = FragmentUtils.loadMainMenuOnBackButtonPressed(this);
        return parent;
 
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (backPressedCallback != null) {
+            backPressedCallback.remove();
+        }
     }
 
 
@@ -70,13 +83,5 @@ public class HighScoresFragment extends Fragment {
             }
         }
     }
-
-
-    @Override
-    public void onDestroy(){
-        super.onDestroy();
-        //titleGemsAnimator.stop();
-    }
-
 
 }
