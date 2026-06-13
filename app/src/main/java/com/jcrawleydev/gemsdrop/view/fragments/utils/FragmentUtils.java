@@ -53,11 +53,6 @@ public class FragmentUtils {
     }
 
 
-    public static void loadFragmentOnBackButtonPressed(Fragment parentFragment, Fragment destinationFragment, String fragmentTag){
-        onBackButtonPressed(parentFragment, () -> loadFragment(parentFragment, destinationFragment, fragmentTag));
-    }
-
-
     public static OnBackPressedCallback loadMainMenuOnBackButtonPressed(Fragment parentFragment){
        return handleBackButtonPress(parentFragment, () -> loadMainMenu(parentFragment));
     }
@@ -83,20 +78,6 @@ public class FragmentUtils {
                 .addToBackStack(null)
                 .commit();
     }
-
-
-    public static void onBackButtonPressed(Fragment parentFragment, Runnable action){
-        var callback = new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                action.run();
-            }
-        };
-        parentFragment.requireActivity()
-                .getOnBackPressedDispatcher()
-                .addCallback(parentFragment.getViewLifecycleOwner(), callback);
-    }
-
 
 
     public static OnBackPressedCallback handleBackButtonPress(Fragment parentFragment, Runnable action){

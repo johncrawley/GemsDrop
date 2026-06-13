@@ -81,19 +81,7 @@ public class MainMenuFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
-        setupBackButton();
-    }
-
-
-    private void setupBackButton(){
-        backPressedCallback = new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                requireActivity().moveTaskToBack(true);
-            }
-        };
-        requireActivity().getOnBackPressedDispatcher()
-                .addCallback(getViewLifecycleOwner(), backPressedCallback);
+        backPressedCallback = FragmentUtils.handleBackButtonPress(this, ()-> requireActivity().moveTaskToBack(true));
     }
 
 

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
@@ -30,6 +31,7 @@ public class GameFragment extends Fragment implements GameView {
     private Game game;
     private MainViewModel viewModel;
     private GemViewManager gemViewManager;
+    private OnBackPressedCallback backPressedCallback;
 
 
     @Override
@@ -42,8 +44,18 @@ public class GameFragment extends Fragment implements GameView {
         createGame();
         assignLayoutDimensions();
         setBackground(parent);
-        FragmentUtils.loadMainMenuOnBackButtonPressed(this, this::quitGame);
+        backPressedCallback = FragmentUtils.loadMainMenuOnBackButtonPressed(this, this::quitGame);
         return parent;
+    }
+
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (backPressedCallback != null) {
+            backPressedCallback.remove();
+        }
     }
 
 

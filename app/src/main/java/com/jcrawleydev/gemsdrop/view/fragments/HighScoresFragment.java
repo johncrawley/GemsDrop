@@ -17,7 +17,6 @@ import com.jcrawleydev.gemsdrop.view.fragments.utils.GameUtils;
 
 public class HighScoresFragment extends Fragment {
 
-
     private OnBackPressedCallback backPressedCallback;
 
     public HighScoresFragment() {
