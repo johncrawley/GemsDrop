@@ -8,7 +8,7 @@ import java.util.Set;
 public record GameLevel(int number,
                         int backgroundResourceId,
                         int startingDropDuration,
-                        int endingDropDuration,
+                        int minimumDropDuration,
                         Set<GemOccurrence> gemColors,
                         SpecialGemConditions specialGemConditions,
                         List<List<GemColor>> startingGrid){

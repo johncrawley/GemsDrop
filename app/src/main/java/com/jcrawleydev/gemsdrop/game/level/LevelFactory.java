@@ -54,7 +54,7 @@ public class LevelFactory {
 
         gameLevel1 = new GameLevel(1,
                 R.drawable.background_pattern_1,
-                350,
+                260,
                 110,
                 possibleColorsOfFallingGems,
                 specialGemConditions,
@@ -117,7 +117,6 @@ public class LevelFactory {
             var msg = e.getMessage();
             System.out.println("IOException opening list from resource: " + msg);
         }
-
         return lines;
     }
 

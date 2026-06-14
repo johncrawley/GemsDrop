@@ -19,22 +19,21 @@ import java.util.List;
 public class GameModel {
 
     public final int GRAVITY_INTERVAL = 58;
-    private int dropRate = 500;
     private int dropCount = 0;
-    private int dropIntervalCounter;
 
     private final GridProps gridProps = new GridProps(15, 7, 2);
     private final GemGrid gemGrid = new GemGridImpl(gridProps);
     private final Score score = new Score(50);
     private final DroppingGemsFactory droppingGemsFactory = new DroppingGemsFactory();
+    private final LevelFactory levelFactory;
+    private final HighScores highScores;
+    private final SoundPlayer soundPlayer;
     private DroppingGems droppingGems, nextDroppingGems;
-    private LevelFactory levelFactory;
     private GameLevel gameLevel;
     private GameStateName gameStateName = GameStateName.AWAITING_GAME_START;
     private int numberOfRowsAlreadyGreyedOut = 0;
-    private final HighScores highScores;
     private RandomBackgroundPicker randomBackgroundPicker;
-    private SoundPlayer soundPlayer;
+    private DropRateUpdater dropRateUpdater;
 
 
     public GameModel(Context context, HighScores highScores, SoundPlayer soundPlayer){
@@ -44,6 +43,7 @@ public class GameModel {
         droppingGemsFactory.setLevel(gameLevel);
         this.highScores = highScores;
         this.soundPlayer = soundPlayer;
+        dropRateUpdater = new DropRateUpdater();
     }
 
     public LevelFactory getLevelFactory(){
@@ -93,7 +93,7 @@ public class GameModel {
     public void setGameLevel(GameLevel level){
         this.gameLevel = level;
         droppingGemsFactory.setLevel(level);
-        setDropRate(level.startingDropDuration());
+        setDropRate(level.startingDropDuration(), level.minimumDropDuration());
     }
 
 
@@ -122,7 +122,7 @@ public class GameModel {
         }
         droppingGems = nextDroppingGems;
         dropCount++;
-        updateDropInterval();
+        dropRateUpdater.updateDropInterval();
         createNextGems();
         return droppingGems;
     }
@@ -164,28 +164,17 @@ public class GameModel {
 
 
     public int getDropRate(){
-        return dropRate;
+        return dropRateUpdater.getDropRate();
     }
 
-    public void setDropRate(int rate){
-        this.dropRate = rate;
+
+    public void setDropRate(int startingInterval, int minimumInterval){
+        dropRateUpdater.init(startingInterval, minimumInterval);
     }
 
 
     public void resetDropCount(){
         dropCount = 0;
-    }
-
-
-    public void updateDropInterval(){
-        int minimumInterval = 120;
-        int intervalDecrement = 20;
-        int numberOfDropsToIncreaseSpeed = 14;
-        dropIntervalCounter++;
-        if(dropIntervalCounter > numberOfDropsToIncreaseSpeed){
-            dropRate = Math.max(minimumInterval, dropRate - intervalDecrement);
-            dropIntervalCounter = 0;
-        }
     }
 
 
