@@ -6,12 +6,6 @@ public class SoundEffectManager {
 
     private SoundPlayer soundPlayer;
     private Score score;
-    private final int numberOfRows;
-
-    public SoundEffectManager(int numberOfRows){
-        this.numberOfRows = numberOfRows;
-    }
-
 
     public void setScore(Score score){
         this.score = score;
@@ -25,16 +19,8 @@ public class SoundEffectManager {
 
     public void play(SoundEffect soundEffect){
         if(soundPlayer != null){
-            log("play() about to play sound: " + soundEffect.name());
             soundPlayer.playSound(soundEffect);
         }
-        else{
-            log("play() soundPlayer is null!");
-        }
-    }
-
-    private void log(String msg){
-        System.out.println("^^^ SoundEffectManager: " + msg);
     }
 
 

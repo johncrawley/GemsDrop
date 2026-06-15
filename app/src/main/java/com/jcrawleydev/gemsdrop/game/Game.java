@@ -54,7 +54,7 @@ public class Game {
 
 
     private void initSoundEffectsManager(){
-        soundEffectManager = new SoundEffectManager(gridProps.numberOfRows());
+        soundEffectManager = new SoundEffectManager();
         soundEffectManager.init(gameModel.getSoundPlayer());
         soundEffectManager.setScore(gameModel.getScore());
     }
