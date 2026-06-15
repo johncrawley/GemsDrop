@@ -3,6 +3,7 @@ package com.jcrawleydev.gemsdrop.game;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsEvaluator;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
+import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 import com.jcrawleydev.gemsdrop.game.utils.MovementChecker;
 import com.jcrawleydev.gemsdrop.game.utils.RotationChecker;
 
@@ -118,12 +119,6 @@ public class GemMover {
             movementQueue.remove();
         }
         movementQueue.add(movement);
-    }
-
-
-
-    private void log(String msg){
-        System.out.println("^^^ GemMover: " + msg);
     }
 
 

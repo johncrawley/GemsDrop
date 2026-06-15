@@ -2,7 +2,7 @@ package com.jcrawleydev.gemsdrop.game.gem;
 
 import static com.jcrawleydev.gemsdrop.game.gem.GemGroupPosition.CENTRE;
 
-import com.jcrawleydev.gemsdrop.game.GridProps;
+import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 
 import java.util.Collections;

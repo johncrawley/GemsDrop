@@ -8,6 +8,7 @@ import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsFactory;
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 import com.jcrawleydev.gemsdrop.game.grid.GemGridImpl;
+import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 import com.jcrawleydev.gemsdrop.game.level.GameLevel;
 import com.jcrawleydev.gemsdrop.game.level.LevelFactory;
 import com.jcrawleydev.gemsdrop.game.score.HighScores;

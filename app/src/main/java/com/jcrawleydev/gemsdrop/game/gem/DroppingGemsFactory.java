@@ -1,7 +1,7 @@
 package com.jcrawleydev.gemsdrop.game.gem;
 
 
-import com.jcrawleydev.gemsdrop.game.GridProps;
+import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 import com.jcrawleydev.gemsdrop.game.level.GameLevel;
 
 import java.util.List;

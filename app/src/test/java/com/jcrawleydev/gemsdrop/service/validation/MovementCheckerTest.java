@@ -3,7 +3,7 @@ package com.jcrawleydev.gemsdrop.service.validation;
 import static org.junit.Assert.assertEquals;
 
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
-import com.jcrawleydev.gemsdrop.game.GridProps;
+import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 import com.jcrawleydev.gemsdrop.game.gem.GemColor;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 import com.jcrawleydev.gemsdrop.game.utils.MovementChecker;

@@ -3,7 +3,7 @@ package com.jcrawleydev.gemsdrop.game.state;
 import com.jcrawleydev.gemsdrop.audio.SoundEffectManager;
 import com.jcrawleydev.gemsdrop.game.Game;
 import com.jcrawleydev.gemsdrop.game.GemMover;
-import com.jcrawleydev.gemsdrop.game.TaskScheduler;
+import com.jcrawleydev.gemsdrop.game.utils.TaskScheduler;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 import com.jcrawleydev.gemsdrop.game.score.Score;
 

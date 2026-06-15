@@ -1,5 +1,5 @@
 package com.jcrawleydev.gemsdrop.game.gem;
-import com.jcrawleydev.gemsdrop.game.GridProps;
+import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 
 public class GemUtils {
 

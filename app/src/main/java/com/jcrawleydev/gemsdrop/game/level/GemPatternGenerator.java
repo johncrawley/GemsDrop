@@ -7,7 +7,7 @@ import static com.jcrawleydev.gemsdrop.game.gem.GemColor.RED;
 import static com.jcrawleydev.gemsdrop.game.gem.GemColor.YELLOW;
 
 
-import com.jcrawleydev.gemsdrop.game.GridProps;
+import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.game.gem.GemColor;
 import com.jcrawleydev.gemsdrop.game.grid.GemGridImpl;

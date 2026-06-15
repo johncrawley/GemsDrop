@@ -1,4 +1,4 @@
-package com.jcrawleydev.gemsdrop.game;
+package com.jcrawleydev.gemsdrop.game.grid;
 
 public record GridProps(int numberOfRows, int numberOfColumns, int depthPerDrop) {
 

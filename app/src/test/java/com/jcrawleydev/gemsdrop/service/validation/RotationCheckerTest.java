@@ -7,18 +7,14 @@ import static org.junit.Assert.assertTrue;
 
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsFactory;
-import com.jcrawleydev.gemsdrop.game.gem.GemColor;
 import com.jcrawleydev.gemsdrop.game.gem.GemUtils;
-import com.jcrawleydev.gemsdrop.game.GridProps;
+import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
-import com.jcrawleydev.gemsdrop.game.level.GameLevel;
 import com.jcrawleydev.gemsdrop.game.level.LevelFactory;
 import com.jcrawleydev.gemsdrop.game.utils.RotationChecker;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.List;
 
 public class RotationCheckerTest {
 

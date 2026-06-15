@@ -7,16 +7,17 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.jcrawleydev.gemsdrop.audio.SoundEffectManager;
-import com.jcrawleydev.gemsdrop.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsFactory;
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.game.gem.GemColor;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
+import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 import com.jcrawleydev.gemsdrop.game.level.GameLevel;
 import com.jcrawleydev.gemsdrop.game.score.Score;
 import com.jcrawleydev.gemsdrop.game.state.GameStateName;
 import com.jcrawleydev.gemsdrop.game.state.StateManager;
+import com.jcrawleydev.gemsdrop.game.utils.TaskScheduler;
 import com.jcrawleydev.gemsdrop.view.fragments.game.GameView;
 
 import java.util.ArrayList;

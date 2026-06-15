@@ -1,6 +1,6 @@
 package com.jcrawleydev.gemsdrop.service.validation;
 
-import com.jcrawleydev.gemsdrop.game.GridProps;
+import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 

@@ -1,7 +1,7 @@
 package com.jcrawleydev.gemsdrop.game.utils;
 
 import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
-import com.jcrawleydev.gemsdrop.game.GridProps;
+import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 
 public class MovementChecker {

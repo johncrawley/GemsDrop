@@ -2,6 +2,7 @@ package com.jcrawleydev.gemsdrop.game;
 
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
+import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 
 import java.util.ArrayList;
 import java.util.List;

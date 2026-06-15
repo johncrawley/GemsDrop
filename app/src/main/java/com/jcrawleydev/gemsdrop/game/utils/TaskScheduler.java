@@ -1,4 +1,4 @@
-package com.jcrawleydev.gemsdrop.game;
+package com.jcrawleydev.gemsdrop.game.utils;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

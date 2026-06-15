@@ -6,7 +6,7 @@ import static org.junit.Assert.assertEquals;
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.game.gem.GemColor;
 import com.jcrawleydev.gemsdrop.game.gem.GemGroupPosition;
-import com.jcrawleydev.gemsdrop.game.GridProps;
+import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 import com.jcrawleydev.gemsdrop.game.gem.GemUtils;
 
 import org.junit.Test;
