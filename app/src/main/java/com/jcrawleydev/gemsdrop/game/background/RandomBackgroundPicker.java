@@ -1,4 +1,4 @@
-package com.jcrawleydev.gemsdrop.game;
+package com.jcrawleydev.gemsdrop.game.background;
 
 import java.util.Random;
 
@@ -14,7 +14,7 @@ public class RandomBackgroundPicker {
 
 
     public void pickRandomBackgroundIndex(){
-        int numberOfBackgrounds = 6;
+        int numberOfBackgrounds = 7;
         currentBackgroundIndex = random.nextInt(numberOfBackgrounds);
     }
 

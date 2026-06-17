@@ -68,7 +68,8 @@ public class GameFragment extends Fragment implements GameView {
         R.drawable.background_3,
         R.drawable.background_4,
         R.drawable.background_5,
-        R.drawable.background_6);
+        R.drawable.background_6,
+        R.drawable.background_7);
 
         int randomIndex = viewModel.gameModel.getRandomBackgroundIndex();
         int backgroundIndex = Math.min(randomIndex, ids.size() - 1);
