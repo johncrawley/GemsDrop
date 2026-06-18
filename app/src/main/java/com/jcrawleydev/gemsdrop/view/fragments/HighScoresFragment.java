@@ -59,11 +59,9 @@ public class HighScoresFragment extends Fragment {
         var finalScore = GameUtils.getFinalScoreString(this);
 
         for (int i = 0; i <= parent.getChildCount() && i < highScores.size(); i++) {
-            if (i == 1) {
-                assignTempHighScoreTo(getTextViewFrom(parent, i), highScores.get(i));
-                continue;
-            }
-            assignScoreTo(getTextViewFrom(parent, i), highScores.get(i), finalScore);
+            var textView = getTextViewFrom(parent, i);
+            var highScore = highScores.get(i);
+            assignScoreTo(textView, highScore, finalScore);
         }
     }
 
@@ -71,12 +69,6 @@ public class HighScoresFragment extends Fragment {
     private TextView getTextViewFrom(ViewGroup parent, int index) {
         int textViewIndex = index + 2; //NB starting from second child because first child is the guideline and second is the title
         return (TextView) parent.getChildAt(textViewIndex);
-    }
-
-
-    private void assignTempHighScoreTo(TextView textView, String highScore) {
-        textView.setText(highScore);
-        textView.setBackgroundResource(R.drawable.background_recent_high_score);
     }
 
 

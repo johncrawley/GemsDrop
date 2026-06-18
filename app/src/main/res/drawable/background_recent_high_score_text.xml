@@ -3,7 +3,7 @@
     android:shape="rectangle">
     <gradient
         android:angle="0"
-        android:gradientRadius="120dp"
+        android:gradientRadius="170dp"
         android:startColor="@color/recent_high_score_background_middle"
         android:endColor="@color/recent_high_score_background_end"
         android:type="radial"/>
