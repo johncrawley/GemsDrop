@@ -71,14 +71,15 @@ public class LevelFactory {
 
         for (var str : gridList) {
             var list = Arrays.stream(str.split(""))
-                    .map(Integer::parseInt).collect(Collectors.toList());
+                    .map(Integer::parseInt)
+                    .collect(Collectors.toList());
             gridIndexes.add(list);
         }
     }
 
 
     private List<List<GemColor>> generateRandomGridRows(List<GemColor> startingColors) {
-        List<List<GemColor>> gemColors = new ArrayList<>();
+        var gemColors = new ArrayList<List<GemColor>>();
         int numberOfGemsPerRow = 7;
         var gridIndexes = getRandomGridIndexes();
         var possibleColors = new ArrayList<>(startingColors);

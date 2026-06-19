@@ -26,19 +26,16 @@ public class GemPatternGenerator {
     private record GemRowsAndStr(List<List<Gem>> gemCols, String str){}
 
 
-    public void generate() {
+    public void generate(int rows, int columns) {
         random = new Random(System.nanoTime());
         var gridProps = new GridProps(20, 7, 2);
         var gemGrid = new GemGridImpl(gridProps);
         gridEvaluator.init(gemGrid.getGemColumns(), gridProps.numberOfRows());
         var list = new ArrayList<GemRowsAndStr>();
-        int goodCount = 0;
-
 
         for(int i = 0; i < 100; i++){
-            list.add(generateResult());
+            list.add(generateResult(rows, columns));
         }
-
 
         for (var item : list) {
             gemGrid.clear();
@@ -46,20 +43,21 @@ public class GemPatternGenerator {
                 gemGrid.addRow(gemCol);
             }
             gridEvaluator.init(gemGrid.getGemColumns(), 7);
-            var markedGems = gridEvaluator.evaluateGemGrid();
-            if(markedGems.length == 0){
-                goodCount++;
-                System.out.println("^^^ goodResult:  " + item.str());
-            }
-            System.out.println("goodCount: " + goodCount);
         }
-
+        print(list);
     }
 
 
-    private GemRowsAndStr generateResult(){
-        int numberOfRowsToFill = 4;
-        int numberOfColumns = 7;
+    private void print(List<GemRowsAndStr> gemRowsAndStrs){
+
+        for(var gemRowAndStr : gemRowsAndStrs){
+            System.out.println(gemRowAndStr.str());
+        }
+        System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+    }
+
+
+    private GemRowsAndStr generateResult(int numberOfRowsToFill, int numberOfColumns){
         var str = new StringBuilder();
         var gemRows = new ArrayList<List<Gem>>();
         for (int currentRow = 0; currentRow < numberOfRowsToFill; currentRow++) {

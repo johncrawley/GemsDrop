@@ -3,6 +3,7 @@ package com.jcrawleydev.gemsdrop.game.gem;
 
 import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 import com.jcrawleydev.gemsdrop.game.level.GameLevel;
+import com.jcrawleydev.gemsdrop.game.level.GemPatternGenerator;
 
 import java.util.List;
 import java.util.Random;
@@ -15,9 +16,14 @@ public class DroppingGemsFactory {
     private int numberOfNormalGemsDropped;
     private int totalDropsPerLevel = 0;
     private final GemColorStore gemColorStore = new GemColorStore();
+    private GemPatternGenerator gemPatternGenerator = new GemPatternGenerator();
 
     public DroppingGemsFactory(){
+
         random = new Random(System.currentTimeMillis());
+        gemPatternGenerator.generate(6,7);
+        gemPatternGenerator.generate(7,7);
+        gemPatternGenerator.generate(8,7);
     }
 
 
@@ -59,7 +65,6 @@ public class DroppingGemsFactory {
     private void updateDropCount(){
         totalDropsPerLevel++;
         gemColorStore.updateDropCount();
-
     }
 
 
