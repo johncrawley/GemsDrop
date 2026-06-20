@@ -67,7 +67,7 @@ public class LevelFactory {
 
     @SuppressLint("NewApi")
     private void initGridList() {
-        var gridList = getListFromResource(context, R.raw.gem_grid_patterns);
+        var gridList = getListFromResource(context, R.raw.gem_grid_patterns_4_rows);
 
         for (var str : gridList) {
             var list = Arrays.stream(str.split(""))
