@@ -16,7 +16,14 @@ import com.jcrawleydev.gemsdrop.game.grid.GridEvaluator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+/*
+    This class generates lists of numbers that represent starting grid patterns.
+    a good way to use it is to instantiate it in the LevelFactory and  call generate
+    for each number of starting rows that you want.
 
+    Then you have the manual task of copying the log output into a raw resource and formatting so that
+    each number is on a separate line.
+ */
 
 public class GemPatternGenerator {
 
@@ -49,9 +56,9 @@ public class GemPatternGenerator {
 
 
     private void print(List<GemRowsAndStr> gemRowsAndStrs){
-
         for(var gemRowAndStr : gemRowsAndStrs){
-            System.out.println(gemRowAndStr.str());
+            System.out.print(" ");
+            System.out.print(gemRowAndStr.str());
         }
         System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
     }
