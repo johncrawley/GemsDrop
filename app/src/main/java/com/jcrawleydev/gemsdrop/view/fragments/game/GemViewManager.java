@@ -212,12 +212,19 @@ public class GemViewManager {
         var updates = new ArrayList<GemPreviewUpdate>();
         var imageViews = List.of(gemPreview1, gemPreview2, gemPreview3);
 
+        changeBackgroundForPreview(gemColors);
+
         for(int i = 0; i < imageViews.size(); i++){
             var imageView = imageViews.get(i);
             var drawable = getDrawableFor(gemColors.get(i), context);
             updates.add(new GemPreviewUpdate(imageView, drawable ));
         }
         animationHelper.animatePreviewChangeFor(updates);
+    }
+
+
+    public void changeBackgroundForPreview(List<GemColor> gemColors){
+
     }
 
 
