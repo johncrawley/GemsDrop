@@ -212,19 +212,16 @@ public class GemViewManager {
         var updates = new ArrayList<GemPreviewUpdate>();
         var imageViews = List.of(gemPreview1, gemPreview2, gemPreview3);
 
-        changeBackgroundForPreview(gemColors);
-
         for(int i = 0; i < imageViews.size(); i++){
             var imageView = imageViews.get(i);
             var drawable = getDrawableFor(gemColors.get(i), context);
             updates.add(new GemPreviewUpdate(imageView, drawable ));
         }
-        animationHelper.animatePreviewChangeFor(updates);
+        animationHelper.animatePreviewChangeFor(updates, containsWonder(gemColors));
     }
 
-
-    public void changeBackgroundForPreview(List<GemColor> gemColors){
-
+    private boolean containsWonder(List<GemColor> gemColors){
+        return  gemColors.contains(GemColor.WONDER);
     }
 
 
@@ -234,9 +231,11 @@ public class GemViewManager {
     }
 
 
-    public void setupGemPreviews(View parentView) {
+    public void setupGemPreviews(View parentView, Context context) {
         ViewGroup previewLayout = parentView.findViewById(R.id.gemsPreviewLayout);
-        animationHelper = new AnimationHelper(previewLayout);
+        int normalBackgroundColor = context.getColor(R.color.gems_preview_background_normal);
+        int wonderBackgroundColor = context.getColor(R.color.gems_preview_background_wonder);
+        animationHelper = new AnimationHelper(previewLayout, normalBackgroundColor, wonderBackgroundColor);
         gemPreview1 = setupGemPreview(previewLayout, 0);
         gemPreview2 = setupGemPreview(previewLayout, 1);
         gemPreview3 = setupGemPreview(previewLayout, 2);

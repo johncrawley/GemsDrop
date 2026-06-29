@@ -25,14 +25,6 @@ public class GemAnimator {
     }
 
 
-    public static void animateAppearanceOf(ViewGroup gemLayout) {
-        gemLayout.setVisibility(View.VISIBLE);
-        View gemView = gemLayout.getChildAt(0);
-        Animation animation = createCentredScaleAnimation(0f, 1f, 750);
-        gemView.startAnimation(animation);
-    }
-
-
     private static Animation createCentredScaleAnimation(float startingScale, float endingScale, int duration){
         Animation animation = new ScaleAnimation(
                 startingScale, endingScale,

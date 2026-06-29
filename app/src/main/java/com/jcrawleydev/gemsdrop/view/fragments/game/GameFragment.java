@@ -117,7 +117,9 @@ public class GameFragment extends Fragment implements GameView {
                 gamePane.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 assignGemContainerDimensions();
                 gemViewManager.assignWidthToExistingGems(gemContainer);
-                gemViewManager.setupGemPreviews(previewLayout);
+                if(getContext() != null){
+                    gemViewManager.setupGemPreviews(previewLayout, getContext());
+                }
                 initGame();
                 GraphicUtils.assignGradient(scoreView, getResources(), R.color.score, R.color.score_gradient);
             }
