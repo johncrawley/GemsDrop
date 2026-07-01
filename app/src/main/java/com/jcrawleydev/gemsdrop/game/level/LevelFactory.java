@@ -50,7 +50,7 @@ public class LevelFactory {
                 new GemOccurrence(LIGHT_PINK, 110));
 
         var specialGemConditions = new SpecialGemConditions(5, 25, 15);
-        List<GemColor> startingColors = List.of(BLUE, GREEN, RED, YELLOW, PURPLE);
+        List<GemColor> startingColors = List.of(BLUE, GREEN, RED, YELLOW, PURPLE, DEEP_BLUE);
 
         gameLevel1 = new GameLevel(1,
                 R.drawable.background_pattern_1,
@@ -59,6 +59,8 @@ public class LevelFactory {
                 possibleColorsOfFallingGems,
                 specialGemConditions,
                 generateRandomGridRows(startingColors));
+
+        //new GemPatternGenerator().generate(7, 7);
     }
 
 
@@ -67,7 +69,7 @@ public class LevelFactory {
 
     @SuppressLint("NewApi")
     private void initGridList() {
-        var gridList = getListFromResource(context, R.raw.gem_grid_patterns_8_rows);
+        var gridList = getListFromResource(context, R.raw.gem_grid_patterns_7_rows_5_colors);
 
         for (var str : gridList) {
             var list = Arrays.stream(str.split(""))

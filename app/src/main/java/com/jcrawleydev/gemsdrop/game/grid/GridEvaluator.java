@@ -63,12 +63,6 @@ public class GridEvaluator {
         evaluateDiagonals();
     }
 
-    private void evaluateOLD(){
-        evaluateRows();
-        evaluateColumns();
-        //evaluateDiagonalSections();
-    }
-
 
     private void evaluateRows(){
         for(int i = 0; i < NUMBER_OF_ROWS; i++){
@@ -113,12 +107,6 @@ public class GridEvaluator {
 
         addUpperHalfReverseSections();
         addLowerHalfReverseDiagonalSections();
-        log("exiting buildSections() number of sections: " + sections.size());
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ GridEvaluator: " + msg);
     }
 
 
@@ -132,6 +120,7 @@ public class GridEvaluator {
             diagonals.add(diagonal);
         }
     }
+
 
     private void addLowerHalfDiagonalSections(){
         for(int i = 0; i < rowLimit; i++) {
