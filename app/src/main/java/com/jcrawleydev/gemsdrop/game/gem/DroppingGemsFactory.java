@@ -48,7 +48,7 @@ public class DroppingGemsFactory {
 
     public DroppingGems createDroppingGems(){
         updateDropCount();
-        if(shouldCreateWonderGem2()){
+        if(shouldCreateWonderGem()){
             numberOfNormalGemsDropped = 0;
             return new WonderDroppingGem(gridProps);
         }
@@ -67,10 +67,6 @@ public class DroppingGemsFactory {
         return hasExceededInitialGemThreshold() && (
                 (isLucky() && haveEnoughNormalGemsDropped())
                         || haveTooManyNormalGemsDropped());
-    }
-
-    private boolean shouldCreateWonderGem2(){
-        return true;
     }
 
 

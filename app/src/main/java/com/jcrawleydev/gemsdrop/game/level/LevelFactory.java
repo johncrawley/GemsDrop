@@ -50,7 +50,7 @@ public class LevelFactory {
                 new GemOccurrence(LIGHT_PINK, 110));
 
         var specialGemConditions = new SpecialGemConditions(5, 25, 15);
-        List<GemColor> startingColors = List.of(BLUE, GREEN, RED, YELLOW, PURPLE, DEEP_BLUE);
+        var startingColors = List.of(BLUE, GREEN, RED, YELLOW, PURPLE, DEEP_BLUE);
 
         gameLevel1 = new GameLevel(1,
                 R.drawable.background_pattern_1,

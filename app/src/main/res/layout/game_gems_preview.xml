@@ -4,9 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:padding="8dp"
     android:gravity="center"
-    android:background="@drawable/background_game_panel">
+    android:background="@drawable/background_preview_panel">
 
     <!-- required layout that is faded in and out on preview change -->
     <LinearLayout
@@ -23,13 +22,11 @@
             android:contentDescription="@string/gem_preview_image_content_description"
             android:src="@drawable/jewel_green"/>
 
-
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:contentDescription="@string/gem_preview_image_content_description"
             android:src="@drawable/jewel_blue"/>
-
 
         <ImageView
             android:layout_width="50dp"
@@ -37,8 +34,5 @@
             android:contentDescription="@string/gem_preview_image_content_description"
             android:src="@drawable/jewel_red"/>
     </LinearLayout>
-
-
-
 
 </LinearLayout>

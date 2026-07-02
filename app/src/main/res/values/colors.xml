@@ -32,6 +32,7 @@
 
     <color name="gems_preview_background_normal">#000000</color>
     <color name="gems_preview_background_wonder">#C1B392</color>
+    <color name="gems_preview_background_wonder_outside">#00000000</color>
 
 
     <color name="menu_button_tint">#DD11194B</color>

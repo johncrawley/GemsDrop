@@ -25,7 +25,7 @@ public class GemViewManager {
     private float gemWidth = 10f;
     private int containerWidth, containerHeight;
     private ImageView gemPreview1, gemPreview2, gemPreview3;
-    private AnimationHelper animationHelper;
+    private PreviewAnimationHelper previewAnimationHelper;
     private final WonderGemAnimator wonderGemAnimator = new WonderGemAnimator();
     private final AtomicInteger currentNumberOfGemsRemoved = new AtomicInteger();
 
@@ -217,7 +217,7 @@ public class GemViewManager {
             var drawable = getDrawableFor(gemColors.get(i), context);
             updates.add(new GemPreviewUpdate(imageView, drawable ));
         }
-        animationHelper.animatePreviewChangeFor(updates, containsWonder(gemColors));
+        previewAnimationHelper.animatePreviewChangeFor(updates, containsWonder(gemColors));
     }
 
     private boolean containsWonder(List<GemColor> gemColors){
@@ -235,7 +235,7 @@ public class GemViewManager {
         ViewGroup previewLayout = parentView.findViewById(R.id.gemsPreviewLayout);
         int normalBackgroundColor = context.getColor(R.color.gems_preview_background_normal);
         int wonderBackgroundColor = context.getColor(R.color.gems_preview_background_wonder);
-        animationHelper = new AnimationHelper(previewLayout, normalBackgroundColor, wonderBackgroundColor);
+        previewAnimationHelper = new PreviewAnimationHelper(previewLayout, normalBackgroundColor, wonderBackgroundColor);
         gemPreview1 = setupGemPreview(previewLayout, 0);
         gemPreview2 = setupGemPreview(previewLayout, 1);
         gemPreview3 = setupGemPreview(previewLayout, 2);

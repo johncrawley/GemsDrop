@@ -5,9 +5,11 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 
+import com.jcrawleydev.gemsdrop.R;
+
 import java.util.List;
 
-public class AnimationHelper {
+public class PreviewAnimationHelper {
 
     private final Animation fadeInAnimation = new AlphaAnimation(0.0f, 1.0f);
     private final Animation fadeOutAndInAnimation = new AlphaAnimation(1.0f, 0.0f);
@@ -16,7 +18,7 @@ public class AnimationHelper {
     private final int normalBackgroundColor, wonderGemBackgroundColor;
     private boolean containsWonder;
 
-    public AnimationHelper(ViewGroup layout, int normalBackgroundColor, int wonderGemBackgroundColor){
+    public PreviewAnimationHelper(ViewGroup layout, int normalBackgroundColor, int wonderGemBackgroundColor){
         this.previewLayout = layout;
         fadeOutAndInAnimation.setDuration(250);
         this.normalBackgroundColor = normalBackgroundColor;
@@ -51,7 +53,7 @@ public class AnimationHelper {
 
     private void onFadeOutCompleted(){
         previewLayout.setVisibility(View.INVISIBLE);
-        setBackgroundColor();
+        setBackground();
         for(var update : gemPreviewUpdates){
             update.imageView().setImageDrawable(update.drawable());
         }
@@ -59,10 +61,9 @@ public class AnimationHelper {
     }
 
 
-    private void setBackgroundColor(){
-        log("entered setBackgroundColor number of previewUpdates: " + gemPreviewUpdates.size());
-        int backgroundColor = containsWonder ? wonderGemBackgroundColor : normalBackgroundColor;
-        previewLayout.setBackgroundColor(backgroundColor);
+    private void setBackground(){
+        int resId = containsWonder ? R.drawable.background_preview_gems_wonder : R.drawable.background_preview_gems_normal;
+        previewLayout.setBackgroundResource(resId);
     }
 
 
