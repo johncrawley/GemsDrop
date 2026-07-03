@@ -1,6 +1,7 @@
 package com.jcrawleydev.gemsdrop.game.gem;
 
 
+import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 import com.jcrawleydev.gemsdrop.game.level.GameLevel;
 import com.jcrawleydev.gemsdrop.game.level.GemPatternGenerator;
@@ -16,8 +17,10 @@ public class DroppingGemsFactory {
     private int numberOfNormalGemsDropped;
     private int totalDropsPerLevel = 0;
     private final GemColorStore gemColorStore = new GemColorStore();
+    private final GemGrid gemGrid;
 
-    public DroppingGemsFactory(){
+    public DroppingGemsFactory(GemGrid gemGrid) {
+        this.gemGrid = gemGrid;
         random = new Random(System.currentTimeMillis());
     }
 
@@ -64,11 +67,15 @@ public class DroppingGemsFactory {
 
 
     private boolean shouldCreateWonderGem(){
-        return hasExceededInitialGemThreshold() && (
+        return areEnoughGemsOnTheGrid() && hasExceededInitialGemThreshold() && (
                 (isLucky() && haveEnoughNormalGemsDropped())
                         || haveTooManyNormalGemsDropped());
     }
 
+
+    private boolean areEnoughGemsOnTheGrid(){
+        return gemGrid.getGemCount() > 40;
+    }
 
     private boolean hasExceededInitialGemThreshold(){
         int minimumInitialDropsBeforeWonderGem = 10;

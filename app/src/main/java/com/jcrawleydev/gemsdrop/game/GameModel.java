@@ -26,7 +26,7 @@ public class GameModel {
     private final GridProps gridProps = new GridProps(15, 7, 2);
     private final GemGrid gemGrid = new GemGridImpl(gridProps);
     private final Score score = new Score(50);
-    private final DroppingGemsFactory droppingGemsFactory = new DroppingGemsFactory();
+    private final DroppingGemsFactory droppingGemsFactory = new DroppingGemsFactory(gemGrid);
     private final LevelFactory levelFactory;
     private final HighScores highScores;
     private final SoundPlayer soundPlayer;
@@ -35,7 +35,7 @@ public class GameModel {
     private GameStateName gameStateName = GameStateName.AWAITING_GAME_START;
     private int numberOfRowsAlreadyGreyedOut = 0;
     private RandomBackgroundPicker randomBackgroundPicker;
-    private DropRateUpdater dropRateUpdater;
+    private final DropRateUpdater dropRateUpdater;
 
 
     public GameModel(Context context, HighScores highScores, SoundPlayer soundPlayer){
