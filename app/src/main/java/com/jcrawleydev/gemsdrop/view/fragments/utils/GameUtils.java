@@ -16,7 +16,14 @@ public class GameUtils {
             var gameModel = viewModel.gameModel;
             return gameModel.getScore().getStr();
         }
-        return "";
+        else{
+            log("getFinalScoreStr() main activity is null!");
+        }
+        return "999";
+    }
+
+    private static void log(String msg){
+        System.out.println("^^^ GameUtils: ! " + msg);
     }
 
 

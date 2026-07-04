@@ -16,7 +16,6 @@ import com.jcrawleydev.gemsdrop.view.fragments.utils.GraphicUtils;
 
 public class GameOverFragment extends Fragment {
 
-
     public GameOverFragment() {
         // Required empty public constructor
     }
@@ -41,7 +40,11 @@ public class GameOverFragment extends Fragment {
             public void onGlobalLayout() {
                 parentView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 TextView gameOverText = parentView.findViewById(R.id.gameOverTextView);
-                GraphicUtils.assignGradient(gameOverText, getResources(), R.color.game_over_text, R.color.game_over_text_2, R.color.game_over_text_3);
+                GraphicUtils.assignGradient(gameOverText,
+                        getResources(),
+                        R.color.game_over_text,
+                        R.color.game_over_text_2,
+                        R.color.game_over_text_3);
             }
         };
         parentView.getViewTreeObserver().addOnGlobalLayoutListener(listener);

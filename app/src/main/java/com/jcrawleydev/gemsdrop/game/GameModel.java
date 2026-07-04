@@ -48,9 +48,11 @@ public class GameModel {
         dropRateUpdater = new DropRateUpdater();
     }
 
+
     public LevelFactory getLevelFactory(){
         return levelFactory;
     }
+
 
     public SoundPlayer getSoundPlayer(){
         return soundPlayer;
@@ -59,13 +61,7 @@ public class GameModel {
 
     public void saveScore(){
         int scoreVal = score.get();
-        log("entered saveScore() value: " + scoreVal);
         highScores.saveScore(scoreVal);
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ GameModel: " + msg);
     }
 
 
@@ -112,6 +108,7 @@ public class GameModel {
     public int getNumberOfRowsAlreadyGreyedOut(){
         return numberOfRowsAlreadyGreyedOut;
     }
+
 
     public DroppingGemsFactory getDroppingGemsFactory(){
         return droppingGemsFactory;

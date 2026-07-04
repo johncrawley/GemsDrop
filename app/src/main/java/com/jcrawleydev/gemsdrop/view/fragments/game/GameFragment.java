@@ -49,7 +49,6 @@ public class GameFragment extends Fragment implements GameView {
     }
 
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();

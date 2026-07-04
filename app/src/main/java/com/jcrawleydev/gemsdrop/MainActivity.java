@@ -11,7 +11,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 
@@ -53,8 +52,10 @@ public class MainActivity extends AppCompatActivity{
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         viewModel.musicPlayer.init(getApplication());
         viewModel.highScores.init(getApplication());
-        viewModel.soundPlayer = new SoundPlayer(getApplicationContext());
-        viewModel.gameModel = new GameModel(getApplicationContext(), viewModel.highScores, viewModel.soundPlayer);
+        if(viewModel.gameModel == null){
+            viewModel.soundPlayer = new SoundPlayer(getApplicationContext());
+            viewModel.gameModel = new GameModel(getApplicationContext(), viewModel.highScores, viewModel.soundPlayer);
+        }
     }
 
 
