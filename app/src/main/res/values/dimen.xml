@@ -5,8 +5,9 @@
     <dimen name="tap_to_play_text_size">32sp</dimen>
     <dimen name="tap_to_play_text_vertical_padding">6dp</dimen>
     <dimen name="title_gems_layout_vertical_margin">14dp</dimen>
-    <dimen name="game_over_text_size">56sp</dimen>
-    <dimen name="game_over_score_text_size">32sp</dimen>
+    <dimen name="game_over_text_size">48sp</dimen>
+    <dimen name="game_over_max_text_size">86sp</dimen>
+    <dimen name="game_over_score_text_size">36sp</dimen>
     <dimen name="title_gem_padding">8dp</dimen>
     <dimen name="title_gem_margin_horizontal">8dp</dimen>
     <dimen name="score_text_size">28sp</dimen>
