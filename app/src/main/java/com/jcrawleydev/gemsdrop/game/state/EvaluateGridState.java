@@ -51,9 +51,7 @@ public class EvaluateGridState extends AbstractGameState{
             loadState(GAME_OVER);
         }
         else{
-            var elapsed = System.currentTimeMillis() - startTime;
-            log("noGemsToBeRemoved() time elapsed from start of state: " + elapsed);
-            soundEffectManager.play(GEM_HITS_FLOOR);
+            //soundEffectManager.play(GEM_HITS_FLOOR);
             loadState(CREATE_GEMS);
         }
     }

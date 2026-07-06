@@ -28,8 +28,6 @@ public class LoadLevelState extends AbstractGameState {
         game.getDroppingGemsFactory().setLevel(level);
         gridAdder.addTo(gemGrid, level.startingGrid());
         game.createGridGemsOnView();
-
-        soundEffectManager.play(SoundEffect.SILENCE); //workaround for delay in first sound effect played
         executorService.schedule(()-> loadState(CREATE_GEMS),
                 1000,
                 TimeUnit.MILLISECONDS);

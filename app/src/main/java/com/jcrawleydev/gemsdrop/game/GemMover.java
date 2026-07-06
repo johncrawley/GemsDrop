@@ -1,7 +1,7 @@
 package com.jcrawleydev.gemsdrop.game;
 
-import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
-import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsEvaluator;
+import com.jcrawleydev.gemsdrop.game.gem.dropping.DroppingGems;
+import com.jcrawleydev.gemsdrop.game.gem.dropping.DroppingGemsEvaluator;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 import com.jcrawleydev.gemsdrop.game.utils.MovementChecker;

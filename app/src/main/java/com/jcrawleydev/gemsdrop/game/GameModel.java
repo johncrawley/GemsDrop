@@ -4,8 +4,8 @@ import android.content.Context;
 
 import com.jcrawleydev.gemsdrop.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.game.background.RandomBackgroundPicker;
-import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
-import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsFactory;
+import com.jcrawleydev.gemsdrop.game.gem.dropping.DroppingGems;
+import com.jcrawleydev.gemsdrop.game.gem.dropping.DroppingGemsFactory;
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 import com.jcrawleydev.gemsdrop.game.grid.GemGridImpl;

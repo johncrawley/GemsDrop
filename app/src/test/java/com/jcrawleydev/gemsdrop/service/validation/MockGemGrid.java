@@ -42,8 +42,8 @@ public class MockGemGrid implements GemGrid {
     }
 
     @Override
-    public void addIfConnecting(Gem gem) {
-
+    public boolean addIfConnecting(Gem gem) {
+        return true;
     }
 
     @Override

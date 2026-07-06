@@ -1,8 +1,11 @@
-package com.jcrawleydev.gemsdrop.game.gem;
+package com.jcrawleydev.gemsdrop.game.gem.dropping;
 
 import static com.jcrawleydev.gemsdrop.game.gem.GemGroupPosition.*;
-import static com.jcrawleydev.gemsdrop.game.gem.DroppingGems.Orientation.*;
+import static com.jcrawleydev.gemsdrop.game.gem.dropping.DroppingGems.Orientation.*;
 
+import com.jcrawleydev.gemsdrop.game.gem.Gem;
+import com.jcrawleydev.gemsdrop.game.gem.GemColor;
+import com.jcrawleydev.gemsdrop.game.gem.GemGroupPosition;
 import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 
@@ -22,6 +25,7 @@ public class DroppingGems {
     private Orientation orientation = NORTH;
     private final int middleColumnIndex;
     private final int INITIAL_POSITION;
+    private int numberOfGemsAdded;
 
 
     public DroppingGems(GridProps gridProps, List<GemColor> gemColors){
@@ -53,9 +57,16 @@ public class DroppingGems {
     }
 
 
+    public int getNumberOfGemsAdded(){
+        return numberOfGemsAdded;
+    }
+
+
     private void addIfConnecting(Gem gem, GemGrid gemGrid){
         if(!gem.isAlreadyAddedToTheGrid()){
-            gemGrid.addIfConnecting(gem);
+            if(gemGrid.addIfConnecting(gem)){
+                numberOfGemsAdded++;
+            }
         }
     }
 
@@ -65,13 +76,13 @@ public class DroppingGems {
     }
 
 
-    public int countConnectingToGrid(){
-        return (int)gems.stream().filter(Gem::isAlreadyAddedToTheGrid).count();
+    public boolean areAllAddedToGrid(){
+        return gems.stream().allMatch(Gem::isAlreadyAddedToTheGrid);
     }
 
 
-    public boolean areAllAddedToGrid(){
-        return gems.stream().allMatch(Gem::isAlreadyAddedToTheGrid);
+    public int size(){
+        return gems.size();
     }
 
 

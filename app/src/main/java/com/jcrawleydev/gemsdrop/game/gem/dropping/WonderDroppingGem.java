@@ -1,7 +1,9 @@
-package com.jcrawleydev.gemsdrop.game.gem;
+package com.jcrawleydev.gemsdrop.game.gem.dropping;
 
 import static com.jcrawleydev.gemsdrop.game.gem.GemGroupPosition.CENTRE;
 
+import com.jcrawleydev.gemsdrop.game.gem.Gem;
+import com.jcrawleydev.gemsdrop.game.gem.GemColor;
 import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 
@@ -9,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public class WonderDroppingGem extends DroppingGems{
+public class WonderDroppingGem extends DroppingGems {
 
     public WonderDroppingGem(GridProps gridProps){
         super(gridProps, Collections.emptyList());

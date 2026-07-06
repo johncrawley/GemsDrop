@@ -5,8 +5,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
-import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsFactory;
+import com.jcrawleydev.gemsdrop.game.gem.dropping.DroppingGems;
+import com.jcrawleydev.gemsdrop.game.gem.dropping.DroppingGemsFactory;
 import com.jcrawleydev.gemsdrop.game.gem.GemUtils;
 import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;

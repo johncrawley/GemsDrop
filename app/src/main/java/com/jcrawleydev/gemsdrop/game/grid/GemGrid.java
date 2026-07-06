@@ -12,7 +12,7 @@ public interface GemGrid {
     List<List<Gem>> getGemColumns();
     List<Gem> getGems();
     int getGemCount();
-    void addIfConnecting(Gem gem);
+    boolean addIfConnecting(Gem gem);
     Set<Long> getMarkedGemIdsFromTouching(Gem wonderGem);
     List<Gem> gravityDropGemsOnePosition();
     int removeMarkedGems();

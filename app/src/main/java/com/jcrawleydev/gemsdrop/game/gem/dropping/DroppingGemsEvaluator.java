@@ -1,4 +1,4 @@
-package com.jcrawleydev.gemsdrop.game.gem;
+package com.jcrawleydev.gemsdrop.game.gem.dropping;
 
 import static com.jcrawleydev.gemsdrop.audio.SoundEffect.GEM_HITS_FLOOR;
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.EVALUATE_GRID;
@@ -50,19 +50,19 @@ public class DroppingGemsEvaluator {
 
     private boolean evaluateNormalGems(DroppingGems droppingGems){
         droppingGems.addConnectingGemsTo(gemGrid);
+        var numberOfGemsAdded = droppingGems.getNumberOfGemsAdded();
 
-        if(droppingGems.areAllAddedToGrid()){
-            gemMover.disableControls();
-            loadState(EVALUATE_GRID);
-            return true;
-        }
-        else if(droppingGems.areAnyAddedToGrid()){
+        if(numberOfGemsAdded > 0){
             gemMover.disableControls();
             soundEffectManager.play(GEM_HITS_FLOOR);
-            loadState(GEM_FREE_FALL);
-            return true;
         }
-        return false;
+
+        if(numberOfGemsAdded == droppingGems.size()){
+            loadState(EVALUATE_GRID);
+        }else if(numberOfGemsAdded > 0){
+            loadState(GEM_FREE_FALL);
+        }
+        return numberOfGemsAdded > 0;
     }
 
 

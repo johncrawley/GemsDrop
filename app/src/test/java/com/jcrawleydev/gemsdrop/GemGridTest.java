@@ -1,22 +1,5 @@
 package com.jcrawleydev.gemsdrop;
 
-import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
-import com.jcrawleydev.gemsdrop.game.gem.Gem;
-import com.jcrawleydev.gemsdrop.game.gem.GemColor;
-import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
-import com.jcrawleydev.gemsdrop.service.validation.Utils;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-
-import static com.jcrawleydev.gemsdrop.game.gem.GemColor.RED;
-import static com.jcrawleydev.gemsdrop.game.gem.GemColor.BLUE;
-import static com.jcrawleydev.gemsdrop.game.gem.GemColor.YELLOW;
-import static com.jcrawleydev.gemsdrop.game.gem.GemColor.GREEN;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

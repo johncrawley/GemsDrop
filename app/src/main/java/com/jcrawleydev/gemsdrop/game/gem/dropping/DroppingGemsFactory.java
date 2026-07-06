@@ -1,10 +1,11 @@
-package com.jcrawleydev.gemsdrop.game.gem;
+package com.jcrawleydev.gemsdrop.game.gem.dropping;
 
 
+import com.jcrawleydev.gemsdrop.game.gem.GemColor;
+import com.jcrawleydev.gemsdrop.game.gem.GemColorStore;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 import com.jcrawleydev.gemsdrop.game.level.GameLevel;
-import com.jcrawleydev.gemsdrop.game.level.GemPatternGenerator;
 
 import java.util.List;
 import java.util.Random;

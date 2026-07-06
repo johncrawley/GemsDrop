@@ -4,7 +4,7 @@ import static com.jcrawleydev.gemsdrop.audio.SoundEffect.GEM_HITS_FLOOR;
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.EVALUATE_GRID;
 
 import com.jcrawleydev.gemsdrop.game.Game;
-import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
+import com.jcrawleydev.gemsdrop.game.gem.dropping.DroppingGems;
 
 
 public class GemFreeFallState extends AbstractGameState{
@@ -26,7 +26,7 @@ public class GemFreeFallState extends AbstractGameState{
 
 
     private void freeFallRemainingGems(){
-        int alreadyConnecting = droppingGems.countConnectingToGrid();
+        int alreadyConnecting = droppingGems.getNumberOfGemsAdded();
         droppingGems.moveDown();
         game.updateDroppingGemsOnView();
         droppingGems.addConnectingGemsTo(gemGrid);
@@ -35,7 +35,7 @@ public class GemFreeFallState extends AbstractGameState{
             loadState(EVALUATE_GRID);
             return;
         }
-        if(droppingGems.countConnectingToGrid() > alreadyConnecting){
+        if(droppingGems.getNumberOfGemsAdded() > alreadyConnecting){
             soundEffectManager.play(GEM_HITS_FLOOR);
         }
     }

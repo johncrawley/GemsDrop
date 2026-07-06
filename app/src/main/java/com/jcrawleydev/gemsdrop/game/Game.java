@@ -7,8 +7,8 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.jcrawleydev.gemsdrop.audio.SoundEffectManager;
-import com.jcrawleydev.gemsdrop.game.gem.DroppingGems;
-import com.jcrawleydev.gemsdrop.game.gem.DroppingGemsFactory;
+import com.jcrawleydev.gemsdrop.game.gem.dropping.DroppingGems;
+import com.jcrawleydev.gemsdrop.game.gem.dropping.DroppingGemsFactory;
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.game.gem.GemColor;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;

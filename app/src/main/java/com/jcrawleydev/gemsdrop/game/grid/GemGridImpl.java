@@ -123,12 +123,15 @@ public class GemGridImpl implements GemGrid {
     }
 
 
-    public void addIfConnecting(Gem gem){
+    @Override
+    public boolean addIfConnecting(Gem gem){
         var column = getColumnBeneath(gem);
         if(isTouching(gem, column)){
             column.add(gem);
             gem.markAsAddedToGrid();
+            return true;
         }
+        return false;
     }
 
 
