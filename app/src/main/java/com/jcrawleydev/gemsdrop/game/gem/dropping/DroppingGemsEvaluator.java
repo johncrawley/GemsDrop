@@ -38,6 +38,7 @@ public class DroppingGemsEvaluator {
     }
 
 
+    // returns true if gems have connected to the grid
     public boolean evaluate(DroppingGems droppingGems){
         if(droppingGems instanceof WonderDroppingGem){
             return evaluateWonderGem((WonderDroppingGem) droppingGems);
@@ -49,8 +50,7 @@ public class DroppingGemsEvaluator {
 
 
     private boolean evaluateNormalGems(DroppingGems droppingGems){
-        droppingGems.addConnectingGemsTo(gemGrid);
-        var numberOfGemsAdded = droppingGems.getNumberOfGemsAdded();
+        var numberOfGemsAdded = droppingGems.addConnectingGemsTo(gemGrid);
 
         if(numberOfGemsAdded > 0){
             gemMover.disableControls();
@@ -67,7 +67,7 @@ public class DroppingGemsEvaluator {
 
 
     private boolean evaluateWonderGem(WonderDroppingGem wonderDroppingGem){
-        var markedGemIds = wonderDroppingGem.addConnectingGemsTo(gemGrid);
+        var markedGemIds = wonderDroppingGem.addTo(gemGrid);
         var numberOfMarkedGems = markedGemIds.size();
         if(numberOfMarkedGems > 0){
             taskScheduler.cancelTask();

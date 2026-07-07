@@ -60,7 +60,8 @@ public class GemGridImpl implements GemGrid {
         }
         var col = gemColumns.get(columnIndex);
         if(!col.isEmpty()){
-            col.remove(col.size()-1);
+            int lastElementIndex = col.size() -1;
+            col.remove(lastElementIndex); // could use removeLast() if min API was 35
         }
     }
 
@@ -199,7 +200,7 @@ public class GemGridImpl implements GemGrid {
 
     private List<Gem> getColumnBeneath(Gem gem){
         var colIndex = gem.getColumn();
-        var index = Math.min(gemColumns.size() -1, Math.max(0, colIndex));
+        var index = Math.clamp(colIndex, 0, gemColumns.size() - 1);
         return gemColumns.get(index);
     }
 

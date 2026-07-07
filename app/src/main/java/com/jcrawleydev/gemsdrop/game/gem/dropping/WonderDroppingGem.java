@@ -30,8 +30,7 @@ public class WonderDroppingGem extends DroppingGems {
     }
 
 
-    @Override
-    public Set<Long> addConnectingGemsTo(GemGrid gemGrid){
+    public Set<Long> addTo(GemGrid gemGrid){
         if(!gemB.isAlreadyAddedToTheGrid()){
             return gemGrid.getMarkedGemIdsFromTouching(gemB);
         }

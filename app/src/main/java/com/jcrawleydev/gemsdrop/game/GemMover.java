@@ -173,7 +173,11 @@ public class GemMover {
         }
     }
 
+
     private void down(){
         droppingGems.moveDown();
+        if(droppingGems.getLowestGemPosition() % 2 == 1){
+           droppingGemsEvaluator.evaluate(droppingGems);
+        }
     }
 }

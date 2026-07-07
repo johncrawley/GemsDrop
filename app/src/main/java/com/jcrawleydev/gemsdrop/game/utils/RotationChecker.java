@@ -1,7 +1,6 @@
 package com.jcrawleydev.gemsdrop.game.utils;
 import com.jcrawleydev.gemsdrop.game.gem.dropping.DroppingGems;
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
-import com.jcrawleydev.gemsdrop.game.gem.GemUtils;
 import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 
@@ -18,7 +17,6 @@ public class RotationChecker {
 
     public boolean canRotate(DroppingGems droppingGems){
         if(droppingGems.areAnyAddedToGrid()){
-            log("canRotate() gems are marked as added to the grid, so won't allow a rotation!");
             return false;
         }
         if(!droppingGems.isOrientationVertical()){
@@ -36,8 +34,7 @@ public class RotationChecker {
 
     public boolean isEnoughSpaceUnderneath(Gem gem){
         int columnHeight = getColumnHeightUnder(gem);
-        int gemBottomHeight = GemUtils.getBottomHeightOf(gem, gridProps);
-        return gemBottomHeight >= columnHeight + gridProps.depthPerDrop();
+        return gem.getContainerPosition() >= columnHeight + gridProps.depthPerDrop();
     }
 
 
@@ -49,11 +46,6 @@ public class RotationChecker {
     private boolean areDroppingGemsObstructedByColumns(DroppingGems droppingGems){
         return isGemAdjacentToColumn(droppingGems.getBottomGem(), -1)
                || isGemAdjacentToColumn(droppingGems.getCentreGem(), 1);
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ RotationChecker: " + msg);
     }
 
 

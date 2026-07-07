@@ -10,22 +10,19 @@ import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 import com.jcrawleydev.gemsdrop.game.grid.GemGrid;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class DroppingGems {
 
-    private final GridProps gridProps;
     List<Gem> gems;
     Gem gemC, gemB, gemA;
     public enum Orientation { NORTH, EAST, SOUTH, WEST }
+    private final GridProps gridProps;
     private Orientation orientation = NORTH;
     private final int middleColumnIndex;
     private final int INITIAL_POSITION;
-    private int numberOfGemsAdded;
 
 
     public DroppingGems(GridProps gridProps, List<GemColor> gemColors){
@@ -49,25 +46,22 @@ public class DroppingGems {
     }
 
 
-    public Set<Long> addConnectingGemsTo(GemGrid gemGrid){
-        addIfConnecting(getBottomGem(), gemGrid);
-        addIfConnecting(getCentreGem(), gemGrid);
-        addIfConnecting(getTopGem(), gemGrid);
-        return Collections.emptySet();
-    }
-
-
-    public int getNumberOfGemsAdded(){
+    public int addConnectingGemsTo(GemGrid gemGrid){
+        int numberOfGemsAdded = 0;
+        numberOfGemsAdded += addIfConnecting(getBottomGem(), gemGrid);
+        numberOfGemsAdded += addIfConnecting(getCentreGem(), gemGrid);
+        numberOfGemsAdded += addIfConnecting(getTopGem(), gemGrid);
         return numberOfGemsAdded;
     }
 
 
-    private void addIfConnecting(Gem gem, GemGrid gemGrid){
+    private int addIfConnecting(Gem gem, GemGrid gemGrid){
         if(!gem.isAlreadyAddedToTheGrid()){
             if(gemGrid.addIfConnecting(gem)){
-                numberOfGemsAdded++;
+                return 1;
             }
         }
+        return 0;
     }
 
 
@@ -136,7 +130,9 @@ public class DroppingGems {
 
 
     private void forEachFreeGem(Consumer<Gem> consumer){
-        gems.stream().filter(gem -> !gem.isAlreadyAddedToTheGrid()).forEach(consumer);
+        gems.stream()
+                .filter(gem -> !gem.isAlreadyAddedToTheGrid())
+                .forEach(consumer);
     }
 
 

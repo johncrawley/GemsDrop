@@ -26,18 +26,17 @@ public class GemFreeFallState extends AbstractGameState{
 
 
     private void freeFallRemainingGems(){
-        int alreadyConnecting = droppingGems.getNumberOfGemsAdded();
         droppingGems.moveDown();
         game.updateDroppingGemsOnView();
-        droppingGems.addConnectingGemsTo(gemGrid);
+        int numberOfGemsAdded = droppingGems.addConnectingGemsTo(gemGrid);
 
+        if(numberOfGemsAdded > 0){
+             soundEffectManager.play(GEM_HITS_FLOOR);
+        }
         if(droppingGems.areAllAddedToGrid()){
             loadState(EVALUATE_GRID);
-            return;
         }
-        if(droppingGems.getNumberOfGemsAdded() > alreadyConnecting){
-            soundEffectManager.play(GEM_HITS_FLOOR);
-        }
+
     }
 
 }

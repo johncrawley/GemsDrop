@@ -1,6 +1,5 @@
 package com.jcrawleydev.gemsdrop.game.state;
 
-import static com.jcrawleydev.gemsdrop.audio.SoundEffect.GEM_HITS_FLOOR;
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.GAME_OVER;
 import static com.jcrawleydev.gemsdrop.game.state.GameStateName.CREATE_GEMS;
 
@@ -17,7 +16,6 @@ public class EvaluateGridState extends AbstractGameState{
         evaluator = new GridEvaluator();
     }
 
-    private long startTime;
 
     @Override
     public void start() {
@@ -26,16 +24,9 @@ public class EvaluateGridState extends AbstractGameState{
 
 
     public void evaluateGemGrid(){
-        startTime = System.currentTimeMillis();
-        var s3 = System.currentTimeMillis();
         cancelTask();
-        var elap3 = System.currentTimeMillis() - s3;
-        log("time taken to cancel task: " + elap3);
         evaluator.init(gemGrid.getGemColumns(), game.getGridProps().numberOfRows());
-        long s2 = System.currentTimeMillis();
         var markedGemsIds = evaluator.evaluateGemGrid();
-        var elap2 = System.currentTimeMillis() - s2;
-        log("evaluateGemGrid(), time taken to evaluate: " + elap2);
         if(doAnyExist(markedGemsIds)){
             game.removeGemsFromView(markedGemsIds);
             soundEffectManager.playGemsRemovedSound();
@@ -51,7 +42,6 @@ public class EvaluateGridState extends AbstractGameState{
             loadState(GAME_OVER);
         }
         else{
-            //soundEffectManager.play(GEM_HITS_FLOOR);
             loadState(CREATE_GEMS);
         }
     }
