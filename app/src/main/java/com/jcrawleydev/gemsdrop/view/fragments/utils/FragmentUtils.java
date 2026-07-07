@@ -34,7 +34,7 @@ public class FragmentUtils {
 
 
     public static void loadHighScores(Fragment parentFragment){
-        loadFragment(parentFragment, new HighScoresFragment(), "game_fragment");
+        loadFragmentFade(parentFragment, new HighScoresFragment(), "game_fragment");
     }
 
 
@@ -44,7 +44,7 @@ public class FragmentUtils {
 
 
     public static void loadGameOver(Fragment parentFragment){
-        loadFragment(parentFragment, new GameOverFragment(), "game_over_fragment");
+        loadFragmentFade(parentFragment, new GameOverFragment(), "game_over_fragment");
     }
 
 
@@ -68,12 +68,22 @@ public class FragmentUtils {
 
 
     public static void loadFragment(Fragment parentFragment, Fragment fragment, String tag, Bundle bundle){
+        loadFragment(parentFragment,fragment, tag, bundle, R.anim.slide_in, R.anim.slide_out);
+    }
+
+
+    public static void loadFragmentFade(Fragment parentFragment, Fragment fragment, String tag, Bundle bundle){
+        loadFragment(parentFragment,fragment, tag, bundle, R.anim.fade_in, R.anim.fade_out);
+    }
+
+
+    public static void loadFragment(Fragment parentFragment, Fragment fragment, String tag, Bundle bundle, int animationInRes, int animationOutRes){
         var fragmentManager = parentFragment.getParentFragmentManager();
         var fragmentTransaction = fragmentManager.beginTransaction();
         removePreviousFragmentTransaction(fragmentManager, tag, fragmentTransaction);
         fragment.setArguments(bundle);
         fragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.slide_in, R.anim.slide_out, R.anim.pop_enter, R.anim.pop_exit )
+                .setCustomAnimations(animationInRes, animationOutRes, R.anim.pop_enter, R.anim.pop_exit )
                 .replace(R.id.fragment_container, fragment, tag)
                 .addToBackStack(null)
                 .commit();
@@ -96,6 +106,10 @@ public class FragmentUtils {
 
     public static void loadFragment(Fragment parentFragment, Fragment fragment, String tag){
         loadFragment(parentFragment, fragment, tag, new Bundle());
+    }
+
+    public static void loadFragmentFade(Fragment parentFragment, Fragment fragment, String tag){
+        loadFragmentFade(parentFragment, fragment, tag, new Bundle());
     }
 
 
