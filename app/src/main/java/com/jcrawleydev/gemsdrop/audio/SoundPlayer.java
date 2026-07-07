@@ -55,23 +55,18 @@ public class SoundPlayer {
 
     public void playSound(SoundEffect soundEffect, int repeats, int volume){
         if(!isSoundEnabled){
-            log("playSound() sound effect is not enabled, returning (" + soundEffect.name() + ")");
             return;
         }
         var soundId = soundsMap.get(soundEffect);
         if(soundId != null){
-            log("playSound() about to play sound from soundPool");
             soundPool.play(soundId, volume, volume, 1, repeats, 1);
-        }else{
-            log("playSound() soundId is null!");
         }
     }
 
 
     private void loadSounds(){
-        log("Entered loadSounds()");
         loadSound(R.raw.ground_hit_2, GEM_HITS_FLOOR);
-        loadSound(R.raw.disappear_1, GEMS_DISAPPEAR);
+        loadSound(R.raw.disappear_1_delayed, GEMS_DISAPPEAR);
         loadSound(R.raw.disappear_2, GEMS_DISAPPEAR_CHAIN_REACTION_1);
         loadSound(R.raw.disappear_3, GEMS_DISAPPEAR_CHAIN_REACTION_2);
         loadSound(R.raw.disappear_4, GEMS_DISAPPEAR_CHAIN_REACTION_3);
@@ -84,14 +79,9 @@ public class SoundPlayer {
     }
 
 
-    private void log(String msg){
-        System.out.println("^^^ SoundPlayer: " + msg);
-    }
-
     private void loadSound(int soundResId, SoundEffect soundEffect){
         int id = soundPool.load(context, soundResId, 1);
         soundsMap.put(soundEffect, id);
     }
-
 
 }
