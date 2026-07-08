@@ -32,7 +32,6 @@ public class GridEvaluator {
         this.NUMBER_OF_ROWS = numberOfRows;
         rowLimit = NUMBER_OF_ROWS - MINIMUM_MATCH_NUMBER;
         this.gemColumns = gemColumns;
-        buildSections();
     }
 
 
@@ -61,7 +60,6 @@ public class GridEvaluator {
         evaluateRows();
         evaluateColumns();
         evaluateDiagonals();
-        //evaluateDiagonalSections();
     }
 
 
@@ -92,25 +90,6 @@ public class GridEvaluator {
     }
 
 
-    private void evaluateDiagonalSections(){
-        for(List<GemCoordinates> section : sections){
-            sectionEvaluator.evaluate(section, gemColumns);
-        }
-    }
-
-
-    private void buildSections(){
-        if(!sections.isEmpty()){
-            return;
-        }
-        addLowerHalfDiagonalSections();
-        addUpperHalfDiagonalSections();
-
-        addUpperHalfReverseSections();
-        addLowerHalfReverseDiagonalSections();
-    }
-
-
     private void addLowerHalfDiagonalsTo(List<List<Gem>> diagonals){
         for(int i = 0; i < rowLimit; i++) {
             var diagonal = new ArrayList<Gem>();
@@ -120,82 +99,6 @@ public class GridEvaluator {
             }
             diagonals.add(diagonal);
         }
-    }
-
-
-    private void addLowerHalfDiagonalSections(){
-        for(int i = 0; i < rowLimit; i++) {
-            var section = new ArrayList<GemCoordinates>();
-            for (int currentRowIndex = 0 ; currentRowIndex < (NUMBER_OF_COLUMNS - i); currentRowIndex++) {
-                int colIndex = i + currentRowIndex;
-                section.add(new GemCoordinates(colIndex, currentRowIndex));
-            }
-            sections.add(section);
-        }
-    }
-
-
-    private void addUpperHalfDiagonalSections(){
-        for(int startingRow = 1; startingRow < rowLimit; startingRow++) {
-            var section = new ArrayList<GemCoordinates>();
-            for (int columnIndex = 0; columnIndex < NUMBER_OF_COLUMNS; columnIndex++) {
-                var column = gemColumns.get(columnIndex);
-                int rowIndex = columnIndex + startingRow;
-                if(rowIndex < column.size()){
-                    section.add(new GemCoordinates(columnIndex, rowIndex));
-                    continue;
-                }
-                section.add(getNullGemCoordinates());
-            }
-            sections.add(section);
-        }
-    }
-
-
-    private void addUpperHalfReverseSections(){
-        for(int startingRow = 1; startingRow < rowLimit ; startingRow++){
-            var section = new ArrayList<GemCoordinates>();
-            for(int rowIndex = startingRow, columnIndex = NUMBER_OF_COLUMNS - 1; rowIndex < NUMBER_OF_ROWS && columnIndex >= 0; rowIndex++, columnIndex--){
-                var column = gemColumns.get(columnIndex);
-                if(rowIndex < column.size()){
-                    section.add(new GemCoordinates(columnIndex, rowIndex));
-                    continue;
-                }
-                section.add(getNullGemCoordinates());
-            }
-            sections.add(section);
-        }
-    }
-
-
-
-    private GemCoordinates getNullGemCoordinates(){
-        return new GemCoordinates(-1, -1);
-    }
-
-
-    private void addLowerHalfReverseDiagonalSections(){
-        for(int i = NUMBER_OF_COLUMNS - 1; i >= MINIMUM_MATCH_NUMBER -1; i--){
-            sections.add(getLowerHalfReverseDiagonalSection(i));
-        }
-    }
-
-
-    private List<GemCoordinates> getLowerHalfReverseDiagonalSection(int columnIndex){
-        var section = new ArrayList<GemCoordinates>();
-        for(int column = columnIndex, row = 0; column >= 0; column--, row++){
-            section.add(getLowerHalfReverseDiagonalCoordinates(row, column));
-        }
-        return section;
-    }
-
-
-    private GemCoordinates getLowerHalfReverseDiagonalCoordinates(int rowIndex, int columnIndex){
-        var column = gemColumns.get(columnIndex);
-        if(rowIndex >= column.size()){
-            return getNullGemCoordinates();
-        }
-        return new GemCoordinates(columnIndex, rowIndex);
     }
 
 
