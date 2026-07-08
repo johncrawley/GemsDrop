@@ -61,6 +61,7 @@ public class GridEvaluator {
         evaluateRows();
         evaluateColumns();
         evaluateDiagonals();
+        //evaluateDiagonalSections();
     }
 
 

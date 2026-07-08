@@ -144,7 +144,7 @@ public class Gem {
     }
 
 
-    public boolean isNotSameColorAs(Gem otherGem){
+    public boolean isNotTheSameColorAs(Gem otherGem){
 
         if(otherGem == null || otherGem instanceof NullGem ){
             return true;

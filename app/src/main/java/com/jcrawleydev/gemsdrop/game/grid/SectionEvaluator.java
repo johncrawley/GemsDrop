@@ -36,17 +36,14 @@ public class SectionEvaluator {
         if(currentGemCoordinates.column() < 0){
             return nextIndex;
         }
-        var currentGem = columns.get(currentGemCoordinates.column()).get(currentGemCoordinates.row());
-        markGem(currentGem);
+        var currentGem = markAndGetGemFrom(columns, currentGemCoordinates);
         int matchingGemsCount = 1;
 
         for(int comparisonIndex = nextIndex; comparisonIndex < section.size(); comparisonIndex++){
-            int colIndex = section.get(comparisonIndex).column();
-            int rowIndex = section.get(comparisonIndex).row();
-            Gem comparisonGem = columns.get(colIndex).get(rowIndex);
-            if(comparisonGem.isNotSameColorAs(currentGem)){
+            var comparisonGem = getComparisonGemFrom(section, columns, comparisonIndex);
+            if(comparisonGem.isNotTheSameColorAs(currentGem)){
                 if(matchingGemsCount >= MINIMUM_MATCH_NUMBER){
-                    markAllCandidatesForDeletionInRange(section, currentIndex, comparisonIndex, columns);
+                    markForDeletionInRange(section, currentIndex, comparisonIndex, columns);
                     return comparisonIndex;
                 }
                 unmarkAllGemsInRange(section, currentIndex, comparisonIndex, columns);
@@ -55,9 +52,22 @@ public class SectionEvaluator {
             matchingGemsCount++;
             markGem(comparisonGem);
         }
-
-        markAllCandidatesForDeletionInRange(section, currentIndex,section.size()-1, columns);
+        markForDeletionInRange(section, currentIndex,section.size()-1, columns);
         return section.size();
+    }
+
+
+    private Gem markAndGetGemFrom(List<List<Gem>> columns, GridEvaluator.GemCoordinates coordinates){
+        var gem =  columns.get(coordinates.column()).get(coordinates.row());
+        markGem(gem);
+        return gem;
+    }
+
+
+    private Gem getComparisonGemFrom(List<GridEvaluator.GemCoordinates> section, List<List<Gem>> columns, int index){
+        int colIndex = section.get(index).column();
+        int rowIndex = section.get(index).row();
+        return columns.get(colIndex).get(rowIndex);
     }
 
 
@@ -71,7 +81,7 @@ public class SectionEvaluator {
     }
 
 
-    private void markAllCandidatesForDeletionInRange(List<GridEvaluator.GemCoordinates> section, int startIndex, int endIndex, List<List<Gem>> columns){
+    private void markForDeletionInRange(List<GridEvaluator.GemCoordinates> section, int startIndex, int endIndex, List<List<Gem>> columns){
         for(int i = startIndex; i <= endIndex; i++){
             var coordinates =  section.get(i);
             if(coordinates.column() >= 0){
@@ -93,9 +103,9 @@ public class SectionEvaluator {
 
         for(int comparisonIndex = nextIndex; comparisonIndex < section.size(); comparisonIndex++){
             Gem comparisonGem = section.get(comparisonIndex);
-            if(comparisonGem.isNotSameColorAs(currentGem)){
+            if(comparisonGem.isNotTheSameColorAs(currentGem)){
                 if(matchingGemsCount >= MINIMUM_MATCH_NUMBER){
-                    markAllCandidatesForDeletionInRange(currentIndex, comparisonIndex, section);
+                    markForDeletionInRange(currentIndex, comparisonIndex, section);
                     return comparisonIndex;
                 }
                 unmarkAllGemsInRange(currentIndex, comparisonIndex, section);
@@ -105,7 +115,7 @@ public class SectionEvaluator {
             markGem(comparisonGem);
         }
 
-        markAllCandidatesForDeletionInRange(currentIndex,section.size()-1, section);
+        markForDeletionInRange(currentIndex,section.size()-1, section);
         return section.size();
     }
 
@@ -122,7 +132,7 @@ public class SectionEvaluator {
     }
 
 
-    private void markAllCandidatesForDeletionInRange(int startIndex, int endIndex, List<Gem> gems){
+    private void markForDeletionInRange(int startIndex, int endIndex, List<Gem> gems){
         for(int i = startIndex; i <= endIndex; i++){
             gems.get(i).setMarkedForDeletion();
         }
