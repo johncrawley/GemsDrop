@@ -22,7 +22,6 @@ public class LoadLevelState extends AbstractGameState {
 
     @Override
     public void start() {
-        game.resetDropCount();
         var level = game.getLevel();
         game.setCurrentGameLevel(level);
         game.getDroppingGemsFactory().setLevel(level);

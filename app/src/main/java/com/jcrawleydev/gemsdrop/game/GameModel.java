@@ -21,7 +21,6 @@ import java.util.List;
 public class GameModel {
 
     public final int GRAVITY_INTERVAL = 58;
-    private int dropCount = 0;
 
     private final GridProps gridProps = new GridProps(15, 7, 2);
     private final GemGrid gemGrid = new GemGridImpl(gridProps);
@@ -120,7 +119,6 @@ public class GameModel {
             createNextGems();
         }
         droppingGems = nextDroppingGems;
-        dropCount++;
         dropRateUpdater.updateDropInterval();
         createNextGems();
         return droppingGems;
@@ -169,11 +167,6 @@ public class GameModel {
 
     public void setDropRate(int startingInterval, int minimumInterval){
         dropRateUpdater.init(startingInterval, minimumInterval);
-    }
-
-
-    public void resetDropCount(){
-        dropCount = 0;
     }
 
 

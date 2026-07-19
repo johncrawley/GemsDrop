@@ -70,7 +70,6 @@ public class Game {
     public void startGame(){
         isStarted.set(false);
         gameModel.resetNumberOfGreyedOutRows();
-        gameModel.resetDropCount();
         gameModel.getGemGrid().init();
         clearScore();
     }
@@ -96,11 +95,6 @@ public class Game {
 
     public GemMover getGemMover(){
         return gemMover;
-    }
-
-
-    public void resetDropCount(){
-        gameModel.resetDropCount();
     }
 
 

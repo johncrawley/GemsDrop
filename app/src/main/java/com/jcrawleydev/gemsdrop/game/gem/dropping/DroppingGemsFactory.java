@@ -27,6 +27,7 @@ public class DroppingGemsFactory {
 
 
     public void onGameStart(){
+        totalDropsPerLevel = 0;
         numberOfNormalGemsDropped = 0;
     }
 
@@ -68,15 +69,19 @@ public class DroppingGemsFactory {
 
 
     private boolean shouldCreateWonderGem(){
-        return areEnoughGemsOnTheGrid() && hasExceededInitialGemThreshold() && (
-                (isLucky() && haveEnoughNormalGemsDropped())
-                        || haveTooManyNormalGemsDropped());
+        return areEnoughGemsOnTheGrid()
+                && hasExceededInitialGemThreshold()
+                && (
+                    (isLucky() && haveEnoughNormalGemsDropped())
+                        || haveTooManyNormalGemsDropped()
+                );
     }
 
 
     private boolean areEnoughGemsOnTheGrid(){
         return gemGrid.getGemCount() > 40;
     }
+
 
     private boolean hasExceededInitialGemThreshold(){
         int minimumInitialDropsBeforeWonderGem = 10;
