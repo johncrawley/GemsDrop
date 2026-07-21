@@ -23,6 +23,7 @@ public class LevelFactory {
 
     private GameLevel gameLevel1;
     private final Context context;
+    private final List<List<Integer>> gridIndexes = new ArrayList<>();
 
     public LevelFactory(Context context) {
         this.context = context;
@@ -62,9 +63,6 @@ public class LevelFactory {
 
         //new GemPatternGenerator().generate(7, 7);
     }
-
-
-    private final List<List<Integer>> gridIndexes = new ArrayList<>();
 
 
     @SuppressLint("NewApi")

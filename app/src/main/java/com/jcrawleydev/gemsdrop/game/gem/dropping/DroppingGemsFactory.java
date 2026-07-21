@@ -71,10 +71,8 @@ public class DroppingGemsFactory {
     private boolean shouldCreateWonderGem(){
         return areEnoughGemsOnTheGrid()
                 && hasExceededInitialGemThreshold()
-                && (
-                    (isLucky() && haveEnoughNormalGemsDropped())
-                        || haveTooManyNormalGemsDropped()
-                );
+                && !gemGrid.areAnyColumnsLessThan(5)
+                && isUserLuckyAndEnoughGemsDropped();
     }
 
 
@@ -86,6 +84,12 @@ public class DroppingGemsFactory {
     private boolean hasExceededInitialGemThreshold(){
         int minimumInitialDropsBeforeWonderGem = 10;
         return minimumInitialDropsBeforeWonderGem < totalDropsPerLevel;
+    }
+
+
+    private boolean isUserLuckyAndEnoughGemsDropped(){
+        return (isLucky() && haveEnoughNormalGemsDropped())
+                        || haveTooManyNormalGemsDropped();
     }
 
 
