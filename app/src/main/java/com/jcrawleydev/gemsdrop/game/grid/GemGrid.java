@@ -22,5 +22,6 @@ public interface GemGrid {
     void addGemAt(int columnIndex, Gem gem);
     void removeTopGemFrom(int columnIndex);
     void clear();
+    boolean areAnyColumnsLessThan(int height);
 
 }

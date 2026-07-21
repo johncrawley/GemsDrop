@@ -53,6 +53,14 @@ public class GemGridImpl implements GemGrid {
     }
 
 
+    public boolean areAnyColumnsLessThan(int height){
+        if(gemColumns == null){
+            return false;
+        }
+        return gemColumns.stream().anyMatch(gc -> gc.size() < height);
+    }
+
+
     @Override
     public void removeTopGemFrom(int columnIndex){
         if(columnIndex >= gemColumns.size() || columnIndex < 0){
