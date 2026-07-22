@@ -13,7 +13,7 @@ import com.jcrawleydev.gemsdrop.view.fragments.AboutFragment;
 import com.jcrawleydev.gemsdrop.view.fragments.HighScoresFragment;
 import com.jcrawleydev.gemsdrop.view.fragments.game.GameFragment;
 import com.jcrawleydev.gemsdrop.view.fragments.GameOverFragment;
-import com.jcrawleydev.gemsdrop.view.fragments.MainMenuFragment;
+import com.jcrawleydev.gemsdrop.view.fragments.main.MainMenuFragment;
 
 
 public class FragmentUtils {

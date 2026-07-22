@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.jcrawleydev.gemsdrop.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.game.GameModel;
-import com.jcrawleydev.gemsdrop.view.fragments.MainMenuFragment;
+import com.jcrawleydev.gemsdrop.view.fragments.main.MainMenuFragment;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;

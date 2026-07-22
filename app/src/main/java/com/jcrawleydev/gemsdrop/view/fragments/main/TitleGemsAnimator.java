@@ -1,4 +1,4 @@
-package com.jcrawleydev.gemsdrop.view.fragments;
+package com.jcrawleydev.gemsdrop.view.fragments.main;
 
 import android.content.Context;
 import android.view.View;
@@ -11,7 +11,6 @@ import com.jcrawleydev.gemsdrop.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 

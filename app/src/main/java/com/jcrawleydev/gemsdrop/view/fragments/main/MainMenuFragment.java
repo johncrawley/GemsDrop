@@ -1,4 +1,4 @@
-package com.jcrawleydev.gemsdrop.view.fragments;
+package com.jcrawleydev.gemsdrop.view.fragments.main;
 
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.MusicUtils.playTrack;
 import static com.jcrawleydev.gemsdrop.view.fragments.utils.MusicUtils.stopTrack;
