@@ -56,7 +56,7 @@ public class LevelFactory {
         gameLevel1 = new GameLevel(1,
                 R.drawable.background_pattern_1,
                 260,
-                110,
+                120,
                 possibleColorsOfFallingGems,
                 specialGemConditions,
                 generateRandomGridRows(startingColors));

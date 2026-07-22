@@ -15,8 +15,8 @@ public enum GemColor {
     WONDER("W", R.drawable.jewel_wonder_1),
     LIGHT_PINK("P", R.drawable.jewel_wonder_3),
     DARK_RED("D", R.drawable.jewel_temp),
-    ORANGE("D", R.drawable.jewel_orange),
-    TURQUOISE("D", R.drawable.jewel_turquoise),
+    ORANGE("O", R.drawable.jewel_orange),
+    TURQUOISE("T", R.drawable.jewel_turquoise),
     NULL("_", R.drawable.jewel_grey),
     EMPTY("=", R.drawable.jewel_empty);
 
