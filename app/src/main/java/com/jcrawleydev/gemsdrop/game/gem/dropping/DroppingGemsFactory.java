@@ -16,7 +16,7 @@ public class DroppingGemsFactory {
     private final Random random;
     private GameLevel gameLevel;
     private int numberOfNormalGemsDropped;
-    private int totalDropsPerLevel = 0;
+    private int currentLevelDropsCount = 0;
     private final GemColorStore gemColorStore = new GemColorStore();
     private final GemGrid gemGrid;
 
@@ -27,7 +27,7 @@ public class DroppingGemsFactory {
 
 
     public void onGameStart(){
-        totalDropsPerLevel = 0;
+        currentLevelDropsCount = 0;
         numberOfNormalGemsDropped = 0;
     }
 
@@ -40,7 +40,7 @@ public class DroppingGemsFactory {
     public void setLevel(GameLevel level){
         this.gameLevel = level;
         assignGemColorsFrom(level);
-        totalDropsPerLevel = 0;
+        currentLevelDropsCount = 0;
     }
 
 
@@ -63,7 +63,7 @@ public class DroppingGemsFactory {
 
 
     private void updateDropCount(){
-        totalDropsPerLevel++;
+        currentLevelDropsCount++;
         gemColorStore.updateDropCount();
     }
 
@@ -71,23 +71,22 @@ public class DroppingGemsFactory {
     private boolean shouldCreateWonderGem(){
         return areEnoughGemsOnTheGrid()
                 && hasExceededInitialGemThreshold()
-                && !gemGrid.areAnyColumnsLessThan(5)
-                && isUserLuckyAndEnoughGemsDropped();
+                && isUserLuckyWithEnoughGemsAlreadyDropped();
     }
 
 
     private boolean areEnoughGemsOnTheGrid(){
-        return gemGrid.getGemCount() > 40;
+        return gemGrid.getGemCount() > 40 && !gemGrid.areAnyColumnsLessThan(5);
     }
 
 
     private boolean hasExceededInitialGemThreshold(){
-        int minimumInitialDropsBeforeWonderGem = 10;
-        return minimumInitialDropsBeforeWonderGem < totalDropsPerLevel;
+        int minimumInitialDropsBeforeWonderGem = 16;
+        return minimumInitialDropsBeforeWonderGem < currentLevelDropsCount;
     }
 
 
-    private boolean isUserLuckyAndEnoughGemsDropped(){
+    private boolean isUserLuckyWithEnoughGemsAlreadyDropped(){
         return (isLucky() && haveEnoughNormalGemsDropped())
                         || haveTooManyNormalGemsDropped();
     }
