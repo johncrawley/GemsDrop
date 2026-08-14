@@ -130,7 +130,8 @@ public class MainMenuFragment extends Fragment {
 
 
     private void goToAboutPage(){
-        FragmentUtils.loadAbout(this);
+        //FragmentUtils.loadAbout(this);
+        FragmentUtils.loadInstructions(this);
     }
 
 

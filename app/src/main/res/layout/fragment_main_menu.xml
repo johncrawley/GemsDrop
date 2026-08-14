@@ -32,7 +32,7 @@
         android:maxLines="2"
         app:autoSizeTextType="uniform"
         app:autoSizeMinTextSize="32sp"
-        app:autoSizeMaxTextSize="86sp"
+        app:autoSizeMaxTextSize="108sp"
         app:autoSizeStepGranularity="2sp"
         app:layout_constraintBottom_toTopOf="@id/titleGuideline"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,7 +53,7 @@
         app:autoSizeTextType="uniform"
         android:maxLines="2"
         app:autoSizeMinTextSize="32sp"
-        app:autoSizeMaxTextSize="86sp"
+        app:autoSizeMaxTextSize="108sp"
         app:autoSizeStepGranularity="2sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/titleGuideline"
@@ -67,6 +67,7 @@
         android:id="@+id/titleGemsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_24sdp"
         android:layout_marginVertical="@dimen/title_gems_layout_vertical_margin"
         android:gravity="center"
         android:orientation="horizontal"
@@ -77,8 +78,8 @@
 
         <ImageView
             android:id="@+id/titleJewel4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
             android:layout_marginHorizontal="@dimen/title_gem_margin_horizontal"
             android:layout_weight=".3"
             android:contentDescription="@string/title_gem_image_content_description"
@@ -87,8 +88,8 @@
 
         <ImageView
             android:id="@+id/titleJewel5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
             android:layout_marginHorizontal="@dimen/title_gem_margin_horizontal"
             android:layout_weight=".3"
             android:contentDescription="@string/title_gem_image_content_description"
@@ -97,8 +98,8 @@
 
         <ImageView
             android:id="@+id/titleJewel6"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
             android:layout_marginHorizontal="@dimen/title_gem_margin_horizontal"
             android:layout_weight=".3"
             android:contentDescription="@string/title_gem_image_content_description"

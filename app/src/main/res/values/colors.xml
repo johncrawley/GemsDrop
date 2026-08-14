@@ -61,4 +61,8 @@
     <color name="background_high_scores_start">#0A1037</color>
     <color name="background_high_scores_end">#18248E</color>
 
+
+    <color name="instructions_background">#111112</color>
+    <color name="instructions_text">#EFE063</color>
+
 </resources>

@@ -22,11 +22,18 @@
     <string name="button_about">ABOUT</string>
 
 
-    <!-- Settings strings -->
+    <!-- Settings -->
     <string name="settings_sounds_header">Sounds</string>
     <string name="settings_switch_menu_sounds">Menu Sounds</string>
     <string name="settings_switch_game_sounds">Game Sounds</string>
     <string name="settings_switch_action_sounds">Action Sounds</string>
+
+    <!-- Instructions -->
+    <string name="instructions_1">Tap Here to Move Right</string>
+    <string name="instructions_2">Tap Here to Move Left</string>
+    <string name="instructions_3">Tap Here to Rotate</string>
+    <string name="instructions_4">Tap Here to Drop</string>
+
 
 
 </resources>

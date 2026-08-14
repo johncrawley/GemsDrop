@@ -37,6 +37,7 @@
         android:layout_height="0dp"
         android:gravity="top|center"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/game_score_include"
         app:layout_constraintEnd_toStartOf="@id/game_preview_include"
         android:layout_weight=".90">
