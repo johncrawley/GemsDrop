@@ -47,17 +47,15 @@ public class InstructionsFragment extends Fragment {
 
 
     private void setupViews(View parent){
-        View instruction1 = parent.findViewById(R.id.instruction1);
-        View dot1 = instruction1.findViewById(R.id.instructionDot);
+        View dot1 = parent.findViewById(R.id.instructionDot1);
         startPulse(dot1);
     }
-
 
 
     private void startPulse(View dot) {
         var scaleX = ObjectAnimator.ofFloat(dot, "scaleX", 1f, 1.4f);
         var scaleY = ObjectAnimator.ofFloat(dot, "scaleY", 1f, 1.4f);
-        var alpha  = ObjectAnimator.ofFloat(dot, "alpha", 1f, 0.4f);
+        var alpha  = ObjectAnimator.ofFloat(dot, "alpha", 1f, 0.1f);
 
         scaleX.setRepeatCount(ValueAnimator.INFINITE);
         scaleY.setRepeatCount(ValueAnimator.INFINITE);
