@@ -32,5 +32,31 @@ public class GameInstructions {
     }
 
 
+    public void moveRight(){
+        droppingGems.moveRight();
+    }
+
+
+    public void moveToNextInstruction(){
+
+    }
+
+
+    /*
+
+        - fragment loads
+            - get GameInstructions instance from the viewModel
+            - gameInstructions.getCurrentInstruction().start();
+
+                [ current instruction starts, assigns next instruction, assigns screen bounds on view]
+
+            - if user taps on the correct area of the screen
+                - currentInstruction.executeMove()
+                    - moveCounter goes up
+                    - eachInstruction will have a move limit before calling GameInstructions to move to next instruction
+
+
+     */
+
 
 }
