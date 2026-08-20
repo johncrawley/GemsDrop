@@ -7,17 +7,93 @@ import static com.jcrawleydev.gemsdrop.game.gem.GemColor.YELLOW;
 import com.jcrawleydev.gemsdrop.game.gem.dropping.DroppingGems;
 import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class GameInstructions {
 
     private DroppingGems droppingGems;
     private boolean areDroppingGemsVisible;
-    private InstructionStateName currentInstructionStateName, nextInstructionStateName;
+    private final Map<InstructionStateName, Instruction> instructionsMap = new HashMap<>();
+    private InstructionsView view;
+    private int currentInstructionIndex;
+    private List<Instruction> instructions;
+
+
+
 
     public GameInstructions(){
         initDroppingGems();
-        currentInstructionStateName = InstructionStateName.MOVE_RIGHT;
+        setupMap();
+    }
+
+
+    public void setView(InstructionsView view){
+        this.view = view;
+    }
+
+
+    private void setupMap(){
+        instructions.add(new Instruction(3,
+                ()-> setClickBounds(.6f, 1f, 0f, .8f) ,
+                this::moveRight,
+                this));
+        instructions.add(new Instruction(3,
+                ()-> setClickBounds(0f, 0.3f, 0f, .8f) ,
+                this::moveLeft,
+                this));
+        instructions.add(new Instruction(3,
+                ()-> setClickBounds(0f, 0.3f, 0f, .8f) ,
+                this::rotate,
+                this));
+        instructions.add(new Instruction(1,
+                ()-> setClickBounds(0f, 0.3f, 0f, .8f) ,
+                this::startDrop,
+                this));
+    }
+
+
+    public void onClick(float x, float y){
+       instructions.get(currentInstructionIndex).onClick();
+    }
+
+
+    public void initCurrentInstruction(){
+        instructions.get(currentInstructionIndex).init();
+    }
+
+
+    public void setClickBounds(float xStart, float xEnd, float yStart, float yEnd){
+        view.setClickBounds(xStart, xEnd, yStart, yEnd);
+    }
+
+
+
+    private void moveLeft(){
+        droppingGems.moveLeft();
+        view.updateGems();
+    }
+
+
+
+    private void moveRight(){
+        droppingGems.moveRight();
+        view.updateGems();
+    }
+
+
+
+    private void rotate(){
+        droppingGems.rotate();
+        view.updateGems();
+    }
+
+
+    private void drop(){
+        droppingGems.moveDown();
+        view.updateGems();
     }
 
 
@@ -32,29 +108,21 @@ public class GameInstructions {
     }
 
 
-    public void moveRight(){
-        droppingGems.moveRight();
-    }
-
-
     public void moveToNextInstruction(){
-
+        if(currentInstructionIndex < instructions.size() -1){
+            currentInstructionIndex++;
+        }
     }
 
 
     /*
-
-        - fragment loads
-            - get GameInstructions instance from the viewModel
-            - gameInstructions.getCurrentInstruction().start();
-
-                [ current instruction starts, assigns next instruction, assigns screen bounds on view]
-
-            - if user taps on the correct area of the screen
-                - currentInstruction.executeMove()
-                    - moveCounter goes up
-                    - eachInstruction will have a move limit before calling GameInstructions to move to next instruction
-
+        - fragment loads for the first time
+            - instruction index is 0, first instruction is loaded, bounds etc
+            - show gems on view, show first instruction (no animation for now, just display)
+            - click, click, click, gem moves, right, right, right
+            - next instruction is queued (i.e. instruction index is incremented)
+            - gems (layout) fades away, instruction1 fades away
+            - on animation done, gems are reinitialized, updated on view, next instruction is loaded
 
      */
 

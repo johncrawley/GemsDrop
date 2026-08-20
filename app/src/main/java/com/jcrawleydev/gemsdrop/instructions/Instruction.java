@@ -1,14 +1,14 @@
 package com.jcrawleydev.gemsdrop.instructions;
 
-public class InstructionState {
+public class Instruction {
 
-    private int counter;
+    int counter;
     private final int counterLimit;
     private final Runnable onStartRunnable, onClickRunnable;
-    private final GameInstructions gameInstructions;
+    final GameInstructions gameInstructions;
 
 
-    public InstructionState(int counterLimit, Runnable onStart, Runnable onClick, GameInstructions gameInstructions){
+    public Instruction(int counterLimit, Runnable onStart, Runnable onClick, GameInstructions gameInstructions){
         this.counterLimit = counterLimit;
         this.onStartRunnable = onStart;
         this.onClickRunnable = onClick;
@@ -22,13 +22,18 @@ public class InstructionState {
 
 
     public void onClick(){
-        counter++;
-        if(counter >= counterLimit){
+        if(counter == counterLimit -1){
             counter = 0;
             gameInstructions.moveToNextInstruction();
-            return;
         }
-        onClickRunnable.run();
+        else if(counter < counterLimit){
+            counter++;
+            onClickRunnable.run();
+        }
     }
 
+
+    public void reset(){
+        counter = 0;
+    }
 }
