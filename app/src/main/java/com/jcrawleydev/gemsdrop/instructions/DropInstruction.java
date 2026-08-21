@@ -1,5 +1,7 @@
 package com.jcrawleydev.gemsdrop.instructions;
 
+import android.graphics.RectF;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -12,22 +14,27 @@ public class DropInstruction extends Instruction {
     private int dropCount = 0;
 
 
-    public DropInstruction(){
-        super(1,null,null,null);
+    public DropInstruction(RectF bounds, GameInstructions gameInstructions){
+        super(1, bounds, null ,gameInstructions);
     }
 
-    private void startDrop(){
-        dropFuture = executorService.schedule(this::drop, 150, TimeUnit.MILLISECONDS);
+
+    @Override
+    public void onClick(){
+        if(counter == 0){
+            counter++;
+            dropFuture = executorService.schedule(this::drop, 150, TimeUnit.MILLISECONDS);
+        }
     }
 
 
     private void drop(){
         gameInstructions.drop();
-        updateDropCount();
+        cancelDropOnLimitReached();
     }
 
 
-    private void updateDropCount(){
+    private void cancelDropOnLimitReached(){
         final int dropLimit = 20;
 
         if(++dropCount > dropLimit){

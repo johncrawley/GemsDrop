@@ -7,6 +7,7 @@ import com.jcrawleydev.gemsdrop.audio.MusicPlayer;
 import com.jcrawleydev.gemsdrop.audio.SoundPlayer;
 import com.jcrawleydev.gemsdrop.game.GameModel;
 import com.jcrawleydev.gemsdrop.game.score.HighScores;
+import com.jcrawleydev.gemsdrop.instructions.GameInstructions;
 
 
 public class MainViewModel extends ViewModel {
@@ -14,4 +15,6 @@ public class MainViewModel extends ViewModel {
     public GameModel gameModel;
     public MusicPlayer musicPlayer = new MusicPlayer();
     public SoundPlayer soundPlayer;
+
+    public GameInstructions gameInstructions = new GameInstructions();
 }

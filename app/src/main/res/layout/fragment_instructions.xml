@@ -111,45 +111,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <!--
-    <include
-        android:id="@+id/instruction1"
-        layout="@layout/movement_instruction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-    <include
-        android:id="@+id/instruction2"
-        layout="@layout/movement_instruction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-
-    <include
-        android:id="@+id/instruction3"
-        layout="@layout/movement_instruction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-
-    <include
-        android:id="@+id/instruction4"
-        layout="@layout/movement_instruction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-        -->
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/instructionGroup1"
+        app:constraint_referenced_ids="instructionDot1,instructionText1" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+

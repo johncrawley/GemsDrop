@@ -1,23 +1,26 @@
 package com.jcrawleydev.gemsdrop.instructions;
 
+import android.graphics.RectF;
+
 public class Instruction {
 
     int counter;
     private final int counterLimit;
-    private final Runnable onStartRunnable, onClickRunnable;
+    private final Runnable onClickRunnable;
     final GameInstructions gameInstructions;
+    final RectF bounds;
 
 
-    public Instruction(int counterLimit, Runnable onStart, Runnable onClick, GameInstructions gameInstructions){
+    public Instruction(int counterLimit, RectF bounds, Runnable onClick, GameInstructions gameInstructions){
         this.counterLimit = counterLimit;
-        this.onStartRunnable = onStart;
+        this.bounds = bounds;
         this.onClickRunnable = onClick;
         this.gameInstructions = gameInstructions;
     }
 
 
-    public void setOnStart(){
-        onStartRunnable.run();
+    public void init(){
+        gameInstructions.setClickBoundsOnView(bounds);
     }
 
 

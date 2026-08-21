@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface InstructionsView {
 
-    void setClickBounds(float xStart, float xEnd, float yStart, float yEnd);
+    void setClickBounds(float xStart, float yStart, float xEnd, float yEnd);
     void createGems(List<Gem> gems);
     void updateGems();
 }

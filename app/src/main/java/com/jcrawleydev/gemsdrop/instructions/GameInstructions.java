@@ -4,19 +4,17 @@ import static com.jcrawleydev.gemsdrop.game.gem.GemColor.BLUE;
 import static com.jcrawleydev.gemsdrop.game.gem.GemColor.GREEN;
 import static com.jcrawleydev.gemsdrop.game.gem.GemColor.YELLOW;
 
+import android.graphics.RectF;
+
 import com.jcrawleydev.gemsdrop.game.gem.dropping.DroppingGems;
 import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class GameInstructions {
 
     private DroppingGems droppingGems;
     private boolean areDroppingGemsVisible;
-    private final Map<InstructionStateName, Instruction> instructionsMap = new HashMap<>();
     private InstructionsView view;
     private int currentInstructionIndex;
     private List<Instruction> instructions;
@@ -30,27 +28,40 @@ public class GameInstructions {
     }
 
 
+    public int getCurrentIndex(){
+        return currentInstructionIndex;
+    }
+
+
     public void setView(InstructionsView view){
         this.view = view;
     }
 
 
     private void setupMap(){
+        float xStart = 0;
+        float xRotateStart = 0.3f;
+        float xRotateEnd = 0.6f;
+        float xEnd = 1;
+
+        float yStart = 0;
+        float yDropStart = 0.8f;
+        float yEnd = 1f;
+
         instructions.add(new Instruction(3,
-                ()-> setClickBounds(.6f, 1f, 0f, .8f) ,
+                new RectF(xRotateEnd, yStart, xEnd, yDropStart) ,
                 this::moveRight,
                 this));
         instructions.add(new Instruction(3,
-                ()-> setClickBounds(0f, 0.3f, 0f, .8f) ,
+                new RectF(xStart, yStart, xRotateStart, yDropStart) ,
                 this::moveLeft,
                 this));
         instructions.add(new Instruction(3,
-                ()-> setClickBounds(0f, 0.3f, 0f, .8f) ,
+                new RectF(xRotateStart, yStart, xRotateEnd, yDropStart) ,
                 this::rotate,
                 this));
-        instructions.add(new Instruction(1,
-                ()-> setClickBounds(0f, 0.3f, 0f, .8f) ,
-                this::startDrop,
+        instructions.add(new DropInstruction(
+                new RectF(xStart, yDropStart, xEnd, yEnd),
                 this));
     }
 
@@ -65,8 +76,8 @@ public class GameInstructions {
     }
 
 
-    public void setClickBounds(float xStart, float xEnd, float yStart, float yEnd){
-        view.setClickBounds(xStart, xEnd, yStart, yEnd);
+    public void setClickBoundsOnView(RectF bounds){
+        view.setClickBounds(bounds.left, bounds.top, bounds.right, bounds.bottom);
     }
 
 
@@ -91,7 +102,7 @@ public class GameInstructions {
     }
 
 
-    private void drop(){
+    public void drop(){
         droppingGems.moveDown();
         view.updateGems();
     }
