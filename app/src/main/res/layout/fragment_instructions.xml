@@ -112,7 +112,30 @@
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <androidx.constraintlayout.widget.Group
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/instructionGroup1"
         app:constraint_referenced_ids="instructionDot1,instructionText1" />
+
+
+    <androidx.constraintlayout.widget.Group
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/instructionGroup2"
+        app:constraint_referenced_ids="instructionDot2,instructionText2" />
+
+
+    <androidx.constraintlayout.widget.Group
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/instructionGroup3"
+        app:constraint_referenced_ids="instructionDot3,instructionText3" />
+
+
+    <androidx.constraintlayout.widget.Group
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/instructionGroup4"
+        app:constraint_referenced_ids="instructionDot4,instructionText4" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
