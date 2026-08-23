@@ -5,6 +5,7 @@ import static android.view.View.VISIBLE;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,7 +22,6 @@ import com.jcrawleydev.gemsdrop.MainViewModel;
 import com.jcrawleydev.gemsdrop.R;
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.instructions.InstructionsView;
-import com.jcrawleydev.gemsdrop.view.fragments.utils.GraphicUtils;
 
 import java.util.List;
 
@@ -33,6 +33,8 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
     private MainViewModel viewModel;
     private Group group1, group2, group3, group4;
     private int containerWidth, containerHeight;
+    private RectF boundsMoveLeft, boundsMoveRight, boundsRotate, boundsDrop, currentBounds;
+    private float gemWidth;
 
 
     public InstructionsFragment() {
@@ -53,23 +55,50 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
 
         assignViewModel();
         setupViews(parent);
+        assignLayoutDimensions(parent);
+        assignOnClick(parent);
         return parent;
     }
 
 
     private void startInstructions(){
-       var currentGroup = switch (viewModel.gameInstructions.getCurrentIndex()){
+        int index = viewModel.gameInstructions.getCurrentIndex();
+       var currentGroup = switch(index){
            case 1 -> group1;
            case 2 -> group2;
            case 3 -> group3;
            default -> group4;
         };
-       currentGroup.setVisibility(VISIBLE);
-       viewModel.gameInstructions.initCurrentInstruction();
+        currentGroup.setVisibility(VISIBLE);
+        viewModel.gameInstructions.initCurrentInstruction();
+        var dot = group1.findViewWithTag("dot");
+        startPulse(dot);
+
+       currentBounds = switch(index){
+           case 1 -> boundsMoveLeft;
+           case 2 -> boundsMoveRight;
+           case 3 -> boundsRotate;
+           default -> boundsDrop;
+       };
     }
 
-    private RectF bounds1, bounds2, bounds3, bounds4;
-    private int gemWidth;
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void assignOnClick(View parent){
+        parent.setOnTouchListener((view, motionEvent) ->
+        {
+            handleClick(motionEvent.getX(), motionEvent.getY());
+            return false;
+        });
+    }
+
+
+    private void handleClick(float x, float y){
+        if(currentBounds != null && currentBounds.contains(x, y)){
+            viewModel.gameInstructions.onClick(x,y);
+        }
+    }
+
 
     private void assignLayoutDimensions(View parent){
         var listener = new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -79,7 +108,8 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
                 containerWidth = parent.getMeasuredWidth();
                 containerHeight = parent.getMeasuredHeight();
                 assignGemDimensions();
-
+                initClickBounds();
+                startInstructions();
             }
         };
         parent.getViewTreeObserver().addOnGlobalLayoutListener(listener);
@@ -87,14 +117,27 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
 
 
     private void initClickBounds(){
+        float xStart = 0;
+        float xRotateStart = 0.3f / containerWidth;
+        float xRotateEnd = 0.6f / containerWidth;
+        float xEnd = containerWidth;
 
+        float yStart = 0;
+        float yDropStart = 0.8f / containerHeight;
+        float yEnd = containerHeight;
+
+        boundsMoveLeft = new RectF(xRotateEnd, yStart, xEnd, yDropStart);
+        boundsMoveRight = new RectF(xStart, yStart, xRotateStart, yDropStart);
+        boundsRotate = new RectF(xRotateStart, yStart, xRotateEnd, yDropStart);
+        boundsDrop = new RectF(xStart, yDropStart, xEnd, yEnd);
 
 
     }
 
 
     private void assignGemDimensions(){
-
+        var shortestDimension = Math.min(containerHeight, containerWidth);
+        gemWidth = shortestDimension / 9f;
     }
 
 
