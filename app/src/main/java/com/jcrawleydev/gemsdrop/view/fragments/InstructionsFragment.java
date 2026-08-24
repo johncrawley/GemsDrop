@@ -130,8 +130,6 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
         boundsMoveRight = new RectF(xStart, yStart, xRotateStart, yDropStart);
         boundsRotate = new RectF(xRotateStart, yStart, xRotateEnd, yDropStart);
         boundsDrop = new RectF(xStart, yDropStart, xEnd, yEnd);
-
-
     }
 
 
@@ -197,12 +195,6 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
         set.start();
     }
 
-
-
-    @Override
-    public void setClickBounds(float xStart, float yStart, float xEnd, float yEnd) {
-
-    }
 
     @Override
     public void createGems(List<Gem> gems) {

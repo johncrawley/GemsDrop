@@ -8,19 +8,17 @@ public class Instruction {
     private final int counterLimit;
     private final Runnable onClickRunnable;
     final GameInstructions gameInstructions;
-    final RectF bounds;
 
 
-    public Instruction(int counterLimit, RectF bounds, Runnable onClick, GameInstructions gameInstructions){
+    public Instruction(int counterLimit, Runnable onClick, GameInstructions gameInstructions){
         this.counterLimit = counterLimit;
-        this.bounds = bounds;
         this.onClickRunnable = onClick;
         this.gameInstructions = gameInstructions;
     }
 
 
     public void init(){
-        gameInstructions.setClickBoundsOnView(bounds);
+        //do nothing for now
     }
 
 

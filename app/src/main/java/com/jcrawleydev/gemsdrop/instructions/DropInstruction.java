@@ -14,8 +14,8 @@ public class DropInstruction extends Instruction {
     private int dropCount = 0;
 
 
-    public DropInstruction(RectF bounds, GameInstructions gameInstructions){
-        super(1, bounds, null ,gameInstructions);
+    public DropInstruction(GameInstructions gameInstructions){
+        super(1, null ,gameInstructions);
     }
 
 

@@ -4,8 +4,6 @@ import static com.jcrawleydev.gemsdrop.game.gem.GemColor.BLUE;
 import static com.jcrawleydev.gemsdrop.game.gem.GemColor.GREEN;
 import static com.jcrawleydev.gemsdrop.game.gem.GemColor.YELLOW;
 
-import android.graphics.RectF;
-
 import com.jcrawleydev.gemsdrop.game.gem.dropping.DroppingGems;
 import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 
@@ -24,7 +22,7 @@ public class GameInstructions {
 
     public GameInstructions(){
         initDroppingGems();
-        setupMap();
+        initInstructions();
     }
 
 
@@ -38,31 +36,17 @@ public class GameInstructions {
     }
 
 
-    private void setupMap(){
-        float xStart = 0;
-        float xRotateStart = 0.3f;
-        float xRotateEnd = 0.6f;
-        float xEnd = 1;
-
-        float yStart = 0;
-        float yDropStart = 0.8f;
-        float yEnd = 1f;
-
+    private void initInstructions(){
         instructions.add(new Instruction(3,
-                new RectF(xRotateEnd, yStart, xEnd, yDropStart) ,
                 this::moveRight,
                 this));
         instructions.add(new Instruction(3,
-                new RectF(xStart, yStart, xRotateStart, yDropStart) ,
                 this::moveLeft,
                 this));
         instructions.add(new Instruction(3,
-                new RectF(xRotateStart, yStart, xRotateEnd, yDropStart) ,
                 this::rotate,
                 this));
-        instructions.add(new DropInstruction(
-                new RectF(xStart, yDropStart, xEnd, yEnd),
-                this));
+        instructions.add(new DropInstruction(this));
     }
 
 
@@ -76,17 +60,10 @@ public class GameInstructions {
     }
 
 
-    public void setClickBoundsOnView(RectF bounds){
-        view.setClickBounds(bounds.left, bounds.top, bounds.right, bounds.bottom);
-    }
-
-
-
     private void moveLeft(){
         droppingGems.moveLeft();
         view.updateGems();
     }
-
 
 
     private void moveRight(){
