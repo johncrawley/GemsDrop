@@ -1,5 +1,6 @@
 package com.jcrawleydev.gemsdrop.view.fragments;
 
+import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 import android.animation.AnimatorSet;
@@ -13,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
@@ -31,7 +34,7 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
     private View dot1,dot2,dot3,dot4;
     private View text1,text2,text3,text4;
     private MainViewModel viewModel;
-    private Group group1, group2, group3, group4;
+    private Group group1, group2, group3, group4, currentGroup;
     private int containerWidth, containerHeight;
     private RectF boundsMoveLeft, boundsMoveRight, boundsRotate, boundsDrop, currentBounds;
     private float gemWidth;
@@ -55,6 +58,7 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
 
         assignViewModel();
         setupViews(parent);
+        viewModel.gameInstructions.setView(this);
         assignLayoutDimensions(parent);
         assignOnClick(parent);
         return parent;
@@ -81,6 +85,63 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
            default -> boundsDrop;
        };
     }
+
+
+    public void start(int index){
+        currentGroup.setVisibility(INVISIBLE);
+        currentGroup = switch(index){
+            case 1 -> group1;
+            case 2 -> group2;
+            case 3 -> group3;
+            default -> group4;
+        };
+        currentGroup.setVisibility(VISIBLE);
+        viewModel.gameInstructions.initCurrentInstruction();
+        var dot = currentGroup.findViewWithTag("dot");
+
+        startPulse(dot);
+
+        currentBounds = switch(index){
+            case 1 -> boundsMoveLeft;
+            case 2 -> boundsMoveRight;
+            case 3 -> boundsRotate;
+            default -> boundsDrop;
+        };
+    }
+
+
+    private void fadeOut(View group, View nextGroup){
+        var fadeOut = AnimationUtils.loadAnimation(getContext(), R.anim.fade_out);
+        fadeOut.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                group.setVisibility(INVISIBLE);
+                fadeIn(nextGroup);
+            }
+
+            @Override public void onAnimationRepeat(Animation animation) {}
+            @Override public void onAnimationStart(Animation animation) {}
+        });
+        group.startAnimation(fadeOut);
+    }
+
+
+    private void fadeIn(View group){
+        var fadeOut = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
+        fadeOut.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                group.setVisibility(VISIBLE);
+                var dot = group.findViewWithTag("dot");
+                startPulse(dot);
+            }
+
+            @Override public void onAnimationRepeat(Animation animation) {}
+            @Override public void onAnimationStart(Animation animation) {}
+        });
+        group.startAnimation(fadeOut);
+    }
+
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -161,7 +222,7 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
         group3 = parent.findViewById(R.id.instructionGroup3);
         group4 = parent.findViewById(R.id.instructionGroup4);
 
-         dot1 = parent.findViewById(R.id.instructionDot1);
+        dot1 = parent.findViewById(R.id.instructionDot1);
         dot2 = parent.findViewById(R.id.instructionDot2);
         dot3 = parent.findViewById(R.id.instructionDot3);
         dot4 = parent.findViewById(R.id.instructionDot4);
@@ -170,8 +231,6 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
         text2 = parent.findViewById(R.id.instructionText2);
         text3 = parent.findViewById(R.id.instructionText3);
         text4 = parent.findViewById(R.id.instructionText4);
-
-        startPulse(dot1);
     }
 
 

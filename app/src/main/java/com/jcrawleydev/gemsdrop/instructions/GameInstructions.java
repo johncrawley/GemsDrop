@@ -7,6 +7,7 @@ import static com.jcrawleydev.gemsdrop.game.gem.GemColor.YELLOW;
 import com.jcrawleydev.gemsdrop.game.gem.dropping.DroppingGems;
 import com.jcrawleydev.gemsdrop.game.grid.GridProps;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameInstructions {
@@ -37,6 +38,7 @@ public class GameInstructions {
 
 
     private void initInstructions(){
+        instructions = new ArrayList<>();
         instructions.add(new Instruction(3,
                 this::moveRight,
                 this));
@@ -62,28 +64,33 @@ public class GameInstructions {
 
     private void moveLeft(){
         droppingGems.moveLeft();
-        view.updateGems();
+        updateGems();
     }
 
 
     private void moveRight(){
         droppingGems.moveRight();
-        view.updateGems();
+        updateGems();
     }
 
 
 
     private void rotate(){
         droppingGems.rotate();
-        view.updateGems();
+        updateGems();
     }
 
 
     public void drop(){
         droppingGems.moveDown();
-        view.updateGems();
+        updateGems();
     }
 
+    private void updateGems(){
+        if(view != null){
+            view.updateGems();
+        }
+    }
 
     public void initDroppingGems(){
         var gridProps = new GridProps(18, 7, 2);
@@ -99,6 +106,9 @@ public class GameInstructions {
     public void moveToNextInstruction(){
         if(currentInstructionIndex < instructions.size() -1){
             currentInstructionIndex++;
+            if(view != null){
+                view.start(currentInstructionIndex);
+            }
         }
     }
 

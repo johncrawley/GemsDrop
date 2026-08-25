@@ -1,6 +1,6 @@
 package com.jcrawleydev.gemsdrop.instructions;
 
-import android.graphics.RectF;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Instruction {
 
@@ -8,6 +8,7 @@ public class Instruction {
     private final int counterLimit;
     private final Runnable onClickRunnable;
     final GameInstructions gameInstructions;
+    final AtomicBoolean isActive = new AtomicBoolean();
 
 
     public Instruction(int counterLimit, Runnable onClick, GameInstructions gameInstructions){
@@ -18,18 +19,22 @@ public class Instruction {
 
 
     public void init(){
-        //do nothing for now
+        isActive.set(true);
     }
 
 
     public void onClick(){
-        if(counter == counterLimit -1){
-            counter = 0;
-            gameInstructions.moveToNextInstruction();
+        if(!isActive.get()){
+            return;
         }
-        else if(counter < counterLimit){
+        if(counter < counterLimit){
             counter++;
             onClickRunnable.run();
+        }
+        if(counter >= counterLimit -1){
+            counter = 0;
+            gameInstructions.moveToNextInstruction();
+            isActive.set(false);
         }
     }
 

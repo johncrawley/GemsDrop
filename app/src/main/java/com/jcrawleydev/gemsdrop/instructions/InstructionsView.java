@@ -8,4 +8,5 @@ public interface InstructionsView {
 
     void createGems(List<Gem> gems);
     void updateGems();
+    void start(int currentInstructionIndex);
 }
