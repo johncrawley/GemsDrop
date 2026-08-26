@@ -31,7 +31,7 @@ import java.util.List;
 public class InstructionsFragment extends Fragment implements InstructionsView {
 
 
-    private View dot1,dot2,dot3,dot4;
+    private View dot1,dot2,dot3,dot4, currentDot;
     private View text1,text2,text3,text4;
     private MainViewModel viewModel;
     private Group group1, group2, group3, group4, currentGroup;
@@ -58,41 +58,67 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
 
         assignViewModel();
         setupViews(parent);
-        viewModel.gameInstructions.setView(this);
         assignLayoutDimensions(parent);
         assignOnClick(parent);
         return parent;
     }
 
 
+    private void log(String msg){
+        System.out.println("^^^ InstructionFragment: " + msg);
+    }
+
+
     private void startInstructions(){
         int index = viewModel.gameInstructions.getCurrentIndex();
+        log("Entered startInstructions() currentIndex: " + index);
        var currentGroup = switch(index){
-           case 1 -> group1;
-           case 2 -> group2;
-           case 3 -> group3;
+           case 0 -> group1;
+           case 1 -> group2;
+           case 2 -> group3;
            default -> group4;
         };
         currentGroup.setVisibility(VISIBLE);
         viewModel.gameInstructions.initCurrentInstruction();
-        var dot = group1.findViewWithTag("dot");
-        startPulse(dot);
+        var previousDot = currentDot;
+        if(previousDot != null){
+            stopPulse(previousDot);
+        }
+        if(currentDot != null){
+            startPulse(currentDot);
+        }
+        else{
+            log("dot is null!");
+        }
 
        currentBounds = switch(index){
-           case 1 -> boundsMoveLeft;
-           case 2 -> boundsMoveRight;
-           case 3 -> boundsRotate;
+           case 0 -> boundsMoveLeft;
+           case 1 -> boundsMoveRight;
+           case 2 -> boundsRotate;
            default -> boundsDrop;
        };
     }
 
 
+    private void setCurrentDot(int index){
+        currentDot = switch(index){
+            case 0 -> dot1;
+            case 1 -> dot2;
+            case 2 -> dot3;
+            default -> dot4;
+        };
+
+    }
+
+
     public void start(int index){
-        currentGroup.setVisibility(INVISIBLE);
+        if(currentGroup != null){
+            currentGroup.setVisibility(INVISIBLE);
+        }
         currentGroup = switch(index){
-            case 1 -> group1;
-            case 2 -> group2;
-            case 3 -> group3;
+            case 0 -> group1;
+            case 1 -> group2;
+            case 2 -> group3;
             default -> group4;
         };
         currentGroup.setVisibility(VISIBLE);
@@ -102,9 +128,9 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
         startPulse(dot);
 
         currentBounds = switch(index){
-            case 1 -> boundsMoveLeft;
-            case 2 -> boundsMoveRight;
-            case 3 -> boundsRotate;
+            case 0 -> boundsMoveLeft;
+            case 1 -> boundsMoveRight;
+            case 2 -> boundsRotate;
             default -> boundsDrop;
         };
     }
@@ -171,6 +197,7 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
                 assignGemDimensions();
                 initClickBounds();
                 startInstructions();
+                viewModel.gameInstructions.setView(InstructionsFragment.this);
             }
         };
         parent.getViewTreeObserver().addOnGlobalLayoutListener(listener);
@@ -222,6 +249,8 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
         group3 = parent.findViewById(R.id.instructionGroup3);
         group4 = parent.findViewById(R.id.instructionGroup4);
 
+        setInvisible(group1, group2, group3, group4);
+
         dot1 = parent.findViewById(R.id.instructionDot1);
         dot2 = parent.findViewById(R.id.instructionDot2);
         dot3 = parent.findViewById(R.id.instructionDot3);
@@ -231,6 +260,13 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
         text2 = parent.findViewById(R.id.instructionText2);
         text3 = parent.findViewById(R.id.instructionText3);
         text4 = parent.findViewById(R.id.instructionText4);
+    }
+
+
+    private void setInvisible(View ...views){
+        for(var view : views ){
+            view.setVisibility(INVISIBLE);
+        }
     }
 
 
@@ -252,6 +288,10 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
         set.setDuration(800);
         set.setInterpolator(new AccelerateDecelerateInterpolator());
         set.start();
+    }
+
+    private void stopPulse(View view){
+
     }
 
 

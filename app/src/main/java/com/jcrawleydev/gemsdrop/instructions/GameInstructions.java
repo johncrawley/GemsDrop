@@ -19,8 +19,6 @@ public class GameInstructions {
     private List<Instruction> instructions;
 
 
-
-
     public GameInstructions(){
         initDroppingGems();
         initInstructions();
