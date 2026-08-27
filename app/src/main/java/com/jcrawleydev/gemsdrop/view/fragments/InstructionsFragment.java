@@ -32,11 +32,10 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
 
 
     private View dot1,dot2,dot3,dot4, currentDot;
-    private View text1,text2,text3,text4;
     private MainViewModel viewModel;
     private Group group1, group2, group3, group4, currentGroup;
     private int containerWidth, containerHeight;
-    private RectF boundsMoveLeft, boundsMoveRight, boundsRotate, boundsDrop, currentBounds;
+    private RectF boundsMoveRight, boundsMoveLeft, boundsRotate, boundsDrop, currentBounds;
     private float gemWidth;
 
 
@@ -72,33 +71,34 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
     private void startInstructions(){
         int index = viewModel.gameInstructions.getCurrentIndex();
         log("Entered startInstructions() currentIndex: " + index);
-       var currentGroup = switch(index){
-           case 0 -> group1;
-           case 1 -> group2;
-           case 2 -> group3;
-           default -> group4;
-        };
-        currentGroup.setVisibility(VISIBLE);
+        setCurrentGroup(index);
         viewModel.gameInstructions.initCurrentInstruction();
-        var previousDot = currentDot;
-        if(previousDot != null){
-            stopPulse(previousDot);
-        }
+        stopPulse();
+        setCurrentDot(index);
         if(currentDot != null){
             startPulse(currentDot);
         }
-        else{
-            log("dot is null!");
-        }
 
        currentBounds = switch(index){
-           case 0 -> boundsMoveLeft;
-           case 1 -> boundsMoveRight;
+           case 0 -> boundsMoveRight;
+           case 1 -> boundsMoveLeft;
            case 2 -> boundsRotate;
            default -> boundsDrop;
        };
     }
 
+    private void setCurrentGroup(int index){
+        if(currentGroup != null){
+            currentGroup.setVisibility(INVISIBLE);
+        }
+        currentGroup = switch(index){
+            case 0 -> group1;
+            case 1 -> group2;
+            case 2 -> group3;
+            default -> group4;
+        };
+        currentGroup.setVisibility(VISIBLE);
+    }
 
     private void setCurrentDot(int index){
         currentDot = switch(index){
@@ -174,6 +174,7 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
     private void assignOnClick(View parent){
         parent.setOnTouchListener((view, motionEvent) ->
         {
+            log("motion event detected!");
             handleClick(motionEvent.getX(), motionEvent.getY());
             return false;
         });
@@ -181,8 +182,15 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
 
 
     private void handleClick(float x, float y){
+        if(currentBounds == null){
+            log("entered handleClick, currentBounds are null!");
+        }
+        else if(!currentBounds.contains(x,y)){
+            log("current bounds: " + currentBounds.right + "," + currentBounds.top + "," + currentBounds.left + "," + currentBounds.bottom + " x,y: " + x + "," + y);
+        }
         if(currentBounds != null && currentBounds.contains(x, y)){
-            viewModel.gameInstructions.onClick(x,y);
+            log("entered handleClick() about to call gameInstructions onclick()");
+            viewModel.gameInstructions.onClick();
         }
     }
 
@@ -206,17 +214,17 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
 
     private void initClickBounds(){
         float xStart = 0;
-        float xRotateStart = 0.3f / containerWidth;
-        float xRotateEnd = 0.6f / containerWidth;
+        float xRotateStart = containerWidth / 3f;
+        float xRotateEnd = xRotateStart * 2;
         float xEnd = containerWidth;
 
         float yStart = 0;
-        float yDropStart = 0.8f / containerHeight;
+        float yDropStart = (containerHeight / 8f) * 7f;
         float yEnd = containerHeight;
 
-        boundsMoveLeft = new RectF(xRotateEnd, yStart, xEnd, yDropStart);
-        boundsMoveRight = new RectF(xStart, yStart, xRotateStart, yDropStart);
+        boundsMoveLeft = new RectF(xStart, yStart, xRotateStart, yDropStart);
         boundsRotate = new RectF(xRotateStart, yStart, xRotateEnd, yDropStart);
+        boundsMoveRight = new RectF(xRotateEnd, yStart, xEnd, yDropStart);
         boundsDrop = new RectF(xStart, yDropStart, xEnd, yEnd);
     }
 
@@ -255,11 +263,6 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
         dot2 = parent.findViewById(R.id.instructionDot2);
         dot3 = parent.findViewById(R.id.instructionDot3);
         dot4 = parent.findViewById(R.id.instructionDot4);
-
-        text1 = parent.findViewById(R.id.instructionText1);
-        text2 = parent.findViewById(R.id.instructionText2);
-        text3 = parent.findViewById(R.id.instructionText3);
-        text4 = parent.findViewById(R.id.instructionText4);
     }
 
 
@@ -269,6 +272,7 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
         }
     }
 
+    AnimatorSet animatorSet;
 
     private void startPulse(View dot) {
         var scaleX = ObjectAnimator.ofFloat(dot, "scaleX", 1f, 1.4f);
@@ -283,15 +287,18 @@ public class InstructionsFragment extends Fragment implements InstructionsView {
         scaleY.setRepeatMode(ValueAnimator.RESTART);
         alpha.setRepeatMode(ValueAnimator.RESTART);
 
-        var set = new AnimatorSet();
-        set.playTogether(scaleX, scaleY, alpha);
-        set.setDuration(800);
-        set.setInterpolator(new AccelerateDecelerateInterpolator());
-        set.start();
+        animatorSet = new AnimatorSet();
+        animatorSet.playTogether(scaleX, scaleY, alpha);
+        animatorSet.setDuration(800);
+        animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
+        animatorSet.start();
+
     }
 
-    private void stopPulse(View view){
-
+    private void stopPulse(){
+        if(animatorSet != null && animatorSet.isRunning()){
+            animatorSet.cancel();
+        }
     }
 
 

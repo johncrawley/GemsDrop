@@ -18,13 +18,14 @@ import com.jcrawleydev.gemsdrop.game.score.Score;
 import com.jcrawleydev.gemsdrop.game.state.GameStateName;
 import com.jcrawleydev.gemsdrop.game.state.StateManager;
 import com.jcrawleydev.gemsdrop.game.utils.TaskScheduler;
+import com.jcrawleydev.gemsdrop.view.fragments.controls.Controllable;
 import com.jcrawleydev.gemsdrop.view.fragments.game.GameView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Game {
+public class Game implements Controllable {
 
     private final GameView gameView;
     private final StateManager stateManager = new StateManager();
@@ -123,20 +124,22 @@ public class Game {
     }
 
 
-    public void rotateGems(){
-        stateManager.getCurrentGameState().rotate();
-    }
-
-
+    @Override
     public void moveLeft(){
         stateManager.getCurrentGameState().left();
     }
 
+    @Override
     public void moveRight() {
         stateManager.getCurrentGameState().right();
     }
 
+    @Override
+    public void rotateGems(){
+        stateManager.getCurrentGameState().rotate();
+    }
 
+    @Override
     public void moveDown(){
         stateManager.getCurrentGameState().down();
     }

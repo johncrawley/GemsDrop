@@ -37,20 +37,18 @@ public class GameInstructions {
 
     private void initInstructions(){
         instructions = new ArrayList<>();
-        instructions.add(new Instruction(3,
-                this::moveRight,
-                this));
-        instructions.add(new Instruction(3,
-                this::moveLeft,
-                this));
-        instructions.add(new Instruction(3,
-                this::rotate,
-                this));
+        addInstruction(this::moveRight);
+        addInstruction(this::moveLeft);
+        addInstruction(this::rotate);
         instructions.add(new DropInstruction(this));
     }
 
 
-    public void onClick(float x, float y){
+    private void addInstruction(Runnable runnable){
+        instructions.add(new Instruction(3, runnable, this));
+    }
+
+    public void onClick(){
        instructions.get(currentInstructionIndex).onClick();
     }
 
@@ -60,13 +58,13 @@ public class GameInstructions {
     }
 
 
-    private void moveLeft(){
+    public void moveLeft(){
         droppingGems.moveLeft();
         updateGems();
     }
 
 
-    private void moveRight(){
+    public void moveRight(){
         droppingGems.moveRight();
         updateGems();
     }

@@ -19,6 +19,7 @@ import com.jcrawleydev.gemsdrop.R;
 import com.jcrawleydev.gemsdrop.game.Game;
 import com.jcrawleydev.gemsdrop.game.gem.Gem;
 import com.jcrawleydev.gemsdrop.game.gem.GemColor;
+import com.jcrawleydev.gemsdrop.view.fragments.controls.GameInputHandler;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.FragmentUtils;
 import com.jcrawleydev.gemsdrop.view.fragments.utils.GraphicUtils;
 
